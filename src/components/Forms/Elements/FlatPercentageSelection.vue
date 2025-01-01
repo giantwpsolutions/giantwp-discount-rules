@@ -9,6 +9,7 @@ const maxValue = ref("");
 </script>
 
 <template>
+  
   <div class="space-y-4 max-w-lg ">
 
     <!-- Discount Type Selection -->

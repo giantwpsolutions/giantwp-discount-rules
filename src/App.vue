@@ -13,11 +13,6 @@ import { onMounted } from 'vue';
     </div>
   </div>
 
-  <div class="join drop-shadow">
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 1" checked/>
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 2" />
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 3" />
-</div>
 </template>
 
 <style scoped>

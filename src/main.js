@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import './style.css'
 import './tailwindcss.css'
 import App from './App.vue'
-import "flyonui/flyonui";
 import router from './router/router';
 
 

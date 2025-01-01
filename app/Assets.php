@@ -23,34 +23,56 @@ class Assets {
      * Load assets
      */
     public function register_plugin_assets() {
-        
-        //Check if the current screen is for your plugin's page
-
-        $screen = get_current_screen();
-        if( $screen->id !== 'woocommerce_page_aio-woodiscount'){
+        if ( ! is_admin() ) {
             return;
         }
-
-        wp_enqueue_script('wp-i18n');
-
+    
+        $screen = get_current_screen();
+        if ( ! $screen || $screen->id !== 'woocommerce_page_aio-woodiscount' ) {
+            return;
+        }
+    
+        wp_enqueue_script( 'wp-i18n' );
+    
+        $is_dev = defined( 'WP_DEBUG' ) && WP_DEBUG;
         $dev_server_js_loader = 'http://localhost:5173/src/main.js';
-        wp_enqueue_script( 
-            'aio-woodiscount-vjs', 
-            $dev_server_js_loader, 
-            ['wp-i18n'], 
-            '1.0', 
-            true // Load in the footer
-        );
-
-        $pro_url = esc_url('https://giantwpsolutions.com/');
-
-        //passing the plugin url to the script
-        wp_localize_script('aio-woodiscount-vjs', 'pluginData', [
-            'pluginUrl' => plugin_dir_url(__DIR__),
-            'restUrl'   => rest_url('aio-woodiscount/v1/'),
-            'proUrl'    => $pro_url
-        ]);
+        $prod_js_loader = plugin_dir_url( __DIR__ ) . 'dist/assets/main.js';
+        $prod_css_loader = plugin_dir_url( __DIR__ ) . 'dist/assets/main.css';
+    
+        if ( $is_dev ) {
+            wp_enqueue_script(
+                'aio-woodiscount-vjs',
+                $dev_server_js_loader,
+                [ 'wp-i18n' ],
+                '1.0',
+                true
+            );
+        } else {
+            wp_enqueue_script(
+                'aio-woodiscount-vjs',
+                $prod_js_loader,
+                [ 'wp-i18n' ],
+                '1.0',
+                true
+            );
+    
+            wp_enqueue_style(
+                'aio-woodiscount-styles',
+                $prod_css_loader,
+                [],
+                '1.0'
+            );
+        }
+    
+        $pro_url = esc_url( 'https://giantwpsolutions.com/' );
+    
+        wp_localize_script( 'aio-woodiscount-vjs', 'pluginData', [
+            'pluginUrl' => plugin_dir_url( __DIR__ ),
+            'restUrl'   => rest_url( 'aio-woodiscount/v1/' ),
+            'proUrl'    => $pro_url,
+        ] );
     }
+    
 
     /**
      * Add type="module" to the script tag

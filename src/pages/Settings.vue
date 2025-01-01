@@ -31,11 +31,7 @@ const { __ } = wp.i18n;
         class="flex-1 bg-gray-100 rounded-md border border-gray-300 h-10 px-5 text-gray-700 outline-none transition focus:border-blue-500"
       />
     </div>
-    <div class="join drop-shadow">
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 1" checked/>
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 2" />
-  <input class="join-item btn" type="radio" name="radio-15" aria-label="Radio 3" />
-</div>
+ 
 
     <!-- Spacer to Push Button to the Bottom -->
     <div class="flex-grow"></div>
