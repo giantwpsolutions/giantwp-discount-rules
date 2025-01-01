@@ -1,0 +1,20 @@
+{
+    "name": "habib/all-in-one-woodiscount",
+    "description": "All in one WooDiscount is a one-stop discount solutions for Woocommerce. With this plugin you can create any kind of discount rules.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Habibur Rahman",
+            "email": "softdev.habib@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "AIO_WooDiscount\\": "app/"
+        },
+        "files": [ "functions.php" ]
+    }
+}
