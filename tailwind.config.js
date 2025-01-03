@@ -5,9 +5,12 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     './node_modules/@headlessui/vue/**/*.{js,ts,jsx,tsx}',
     './node_modules/@heroicons/vue/**/*.{js,ts,jsx,tsx}',
+
   ],
   theme: {
-    extend: {},
+    extend: {
+
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

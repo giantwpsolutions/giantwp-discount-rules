@@ -1,91 +1,121 @@
-<!-- FlatPercentageSelection -->
 <script setup>
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'; // Import the icon
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'; // Importing the tooltip icon
 import { ref } from 'vue';
 
-const discountType = ref("");
-const discountValue = ref("");
-const maxValue = ref("");
+// Reactive variables
+const discountType = ref("default"); // Default to 'fixed'
+const discountValue = ref(null);
+const maxValue = ref(null);
+
+// Validation state
+const errors = ref({
+  discountType: '',
+  discountValue: '',
+  maxValue: ''
+});
+
+const validateFields = () => {
+  errors.value.discountType = discountType.value ? '' : __('Please select a discount type', 'aio-woodiscount');
+  errors.value.discountValue = discountValue.value ? '' : __('Discount value is required', 'aio-woodiscount');
+  errors.value.discountType = discountType.value=== 'default' ? __('Please select a discount type', 'aio-woodiscount'): ''; 
+  errors.value.maxValue = discountType.value === 'percentage' && !maxValue.value
+    ? __('Maximum value is required for percentage type', 'aio-woodiscount')
+    : '';
+};
+
+const handleSubmit = () => {
+  validateFields();
+  if (!errors.value.discountType && !errors.value.discountValue && !errors.value.maxValue) {
+    console.log('Form submitted:', { discountType: discountType.value, discountValue: discountValue.value, maxValue: maxValue.value });
+  }
+};
 </script>
 
 <template>
-  
-  <div class="space-y-4 max-w-lg ">
-
+  <div class="space-y-4 max-w-lg">
     <!-- Discount Type Selection -->
-
     <div class="w-full max-w-md mb-6">
-
       <label for="discountType" class="block text-sm font-medium text-gray-900">
         {{ __('Discount Type', 'aio-woodiscount') }}
       </label>
-
       <select
         v-model="discountType"
         id="discountType"
         class="mt-1.5 h-9 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm"
       >
-        <option value="">{{ __('Please select', 'aio-woodiscount') }}</option>
+        <option value="default">{{ __('Please select', 'aio-woodiscount') }}</option>
         <option value="fixed">{{ __('Fixed', 'aio-woodiscount') }}</option>
         <option value="percentage">{{ __('Percentage', 'aio-woodiscount') }}</option>
       </select>
-
+      <p v-if="errors.discountType" class="text-red-600 text-sm mt-1">{{ errors.discountType }}</p>
     </div>
 
     <!-- Inline Fields: Discount Value and Maximum Value -->
+    <div class="flex gap-4 items-start">
+      <!-- Discount Value -->
+      <div class="relative flex-1">
+        <label for="discountValue" class="block text-sm font-medium text-gray-900 my-1">
+          {{ __('Discount Value', 'aio-woodiscount') }}
+        </label>
+        <div class="flex items-center">
+          <input
+            v-model="discountValue"
+            type="number"
+            id="discountValue"
+            :placeholder=" __('Enter discount value', 'aio-woodiscount')"
+            class="w-full h-9 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4"
+          />
+          <span class="ml-0 h-9 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100">
+            {{ discountType === 'percentage' ? '%' : '$' }}
+          </span>
+        </div>
+        <p v-if="errors.discountValue" class="text-red-600 text-sm mt-1">{{ errors.discountValue }}</p>
+      </div>
 
-     <!-- Discount Value -->
-     <div class="relative">
-      <label for="discountValue" class="block text-sm font-medium text-gray-900">
-        {{ __('Discount Value', 'aio-woodiscount') }}
-      </label>
-      <input
-        v-model="discountValue"
-        type="number"
-        id="discountValue"
-        placeholder="{{ __('Enter discount value', 'aio-woodiscount') }}"
-        class="w-full h-9 rounded-md border-gray-200 pr-10 shadow-sm sm:text-sm"
-      />
-      <span
-        class="pointer-events-none absolute inset-y-0 end-0 grid w-10 place-content-center text-gray-500"
-      >
-        <!-- Dynamic Icon -->
-        <template v-if="discountType === 'fixed'">
-          <span class="text-lg leading-none">$</span>
-        </template>
-        <template v-else-if="discountType === 'percentage'">
-          <span class="text-lg leading-none">%</span>
-        </template>
-        <template v-else>
-          <!-- Default Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-            <path
-              fill-rule="evenodd"
-              d="M5.404 14.596A6.5 6.5 0 1116.5 10a1.25 1.25 0 01-2.5 0 4 4 0 10-.571 2.06A2.75 2.75 0 0018 10a8 8 0 10-2.343 5.657.75.75 0 00-1.06-1.06 6.5 6.5 0 01-9.193 0zM10 7.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </template>
-      </span>
+      <!-- Maximum Value -->
+      <div class="relative flex-1">
+        <label for="maxValue" class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
+          {{ __('Maximum Value', 'aio-woodiscount') }}
+          <div class="group relative">
+            <QuestionMarkCircleIcon class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            <div
+              class="absolute left-1/2 top-full mt-1 -translate-x-1/2 hidden group-hover:block w-max rounded bg-gray-700 p-2 text-xs text-white shadow-lg z-50"
+            >
+              {{ __('The maximum value that can be applied', 'aio-woodiscount') }}
+            </div>
+          </div>
+        </label>
+        <div class="flex items-center">
+          <input
+            v-model="maxValue"
+            type="number"
+            id="maxValue"
+            :placeholder="__('Enter maximum value', 'aio-woodiscount')"
+            :disabled="discountType === 'fixed' || discountType === 'default'"
+            class="w-full h-9 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4"
+          />
+          <span class="ml-0 px-2 py-2 h-9 border rounded-custom-aio-right text-gray-700 bg-gray-100">
+            $
+          </span>
+        </div>
+        <p v-if="errors.maxValue" class="text-red-600 text-sm mt-1">{{ errors.maxValue }}</p>
+      </div>
     </div>
 
-    <!-- Maximum Value -->
-    <div>
-      <label for="maxValue" class="block text-sm font-medium text-gray-900">
-        {{ __('Maximum Value', 'aio-woodiscount') }}
-      </label>
-      <input
-        v-model="maxValue"
-        type="number"
-        id="maxValue"
-        placeholder="{{ __('Enter maximum value', 'aio-woodiscount') }}"
-        :disabled="discountType === 'fixed'"
-        class="mt-1.5 w-full h-9 rounded-md border-gray-200 text-gray-700 sm:text-sm"
-      />
-    </div>
+    
   </div>
 </template>
 
 <style scoped>
-/* Optional: Custom styles for tooltip or other elements if needed */
+/* Tooltip styling */
+.group:hover .group-hover\:block {
+  display: block;
+}
+
+.rounded-custom-aio-left{
+    border-radius: 5px 0px 0px 5px ;
+}
+.rounded-custom-aio-right{
+    border-radius: 0px 5px 5px 0px ;
+}
 </style>
