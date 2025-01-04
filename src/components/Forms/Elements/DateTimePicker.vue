@@ -6,10 +6,10 @@ const value2 = ref(''); // Holds the date-time picker range
 </script>
 
 <template>
-  <div class="space-y-4 max-w-lg">
+  <div class="space-y-4 w-2xl">
     <!-- Toggle Switch -->
     <div class="flex items-center gap-2 my-6">
-      <el-switch v-model="enableSchedule" />
+      <el-switch v-model="enableSchedule" inline-prompt :active-text="__( 'On', 'aio-woodiscount')" :inactive-text="__( 'Off', 'aio-woodiscount')" />
       <label class="text-sm font-medium text-gray-900">
         {{ __('Enable Schedule?', 'aio-woodiscount') }}
       </label>
@@ -28,7 +28,8 @@ const value2 = ref(''); // Holds the date-time picker range
         format="YYYY-MM-DD HH:mm:ss"
         date-format="YYYY/MM/DD ddd"
         time-format="A hh:mm:ss"
-        class="aio-height"
+        class="my-custom-popper"
+        size="large"
       />
     </div>
   </div>
@@ -36,19 +37,11 @@ const value2 = ref(''); // Holds the date-time picker range
 
 
 
-<style scoped>
-/* Custom styles for date picker */
-.el-input__inner {
-  border: 2px solid black !important;
-  padding: 10px !important;
+<style >
+.my-custom-popper{
+  border: 0.5px solid #818181;
+
 }
 
-.el-input__inner::placeholder {
-  color: gray !important;
-  font-size: 14px !important;
-}
 
-.aio-height .el-date-editor--datetimerange {
-  height: auto !important;
-}
 </style>

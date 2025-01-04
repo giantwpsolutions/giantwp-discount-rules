@@ -1,140 +1,200 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from "vue";
+import { Delete } from "@element-plus/icons-vue";
+import {
+  conditionOptions,
+  conditonsApplies,
+  enableConditions,
+  operatorOptions,
+} from "./ConditionsData/conditionsData.js";
 
-// Initial conditions data structure
+// Reactive Data
+const { __ } = wp.i18n;
 const conditions = reactive([
-  { id: Date.now(), field: '', operator: '', value: '' },
+  { id: Date.now(), field: "", operator: "Greater Than", value: "100" },
 ]);
 
-// Options for the first field
-const conditionOptions = [
-  { label: 'Select', value: '' },
-  { label: 'Cart Subtotal Price', value: 'cartPrice' },
-  { label: 'Cart Quantity', value: 'cartQuantity' },
-  { label: 'Cart Total Weight', value: 'cartWeight' },
-  { label: 'Cart Item Product', value: 'cartItemProduct' },
-  { label: 'Cart Item Variation', value: 'cartItemVariation' },
-  { label: 'Cart Item Category', value: 'cartItemCategory' },
-  { label: 'Cart Item Tag', value: 'cartItemTag' },
-  { label: 'Cart Item Regular Price', value: 'cartItemPrice' },
-  { label: 'Customer Is Logged In', value: 'isLoggedIn' },
-  { label: 'Customer Role', value: 'customerRole' },
-  { label: 'Specific Customer', value: 'specificCustomer' },
-  { label: 'Customer Order Count', value: 'orderCount' },
-  { label: 'Order History Category', value: 'orderCategory' },
-  { label: 'Shipping Region', value: 'shippingRegion' },
-  { label: 'Payment Method', value: 'paymentMethod' },
-  { label: 'Applied Coupons', value: 'appliedCoupons' },
-];
-
-// Options for operators based on the selected first field
-const operatorOptions = {
-  default: ['Greater Than', 'Less Than', 'Equal or Greater Than', 'Equal or Less Than'],
-  contain: ['Contains All', 'Contains in List', 'Not Contain in List'],
-  isLoggedIn: ['Logged In', 'Not Logged In'],
-  inList: ['In List', 'Not In List'],
+// Value Field Options for Dropdowns
+const dropdownOptions = {
+  cart_item_product: ["Product 1", "Product 2", "Product 3"],
+  cartItemVariation: ["Variation 1", "Variation 2", "Variation 3"],
+  specificCustomer: ["Customer A", "Customer B", "Customer C"],
 };
 
-// Add new condition
+// Add a New Condition
 const addCondition = (event) => {
-  // Prevent form submission or reload
   event.preventDefault();
-
   conditions.push({
     id: Date.now(),
-    field: '',
-    operator: '',
-    value: '',
+    field: "cartPrice",
+    operator: "Greater Than",
+    value: "",
   });
 };
 
-// Remove condition
+// Remove a Condition
 const removeCondition = (id) => {
   const index = conditions.findIndex((cond) => cond.id === id);
   if (index > -1) conditions.splice(index, 1);
 };
 
-// Dynamic operator options based on selected field
+// Get Operators for the Selected Field
 const getOperators = (field) => {
   if (
-    ['cartItemProduct', 'cartItemVariation', 'cartItemCategory', 'cartItemTag'].includes(field)
+    field === "cart_item_product" ||
+    field === "cart_item_variation" ||
+    field === "cart_item_category" ||
+    field === "cart_item_tag" ||
+    field === "customer_order_history_category" ||
+    field === "customer_order_history_category"
   ) {
     return operatorOptions.contain;
-  } else if (field === 'isLoggedIn') {
+  }
+  if (field === "isLoggedIn") {
     return operatorOptions.isLoggedIn;
-  } else if (['customerRole', 'specificCustomer'].includes(field)) {
-    return operatorOptions.inList;
   }
   return operatorOptions.default;
 };
+
+// Check if the Third Field is a Number Input
+const isNumberField = (field) => ["cartPrice"].includes(field);
+
+// Check if the Third Field is a Dropdown
+const isDropdownField = (field) =>
+  ["cart_item_product", "cart_item_variation", "customer_specific"].includes(
+    field
+  );
+
+// Get Dropdown Options for the Third Field
+const getDropdownOptions = (field) => dropdownOptions[field] || [];
 </script>
 
 <template>
-  <div class="p-4">
-    <h3 class="text-lg font-bold mb-4">{{ __('Add Conditions', 'aio-woodiscount') }}</h3>
-
-    <!-- Dynamic Conditions -->
-    <div v-for="condition in conditions" :key="condition.id" class="flex items-center gap-4 mb-4">
-      <!-- First Field -->
-      <select
-        v-model="condition.field"
-        class="border rounded p-2 flex-1"
-        :aria-label="__('Condition Field', 'aio-woodiscount')"
-      >
-        <option
-          v-for="option in conditionOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ __(option.label, 'aio-woodiscount') }}
-        </option>
-      </select>
-
-      <!-- Operator -->
-      <select
-        v-model="condition.operator"
-        :disabled="!condition.field"
-        class="border rounded p-2 flex-1"
-        :aria-label="__('Condition Operator', 'aio-woodiscount')"
-      >
-        <option value="" disabled>{{ __('Select Operator', 'aio-woodiscount') }}</option>
-        <option v-for="op in getOperators(condition.field)" :key="op" :value="op">
-          {{ __(op, 'aio-woodiscount') }}
-        </option>
-      </select>
-
-      <!-- Third Field: Value -->
-      <input
-        v-if="condition.field && condition.operator"
-        v-model="condition.value"
-        :type="['cartPrice', 'cartItemPrice'].includes(condition.field) ? 'number' : 'text'"
-        :placeholder="__('Enter value', 'aio-woodiscount')"
-        class="border rounded p-2 flex-1"
-      />
-      <span
-        v-else-if="condition.field === 'isLoggedIn'"
-        class="flex-1 text-center text-sm text-gray-500"
-      >
-        {{ __('No value required', 'aio-woodiscount') }}
-      </span>
-
-      <!-- Delete Button -->
-      <button
-        @click="removeCondition(condition.id)"
-        class="text-red-500 border border-red-500 rounded p-2 hover:bg-red-100"
-        :aria-label="__('Delete Condition', 'aio-woodiscount')"
-      >
-        {{ __('Delete', 'aio-woodiscount') }}
-      </button>
+  <div class="space-y-4 w-5/6">
+    <div class="flex items-center gap-2 mt-6 mb-1">
+      <el-switch
+        v-model="enableConditions"
+        inline-prompt
+        :active-text="__('On', 'aio-woodiscount')"
+        :inactive-text="__('Off', 'aio-woodiscount')" />
+      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+        {{ __("Enable Conditions?", "aio-woodiscount") }}
+      </label>
     </div>
 
-    <!-- Add Condition Button -->
-    <button
-      @click="addCondition"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-      :aria-label="__('Add Condition', 'aio-woodiscount')"
-    >
-      {{ __('Add Condition', 'aio-woodiscount') }}
-    </button>
+    <!-- Conditions field group -->
+    <div class="space-y-4" v-if="enableConditions">
+      <!-- Radio Group -->
+      <div class="flex items-center gap-2 mt-6 mb-1">
+        <label
+          class="text-sm font-medium text-gray-900 flex items-center gap-1">
+          {{ __("Apply conditions if matches", "aio-woodiscount") }}
+        </label>
+        <div class="group relative">
+          <el-radio-group v-model="conditonsApplies">
+            <el-radio-button
+              :label="__('Any', 'aio-woodiscount')"
+              value="any" />
+            <el-radio-button
+              :label="__('All', 'aio-woodiscount')"
+              value="all" />
+          </el-radio-group>
+        </div>
+      </div>
+
+      <label
+        for="add_conditions"
+        class="block text-sm font-medium text-gray-900 my-5">
+        {{ __("Add Conditions", "aio-woodiscount") }}
+      </label>
+
+      <!-- Dynamic Conditions -->
+      <div
+        v-for="condition in conditions"
+        :key="condition.id"
+        class="space-y-2 flex">
+        <div class="flex items-center gap-4">
+          <!-- Condition Options -->
+          <select
+            v-model="condition.field"
+            class="border rounded p-2 flex-1"
+            :aria-label="__('Condition Field', 'aio-woodiscount')">
+            <option value="">
+              {{ __("Please select", "aio-woodiscount") }}
+            </option>
+            <template v-for="group in conditionOptions" :key="group.label">
+              <optgroup :label="group.label" class="optgroup-custom-style">
+                <option
+                  v-for="option in group.options"
+                  :key="option.value"
+                  :value="option.value"
+                  class="option-custom-style">
+                  {{ option.label }}
+                </option>
+              </optgroup>
+            </template>
+          </select>
+
+          <!-- Operator -->
+          <select
+            v-model="condition.operator"
+            class="border rounded p-2 flex-1"
+            :aria-label="__('Condition Operator', 'aio-woodiscount')">
+            <option value="" disabled>
+              {{ __("Select Operator", "aio-woodiscount") }}
+            </option>
+            <option
+              v-for="op in getOperators(condition.field)"
+              :key="op.value"
+              :value="op.value">
+              {{ op.label }}
+            </option>
+          </select>
+
+          <!-- Third Field -->
+          <div class="flex-1">
+            <!-- Number Input -->
+            <input
+              v-if="isNumberField(condition.field)"
+              v-model="condition.value"
+              type="number"
+              placeholder="Enter a number"
+              class="border rounded p-2 w-full" />
+
+            <!-- Dropdown Select -->
+            <select
+              v-else-if="isDropdownField(condition.field)"
+              v-model="condition.value"
+              class="border rounded p-2 w-full">
+              <option value="" disabled>Select an option</option>
+              <option
+                v-for="option in getDropdownOptions(condition.field)"
+                :key="option"
+                :value="option">
+                {{ option }}
+              </option>
+            </select>
+
+            <!-- No Value Needed -->
+            <span v-else class="text-gray-500">{{
+              __("No value needed", "aio-woodiscount")
+            }}</span>
+          </div>
+        </div>
+
+        <!-- Delete Button -->
+        <el-icon @click="removeCondition(condition.id)" size="24px">
+          <Delete style="color: red; cursor: pointer" />
+        </el-icon>
+      </div>
+
+      <!-- Add Condition Button -->
+      <button
+        @click="addCondition"
+        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
+        :aria-label="__('Add Condition', 'aio-woodiscount')">
+        {{ __("Add Condition", "aio-woodiscount") }}
+      </button>
+    </div>
   </div>
 </template>

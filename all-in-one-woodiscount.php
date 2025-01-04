@@ -109,6 +109,12 @@ final class All_in_one_wooDiscount {
         }
 
         update_option( 'AIOWD_version', self::version );
+        
+        if( is_admin() ){
+        new AIO_WooDiscount\Api\Api();
+        }
+
+        
     }
 
     /**

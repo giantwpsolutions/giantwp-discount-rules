@@ -44,3 +44,22 @@ body, html {
     width: 100%;
   }
 }
+.custom-tooltip{
+  max-width: 220px; /* Set your desired width */
+  white-space: normal; /* Allow multiline text */
+  word-wrap: break-word;
+}
+
+.optgroup-custom-style{
+  font-weight: 400;
+  font-style: italic;
+  font-size: 12px;
+  padding-top: 10px;
+
+}
+
+.option-custom-style{
+  font-style: normal;
+  font-size: 14px;
+  cursor: pointer;
+}

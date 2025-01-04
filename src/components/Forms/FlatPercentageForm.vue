@@ -16,6 +16,7 @@
 <FlatPercentageSelection></FlatPercentageSelection>
 <DateTimePicker></DateTimePicker>
 <UsageLimits></UsageLimits>
+<Conditions></Conditions>
 </form>
 
 
