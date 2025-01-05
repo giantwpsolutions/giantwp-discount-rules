@@ -47,11 +47,11 @@ class Products_Controller extends WP_REST_Controller
      */
     public function get_products_item_permission()
     {
-        if (current_user_can('manage_woocommerce')) {
-            return true;
-        }
+        // if (current_user_can('manage_woocommerce')) {
+        //     return true;
+        // }
 
-        return false;
+        return true;
     }
 
 

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref } from "vue";
 import { Delete } from "@element-plus/icons-vue";
 import {
   conditionOptions,
@@ -7,13 +7,6 @@ import {
   enableConditions,
   operatorOptions,
 } from "./ConditionsData/conditionsData.js";
-
-import {
-  productOptions,
-  isLoadingProducts,
-  productError,
-  loadProducts,
-} from "@/data/productsFetch.js";
 
 // Reactive Data
 const { __ } = wp.i18n;
@@ -28,16 +21,10 @@ const conditions = reactive([
 
 // Value Field Options for Dropdowns
 const dropdownOptions = {
-  cart_item_product: [],
+  cart_item_product: ["Product 1", "Product 2", "Product 3"],
   cartItemVariation: ["Variation 1", "Variation 2", "Variation 3"],
   specificCustomer: ["Customer A", "Customer B", "Customer C"],
 };
-
-// Fetch products on mount for cart_item_product
-onMounted(async () => {
-  await loadProducts();
-  dropdownOptions.cart_item_product = productOptions.value; // Populate dynamically
-});
 
 // Add a New Condition
 const addCondition = (event) => {
@@ -93,7 +80,6 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
 
 <template>
   <div class="space-y-4 w-5/6">
-    <!-- Enable Conditions -->
     <div class="flex items-center gap-2 mt-6 mb-1">
       <el-switch
         v-model="enableConditions"
@@ -133,12 +119,12 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
       <div
         v-for="condition in conditions"
         :key="condition.id"
-        class="flex items-center gap-2 mb-4">
-        <!-- Field Selector -->
-        <div class="w-[30%]">
+        class="flex items-center gap-4 mb-4">
+        <div class="flex items-center w-full gap-4">
+          <!-- Condition Options -->
           <select
             v-model="condition.field"
-            class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="border h-8 rounded p-2 flex-1 basis-1/4 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             :aria-label="__('Condition Field', 'aio-woodiscount')">
             <option value="">
               {{ __("Please select", "aio-woodiscount") }}
@@ -157,13 +143,11 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
               </optgroup>
             </template>
           </select>
-        </div>
 
-        <!-- Operator Selector -->
-        <div class="w-[20%]">
+          <!-- Operator -->
           <select
             v-model="condition.operator"
-            class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="border h-8 rounded p-2 flex basis-1/4 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             :aria-label="__('Condition Operator', 'aio-woodiscount')">
             <option value="" disabled>
               {{ __("Select Operator", "aio-woodiscount") }}
@@ -175,76 +159,56 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
               {{ op.label }}
             </option>
           </select>
-        </div>
 
-        <!-- Value Input -->
-        <div class="w-[45%]">
-          <input
-            v-if="isNumberField(condition.field)"
-            v-model="condition.value"
-            type="number"
-            placeholder="Enter a number"
-            class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-
-          <div
-            v-else-if="isPricingField(condition.field)"
-            class="flex items-center">
+          <!-- Third Field -->
+          <div class="flex basis-2/4">
             <input
+              v-if="isNumberField(condition.field)"
               v-model="condition.value"
               type="number"
-              placeholder="Enter Value"
-              class="w-5/6 h-8 border-gray-300 text-sm rounded-l border-r-0 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-            <span
-              class="w-1/6 h-8 flex items-center justify-center bg-gray-200 border border-l-0 border-gray-300 rounded-r">
-              $
-            </span>
+              placeholder="Enter a number"
+              class="border rounded h-8 p-2 w-full text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+
+            <!-- pricing -->
+            <div v-else-if="isPricingField(condition.field)" class="">
+              <input
+                v-model="usageLimitsCount"
+                type="number"
+                id="usageLimit"
+                :placeholder="__('Enter Value', 'aio-woodiscount')"
+                class="w-5/6 h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+              <span
+                class="ml-0 w-1/6 h-8 px-2.5 py-2.5 border rounded-custom-aio-right text-gray-700 bg-gray-100">
+                $
+              </span>
+            </div>
+
+            <select
+              v-else-if="isDropdownField(condition.field)"
+              v-model="condition.value"
+              class="w-5/6 h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="" disabled>Select an option</option>
+              <option
+                v-for="option in getDropdownOptions(condition.field)"
+                :key="option"
+                :value="option">
+                {{ option }}
+              </option>
+            </select>
+
+            <span v-else class="text-gray-500">{{
+              __("No value needed", "aio-woodiscount")
+            }}</span>
           </div>
-
-          <!-- Product Dropdown -->
-          <el-select
-            v-else-if="isDropdownField(condition.field)"
-            v-model="condition.value"
-            class="flex-1"
-            multiple
-            placeholder="Select product"
-            :loading="isLoadingProducts">
-            <el-option
-              v-for="option in getDropdownOptions(condition.field)"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value" />
-          </el-select>
-
-          <!-- <select
-            v-else-if="isDropdownField(condition.field)"
-            v-model="condition.value"
-            class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="" disabled>
-              {{ __("Select an option", "aio-woodiscount") }}
-            </option>
-            <option
-              v-for="option in getDropdownOptions(condition.field)"
-              :key="option"
-              :value="option">
-              {{ option.label }}
-            </option>
-          </select> -->
-
-          <span v-else class="text-gray-500">
-            {{ __("No value needed", "aio-woodiscount") }}
-          </span>
         </div>
 
         <!-- Delete Button -->
-        <div class="w-[5%] flex justify-center items-center">
-          <el-icon
-            @click="removeCondition(condition.id)"
-            size="20px"
-            color="red"
-            class="cursor-pointer text-red-500">
-            <Delete />
-          </el-icon>
-        </div>
+        <el-icon
+          @click="removeCondition(condition.id)"
+          size="20px"
+          class="delete_icon">
+          <Delete style="color: red; cursor: pointer" />
+        </el-icon>
       </div>
 
       <!-- Add Condition Button -->

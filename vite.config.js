@@ -7,16 +7,21 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [vue()],
-    base: isProduction ? './' : '/', // Use relative paths in production
+    base: isProduction ? './' : '/',   // Use relative paths in production
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),   // Add alias for `@` pointing to `src`
+      },
+    },
     build: {
-      outDir: 'dist', // Output directory
+      outDir: 'dist',   // Output directory
       emptyOutDir: true,
       rollupOptions: {
-        input: path.resolve(__dirname, 'src/main.js'), // Entry file
+        input: path.resolve(__dirname, 'src/main.js'),   // Entry file
         output: {
-          assetFileNames: 'assets/[name][extname]', // No hash for assets
-          entryFileNames: 'assets/main.js', // Fixed name for JS entry
-          chunkFileNames: 'assets/[name].js', // Fixed name for JS chunks
+          assetFileNames: 'assets/[name][extname]',   // No hash for assets
+          entryFileNames: 'assets/main.js',           // Fixed name for JS entry
+          chunkFileNames: 'assets/[name].js',         // Fixed name for JS chunks
         },
       },
     },
@@ -24,7 +29,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       strictPort: true,
       proxy: {
-        '/wp-admin': 'http://localhost/giantwpsolutions', // Adjust to your local WordPress setup
+        '/wp-admin': 'http://localhost/giantwpsolutions',   // Adjust to your local WordPress setup
         '/wp-content': 'http://localhost/giantwpsolutions',
       },
     },

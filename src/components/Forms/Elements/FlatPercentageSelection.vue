@@ -53,7 +53,7 @@ const handleSubmit = () => {
       <select
         v-model="discountType"
         id="discountType"
-        class="mt-1.5 h-9 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
+        class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
         <option value="default">
           {{ __("Please select", "aio-woodiscount") }}
         </option>
@@ -82,12 +82,13 @@ const handleSubmit = () => {
             type="number"
             id="discountValue"
             :placeholder="__('Enter discount value', 'aio-woodiscount')"
-            class="w-full h-9 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
+            class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
-            class="ml-0 h-9 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100">
+            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100">
             {{ discountType === "percentage" ? "%" : "$" }}
           </span>
         </div>
+
         <p v-if="errors.discountValue" class="text-red-600 text-sm mt-1">
           {{ errors.discountValue }}
         </p>
@@ -120,9 +121,9 @@ const handleSubmit = () => {
             id="maxValue"
             :placeholder="__('Enter maximum value', 'aio-woodiscount')"
             :disabled="discountType === 'fixed' || discountType === 'default'"
-            class="w-full h-9 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
+            class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
-            class="ml-0 px-2 py-2 h-9 border rounded-custom-aio-right text-gray-700 bg-gray-100">
+            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100">
             $
           </span>
         </div>

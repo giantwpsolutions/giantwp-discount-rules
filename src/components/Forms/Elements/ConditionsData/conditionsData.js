@@ -1,25 +1,6 @@
 import { reactive, ref, onMounted } from 'vue';
 const { __ } = wp.i18n;
 
-//Import Product API
-import { fetchProducts } from '@/api/services/productService';
-const products = ref([]);
-const isLoading = ref(true);
-const error = ref(null);
-
-export const loadProducts = async () => {
-    try {
-        products.value = await fetchProducts();
-    } catch (err) {
-        error.value = 'Failed to fetch products.';
-    } finally {
-        isLoading.value = false;
-    }
-};
-
-onMounted(() => {
-    loadProducts();
-});
 
 //State for conditions usages (on/off)
 export const enableConditions = ref(false);
