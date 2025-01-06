@@ -39,15 +39,13 @@ export const loadProducts = async () => {
 
                     // Push variation with attributes to options
                     variationOptions.value.push({
-                        label: `${product.name} - ${attributeString || "N/A"}`,   // Default to "N/A" if no attributes
+                        label: `${product.name} - ${attributeString || "N/A"}`,
                         value: variation.id,
                     });
                 });
             }
         });
 
-        console.log("Product Options:", productOptions.value);
-        console.log("Variation Options:", variationOptions.value);
     } catch (error) {
         console.error("Error loading products:", error);
         productError.value = "Failed to load products.";

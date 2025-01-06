@@ -39,7 +39,7 @@ export const conditionOptions = [
         options: [
             { label: __('Customer Is Logged In', 'aio-woodiscount'), value: 'customer_is_logged_in' },
             { label: __('Customer Role', 'aio-woodiscount'), value: 'customer_role' },
-            { label: __('Specific Customer', 'aio-woodiscount'), value: 'customer_specific' },
+            { label: __('Specific Customer', 'aio-woodiscount'), value: 'specific_customer' },
         ],
     },
     {
@@ -95,6 +95,17 @@ export const operatorOptions = {
         {
             label: __('Not Logged In', 'aio-woodiscount'),
             value: 'not_logged_in',
+        },
+    ],
+
+    inList: [
+        {
+            label: __('In List', 'aio-woodiscount'),
+            value: 'in_list',
+        },
+        {
+            label: __('Not in List', 'aio-woodiscount'),
+            value: 'not_in_list',
         },
     ],
 };
