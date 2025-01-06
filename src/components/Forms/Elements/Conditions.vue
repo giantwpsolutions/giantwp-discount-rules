@@ -13,6 +13,7 @@ import {
   isLoadingProducts,
   productError,
   loadProducts,
+  variationOptions,
 } from "@/data/productsFetch.js";
 
 // Reactive Data
@@ -27,16 +28,21 @@ const conditions = reactive([
 ]);
 
 // Value Field Options for Dropdowns
-const dropdownOptions = {
+const dropdownOptions = reactive({
   cart_item_product: [],
-  cartItemVariation: ["Variation 1", "Variation 2", "Variation 3"],
+  cart_item_variation: [],
   specificCustomer: ["Customer A", "Customer B", "Customer C"],
-};
-
+});
 // Fetch products on mount for cart_item_product
 onMounted(async () => {
-  await loadProducts();
-  dropdownOptions.cart_item_product = productOptions.value; // Populate dynamically
+  try {
+    await loadProducts();
+
+    dropdownOptions.cart_item_product = productOptions.value;
+    dropdownOptions.cart_item_variation = variationOptions.value;
+  } catch (error) {
+    console.error("Error loading dropdown options:", error);
+  }
 });
 
 // Add a New Condition

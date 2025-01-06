@@ -65,21 +65,48 @@ class Products_Controller extends WP_REST_Controller
 
     public function get_products_item($request)
     {
-
         $args = [
             'status' => 'publish',
-            'limit' => -1,
+            'limit'  => -1,
         ];
 
+        // Get all products
         $products = wc_get_products($args);
 
         $data = [];
         foreach ($products as $product) {
-            $data[] = [
-                'id'    => $product->get_id(),
-                'name'  => $product->get_name(),
-                'price' => $product->get_price(),
-            ];
+            // Check if the product has variations
+            if ($product->is_type('variable')) {
+                $variations = $product->get_children(); // Get variation IDs
+
+                $variation_data = [];
+                foreach ($variations as $variation_id) {
+                    $variation = wc_get_product($variation_id);
+                    if ($variation) {
+                        $variation_data[] = [
+                            'id'         => $variation->get_id(),
+                            'name'       => $variation->get_name(),
+                            'price'      => $variation->get_price(),
+                            'sku'        => $variation->get_sku(),
+                            'attributes' => $variation->get_attributes(),
+                        ];
+                    }
+                }
+
+                $data[] = [
+                    'id'         => $product->get_id(),
+                    'name'       => $product->get_name(),
+                    'price'      => $product->get_price(),
+                    'variations' => $variation_data,
+                ];
+            } else {
+                // Simple or other product types
+                $data[] = [
+                    'id'    => $product->get_id(),
+                    'name'  => $product->get_name(),
+                    'price' => $product->get_price(),
+                ];
+            }
         }
 
         return rest_ensure_response($data);
