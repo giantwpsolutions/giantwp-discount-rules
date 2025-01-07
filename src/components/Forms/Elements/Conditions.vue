@@ -23,6 +23,20 @@ import {
   loadUsersAndRoles,
 } from "@/data/usersFetch.js";
 
+import {
+  categoryOptions,
+  tagOptions,
+  isLoadingCategoriesTags,
+  loadCategoriesAndTags,
+} from "@/data/categoriesAndTagsFetch.js";
+
+import {
+  paymentGatewayOptions,
+  isLoadingPaymentGateways,
+  paymentGatewayError,
+  loadPaymentGateways,
+} from "@/data/paymentGatewaysFetch.js";
+
 // Reactive Data
 const { __ } = wp.i18n;
 const conditions = reactive([
@@ -40,6 +54,9 @@ const dropdownOptions = reactive({
   cart_item_variation: [],
   customer_role: [],
   specific_customer: [],
+  cart_item_category: [],
+  cart_item_tag: [],
+  payment_method: [],
 });
 //API fetching Data
 
@@ -54,6 +71,15 @@ onMounted(async () => {
     await loadUsersAndRoles();
     dropdownOptions.customer_role = roleOptions.value; // Roles
     dropdownOptions.specific_customer = userOptions.value; // Users
+
+    //Load Category and Tags
+    await loadCategoriesAndTags();
+    dropdownOptions.cart_item_category = categoryOptions.value;
+    dropdownOptions.cart_item_tag = tagOptions.value;
+
+    //load Payment gateways
+    await loadPaymentGateways();
+    dropdownOptions.payment_method = paymentGatewayOptions.value;
   } catch (error) {
     console.error("Error loading dropdown options:", error);
   }
@@ -88,10 +114,14 @@ const getOperators = (field) => {
   ) {
     return operatorOptions.contain;
   }
-  if (field === "customer_role" || field === "specific_customer") {
+  if (
+    field === "customer_role" ||
+    field === "specific_customer" ||
+    field === "payment_method"
+  ) {
     return operatorOptions.inList;
   }
-  if (field === "isLoggedIn") {
+  if (field === "customer_is_logged_in") {
     return operatorOptions.isLoggedIn;
   }
   return operatorOptions.default;
@@ -99,10 +129,13 @@ const getOperators = (field) => {
 
 // Check if the Third Field is a Number Input
 const isNumberField = (field) =>
-  ["cart_quantity", "cart_total_weight"].includes(field);
+  ["cart_quantity", "cart_total_weight", "customer_order_count"].includes(
+    field
+  );
 
 // Check if the Third Field is a Number Input
-const isPricingField = (field) => ["cart_subtotal_price"].includes(field);
+const isPricingField = (field) =>
+  ["cart_subtotal_price", "cart_item_regular_price"].includes(field);
 
 // Check if the Third Field is a Dropdown
 const isDropdownField = (field) =>
@@ -111,6 +144,9 @@ const isDropdownField = (field) =>
     "cart_item_variation",
     "customer_role",
     "specific_customer",
+    "cart_item_category",
+    "cart_item_tag",
+    "payment_method",
   ].includes(field);
 
 // Get Dropdown Options for the Third Field
@@ -202,9 +238,6 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
               v-model="condition.operator"
               class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               :aria-label="__('Condition Operator', 'aio-woodiscount')">
-              <option value="" disabled>
-                {{ __("Select Operator", "aio-woodiscount") }}
-              </option>
               <option
                 v-for="op in getOperators(condition.field)"
                 :key="op.value"

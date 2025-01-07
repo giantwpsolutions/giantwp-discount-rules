@@ -2,7 +2,10 @@
 
 namespace AIO_WooDiscount\Api;
 
+use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
+use AIO_WooDiscount\Api\Controllers\Products_Category_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Controller;
+use AIO_WooDiscount\Api\Controllers\Products_Tag_Controller;
 use AIO_WooDiscount\Api\Controllers\Users_Controller;
 
 /**
@@ -24,5 +27,15 @@ class Api
 
         $users_controller = new Users_Controller();
         $users_controller->register_routes();
+
+        $product_category = new Products_Category_Controller();
+        $product_category->register_routes();
+
+
+        $product_tag = new Products_Tag_Controller();
+        $product_tag->register_routes();
+
+        $paymentGatewayController = new Payment_Gateways_Controller();
+        $paymentGatewayController->register_routes();
     }
 }
