@@ -94,3 +94,16 @@ html {
 .el-select-dropdown__item span {
   color: rgb(34, 34, 34);
 }
+.full-width {
+  width: 100%;
+}
+.el-cascader__search-input {
+  border: none !important;
+  outline: none !important;
+  background-color: white;
+}
+.el-cascader__search-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}

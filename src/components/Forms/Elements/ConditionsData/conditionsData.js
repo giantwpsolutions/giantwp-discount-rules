@@ -46,6 +46,7 @@ export const conditionOptions = [
         label: __('Purchase History', 'aio-woodiscount'),
         options: [
             { label: __('Customer Order Count', 'aio-woodiscount'), value: 'customer_order_count' },
+            { label: __('Order History Product', 'aio-woodiscount'), value: 'customer_order_history_product' },
             { label: __('Order History Category', 'aio-woodiscount'), value: 'customer_order_history_category' },
             { label: __('Shipping Region', 'aio-woodiscount'), value: 'customer_shipping_region' },
         ],
@@ -126,4 +127,52 @@ export const addCondition = () => {
 export const removeCondition = (id) => {
     const index = conditions.findIndex((cond) => cond.id === id);
     if (index > -1) conditions.splice(index, 1);
+};
+
+
+
+
+
+// Value Field Options for Dropdowns
+export const dropdownOptions = reactive({
+    cart_item_product: [],
+    cart_item_variation: [],
+    customer_role: [],
+    specific_customer: [],
+    cart_item_category: [],
+    cart_item_tag: [],
+    payment_method: [],
+    customer_order_history_category: [],
+});
+
+//value for Cascade dropdown options
+
+export const cascadeOptions = reactive({
+    customer_shipping_region: [],
+});
+
+// Get Operators for the Selected Field
+export const getOperators = (field) => {
+    if (
+        field === "cart_item_product" ||
+        field === "cart_item_variation" ||
+        field === "cart_item_category" ||
+        field === "cart_item_tag" ||
+        field === "customer_order_history_category" ||
+        field === "customer_order_history_product"
+    ) {
+        return operatorOptions.contain;
+    }
+    if (
+        field === "customer_role" ||
+        field === "specific_customer" ||
+        field === "payment_method" ||
+        field === "customer_shipping_region"
+    ) {
+        return operatorOptions.inList;
+    }
+    if (field === "customer_is_logged_in") {
+        return operatorOptions.isLoggedIn;
+    }
+    return operatorOptions.default;
 };

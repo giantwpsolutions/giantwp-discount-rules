@@ -2,11 +2,14 @@
 
 namespace AIO_WooDiscount\Api;
 
+use AIO_WooDiscount\Api\Controllers\General_Data;
 use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Category_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Tag_Controller;
+use AIO_WooDiscount\Api\Controllers\Shipping_Zone_Controller;
 use AIO_WooDiscount\Api\Controllers\Users_Controller;
+
 
 /**
  * Rest API Class
@@ -37,5 +40,11 @@ class Api
 
         $paymentGatewayController = new Payment_Gateways_Controller();
         $paymentGatewayController->register_routes();
+
+        $ShippingZoneController = new Shipping_Zone_Controller();
+        $ShippingZoneController->register_routes();
+
+        $generalData = new General_Data();
+        $generalData->register_routes();
     }
 }

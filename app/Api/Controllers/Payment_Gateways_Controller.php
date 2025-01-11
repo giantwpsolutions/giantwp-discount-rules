@@ -36,6 +36,7 @@ class Payment_Gateways_Controller extends WP_REST_Controller
         );
     }
 
+
     /**
      * Checks if the current user has permission to access the API.
      *  @param  \WP_REST_Request $request The request object.

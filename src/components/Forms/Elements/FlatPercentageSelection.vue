@@ -1,6 +1,17 @@
 <script setup>
 import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid"; // Importing the tooltip icon
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+
+import {
+  generalData,
+  isLoadingGeneralData,
+  generalDataError,
+  loadGeneralData,
+} from "@/data/generalDataFetch";
+
+onMounted(() => {
+  loadGeneralData();
+});
 
 // Reactive variables
 const discountType = ref("default"); // Default to 'fixed'
@@ -84,8 +95,12 @@ const handleSubmit = () => {
             :placeholder="__('Enter discount value', 'aio-woodiscount')"
             class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
-            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100">
-            {{ discountType === "percentage" ? "%" : "$" }}
+            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100"
+            v-html="
+              discountType === 'percentage'
+                ? '%'
+                : generalData.currency_symbol || '$'
+            ">
           </span>
         </div>
 
@@ -123,8 +138,8 @@ const handleSubmit = () => {
             :disabled="discountType === 'fixed' || discountType === 'default'"
             class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
-            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100">
-            $
+            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100"
+            v-html="generalData.currency_symbol || '$'">
           </span>
         </div>
       </div>

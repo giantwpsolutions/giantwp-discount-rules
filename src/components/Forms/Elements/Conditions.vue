@@ -6,6 +6,9 @@ import {
   conditonsApplies,
   enableConditions,
   operatorOptions,
+  dropdownOptions,
+  cascadeOptions,
+  getOperators,
 } from "./ConditionsData/conditionsData.js";
 
 import {
@@ -37,6 +40,19 @@ import {
   loadPaymentGateways,
 } from "@/data/paymentGatewaysFetch.js";
 
+import {
+  countriesOptions,
+  isLoadingCountries,
+  loadCountriesAndStates,
+} from "@/data/shippingFetch.js";
+
+import {
+  generalData,
+  isLoadingGeneralData,
+  generalDataError,
+  loadGeneralData,
+} from "@/data/generalDataFetch";
+
 // Reactive Data
 const { __ } = wp.i18n;
 const conditions = reactive([
@@ -48,16 +64,6 @@ const conditions = reactive([
   },
 ]);
 
-// Value Field Options for Dropdowns
-const dropdownOptions = reactive({
-  cart_item_product: [],
-  cart_item_variation: [],
-  customer_role: [],
-  specific_customer: [],
-  cart_item_category: [],
-  cart_item_tag: [],
-  payment_method: [],
-});
 //API fetching Data
 
 onMounted(async () => {
@@ -65,6 +71,7 @@ onMounted(async () => {
     // Load products and variations
     await loadProducts();
     dropdownOptions.cart_item_product = productOptions.value; // Products
+    dropdownOptions.customer_order_history_product = productOptions.value; // Products
     dropdownOptions.cart_item_variation = variationOptions.value; // Variations
 
     // Load users and roles
@@ -75,11 +82,19 @@ onMounted(async () => {
     //Load Category and Tags
     await loadCategoriesAndTags();
     dropdownOptions.cart_item_category = categoryOptions.value;
+    dropdownOptions.customer_order_history_category = categoryOptions.value;
     dropdownOptions.cart_item_tag = tagOptions.value;
 
     //load Payment gateways
     await loadPaymentGateways();
     dropdownOptions.payment_method = paymentGatewayOptions.value;
+
+    //load countries and states
+    await loadCountriesAndStates();
+    cascadeOptions.customer_shipping_region = countriesOptions.value;
+
+    //load general Data
+    await loadGeneralData();
   } catch (error) {
     console.error("Error loading dropdown options:", error);
   }
@@ -102,31 +117,6 @@ const removeCondition = (id) => {
   if (index > -1) conditions.splice(index, 1);
 };
 
-// Get Operators for the Selected Field
-const getOperators = (field) => {
-  if (
-    field === "cart_item_product" ||
-    field === "cart_item_variation" ||
-    field === "cart_item_category" ||
-    field === "cart_item_tag" ||
-    field === "customer_order_history_category" ||
-    field === "customer_order_history_category"
-  ) {
-    return operatorOptions.contain;
-  }
-  if (
-    field === "customer_role" ||
-    field === "specific_customer" ||
-    field === "payment_method"
-  ) {
-    return operatorOptions.inList;
-  }
-  if (field === "customer_is_logged_in") {
-    return operatorOptions.isLoggedIn;
-  }
-  return operatorOptions.default;
-};
-
 // Check if the Third Field is a Number Input
 const isNumberField = (field) =>
   ["cart_quantity", "cart_total_weight", "customer_order_count"].includes(
@@ -147,10 +137,18 @@ const isDropdownField = (field) =>
     "cart_item_category",
     "cart_item_tag",
     "payment_method",
+    "customer_order_history_category",
+    "customer_order_history_product",
   ].includes(field);
+
+const isCascadefield = (field) => ["customer_shipping_region"].includes(field);
 
 // Get Dropdown Options for the Third Field
 const getDropdownOptions = (field) => dropdownOptions[field] || [];
+
+//Get Cascade Options for the third field
+
+const getCascadeOptions = (field) => cascadeOptions[field] || [];
 </script>
 
 <template>
@@ -265,8 +263,8 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
                 placeholder="Enter Value"
                 class="w-5/6 h-8 border-gray-300 text-sm rounded-l border-r-0 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
               <span
-                class="w-1/6 h-8 flex items-center justify-center bg-gray-200 border border-l-0 border-gray-300 rounded-r">
-                $
+                class="w-1/6 h-8 flex items-center justify-center bg-gray-200 border border-l-0 border-gray-300 rounded-r"
+                v-html="generalData.currency_symbol || '$'">
               </span>
             </div>
 
@@ -280,23 +278,20 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
               :loading="isLoadingProducts"
               class="custom-select-v2" />
 
-            <!-- Product Dropdown -->
-            <!-- <el-select
-            v-else-if = "isDropdownField(condition.field)"
-            v-model   = "condition.value"
-            multiple
-            :placeholder = "__('Select', 'aio-woodiscount')"
-            :loading     = "isLoadingProducts">
-            <el-option
-                v-for = "option in getDropdownOptions(condition.field)"
-              :key    = "option.value"
-              :label  = "option.label"
-              :value  = "option.value" />
-          </el-select> -->
+            <el-cascader
+              v-else-if="isCascadefield(condition.field)"
+              :options="countriesOptions"
+              :props="{ multiple: true, checkStrictly: true }"
+              :show-all-levels="false"
+              clearable
+              class="full-width custom-cascade"
+              filterable
+              :loading="isLoadingCountries"
+              placeholder="Select Continent, Country, and State" />
 
-            <span v-else class="text-gray-500">
+            <!-- <span v-else class = "text-gray-500">
               {{ __("No value needed", "aio-woodiscount") }}
-            </span>
+            </span> -->
           </div>
 
           <!-- Delete Button -->
