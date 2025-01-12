@@ -8,6 +8,7 @@ import FlatPercentageSelection from "./Elements/FlatPercentageSelection.vue";
 import DateTimePicker from "./Elements/DateTimePicker.vue";
 import UsageLimits from "./Elements/UsageLimits.vue";
 import CheckProduct from "./Elements/CheckProduct.vue";
+import AutoApply from "./Elements/AutoApply.vue";
 </script>
 
 <template>
@@ -16,6 +17,7 @@ import CheckProduct from "./Elements/CheckProduct.vue";
     <FlatPercentageSelection></FlatPercentageSelection>
     <DateTimePicker></DateTimePicker>
     <UsageLimits></UsageLimits>
+    <AutoApply></AutoApply>
     <Conditions></Conditions>
   </form>
 </template>
