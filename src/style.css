@@ -136,10 +136,19 @@ html {
 .el-input__inner {
   border: none !important;
 }
+.el-input__inner:focus {
+  box-shadow: none !important;
+}
 .el-tag__content {
-  color: black;
+  color: rgb(219, 219, 219);
 }
 
 .el-input__wrapper {
   border: 1px solid rgb(139, 139, 139);
+}
+.el-select__caret {
+  color: #000 !important;
+}
+.el-input-group__append {
+  color: #303030 !important;
 }

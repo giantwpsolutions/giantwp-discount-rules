@@ -55,9 +55,9 @@ const usageLimitsCount = ref(null);
           <input
             v-model="usageLimitsCount"
             type="number"
-              id         = "usageLimit"
-            :placeholder = "__('Enter Usage Limit', 'aio-woodiscount')"
-              class      = "w-full h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4" />
+            id="usageLimit"
+            :placeholder="__('Enter Usage Limit', 'aio-woodiscount')"
+            class="w-full h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4" />
         </div>
       </div>
     </div>
