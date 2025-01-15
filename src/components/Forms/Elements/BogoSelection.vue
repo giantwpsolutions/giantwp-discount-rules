@@ -8,6 +8,8 @@ import {
   loadGeneralData,
 } from "@/data/generalDataFetch";
 
+import BogoSameProductBuy from "./BogoSameProductBuy.vue";
+
 onMounted(() => {
   loadGeneralData();
 });
@@ -218,6 +220,9 @@ const discounttypeBogo = ref("fixedBogo");
         </div>
       </label>
     </div>
+  </div>
+  <div v-if="bogoType === 'bogosame'">
+    <BogoSameProductBuy></BogoSameProductBuy>
   </div>
 </template>
 

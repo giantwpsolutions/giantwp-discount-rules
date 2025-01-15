@@ -9,7 +9,7 @@ import {
   dropdownOptions,
   cascadeOptions,
   getOperators,
-} from "./ConditionsData/conditionsData.js";
+} from "@/data/conditionsData.js";
 
 import {
   productOptions,

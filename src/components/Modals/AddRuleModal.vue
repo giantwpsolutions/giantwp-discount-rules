@@ -181,7 +181,7 @@ const saveForm = () => {
 <style scoped>
 .modal-zoom-fade-enter-active,
 .modal-zoom-fade-leave-active {
-  transition: all 0.7s ease;
+  transition: all 0.5s ease;
 }
 .modal-zoom-fade-enter-from,
 .modal-zoom-fade-leave-to {
