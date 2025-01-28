@@ -152,3 +152,11 @@ html {
 .el-input-group__append {
   color: #303030 !important;
 }
+
+.el-tag span {
+  color: white;
+}
+
+.el-select__tags-text {
+  color: #000 !important;
+}

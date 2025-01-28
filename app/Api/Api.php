@@ -9,6 +9,8 @@ use AIO_WooDiscount\Api\Controllers\Products_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Tag_Controller;
 use AIO_WooDiscount\Api\Controllers\Shipping_Zone_Controller;
 use AIO_WooDiscount\Api\Controllers\Users_Controller;
+use AIO_WooDiscount\Api\Controllers\Save_Data;
+
 
 
 /**
@@ -46,5 +48,8 @@ class Api
 
         $generalData = new General_Data();
         $generalData->register_routes();
+
+        $save_data = new Save_Data();
+        $save_data->register_routes();
     }
 }
