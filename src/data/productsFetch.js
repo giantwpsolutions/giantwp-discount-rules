@@ -1,8 +1,7 @@
 // src/data/productsFetch.js
 import { ref } from "vue";
 import { fetchProducts } from "@/api/services/productService";
-const { __ } = wp.i18n;
-// Adjust the import path
+const { __ } = wp.i18n; // Localization function for translations
 
 // Reactive states
 export const productOptions = ref([]);    // For products
@@ -13,7 +12,7 @@ export const productError = ref(null);
 // Function to fetch products and variations
 export const loadProducts = async () => {
     try {
-        const products = await fetchProducts();
+        const products = await fetchProducts(); // Using wp.apiFetch from productService.js
 
         // Clear existing options
         productOptions.value = [];
@@ -48,9 +47,8 @@ export const loadProducts = async () => {
 
     } catch (error) {
         console.error("Error loading products:", error);
-        productError.value = "Failed to load products.";
+        productError.value = __("Failed to load products.", "aio-woodiscount");
     } finally {
         isLoadingProducts.value = false;
     }
 };
-

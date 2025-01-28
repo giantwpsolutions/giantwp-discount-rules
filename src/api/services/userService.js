@@ -1,14 +1,17 @@
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 
 // Fetch all users with their roles
 export const fetchUsers = async (roles = []) => {
     try {
         // Construct the query parameters for roles
         const queryParams = roles.length > 0 ? `?roles=${roles.join(",")}` : "";
-        const response = await axios.get(`${pluginData.restUrl}users${queryParams}`);
+        const response = await apiFetch({
+            path: `${pluginData.restUrl}users${queryParams}`,
+            method: "GET",
+        });
 
         // Return user data
-        return response.data;
+        return response;
     } catch (error) {
         console.error("Error fetching users:", error);
         throw error;
@@ -18,10 +21,13 @@ export const fetchUsers = async (roles = []) => {
 // Fetch available roles
 export const fetchRoles = async () => {
     try {
-        const response = await axios.get(`${pluginData.restUrl}roles`);
+        const response = await apiFetch({
+            path: `${pluginData.restUrl}roles`,
+            method: "GET",
+        });
 
         // Return roles data
-        return response.data;
+        return response;
     } catch (error) {
         console.error("Error fetching roles:", error);
         throw error;

@@ -1,10 +1,39 @@
-import axios from 'axios';
+import { apiFetch } from '@wordpress/api-fetch';
 
-const apiClient = axios.create({
-    baseURL: pluginData.restUrl, // Defined in your PHP script via `wp_localize_script`
-    headers: {
-        'Content-Type': 'application/json',
+const apiClient = {
+    get: (path, options = {}) => {
+        return apiFetch({
+            path: `${pluginData.restUrl}${path}`,
+            method: 'GET',
+            ...options,
+        });
     },
-});
+
+    post: (path, data = {}, options = {}) => {
+        return apiFetch({
+            path: `${pluginData.restUrl}${path}`,
+            method: 'POST',
+            data,
+            ...options,
+        });
+    },
+
+    put: (path, data = {}, options = {}) => {
+        return apiFetch({
+            path: `${pluginData.restUrl}${path}`,
+            method: 'PUT',
+            data,
+            ...options,
+        });
+    },
+
+    delete: (path, options = {}) => {
+        return apiFetch({
+            path: `${pluginData.restUrl}${path}`,
+            method: 'DELETE',
+            ...options,
+        });
+    },
+};
 
 export default apiClient;

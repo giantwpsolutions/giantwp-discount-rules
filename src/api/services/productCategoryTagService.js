@@ -1,10 +1,13 @@
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 
 // Fetch product categories
 export const fetchProductCategories = async () => {
     try {
-        const response = await axios.get(`${pluginData.restUrl}categories`);
-        return response.data; // Return raw categories data
+        const response = await apiFetch({
+            path: `${pluginData.restUrl}categories`,
+            method: "GET",
+        });
+        return response; // Return raw categories data
     } catch (error) {
         console.error("Error fetching product categories:", error);
         throw error;
@@ -14,8 +17,11 @@ export const fetchProductCategories = async () => {
 // Fetch product tags
 export const fetchProductTags = async () => {
     try {
-        const response = await axios.get(`${pluginData.restUrl}tags`);
-        return response.data; // Return raw tags data
+        const response = await apiFetch({
+            path: `${pluginData.restUrl}tags`,
+            method: "GET",
+        });
+        return response; // Return raw tags data
     } catch (error) {
         console.error("Error fetching product tags:", error);
         throw error;

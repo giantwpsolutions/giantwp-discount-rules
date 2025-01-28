@@ -1,11 +1,14 @@
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 
 
 //Fetch the payment gateway
 export const fetchPaymentGateways = async () => {
     try {
-        const response = await axios.get(`${pluginData.restUrl}payment-gateways`);
-        return response.data;
+        const response = await apiFetch({
+            path: `${pluginData.restUrl}payment-gateways`,
+            method: "GET",
+        });
+        return response;
     } catch (error) {
         console.error("Error Fetching Payment Gateways: ", error);
         throw error;

@@ -14,7 +14,7 @@ class General_Data extends WP_REST_Controller
 
     public function __construct()
     {
-        $this->namespace = 'aio-woodiscount/v1';
+        $this->namespace = 'aio-woodiscount/v2';
         $this->rest_base = 'general';
     }
 
