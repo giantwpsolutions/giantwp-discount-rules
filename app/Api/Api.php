@@ -21,10 +21,10 @@ class Api
 
     public function __construct()
     {
-        add_action('rest_api_init', [$this, 'register_api']);
+        add_action('rest_api_init', [$this, 'aio_register_api']);
     }
 
-    public function register_api()
+    public function aio_register_api()
     {
 
         $product_controller = new Products_Controller();

@@ -1,10 +1,9 @@
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, defineProps, defineEmits, onMounted, watch } from "vue";
+import { debounce } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import {
   conditionOptions,
-  conditonsApplies,
-  enableConditions,
   operatorOptions,
   dropdownOptions,
   cascadeOptions,
@@ -14,7 +13,6 @@ import {
 import {
   productOptions,
   isLoadingProducts,
-  productError,
   loadProducts,
   variationOptions,
 } from "@/data/productsFetch.js";
@@ -36,7 +34,6 @@ import {
 import {
   paymentGatewayOptions,
   isLoadingPaymentGateways,
-  paymentGatewayError,
   loadPaymentGateways,
 } from "@/data/paymentGatewaysFetch.js";
 
@@ -46,64 +43,59 @@ import {
   loadCountriesAndStates,
 } from "@/data/shippingFetch.js";
 
-import {
-  generalData,
-  isLoadingGeneralData,
-  generalDataError,
-  loadGeneralData,
-} from "@/data/generalDataFetch";
+import { generalData, loadGeneralData } from "@/data/generalDataFetch";
 
-// Reactive Data
-const { __ } = wp.i18n;
-const conditions = reactive([
-  {
-    id: Date.now(),
-    field: "cart_subtotal_price",
-    operator: "greater_than",
-    value: "100",
-  },
+// **Props & Emits**
+const props = defineProps({
+  value: Array, // Parent-passed conditions
+  toggle: Boolean, // Enable/Disable conditions
+  conditionsApplies: String, // Enable/Disable conditions
+});
+
+const emit = defineEmits([
+  "update:value",
+  "update:toggle",
+  "update:conditionsApplies",
 ]);
 
-//API fetching Data
+// **Reactive State**
+const enableConditions = ref(props.toggle);
+const localConditions = ref([...props.value]);
+const conditionsApplies = ref(props.conditionsApplies);
 
+// **Sync Props with Local State**
 onMounted(async () => {
   try {
-    // Load products and variations
     await loadProducts();
-    dropdownOptions.cart_item_product = productOptions.value; // Products
-    dropdownOptions.customer_order_history_product = productOptions.value; // Products
-    dropdownOptions.cart_item_variation = variationOptions.value; // Variations
+    dropdownOptions.cart_item_product = productOptions.value;
+    dropdownOptions.customer_order_history_product = productOptions.value;
+    dropdownOptions.cart_item_variation = variationOptions.value;
 
-    // Load users and roles
     await loadUsersAndRoles();
-    dropdownOptions.customer_role = roleOptions.value; // Roles
-    dropdownOptions.specific_customer = userOptions.value; // Users
+    dropdownOptions.customer_role = roleOptions.value;
+    dropdownOptions.specific_customer = userOptions.value;
 
-    //Load Category and Tags
     await loadCategoriesAndTags();
     dropdownOptions.cart_item_category = categoryOptions.value;
     dropdownOptions.customer_order_history_category = categoryOptions.value;
     dropdownOptions.cart_item_tag = tagOptions.value;
 
-    //load Payment gateways
     await loadPaymentGateways();
     dropdownOptions.payment_method = paymentGatewayOptions.value;
 
-    //load countries and states
     await loadCountriesAndStates();
     cascadeOptions.customer_shipping_region = countriesOptions.value;
 
-    //load general Data
     await loadGeneralData();
   } catch (error) {
     console.error("Error loading dropdown options:", error);
   }
 });
 
-// Add a New Condition
+// **Add a New Condition**
 const addCondition = (event) => {
   event.preventDefault();
-  conditions.push({
+  localConditions.value.push({
     id: Date.now(),
     field: "cart_subtotal_price",
     operator: "greater_than",
@@ -111,23 +103,36 @@ const addCondition = (event) => {
   });
 };
 
-// Remove a Condition
+// **Remove a Condition**
 const removeCondition = (id) => {
-  const index = conditions.findIndex((cond) => cond.id === id);
-  if (index > -1) conditions.splice(index, 1);
+  localConditions.value = localConditions.value.filter(
+    (cond) => cond.id !== id
+  );
 };
 
-// Check if the Third Field is a Number Input
+// **Emit Updated Conditions**
+const updateConditions = () => {
+  emit("update:value", [...localConditions.value]);
+};
+
+// **Emit Toggle Change**
+const updateEnableConditions = () => {
+  emit("update:toggle", enableConditions.value);
+};
+
+// **Emit conditionsApplies Change**
+const updateConditionsApplies = () => {
+  emit("update:conditionsApplies", conditionsApplies.value);
+};
+// **Check Field Type**
 const isNumberField = (field) =>
   ["cart_quantity", "cart_total_weight", "customer_order_count"].includes(
     field
   );
 
-// Check if the Third Field is a Number Input
 const isPricingField = (field) =>
   ["cart_subtotal_price", "cart_item_regular_price"].includes(field);
 
-// Check if the Third Field is a Dropdown
 const isDropdownField = (field) =>
   [
     "cart_item_product",
@@ -141,14 +146,45 @@ const isDropdownField = (field) =>
     "customer_order_history_product",
   ].includes(field);
 
-const isCascadefield = (field) => ["customer_shipping_region"].includes(field);
+const isCascadeField = (field) => ["customer_shipping_region"].includes(field);
 
-// Get Dropdown Options for the Third Field
+// **Dropdown & Cascader Options**
 const getDropdownOptions = (field) => dropdownOptions[field] || [];
-
-//Get Cascade Options for the third field
-
 const getCascadeOptions = (field) => cascadeOptions[field] || [];
+
+watch(
+  localConditions,
+  (newVal) => {
+    console.log("Child Conditions Updated:", newVal);
+    emit("update:value", [...newVal]);
+  },
+  { deep: true } // Single watcher handles all changes
+);
+
+watch(enableConditions, () => {
+  updateEnableConditions();
+});
+
+watch(conditionsApplies, () => {
+  updateConditionsApplies();
+});
+
+// Single debounced watcher for all changes
+const emitUpdates = debounce(() => {
+  console.log(
+    "Child Conditions (Debounced):",
+    JSON.parse(JSON.stringify(localConditions.value))
+  );
+  emit("update:value", [...localConditions.value]);
+}, 300);
+
+watch(
+  [localConditions, enableConditions, conditionsApplies],
+  () => {
+    emitUpdates();
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -157,60 +193,59 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
     <div class="flex items-center gap-2 mt-6 mb-1">
       <el-switch
         v-model="enableConditions"
+        @change="updateEnableConditions"
         inline-prompt
         :active-text="__('On', 'aio-woodiscount')"
         :inactive-text="__('Off', 'aio-woodiscount')" />
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <label class="text-sm font-medium text-gray-900">
         {{ __("Enable Conditions?", "aio-woodiscount") }}
       </label>
     </div>
 
+    <!-- Conditions Section -->
     <div class="space-y-4 w-full" v-if="enableConditions">
+      <!-- Apply Conditions Mode (Any/All) -->
       <div class="flex items-center gap-2 mt-6 mb-1">
         <label
           class="text-sm font-medium text-gray-900 flex items-center gap-1">
           {{ __("Apply conditions if matches", "aio-woodiscount") }}
         </label>
-        <div class="group relative">
-          <el-radio-group v-model="conditonsApplies">
-            <el-radio-button
-              :label="__('Any', 'aio-woodiscount')"
-              value="any" />
-            <el-radio-button
-              :label="__('All', 'aio-woodiscount')"
-              value="all" />
-          </el-radio-group>
-        </div>
+        <el-radio-group
+          v-model="conditionsApplies"
+          @change="updateConditionsApplies">
+          <el-radio-button :label="__('Any', 'aio-woodiscount')" value="any" />
+
+          <el-radio-button :label="__('All', 'aio-woodiscount')" value="all" />
+        </el-radio-group>
       </div>
 
-      <label
-        for="add_conditions"
-        class="block text-sm font-medium text-gray-900 my-5">
+      <!-- condition add -->
+      <label class="block text-sm font-medium text-gray-900">
         {{ __("Add Conditions", "aio-woodiscount") }}
       </label>
 
-      <!-- Dynamic Conditions -->
       <div
-        v-for="(condition, index) in conditions"
+        v-for="(condition, index) in localConditions"
         :key="condition.id"
         class="mt-1">
         <!-- OR/AND Separator -->
         <div v-if="index > 0" class="mb-2">
           <span class="text-black italic text-sm">
             {{
-              conditonsApplies === "any"
+              conditionsApplies === "any"
                 ? __("Or", "aio-woodiscount")
                 : __("And", "aio-woodiscount")
             }}
           </span>
         </div>
+
         <div class="flex items-center gap-2 mb-2">
           <!-- Field Selector -->
           <div class="w-[30%]">
             <select
               v-model="condition.field"
-              class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :aria-label="__('Condition Field', 'aio-woodiscount')">
+              class="w-full h-8 border rounded p-2 text-sm"
+              @change="updateConditions">
               <option value="">
                 {{ __("Please select", "aio-woodiscount") }}
               </option>
@@ -221,8 +256,7 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
                   <option
                     v-for="option in group.options"
                     :key="option.value"
-                    :value="option.value"
-                    class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    :value="option.value">
                     {{ option.label }}
                   </option>
                 </optgroup>
@@ -234,8 +268,8 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
           <div class="w-[20%]">
             <select
               v-model="condition.operator"
-              class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :aria-label="__('Condition Operator', 'aio-woodiscount')">
+              class="w-full h-8 border rounded p-2 text-sm"
+              @change="updateConditions">
               <option
                 v-for="op in getOperators(condition.field)"
                 :key="op.value"
@@ -247,51 +281,21 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
 
           <!-- Value Input -->
           <div class="w-[45%]">
-            <input
-              v-if="isNumberField(condition.field)"
-              v-model="condition.value"
-              type="number"
-              placeholder="Enter a number"
-              class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-
-            <div
-              v-else-if="isPricingField(condition.field)"
-              class="flex items-center">
-              <input
-                v-model="condition.value"
-                type="number"
-                placeholder="Enter Value"
-                class="w-5/6 h-8 border-gray-300 text-sm rounded-l border-r-0 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-              <span
-                class="w-1/6 h-8 flex items-center justify-center bg-gray-200 border border-l-0 border-gray-300 rounded-r"
-                v-html="generalData.currency_symbol || '$'">
-              </span>
-            </div>
-
             <el-select-v2
-              v-else-if="isDropdownField(condition.field)"
+              v-if="isDropdownField(condition.field)"
               v-model="condition.value"
               :options="getDropdownOptions(condition.field)"
-              :placeholder="__('Select', 'aio-woodiscount')"
               filterable
               multiple
-              :loading="isLoadingProducts"
-              class="custom-select-v2" />
+              class="custom-select-v2"
+              @change="updateConditions" />
 
-            <el-cascader
-              v-else-if="isCascadefield(condition.field)"
-              :options="countriesOptions"
-              :props="{ multiple: true, checkStrictly: true }"
-              :show-all-levels="false"
-              clearable
-              class="full-width custom-cascade"
-              filterable
-              :loading="isLoadingCountries"
-              placeholder="Select Continent, Country, and State" />
-
-            <!-- <span v-else class = "text-gray-500">
-              {{ __("No value needed", "aio-woodiscount") }}
-            </span> -->
+            <input
+              v-else
+              v-model="condition.value"
+              type="text"
+              class="w-full h-8 border rounded p-2 text-sm"
+              @input="updateConditions" />
           </div>
 
           <!-- Delete Button -->
@@ -299,7 +303,6 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
             <el-icon
               @click="removeCondition(condition.id)"
               size="20px"
-              color="red"
               class="cursor-pointer text-red-500">
               <Delete />
             </el-icon>
@@ -310,8 +313,7 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
       <!-- Add Condition Button -->
       <button
         @click="addCondition"
-        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-        :aria-label="__('Add Condition', 'aio-woodiscount')">
+        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
         {{ __("Add Condition", "aio-woodiscount") }}
       </button>
     </div>

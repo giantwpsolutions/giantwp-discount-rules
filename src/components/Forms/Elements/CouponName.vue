@@ -1,8 +1,23 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps, defineEmits, watch } from "vue";
 
-// Reactive state for coupon name
-const couponName = ref("");
+// Props and Emit for v-model
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+// Local state to bind the input value
+const localCouponName = ref(props.modelValue);
+
+// Watch for changes in local state and emit updates
+watch(localCouponName, (newValue) => {
+  emit("update:modelValue", newValue);
+});
 </script>
 
 <template>
@@ -16,7 +31,7 @@ const couponName = ref("");
       <input
         type="text"
         id="aio_coupon"
-        v-model="couponName"
+        v-model="localCouponName"
         class="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
         :placeholder="__('Coupon Name', 'aio-woodiscount')" />
       <span

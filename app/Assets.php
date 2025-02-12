@@ -36,6 +36,7 @@ class Assets
         }
 
         wp_enqueue_script('wp-i18n');
+        wp_enqueue_script('wp-api-fetch');
 
         $is_dev = defined('WP_DEBUG') && WP_DEBUG;
         $dev_server_js_loader = 'http://localhost:5173/src/main.js';

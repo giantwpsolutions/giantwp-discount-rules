@@ -1,7 +1,15 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps, defineEmits } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
+import { saveData } from "@/data/saveData.js";
+import {
+  discountCreatedMessage,
+  warningMessage,
+  errorMessage,
+} from "../../data/message";
+
+const { __ } = wp.i18n;
 
 const props = defineProps({
   visible: {
@@ -10,44 +18,86 @@ const props = defineProps({
   },
 });
 
-const selectedDiscountType = ref("");
+const emit = defineEmits(["close"]);
+
+const selectedDiscountsType = ref("");
 const showForm = ref(false);
+const isSaving = ref(false);
+
+const flatPercentageFormRef = ref(null);
+const bogoFormRef = ref(null);
 
 const proFeatures = [
   {
     name: "Bulk Discount",
     description: "Apply discounts based on bulk purchases",
   },
-  {
-    name: "Cart Based",
-    description: "Discounts based on cart value",
-  },
+  { name: "Cart Based", description: "Discounts based on cart value" },
   {
     name: "Payment Method Based",
     description: "Discounts based on payment method",
   },
-  {
-    name: "Combo Discount",
-    description: "Discounts for bundled items",
-  },
-  {
-    name: "Category Based",
-    description: "Discounts for specific categories",
-  },
+  { name: "Combo Discount", description: "Discounts for bundled items" },
+  { name: "Category Based", description: "Discounts for specific categories" },
 ];
 
 const goBack = () => {
   showForm.value = false;
-  selectedDiscountType.value = "";
+  selectedDiscountsType.value = "";
 };
 
 const selectDiscountType = (type) => {
-  selectedDiscountType.value = type;
+  selectedDiscountsType.value = type;
   showForm.value = true;
 };
 
-const saveForm = () => {
-  console.log(`Saving form for ${selectedDiscountType.value}...`);
+const saveForm = async () => {
+  if (isSaving.value) return;
+  isSaving.value = true;
+
+  try {
+    let formData = null;
+    let activeForm = null;
+
+    switch (selectedDiscountsType.value) {
+      case "Flat/Percentage":
+        activeForm = flatPercentageFormRef.value;
+        break;
+      case "BOGO":
+        activeForm = bogoFormRef.value;
+        break;
+    }
+
+    if (!activeForm || !activeForm.validate()) {
+      warningMessage();
+      return;
+    }
+
+    formData = activeForm.getFormData();
+
+    formData.discountType = selectedDiscountsType.value.toLowerCase();
+
+    console.log(
+      "Final Data Before Sending:",
+      JSON.parse(JSON.stringify(formData))
+    );
+
+    const response = await saveData.saveCoupon(formData);
+
+    console.log("Coupon created:", response);
+
+    if (response?.success) {
+      discountCreatedMessage(); // ✅ Show success message
+      emit("close");
+    } else {
+      errorMessage();
+    }
+  } catch (error) {
+    console.error("Save failed:", error);
+    alert(__("Error saving coupon:", "aio-woodiscount") + " " + error.message);
+  } finally {
+    isSaving.value = false;
+  }
 };
 </script>
 
@@ -81,7 +131,7 @@ const saveForm = () => {
           <h3 class="text-lg font-bold">
             {{
               showForm
-                ? selectedDiscountType
+                ? selectedDiscountsType
                 : __("Select Discount Type", "aio-woodiscount")
             }}
           </h3>
@@ -150,11 +200,14 @@ const saveForm = () => {
           <template v-else>
             <!-- Dynamically Render the Form Based on Selected Discount Type -->
             <FlatPercentageForm
-              v-if="selectedDiscountType === 'Flat/Percentage'" />
-            <Bogo v-else-if="selectedDiscountType === 'BOGO'" />
+              v-if="selectedDiscountsType === 'Flat/Percentage'"
+              ref="flatPercentageFormRef" />
+            <Bogo
+              v-else-if="selectedDiscountsType === 'BOGO'"
+              ref="bogoFormRef" />
             <p v-else>
               {{ __("Form for", "aio-woodiscount") }}
-              {{ selectedDiscountType }}
+              {{ selectedDiscountsType }}
             </p>
           </template>
         </div>
@@ -162,15 +215,20 @@ const saveForm = () => {
         <!-- Modal Footer -->
         <div class="mt-4 flex justify-end space-x-4">
           <button
-            @click="$emit('close')"
+            @click="emit('close')"
             class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
             {{ __("Close", "aio-woodiscount") }}
           </button>
           <button
             v-if="showForm"
             @click="saveForm"
+            :disabled="isSaving"
             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            {{ __("Save", "aio-woodiscount") }}
+            {{
+              isSaving
+                ? __("Saving...", "aio-woodiscount")
+                : __("Save", "aio-woodiscount")
+            }}
           </button>
         </div>
       </div>

@@ -1,57 +1,44 @@
 <script setup>
-import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid"; // Importing the tooltip icon
-import { ref, onMounted } from "vue";
+import { defineProps, defineEmits, ref, onMounted } from "vue";
+import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
 
-import {
-  generalData,
-  isLoadingGeneralData,
-  generalDataError,
-  loadGeneralData,
-} from "@/data/generalDataFetch";
+import { generalData, loadGeneralData } from "@/data/generalDataFetch";
 
+// Props & Emits
+const props = defineProps({
+  fpDiscountType: { type: String, default: "fixed" },
+  discountValue: { type: Number, default: null },
+  maxValue: { type: Number, default: null },
+});
+
+const emit = defineEmits([
+  "update:fpDiscountType",
+  "update:discountValue",
+  "update:maxValue",
+]);
+
+// Local state for reactivity
+const selectedFPDiscountType = ref(props.fpDiscountType);
+const discountValue = ref(props.discountValue);
+const maxValue = ref(props.maxValue);
+
+// Emit Updates when values change
+const updateDiscountType = () => {
+  emit("update:fpDiscountType", selectedFPDiscountType.value);
+};
+
+const updateDiscountValue = () => {
+  emit("update:discountValue", discountValue.value);
+};
+
+const updateMaxValue = () => {
+  emit("update:maxValue", maxValue.value);
+};
+
+// Fetch General Data on Mount
 onMounted(() => {
   loadGeneralData();
 });
-
-// Reactive variables
-const discountType = ref("default"); // Default to 'fixed'
-const discountValue = ref(null);
-const maxValue = ref(null);
-
-// Validation state
-const errors = ref({
-  discountType: "",
-  discountValue: "",
-  maxValue: "",
-});
-
-const validateFields = () => {
-  errors.value.discountType = discountType.value
-    ? ""
-    : __("Please select a discount type", "aio-woodiscount");
-  errors.value.discountValue = discountValue.value
-    ? ""
-    : __("Discount value is required", "aio-woodiscount");
-  errors.value.discountType =
-    discountType.value === "default"
-      ? __("Please select a discount type", "aio-woodiscount")
-      : "";
-};
-
-const handleSubmit = () => {
-  validateFields();
-  if (
-    !errors.value.discountType &&
-    !errors.value.discountValue &&
-    !errors.value.maxValue
-  ) {
-    console.log("Form submitted:", {
-      discountType: discountType.value,
-      discountValue: discountValue.value,
-      maxValue: maxValue.value,
-    });
-  }
-};
 </script>
 
 <template>
@@ -62,23 +49,18 @@ const handleSubmit = () => {
         {{ __("Discount Type", "aio-woodiscount") }}
       </label>
       <select
-        v-model="discountType"
+        v-model="selectedFPDiscountType"
+        @change="updateDiscountType"
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
-        <option value="default">
-          {{ __("Please select", "aio-woodiscount") }}
-        </option>
         <option value="fixed">{{ __("Fixed", "aio-woodiscount") }}</option>
         <option value="percentage">
           {{ __("Percentage", "aio-woodiscount") }}
         </option>
       </select>
-      <p v-if="errors.discountType" class="text-red-600 text-sm mt-1">
-        {{ errors.discountType }}
-      </p>
     </div>
 
-    <!-- Inline Fields: Discount Value and Maximum Value -->
+    <!-- Discount Value & Max Value Fields -->
     <div class="flex gap-4 items-start">
       <!-- Discount Value -->
       <div class="relative flex-1">
@@ -90,6 +72,7 @@ const handleSubmit = () => {
         <div class="flex items-center">
           <input
             v-model="discountValue"
+            @input="updateDiscountValue"
             type="number"
             id="discountValue"
             :placeholder="__('Enter discount value', 'aio-woodiscount')"
@@ -97,16 +80,12 @@ const handleSubmit = () => {
           <span
             class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100"
             v-html="
-              discountType === 'percentage'
+              selectedFPDiscountType === 'percentage'
                 ? '%'
                 : generalData.currency_symbol || '$'
             ">
           </span>
         </div>
-
-        <p v-if="errors.discountValue" class="text-red-600 text-sm mt-1">
-          {{ errors.discountValue }}
-        </p>
       </div>
 
       <!-- Maximum Value -->
@@ -115,27 +94,25 @@ const handleSubmit = () => {
           for="maxValue"
           class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
           {{ __("Maximum Value", "aio-woodiscount") }}
-          <div class="group relative">
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              :content="
-                __('The maximum value that can be applied', 'aio-woodiscount')
-              "
-              placement="top"
-              popper-class="custom-tooltip">
-              <QuestionMarkCircleIcon
-                class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-            </el-tooltip>
-          </div>
+          <el-tooltip
+            effect="dark"
+            :content="
+              __('The maximum value that can be applied', 'aio-woodiscount')
+            "
+            placement="top"
+            popper-class="custom-tooltip">
+            <QuestionMarkCircleIcon
+              class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+          </el-tooltip>
         </label>
         <div class="flex items-center">
           <input
             v-model="maxValue"
+            @input="updateMaxValue"
             type="number"
             id="maxValue"
             :placeholder="__('Enter maximum value', 'aio-woodiscount')"
-            :disabled="discountType === 'fixed' || discountType === 'default'"
+            :disabled="selectedFPDiscountType === 'fixed'"
             class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
             class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100"
