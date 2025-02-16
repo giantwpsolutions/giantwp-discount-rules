@@ -102,7 +102,7 @@ watch(
     <!-- ✅ Fix UsageLimits syncing -->
     <UsageLimits v-model="formData.usageLimits"></UsageLimits>
 
-    <AutoApply></AutoApply>
+    <AutoApply v-model="formData.autoApply"> </AutoApply>
 
     <Conditions
       v-model:value="formData.conditions"

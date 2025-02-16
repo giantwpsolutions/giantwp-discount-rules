@@ -14,11 +14,11 @@ class Assets
 
     public function __construct()
     {
-        error_log('Assets class constructor triggered'); // Add this log to confirm constructor is firing
 
         add_action('admin_enqueue_scripts', [$this, 'register_plugin_assets'], 50);
 
         add_filter('script_loader_tag', [$this, 'add_attribute_type'], 10, 3);
+        add_action('in_admin_header', [$this, 'disable_core_update_notifications']);
     }
 
     /**
@@ -96,5 +96,18 @@ class Assets
             $tag = '<script type="module" src="' . esc_url($src) . '"></script>';
         }
         return $tag;
+    }
+
+    /**
+     * Remove Wordpress Core Notice from Plugin admin page
+     *
+     */
+    public function disable_core_update_notifications()
+    {
+        $current_screen = get_current_screen();
+        if ($current_screen && $current_screen->id === 'woocommerce_page_aio-woodiscount') {
+            remove_all_actions('admin_notices'); // Removes ALL admin notices
+            remove_all_actions('network_admin_notices');
+        }
     }
 }

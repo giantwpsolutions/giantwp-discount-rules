@@ -75,8 +75,7 @@ watch(
         <div class="flex items-center">
           <span
             class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-left text-gray-700 bg-gray-100">
-            {{ __("Usage/", "aio-woodiscount") }}
-            {{ usageData.usageLimitsCount }}
+            {{ __("Usage/", "aio-woodiscount") }}0
           </span>
           <input
             v-model.number="usageData.usageLimitsCount"

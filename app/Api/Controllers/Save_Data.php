@@ -16,6 +16,12 @@ class Save_Data extends WP_REST_Controller
         $this->rest_base = 'save-data';
     }
 
+
+    /**
+     * Registers the routes for the objects of the controller.
+     *
+     * @return void
+     */
     public function register_routes()
     {
         register_rest_route(
@@ -29,13 +35,49 @@ class Save_Data extends WP_REST_Controller
                 ],
             ]
         );
+
+        // ✅ Add this route for fetching all discounts
+        register_rest_route(
+            $this->namespace,
+            '/get-discounts',
+            [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [$this, 'get_discounts'],
+                    'permission_callback' => '__return_true',
+                ],
+            ]
+        );
     }
 
+    public function get_discounts(WP_REST_Request $request)
+    {
+        $data = get_option('aio_woodiscount_data', []);
+        return new WP_REST_Response($data, 200);
+    }
+
+
+    /**
+     * Checks if a given request has access to create.
+     * 
+     *@param  \WP_REST_Request $request The request object.
+     *
+     * @return bool True if the user has permission, false otherwise.
+     * 
+     */
     public function save_form_data_permission()
     {
         return current_user_can('manage_options'); // ✅ Ensure only admins can save
     }
 
+
+    /** 
+     * Save Form Data
+     *
+     * @param  \WP_Rest_Request $request
+     *
+     * @return \WP_Rest_Response|WP_Error
+     */
     public function save_form_data(WP_REST_Request $request)
     {
         $params = $request->get_json_params();
@@ -47,7 +89,17 @@ class Save_Data extends WP_REST_Controller
                 ['status' => 400]
             );
         }
+
         error_log("🔴 RAW DATA RECEIVED: " . print_r($params, true));
+
+        // ✅ Get existing discounts
+        $existing_data = get_option('aio_woodiscount_data', []);
+        if (!is_array($existing_data)) {
+            $existing_data = maybe_unserialize($existing_data);
+            if (!is_array($existing_data)) {
+                $existing_data = []; // 🔥 Ensure we always work with an array
+            }
+        }
 
         // ✅ Sanitize received data
         $sanitized_data = $this->sanitize_data($params);
@@ -56,8 +108,12 @@ class Save_Data extends WP_REST_Controller
             return $sanitized_data;
         }
 
+        // ✅ Append new data instead of replacing
+        $existing_data[] = $sanitized_data;
+
         // ✅ Save to WordPress options
-        $saved = update_option('aio_woodiscount_data', maybe_serialize($sanitized_data));
+        //array_push($existing_data, $sanitized_data);  // ✅ Ensure proper append
+        $saved = update_option('aio_woodiscount_data', maybe_serialize($existing_data));
 
         if (!$saved) {
             return new WP_Error(
@@ -67,15 +123,15 @@ class Save_Data extends WP_REST_Controller
             );
         }
 
-        error_log("🟠 SANITIZED DATA TO SAVE: " . print_r($sanitized_data, true));
-
-
+        error_log("🟠 SANITIZED DATA TO SAVE: " . print_r($existing_data, true));
 
         return new WP_REST_Response(
             ['success' => true, 'message' => __('Data saved successfully.', 'aio-woodiscount')],
             200
         );
     }
+
+
 
     private function sanitize_data($data)
     {
