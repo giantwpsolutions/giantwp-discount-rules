@@ -2,7 +2,7 @@
 import { ref, defineProps, defineEmits } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
-import { saveData } from "@/data/saveData.js";
+import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
 import {
   discountCreatedMessage,
   warningMessage,
@@ -82,7 +82,7 @@ const saveForm = async () => {
       JSON.parse(JSON.stringify(formData))
     );
 
-    const response = await saveData.saveCoupon(formData);
+    const response = await saveFlatPercentageDiscount.saveCoupon(formData);
 
     console.log("Coupon created:", response);
 

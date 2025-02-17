@@ -1,11 +1,11 @@
 import apiFetch from "@wordpress/api-fetch";
 
-export const saveData = {
+export const saveFlatPercentageDiscount = {
     async saveCoupon(newData) {
         try {
             // ✅ Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-discounts`,
+                path: `${pluginData.restUrl}get-flatpercentage-discount`,
                 method: "GET",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -58,7 +58,7 @@ export const saveData = {
 
             // ✅ Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-data`,
+                path: `${pluginData.restUrl}save-flatpercentage-discount`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
