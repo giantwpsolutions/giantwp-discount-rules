@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineProps, defineEmits, watch, nextTick } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
 import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
@@ -7,22 +7,26 @@ import {
   discountCreatedMessage,
   warningMessage,
   errorMessage,
-} from "../../data/message";
-
-const { __ } = wp.i18n;
+  updatedDiscountMessage,
+} from "@/data/message";
 
 const props = defineProps({
   visible: {
     type: Boolean,
     required: true,
   },
+  editingRule: {
+    type: Object,
+    default: () => ({}), // ✅ Ensure it is always an object
+  },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "discountUpdated"]);
 
 const selectedDiscountsType = ref("");
 const showForm = ref(false);
 const isSaving = ref(false);
+const isEditMode = ref(false);
 
 const flatPercentageFormRef = ref(null);
 const bogoFormRef = ref(null);
@@ -51,6 +55,28 @@ const selectDiscountType = (type) => {
   showForm.value = true;
 };
 
+// ** Watch Editing Rule to Load Data into Form **
+watch(
+  () => props.editingRule,
+  async (newVal) => {
+    if (newVal && Object.keys(newVal).length > 0) {
+      isEditMode.value = true;
+      selectedDiscountsType.value = newVal.discountType;
+      showForm.value = true;
+
+      // Wait for the form component to be rendered
+      await nextTick();
+      await nextTick(); // Sometimes needed for nested components
+
+      if (flatPercentageFormRef.value) {
+        console.log("🟢 Passing Data to Form:", newVal);
+        flatPercentageFormRef.value.setFormData(structuredClone(newVal));
+      }
+    }
+  },
+  { immediate: true, deep: true }
+);
+
 const saveForm = async () => {
   if (isSaving.value) return;
   isSaving.value = true;
@@ -75,26 +101,23 @@ const saveForm = async () => {
 
     formData = activeForm.getFormData();
 
-    formData.discountType = selectedDiscountsType.value.toLowerCase();
-
-    console.log(
-      "Final Data Before Sending:",
-      JSON.parse(JSON.stringify(formData))
-    );
-
-    const response = await saveFlatPercentageDiscount.saveCoupon(formData);
-
-    console.log("Coupon created:", response);
-
-    if (response?.success) {
-      discountCreatedMessage(); // ✅ Show success message
-      emit("close");
+    if (isEditMode.value && formData.id) {
+      console.log("🟡 Editing Existing Discount:", formData);
+      await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
+      updatedDiscountMessage();
     } else {
-      errorMessage();
+      console.log("🟢 Creating New Discount:", formData);
+      await saveFlatPercentageDiscount.saveCoupon(formData);
+      discountCreatedMessage();
     }
+
+    emit("discountUpdated");
+
+    isEditMode.value = false;
+    emit("close");
   } catch (error) {
     console.error("Save failed:", error);
-    alert(__("Error saving coupon:", "aio-woodiscount") + " " + error.message);
+    errorMessage();
   } finally {
     isSaving.value = false;
   }
@@ -200,8 +223,9 @@ const saveForm = async () => {
           <template v-else>
             <!-- Dynamically Render the Form Based on Selected Discount Type -->
             <FlatPercentageForm
-              v-if="selectedDiscountsType === 'Flat/Percentage'"
-              ref="flatPercentageFormRef" />
+              v-if="selectedDiscountsType === 'Flat/Percentage' && showForm"
+              ref="flatPercentageFormRef"
+              :initialData="props.editingRule" />
             <Bogo
               v-else-if="selectedDiscountsType === 'BOGO'"
               ref="bogoFormRef" />

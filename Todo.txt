@@ -1,0 +1,25 @@
+const toggleStatus = async (rule) => {
+  try {
+    // Toggle status between "on" and "off"
+    const newStatus = rule.status === "on" ? "off" : "on";
+
+    // Update the rule object locally for immediate UI feedback
+    rule.status = newStatus;
+
+    let updatedData = { ...rule, status: newStatus };
+
+    // Determine which API to call based on discount type
+    if (rule.discountType === "Flat/Percentage") {
+      await saveFlatPercentageDiscount.updateDiscount(rule.id, updatedData);
+    } else if (rule.discountType === "BOGO") {
+      await saveFlatPercentageDiscount.updateBogoDiscount(rule.id, updatedData);
+    } else {
+      console.warn("Unknown discount type:", rule.discountType);
+      return;
+    }
+
+    console.log(`Status updated to: ${newStatus} for ${rule.discountType} discount.`);
+  } catch (error) {
+    console.error("Failed to update status:", error);
+  }
+};

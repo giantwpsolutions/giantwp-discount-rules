@@ -1,37 +1,68 @@
+<!-- Discount.vue -->
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import DiscountTable from "../components/DiscountTable.vue";
 import AddRuleModal from "../components/modals/AddRuleModal.vue";
-
-const discountRules = ref([
-  {
-    id: 1,
-    name: "COUPON123",
-    type: "BOGO",
-    startDate: "2024-12-01",
-    endDate: "2024-12-31",
-    status: true,
-  },
-  {
-    id: 2,
-    name: "SUMMER2024",
-    type: "Percentage",
-    startDate: "2024-06-01",
-    endDate: "2024-09-01",
-    status: false,
-  },
-]);
+import {
+  fetchFlatPercentageRule,
+  discountRules,
+} from "../api/services/flatPercentageDataServices";
+import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
 
 const showModal = ref(false);
+const selectedDiscount = ref(null); // Track selected rule for editing
 
-const toggleStatus = (rule) => {
-  rule.status = !rule.status;
+const fetchDiscountRules = async () => {
+  discountRules.value = await fetchFlatPercentageRule();
+  console.log("🟢 Discount rules updated:", discountRules.value);
+};
+onMounted(fetchDiscountRules);
+
+const deleteRule = async (id) => {
+  try {
+    await saveFlatPercentageDiscount.deleteCoupon(id);
+    await fetchDiscountRules(); // ✅ Refetch the updated list
+  } catch (error) {
+    console.error("❌ Failed to delete:", error);
+  }
+};
+const toggleStatus = async (rule) => {
+  try {
+    const newStatus = rule.status === "on" ? "off" : "on";
+    rule.status = newStatus; // Update locally for UI
+
+    console.log("🟢 Sending Update Request:", rule);
+
+    const response = await saveFlatPercentageDiscount.updateDiscount(rule.id, {
+      ...rule,
+      status: newStatus,
+    });
+
+    console.log("✅ Status updated successfully:", response);
+  } catch (error) {
+    console.error("❌ Failed to update status:", error);
+
+    if (error?.response) {
+      console.error("🔴 Server Response:", error.response);
+    }
+  }
 };
 
+// ✅ Handle Edit Click
+const handleEdit = async (rule) => {
+  selectedDiscount.value = structuredClone({
+    ...rule,
+    discountType: "Flat/Percentage", // Ensure this matches your type
+  });
+  showModal.value = true;
+};
+// ✅ Handle New Entry
 const addNewRule = () => {
+  selectedDiscount.value = null; // ✅ Reset for new entry
   showModal.value = true;
 };
 
+// ✅ Close Modal
 const closeModal = () => {
   showModal.value = false;
 };
@@ -55,11 +86,15 @@ const closeModal = () => {
     <!-- Discount Table -->
     <DiscountTable
       :discountRules="discountRules"
-      :onToggleStatus="toggleStatus"
-      :onEdit="(id) => console.log(`Edit rule with ID: ${id}`)"
-      :onDelete="(id) => console.log(`Delete rule with ID: ${id}`)" />
+      @toggle-status="toggleStatus"
+      :onEdit="handleEdit"
+      :onDelete="deleteRule" />
 
     <!-- Modal Component -->
-    <AddRuleModal :visible="showModal" @close="closeModal" />
+    <AddRuleModal
+      :visible="showModal"
+      :editingRule="selectedDiscount"
+      @close="closeModal"
+      @discountUpdated="fetchDiscountRules" />
   </div>
 </template>

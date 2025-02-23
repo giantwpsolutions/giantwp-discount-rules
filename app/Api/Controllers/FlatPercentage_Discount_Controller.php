@@ -32,12 +32,12 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
                 [
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => [$this, 'save_form_data'],
-                    'permission_callback' => [$this, 'save_form_data_permission'],
+                    'permission_callback' => [$this, 'permission_callback'],
                 ],
             ]
         );
 
-        // ✅ Add this route for fetching all discounts
+        // this route for fetching all discounts
         register_rest_route(
             $this->namespace,
             '/get-flatpercentage-discount',
@@ -45,16 +45,45 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
                 [
                     'methods'             => WP_REST_Server::READABLE,
                     'callback'            => [$this, 'get_discounts'],
-                    'permission_callback' => '__return_true',
+                    'permission_callback' => [$this, 'permission_callback'],
                 ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace,
+            '/update-flatpercentage-discount/(?P<id>[\w-]+)',
+            [
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => [$this, 'update_discount'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace,
+            '/delete-flatpercentage-discount/(?P<id>[\w-]+)',
+            [
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'delete_discount'],
+                'permission_callback' => [$this, 'permission_callback'],
             ]
         );
     }
 
     public function get_discounts(WP_REST_Request $request)
     {
-        $data = get_option('aio_flatpercentage_discount', []);
-        return new WP_REST_Response($data, 200);
+        $discounts = get_option('aio_flatpercentage_discount', []);
+
+        if (maybe_serialize($discounts)) {
+            $discounts = maybe_unserialize($discounts);
+        }
+
+        // if (!is_array($discounts)) {
+        //     $discounts = [];
+        // }
+
+        wp_send_json($discounts);
     }
 
 
@@ -66,9 +95,9 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
      * @return bool True if the user has permission, false otherwise.
      * 
      */
-    public function save_form_data_permission()
+    public function permission_callback()
     {
-        return current_user_can('manage_options');  // ✅ Ensure only admins can save
+        return current_user_can('manage_options');
     }
 
 
@@ -131,5 +160,79 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
             ['success' => true, 'message' => __('Data saved successfully.', 'aio-woodiscount')],
             200
         );
+    }
+
+
+    /**
+     * Update an existing discount rule.
+     *
+     * @param WP_REST_Request $request The request object.
+     *
+     * @return WP_REST_Response|WP_Error The response object.
+     */
+    public function update_discount(WP_REST_Request $request)
+    {
+        $id     = $request->get_param('id');
+        $params = $request->get_json_params();
+        if (empty($params)) {
+            return new WP_Error('missing_data', __('No data received.', 'aio-woodiscount'), ['status' => 400]);
+        }
+
+        $existing_data = get_option('aio_flatpercentage_discount', []);
+        $existing_data = maybe_unserialize($existing_data);
+        if (!is_array($existing_data)) {
+            $existing_data = [];
+        }
+
+        $updated = false;
+        foreach ($existing_data as &$discount) {
+            if (isset($discount['id']) && $discount['id'] === $id) {
+                $discount = $params;
+                $updated  = true;
+                break;
+            }
+        }
+
+        if ($updated) {
+
+            $saved = update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
+            if ($saved) {
+                return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'aio-woodiscount')], 200);
+            } else {
+                return new WP_Error('save_failed', __('Failed to save data.', 'aio-woodiscount'), ['status' => 500]);
+            }
+        }
+
+        return new WP_Error('not_found', __('Discount rule not found.', 'aio-woodiscount'), ['status' => 404]);
+    }
+
+
+    public function delete_discount(WP_REST_Request $request)
+    {
+        $id = $request->get_param('id');
+
+        // ✅ Ensure existing data is an array
+        $existing_data = get_option('aio_flatpercentage_discount', []);
+
+        if (!is_array($existing_data)) {
+            $existing_data = maybe_unserialize($existing_data);
+        }
+
+        if (!is_array($existing_data)) {
+            return new WP_Error('invalid_data', __('Stored discount data is corrupted.', 'aio-woodiscount'), ['status' => 500]);
+        }
+
+        // ✅ Find the discount with matching ID
+        $existing_data = array_filter($existing_data, function ($discount) use ($id) {
+            return isset($discount['id']) && $discount['id'] !== $id;
+        });
+
+        // ✅ Re-index array after filtering
+        $existing_data = array_values($existing_data);
+
+        // ✅ Save updated data
+        update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
+
+        return new WP_REST_Response(['success' => true, 'message' => __('Data deleted successfully.', 'aio-woodiscount')], 200);
     }
 }

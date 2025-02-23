@@ -11,8 +11,17 @@ import UsageLimits from "./Elements/UsageLimits.vue";
 import CheckProduct from "./Elements/CheckProduct.vue";
 import AutoApply from "./Elements/AutoApply.vue";
 
+// ** Define Props **
+const props = defineProps({
+  initialData: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+
 // ✅ Reactive state for the form (Fix usageLimits structure)
 const formData = reactive({
+  id: null,
   couponName: "",
   fpDiscountType: "fixed",
   discountValue: null,
@@ -43,6 +52,30 @@ const scheduleRange = computed({
   },
 });
 
+// Watch for edit mode data updates
+watch(
+  () => props.initialData,
+  (newVal) => {
+    if (newVal && Object.keys(newVal).length > 0) {
+      console.log("🟢 Receiving Initial Data:", newVal);
+      Object.keys(formData).forEach((key) => {
+        if (key in newVal) {
+          formData[key] = newVal[key];
+        }
+      });
+
+      // Handle nested objects
+      if (newVal.schedule) {
+        formData.schedule = { ...newVal.schedule };
+      }
+      if (newVal.usageLimits) {
+        formData.usageLimits = { ...newVal.usageLimits };
+      }
+    }
+  },
+  { immediate: true, deep: true }
+);
+
 // ✅ Debugging Watches
 watch(
   () => formData.usageLimits,
@@ -72,16 +105,15 @@ watch(
 // ✅ Expose formData for saving
 defineExpose({
   getFormData: () => JSON.parse(JSON.stringify(formData)), // Clone reactive object
-  validate: () => !!formData.couponName.trim(),
+  validate: () => {
+    console.log("🔍 Validate Check - Coupon Name:", formData.couponName);
+    return !!formData.couponName.trim();
+  },
+  setFormData: (data) => {
+    console.log("🟢 Setting Form Data in Edit Mode:", data);
+    Object.assign(formData, JSON.parse(JSON.stringify(data)));
+  },
 });
-
-// ✅ Watch `conditionsApplies` to debug updates
-watch(
-  () => formData.conditionsApplies,
-  (newVal) => {
-    console.log("🔹 Condition Applies Updated:", newVal);
-  }
-);
 </script>
 
 <template>

@@ -1,9 +1,14 @@
+
 import apiFetch from "@wordpress/api-fetch";
+import { id } from "element-plus/es/locale/index.mjs";
 
 export const saveFlatPercentageDiscount = {
+    /**
+   * Save a new discount rule
+   */
     async saveCoupon(newData) {
         try {
-            // ✅ Fetch existing data before appending
+            // Fetch existing data before appending
             const existingData = await apiFetch({
                 path: `${pluginData.restUrl}get-flatpercentage-discount`,
                 method: "GET",
@@ -14,7 +19,7 @@ export const saveFlatPercentageDiscount = {
 
             const previousDiscounts = Array.isArray(existingData) ? existingData : [];
 
-            // ✅ Ensure conditions are formatted properly
+            // Ensure conditions are formatted properly
             const formattedConditions = Array.isArray(newData.conditions)
                 ? newData.conditions.map((c) => ({
                     field: c.field || "",
@@ -25,13 +30,11 @@ export const saveFlatPercentageDiscount = {
 
             console.log("Final Conditions Before Sending:", formattedConditions);
 
-            // ✅ Ensure required fields are provided
-            if (!newData.couponName || !newData.discountType) {
-                throw new Error("Missing required fields: couponName or discountType");
-            }
+            const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
             // ✅ Prepare new discount entry
             const newDiscount = {
+                id: generateUniqueId(),
                 discountType: newData.discountType,
                 status: ["on", "off"].includes(newData.status) ? newData.status : "on",
                 couponName: newData.couponName,
@@ -63,7 +66,7 @@ export const saveFlatPercentageDiscount = {
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
                 },
-                data: newDiscount, // ✅ Send full array with appended data
+                data: newDiscount,   // ✅ Send only the new discount entry
             });
 
             return response;
@@ -72,4 +75,36 @@ export const saveFlatPercentageDiscount = {
             throw new Error(error.message);
         }
     },
+
+    /**
+     * Update an existing discount rule by index
+     */
+    async updateDiscount(id, updatedDiscounts) {
+        try {
+            const response = await apiFetch({
+                path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
+                method: "POST", // Use "POST" for updates (WP_REST_Server::EDITABLE)
+                headers: {
+                    "X-WP-Nonce": pluginData.nonce,
+                },
+                data: updatedDiscounts,
+            });
+
+            console.log("Updated Discount Rule:", response);
+            return response;
+        } catch (error) {
+            console.error("Error updating discount:", error);
+            throw new Error(error.message);
+        }
+    },
+
+    async deleteCoupon(id) {
+        return apiFetch({
+            path: `${pluginData.restUrl}delete-flatpercentage-discount/${id}`,
+            method: "DELETE",
+            headers: { "X-WP-Nonce": pluginData.nonce },
+        });
+    }
+
+
 };

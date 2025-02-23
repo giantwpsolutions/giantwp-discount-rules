@@ -1,8 +1,10 @@
 <script setup>
-  import { defineProps } from 'vue';
+import { ref } from "vue";
+import { Edit, Delete, InfoFilled } from "@element-plus/icons-vue";
+import { __ } from "@wordpress/i18n";
 
-// Props for discount rules and event handlers
-const props = defineProps({
+// Define props (No need to import defineProps)
+defineProps({
   discountRules: {
     type: Array,
     required: true,
@@ -20,6 +22,23 @@ const props = defineProps({
     required: true,
   },
 });
+
+// Function to format the date (YYYY-MM-DD)
+const formatDate = (dateString) => {
+  if (!dateString || dateString === "") return "-"; // Handle empty or null dates
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "-"; // Handle invalid dates
+
+  return date.toISOString().split("T")[0]; // Extracts "YYYY-MM-DD"
+};
+
+// Track clicked state for confirmation
+const clicked = ref(false);
+
+const handleCancel = () => {
+  clicked.value = true;
+};
 </script>
 
 <template>
@@ -28,7 +47,7 @@ const props = defineProps({
       <thead>
         <tr class="bg-gray-100 text-left">
           <th class="px-4 py-2 border-b w-12">
-            <input type="checkbox" class="h-5 w-5">
+            <input type="checkbox" class="h-5 w-5" />
           </th>
           <th class="px-4 py-2 border-b">Discount Name</th>
           <th class="px-4 py-2 border-b">Type</th>
@@ -42,60 +61,84 @@ const props = defineProps({
         <!-- No Data Row -->
         <tr v-if="discountRules.length === 0">
           <td colspan="7" class="text-center px-4 py-6 text-gray-500">
-            {{ __('No discount rules created', 'aio-woodiscount') }}
+            {{ __("No discount rules created", "aio-woodiscount") }}
           </td>
         </tr>
 
         <!-- Discount Rule Rows -->
         <tr v-for="rule in discountRules" :key="rule.id">
           <td class="px-4 py-2 border-b">
-            <input type="checkbox" class="h-5 w-5">
+            <input type="checkbox" class="h-5 w-5" :value="rule.id" />
           </td>
-          <td class="px-4 py-2 border-b">{{ rule.name }}</td>
-          <td class="px-4 py-2 border-b">{{ rule.type }}</td>
-          <td class="px-4 py-2 border-b">{{ rule.startDate }}</td>
-          <td class="px-4 py-2 border-b">{{ rule.endDate }}</td>
+          <td class="px-4 py-2 border-b">{{ rule.couponName }}</td>
+          <td class="px-4 py-2 border-b capitalize">{{ rule.discountType }}</td>
+          <td class="px-4 py-2 border-b">
+            {{ formatDate(rule.schedule?.startDate) || "--" }}
+          </td>
+          <td class="px-4 py-2 border-b">
+            {{ formatDate(rule.schedule?.endDate) || "--" }}
+          </td>
           <td class="px-4 py-2 border-b">
             <label class="inline-flex relative items-center cursor-pointer">
-              <input
-              type="checkbox"
-              :checked="rule.status"
-              @change="() => onToggleStatus(rule)"
-              class="sr-only peer"
-              />
-              <span
-              class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-              ></span>
+              <el-switch
+                v-model="rule.status"
+                active-value="on"
+                inactive-value="off"
+                @change="$emit('toggle-status', rule)" />
             </label>
           </td>
           <td class="px-4 py-2 border-b">
-            <!-- Edit Button with Tooltip -->
-            <div class="relative group inline-block">
-              <button @click="() => onEdit(rule.id)" class="text-blue-600 hover:text-blue-800 mr-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.5 3.5l-9 9L5 21l8.5-2.5 9-9-6-6z" />
-                </svg>
-              </button>
-              <span class="absolute bottom-full mb-1 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-                Edit
-              </span>
-            </div>
-            <!-- Delete Button with Red Bin Icon and Tooltip -->
-            <div class="relative group inline-block">
-              <button @click="() => onDelete(rule.id)" class="text-red-600 hover:text-red-800">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M9 3V4H4V6H5L6 21C6 21.552 6.448 22 7 22H17C17.552 22 18 21.552 18 21L19 6H20V4H15V3H9ZM8 6H16L15 20H9L8 6Z"/>
-                </svg>
-              </button>
-              <span class="absolute bottom-full mb-1 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-                Delete
-              </span>
-            </div>
+            <!-- Edit Button -->
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="__('Edit Rule', 'aio-woodiscount')"
+              placement="top">
+              <el-icon
+                @click="onEdit(rule)"
+                class="text-blue-600 hover:text-blue-800 mr-2 hover:cursor-pointer"
+                :size="20"
+                ><Edit
+              /></el-icon>
+            </el-tooltip>
+
+            <!-- Delete Button with Confirmation -->
+
+            <el-popconfirm
+              width="220"
+              icon-color="#626AEF"
+              :title="
+                __(
+                  'Are you sure you want to delete this discount?',
+                  'aio-woodiscount'
+                )
+              "
+              @confirm="onDelete(rule.id)">
+              <template #reference>
+                <span>
+                  <el-tooltip
+                    effect="dark"
+                    :content="__('Delete Rule', 'aio-woodiscount')"
+                    placement="top">
+                    <el-icon
+                      class="text-red-600 hover:text-red-800 hover:cursor-pointer"
+                      :size="20">
+                      <Delete />
+                    </el-icon>
+                  </el-tooltip>
+                </span>
+              </template>
+
+              <template #actions="{ confirm, cancel }">
+                <el-button size="small" @click="cancel">No</el-button>
+                <el-button type="danger" size="small" @click="confirm"
+                  >Yes</el-button
+                >
+              </template>
+            </el-popconfirm>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  
 </template>

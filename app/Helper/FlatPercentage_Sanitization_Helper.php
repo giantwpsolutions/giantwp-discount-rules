@@ -24,6 +24,7 @@ class FlatPercentage_Sanitization_Helper
         }
 
         return [
+            'id'             => sanitize_text_field($data['id'] ?? time()),
             'discountType'   => sanitize_text_field($data['discountType'] ?? 'flat'),
             'status'         => in_array($data['status'] ?? 'on', ['on', 'off']) ? $data['status'] : 'on',
             'couponName'     => sanitize_text_field($data['couponName'] ?? ''),

@@ -27,3 +27,12 @@ export const errorMessage = () => {
         offset: 100,
     });
 };
+
+export const updatedDiscountMessage = () => {
+    ElNotification({
+        title: __("Updated!", "aio-woodiscount"),
+        message: __("The discount rule has been updated successfully.", "aio-woodiscount"),
+        type: "success",
+        offset: 100,
+    });
+};

@@ -14,6 +14,15 @@ const emit = defineEmits(["update:modelValue"]);
 // Local state to bind the input value
 const localCouponName = ref(props.modelValue);
 
+// ✅ Watch for changes in `props.modelValue` and update `localCouponName`
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    localCouponName.value = newVal;
+  },
+  { immediate: true }
+);
+
 // Watch for changes in local state and emit updates
 watch(localCouponName, (newValue) => {
   emit("update:modelValue", newValue);
