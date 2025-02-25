@@ -8,6 +8,7 @@ import {
   discountRules,
 } from "../api/services/flatPercentageDataServices";
 import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
+import { deleteMessage } from "@/data/message.js";
 
 const showModal = ref(false);
 const selectedDiscount = ref(null); // Track selected rule for editing
@@ -21,7 +22,9 @@ onMounted(fetchDiscountRules);
 const deleteRule = async (id) => {
   try {
     await saveFlatPercentageDiscount.deleteCoupon(id);
-    await fetchDiscountRules(); // ✅ Refetch the updated list
+    await fetchDiscountRules();
+
+    deleteMessage();
   } catch (error) {
     console.error("❌ Failed to delete:", error);
   }
@@ -29,22 +32,24 @@ const deleteRule = async (id) => {
 const toggleStatus = async (rule) => {
   try {
     const newStatus = rule.status === "on" ? "off" : "on";
-    rule.status = newStatus; // Update locally for UI
 
-    console.log("🟢 Sending Update Request:", rule);
+    // Store original data
+    const originalData = JSON.parse(JSON.stringify(rule));
 
-    const response = await saveFlatPercentageDiscount.updateDiscount(rule.id, {
-      ...rule,
+    // Optimistic update
+    rule.status = newStatus;
+
+    // Send only the status field
+    await saveFlatPercentageDiscount.updateDiscount(rule.id, {
       status: newStatus,
     });
 
-    console.log("✅ Status updated successfully:", response);
+    // Force full refresh
+    await fetchDiscountRules();
   } catch (error) {
-    console.error("❌ Failed to update status:", error);
-
-    if (error?.response) {
-      console.error("🔴 Server Response:", error.response);
-    }
+    // Revert on error
+    Object.assign(rule, originalData);
+    console.error("Status update failed:", error);
   }
 };
 
@@ -64,6 +69,7 @@ const addNewRule = () => {
 
 // ✅ Close Modal
 const closeModal = () => {
+  selectedDiscount.value = null;
   showModal.value = false;
 };
 </script>

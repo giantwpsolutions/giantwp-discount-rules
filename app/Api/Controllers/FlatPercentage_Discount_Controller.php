@@ -172,30 +172,42 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
      */
     public function update_discount(WP_REST_Request $request)
     {
-        $id     = $request->get_param('id');
+        $id = sanitize_text_field($request->get_param('id'));
+
         $params = $request->get_json_params();
         if (empty($params)) {
             return new WP_Error('missing_data', __('No data received.', 'aio-woodiscount'), ['status' => 400]);
         }
 
+        $sanitized_data = FlatPercentage_Sanitization_Helper::FlatPercentage_Data_Sanitization($params);
+        if (is_wp_error($sanitized_data)) {
+            return $sanitized_data;
+        }
+
+        // ✅ Retrieve existing discount data
         $existing_data = get_option('aio_flatpercentage_discount', []);
-        $existing_data = maybe_unserialize($existing_data);
+        if (!is_array($existing_data)) {
+            $existing_data = maybe_unserialize($existing_data);
+        }
         if (!is_array($existing_data)) {
             $existing_data = [];
         }
 
+        // ✅ Update discount entry
         $updated = false;
         foreach ($existing_data as &$discount) {
             if (isset($discount['id']) && $discount['id'] === $id) {
-                $discount = $params;
+                $discount = array_merge($discount, $sanitized_data);  // ✅ Merge sanitized data
                 $updated  = true;
                 break;
             }
         }
 
         if ($updated) {
-
+            // ✅ Save sanitized data
             $saved = update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
+            error_log("🟠 SANITIZED DATA TO status: " . print_r($existing_data, true));
+
             if ($saved) {
                 return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'aio-woodiscount')], 200);
             } else {

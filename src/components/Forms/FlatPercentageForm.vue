@@ -42,13 +42,22 @@ const formData = reactive({
   conditions: [],
 });
 
-// ✅ Ensure `scheduleRange` updates properly
+// Ensure `scheduleRange` updates properly
 const scheduleRange = computed({
-  get: () => formData.schedule.scheduleRange,
+  get: () => {
+    // Return dates in proper format for the picker
+    return [
+      formData.schedule.startDate
+        ? new Date(formData.schedule.startDate)
+        : null,
+      formData.schedule.endDate ? new Date(formData.schedule.endDate) : null,
+    ];
+  },
   set: (value) => {
+    // Store dates in ISO string format
+    formData.schedule.startDate = value?.[0]?.toISOString() || null;
+    formData.schedule.endDate = value?.[1]?.toISOString() || null;
     formData.schedule.scheduleRange = value;
-    formData.schedule.startDate = value?.[0] || null;
-    formData.schedule.endDate = value?.[1] || null;
   },
 });
 
@@ -58,16 +67,31 @@ watch(
   (newVal) => {
     if (newVal && Object.keys(newVal).length > 0) {
       console.log("🟢 Receiving Initial Data:", newVal);
+
+      // Clone all top-level properties
       Object.keys(formData).forEach((key) => {
-        if (key in newVal) {
+        if (key in newVal && key !== "schedule") {
           formData[key] = newVal[key];
         }
       });
 
-      // Handle nested objects
+      // Handle schedule data conversion
       if (newVal.schedule) {
-        formData.schedule = { ...newVal.schedule };
+        formData.schedule = {
+          enableSchedule: newVal.schedule.enableSchedule || false,
+          startDate: newVal.schedule.startDate || null,
+          endDate: newVal.schedule.endDate || null,
+          // Initialize scheduleRange from stored dates
+          scheduleRange: [
+            newVal.schedule.startDate
+              ? new Date(newVal.schedule.startDate)
+              : null,
+            newVal.schedule.endDate ? new Date(newVal.schedule.endDate) : null,
+          ],
+        };
       }
+
+      // Handle other nested objects
       if (newVal.usageLimits) {
         formData.usageLimits = { ...newVal.usageLimits };
       }

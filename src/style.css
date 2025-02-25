@@ -160,3 +160,6 @@ html {
 .el-select__tags-text {
   color: #000 !important;
 }
+.deletebutton i {
+  color: red;
+}

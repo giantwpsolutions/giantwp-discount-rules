@@ -1,4 +1,5 @@
 import { ElNotification } from 'element-plus';
+import { DeleteFilled } from '@element-plus/icons-vue'
 const { __ } = wp.i18n;
 
 export const discountCreatedMessage = () => {
@@ -33,6 +34,16 @@ export const updatedDiscountMessage = () => {
         title: __("Updated!", "aio-woodiscount"),
         message: __("The discount rule has been updated successfully.", "aio-woodiscount"),
         type: "success",
+        offset: 100,
+    });
+};
+
+export const deleteMessage = () => {
+    ElNotification({
+        title: __("Deleted!", "aio-woodiscount"),
+        message: __("The discount rule has been Deleted successfully.", "aio-woodiscount"),
+        icon: DeleteFilled,
+        customClass: 'deletebutton',
         offset: 100,
     });
 };

@@ -82,9 +82,11 @@ const handleCancel = () => {
             <label class="inline-flex relative items-center cursor-pointer">
               <el-switch
                 v-model="rule.status"
-                active-value="on"
-                inactive-value="off"
-                @change="$emit('toggle-status', rule)" />
+                :active-value="'on'"
+                :inactive-value="'off'"
+                @change="
+                  (val) => $emit('toggle-status', { ...rule, status: val })
+                " />
             </label>
           </td>
           <td class="px-4 py-2 border-b">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits, watch, nextTick } from "vue";
+import { ref, defineEmits, watch, nextTick } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
 import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";

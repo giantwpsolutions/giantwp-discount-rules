@@ -32,11 +32,14 @@ export const saveFlatPercentageDiscount = {
 
             const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
+            const validateStatus = (status) =>
+                ['on', 'off'].includes(status) ? status : 'on';
+
             // ✅ Prepare new discount entry
             const newDiscount = {
                 id: generateUniqueId(),
                 discountType: newData.discountType,
-                status: ["on", "off"].includes(newData.status) ? newData.status : "on",
+                status: validateStatus(newData.status),
                 couponName: newData.couponName,
                 fpDiscountType: newData.fpDiscountType || "fixed",
                 discountValue: newData.discountValue || 0,
@@ -79,22 +82,34 @@ export const saveFlatPercentageDiscount = {
     /**
      * Update an existing discount rule by index
      */
-    async updateDiscount(id, updatedDiscounts) {
+    async updateDiscount(id, updatedFields) {
         try {
+            // Validate status
+            const payload = {
+                ...updatedFields,
+                status: ['on', 'off'].includes(updatedFields.status)
+                    ? updatedFields.status
+                    : 'on'
+            };
+
             const response = await apiFetch({
                 path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
-                method: "POST", // Use "POST" for updates (WP_REST_Server::EDITABLE)
+                method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
+                    "Content-Type": "application/json",
                 },
-                data: updatedDiscounts,
+                body: JSON.stringify(payload),
             });
 
-            console.log("Updated Discount Rule:", response);
-            return response;
+            if (!response?.success) {
+                throw new Error(response?.message || 'Update failed');
+            }
+
+            return response.data;
         } catch (error) {
-            console.error("Error updating discount:", error);
-            throw new Error(error.message);
+            console.error("Update error:", error);
+            throw error;
         }
     },
 
