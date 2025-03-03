@@ -2,7 +2,8 @@
 import { ref, defineEmits, watch, nextTick } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
-import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
+import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
+import { saveBogoData } from "@/data/save-data/saveBogoData.js";
 import {
   discountCreatedMessage,
   warningMessage,
@@ -107,7 +108,12 @@ const saveForm = async () => {
       updatedDiscountMessage();
     } else {
       console.log("🟢 Creating New Discount:", formData);
-      await saveFlatPercentageDiscount.saveCoupon(formData);
+      if (selectedDiscountsType.value === "Flat/Percentage") {
+        await saveFlatPercentageDiscount.saveCoupon(formData);
+      } else if (selectedDiscountsType.value === "BOGO") {
+        await saveBogoData.saveCoupon(formData);
+      }
+
       discountCreatedMessage();
     }
 

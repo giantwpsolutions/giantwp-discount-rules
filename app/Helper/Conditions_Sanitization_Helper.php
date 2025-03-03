@@ -17,7 +17,7 @@ class Conditions_Sanitization_Helper
      * @param array $condition The raw condition data.
      * @return array The sanitized condition.
      */
-    public static function sanitize_condition($condition)  // ❌ Was private, now ✅ public
+    public static function sanitize_condition($condition)
     {
         return [
             'field'    => sanitize_text_field($condition['field'] ?? ''),

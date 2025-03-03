@@ -5,31 +5,31 @@ const { __ } = wp.i18n;
 export const bogoBuyProductOptions = [
     {
         label: __('All Products', 'aio-woodiscount'),
-        value: 'bogo_all_products',
+        value: 'all_products',
     },
     {
         label: __('Product', 'aio-woodiscount'),
-        value: 'bogo_product',
+        value: 'product',
     },
     {
         label: __('Product Variation', 'aio-woodiscount'),
-        value: 'bogo_product_variation',
+        value: 'product_variation',
     },
     {
         label: __('Product Tags', 'aio-woodiscount'),
-        value: 'bogo_product_tags',
+        value: 'product_tags',
     },
     {
         label: __('Product Category', 'aio-woodiscount'),
-        value: 'bogo_product_category',
+        value: 'product_category',
     },
     {
         label: __('Product Price', 'aio-woodiscount'),
-        value: 'bogo_product_price',
+        value: 'product_price',
     },
     {
         label: __('Product in Stock', 'aio-woodiscount'),
-        value: 'bogo_product_instock',
+        value: 'product_instock',
     },
 ];
 
@@ -60,16 +60,16 @@ export const bogoBuyProductOperator = {
 
 export const getBogoBuyProductOperator = (field) => {
 
-    if (field === "bogo_product_price" ||
-        field === "bogo_product_instock"
+    if (field === "product_price" ||
+        field === "product_instock"
 
     ) {
         return bogoBuyProductOperator.default;
     }
-    if (field === "bogo_product" ||
-        field === "bogo_product_variation" ||
-        field === "bogo_product_tags" ||
-        field === "bogo_product_category"
+    if (field === "product" ||
+        field === "product_variation" ||
+        field === "product_tags" ||
+        field === "product_category"
 
     ) {
         return bogoBuyProductOperator.inList;
@@ -81,17 +81,17 @@ export const getBogoBuyProductOperator = (field) => {
 //if it's dropdown
 export const bogoSameProductBuyIsDropdown = (field) =>
     [
-        "bogo_product",
-        "bogo_product_variation",
-        "bogo_product_tags",
-        "bogo_product_category",
+        "product",
+        "product_variation",
+        "product_tags",
+        "product_category",
     ].includes(field);
 
 export const bogoSameProductDropdownOptions = reactive({
-    bogo_product: [],
-    bogo_product_variation: [],
-    bogo_product_tags: [],
-    bogo_product_category: [],
+    product: [],
+    product_variation: [],
+    product_tags: [],
+    product_category: [],
 });
 
 export const getBogoSameProductDropdown = (field) => bogoSameProductDropdownOptions[field] || [];

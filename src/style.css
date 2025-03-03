@@ -142,6 +142,9 @@ html {
 .el-tag__content {
   color: rgb(219, 219, 219);
 }
+.el-tag__content span {
+  color: black !important;
+}
 
 .el-input__wrapper {
   border: 1px solid rgb(139, 139, 139);
@@ -162,4 +165,8 @@ html {
 }
 .deletebutton i {
   color: red;
+}
+
+.el-cascader__search-input {
+  background: white !important;
 }

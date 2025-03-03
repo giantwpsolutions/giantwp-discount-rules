@@ -1,7 +1,8 @@
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
 import { Delete, CirclePlus } from "@element-plus/icons-vue";
+import { debounce } from "lodash";
 import {
   bogoBuyProductOptions,
   bogoBuyProductOperator,
@@ -9,7 +10,7 @@ import {
   bogoSameProductBuyIsDropdown,
   getBogoSameProductDropdown,
   bogoSameProductDropdownOptions,
-} from "@/data/bogoProductData.js";
+} from "@/data/form-data/bogoProductData.js";
 
 import {
   productOptions,
@@ -33,19 +34,31 @@ import {
   loadGeneralData,
 } from "@/data/generalDataFetch";
 
+// **Props & Emits**
+const props = defineProps({
+  value: { type: Array, default: () => [] },
+  bogoApplies: { type: String, default: "any" },
+});
+
+const emit = defineEmits(["update:value", "update:bogoApplies"]);
+
+// **Reactive State**
+const buyProductsBogoSame = ref([...props.value]);
+const bogoApplies = ref(props.bogoApplies);
+
+// Fetch Api
+
 onMounted(async () => {
   try {
     // Load products and variations
     await loadProducts();
-    bogoSameProductDropdownOptions.bogo_product = productOptions.value; // Products
-    bogoSameProductDropdownOptions.bogo_product_variation =
-      variationOptions.value; // Variations
+    bogoSameProductDropdownOptions.product = productOptions.value; // Products
+    bogoSameProductDropdownOptions.product_variation = variationOptions.value; // Variations
 
     //Load Category and Tags
     await loadCategoriesAndTags();
-    bogoSameProductDropdownOptions.bogo_product_category =
-      categoryOptions.value;
-    bogoSameProductDropdownOptions.bogo_product_tags = tagOptions.value;
+    bogoSameProductDropdownOptions.product_category = categoryOptions.value;
+    bogoSameProductDropdownOptions.product_tags = tagOptions.value;
 
     //load general Data
     await loadGeneralData();
@@ -54,40 +67,70 @@ onMounted(async () => {
   }
 });
 
-const productsBogoAppliesto = ref("anyproduct");
-
-const buyProductsBogoSame = reactive([
-  {
-    id: Date.now(),
-    field: "bogo_all_products",
-    operator: "",
-    value: "",
-  },
-]);
-
 // Add a New Product Selection option
-const addProductBogoSame = () => {
-  buyProductsBogoSame.push({
+const addProductBogoSame = (event) => {
+  event.preventDefault();
+  buyProductsBogoSame.value.push({
     id: Date.now(),
-    field: "bogo_all_products",
+    field: "product",
     operator: "",
-    value: "",
+    value: [],
   });
 };
 
 // Remove a Product Selection option
 const removeProductBogoSame = (id) => {
-  const index = buyProductsBogoSame.findIndex(
-    (productBS) => productBS.id === id
-  );
+  const index = (buyProductsBogoSame.value = buyProductsBogoSame.value.filter(
+    (product) => product.id !== id
+  ));
   if (index > -1) buyProductsBogoSame.splice(index, 1);
 };
 
 const bogoSameProductisPricingField = (field) =>
-  ["bogo_product_price"].includes(field);
+  ["product_price"].includes(field);
 
 const bogoSameProductisNumberField = (field) =>
-  ["bogo_product_instock"].includes(field);
+  ["product_instock"].includes(field);
+
+// **Emit Updated buy Product **
+const updateBuyProductsBogoSame = () => {
+  emit("update:value", [...buyProductsBogoSame.value]);
+};
+
+// **Emit bogoApplies Change**
+const updateBogoApplies = () => {
+  emit("update:bogoApplies", bogoApplies.value);
+};
+
+watch(
+  buyProductsBogoSame,
+  (newVal) => {
+    console.log("Child Conditions Updated:", newVal);
+    emit("update:value", [...newVal]);
+  },
+  { deep: true } // Single watcher handles all changes
+);
+
+watch(bogoApplies, () => {
+  updateBogoApplies();
+});
+
+// Single debounced watcher for all changes
+const emitUpdates = debounce(() => {
+  console.log(
+    "Child Conditions (Debounced):",
+    JSON.parse(JSON.stringify(buyProductsBogoSame.value))
+  );
+  emit("update:value", [...buyProductsBogoSame.value]);
+}, 300);
+
+watch(
+  [buyProductsBogoSame, bogoApplies],
+  () => {
+    emitUpdates();
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -116,18 +159,14 @@ const bogoSameProductisNumberField = (field) =>
         {{ __("Rules apply to products if matches", "aio-woodiscount") }}
       </label>
       <div class="group relative">
-        <el-radio-group v-model="productsBogoAppliesto">
-          <el-radio-button
-            :label="__('Any', 'aio-woodiscount')"
-            value="anyproduct" />
-          <el-radio-button
-            :label="__('All', 'aio-woodiscount')"
-            value="allproduct" />
+        <el-radio-group v-model="bogoApplies" @change="updateBogoApplies">
+          <el-radio-button :label="__('Any', 'aio-woodiscount')" value="any" />
+          <el-radio-button :label="__('All', 'aio-woodiscount')" value="all" />
         </el-radio-group>
       </div>
     </div>
 
-    <!-- checking  -->
+    <!-- All Fields  -->
     <div
       v-for="(buyProductBogoSame, index) in buyProductsBogoSame"
       :key="buyProductBogoSame.id">
@@ -135,7 +174,7 @@ const bogoSameProductisNumberField = (field) =>
       <div v-if="index > 0" class="mb-2">
         <span class="text-black italic text-sm">
           {{
-            productsBogoAppliesto === "anyproduct"
+            bogoApplies === "anyproduct"
               ? __("Or", "aio-woodiscount")
               : __("And", "aio-woodiscount")
           }}
@@ -144,7 +183,11 @@ const bogoSameProductisNumberField = (field) =>
       <div class="flex flex-wrap gap-2">
         <!-- Field 1: 30% width -->
         <div class="w-[25%]">
-          <el-select v-model="buyProductBogoSame.field" clearable style="">
+          <el-select
+            v-model="buyProductBogoSame.field"
+            clearable
+            @change="updateBuyProductsBogoSame"
+            style="">
             <el-option
               v-for="item in bogoBuyProductOptions"
               :key="item.value"
@@ -158,6 +201,7 @@ const bogoSameProductisNumberField = (field) =>
           <el-select
             v-if="getBogoBuyProductOperator(buyProductBogoSame.field)?.length"
             v-model="buyProductBogoSame.operator"
+            @change="updateBuyProductsBogoSame"
             style="">
             <el-option
               v-for="item in getBogoBuyProductOperator(
@@ -174,6 +218,7 @@ const bogoSameProductisNumberField = (field) =>
           <el-select-v2
             v-if="bogoSameProductBuyIsDropdown(buyProductBogoSame.field)"
             v-model="buyProductBogoSame.value"
+            @change="updateBuyProductsBogoSame"
             :options="getBogoSameProductDropdown(buyProductBogoSame.field)"
             :placeholder="__('Select', 'aio-woodiscount')"
             filterable
@@ -183,7 +228,8 @@ const bogoSameProductisNumberField = (field) =>
 
           <el-input
             v-else-if="bogoSameProductisPricingField(buyProductBogoSame.field)"
-            v-model="buyProductBogoSame.value">
+            v-model="buyProductBogoSame.value"
+            @change="updateBuyProductsBogoSame">
             <template #append
               ><span v-html="generalData.currency_symbol || '$'"></span
             ></template>
@@ -192,21 +238,14 @@ const bogoSameProductisNumberField = (field) =>
           <el-input-number
             v-else-if="bogoSameProductisNumberField(buyProductBogoSame.field)"
             v-model="buyProductBogoSame.value"
+            @change="updateBuyProductsBogoSame"
             class="mx-4"
             controls-position="right"
-            style="width: -webkit-fill-available"
-            @change="handleChange" />
+            style="width: -webkit-fill-available" />
         </div>
 
         <!-- Field 4: 10% width with icons -->
         <div class="w-[20%] flex items-center gap-4 border-gray-300 rounded">
-          <el-icon
-            @click="addProductBogoSame"
-            size="20px"
-            color="#409EFF"
-            class="cursor-pointer text-blue-800">
-            <CirclePlus />
-          </el-icon>
           <el-icon
             @click="removeProductBogoSame(buyProductBogoSame.id)"
             size="20px"
@@ -217,5 +256,11 @@ const bogoSameProductisNumberField = (field) =>
         </div>
       </div>
     </div>
+    <!-- Add Product Assign Button Button -->
+    <button
+      @click="addProductBogoSame"
+      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      {{ __("Assign Product", "aio-woodiscount") }}
+    </button>
   </div>
 </template>

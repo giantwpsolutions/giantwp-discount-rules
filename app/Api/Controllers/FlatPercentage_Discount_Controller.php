@@ -9,6 +9,11 @@ use WP_REST_Response;
 use WP_Error;
 use AIO_WooDiscount\Helper\FlatPercentage_Sanitization_Helper;
 
+
+/**
+ * Flat Percentage Data Save Controller class
+ */
+
 class FlatPercentage_Discount_Controller extends WP_REST_Controller
 {
     public function __construct()
@@ -71,24 +76,11 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
         );
     }
 
-    public function get_discounts(WP_REST_Request $request)
-    {
-        $discounts = get_option('aio_flatpercentage_discount', []);
 
-        if (maybe_serialize($discounts)) {
-            $discounts = maybe_unserialize($discounts);
-        }
-
-        // if (!is_array($discounts)) {
-        //     $discounts = [];
-        // }
-
-        wp_send_json($discounts);
-    }
 
 
     /**
-     * Checks if a given request has access to create.
+     * Checks if a given request has access.
      * 
      *@param  \WP_REST_Request $request The request object.
      *
@@ -219,6 +211,13 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
     }
 
 
+    /** 
+     * Delete Flat/Percentage Discount Data
+     *
+     * @param  \WP_Rest_Request $request
+     *
+     * @return \WP_Rest_Response|WP_Error
+     */
     public function delete_discount(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
@@ -246,5 +245,25 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
         update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
 
         return new WP_REST_Response(['success' => true, 'message' => __('Data deleted successfully.', 'aio-woodiscount')], 200);
+    }
+
+
+    /** 
+     * Get Flat-Percentage Discount Data
+     *
+     * @param  \WP_Rest_Request $request
+     *
+     * @return \WP_Rest_Response|WP_Error
+     */
+
+    public function get_discounts(WP_REST_Request $request)
+    {
+        $discounts = get_option('aio_flatpercentage_discount', []);
+
+        if (maybe_serialize($discounts)) {
+            $discounts = maybe_unserialize($discounts);
+        }
+
+        wp_send_json($discounts);
     }
 }

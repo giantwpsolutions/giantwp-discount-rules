@@ -4,8 +4,8 @@ Plugin Name: All In One WooDiscount
 Plugin URI: https://giantwpsolutions.com
 Description: All in one WooDiscount is a one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
 Version: 1.0
-Author: Habib Rahman
-Author URI: https://habibr.me 
+Author: Giant WP Solutions
+Author URI: https://giantwpsolutions.com
 License: GPLv2 or later
 Text Domain: aio-woodiscount
 Domain Path: /languages/

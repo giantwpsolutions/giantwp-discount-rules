@@ -8,7 +8,7 @@ import {
   dropdownOptions,
   cascadeOptions,
   getOperators,
-} from "@/data/conditionsData.js";
+} from "@/data/form-data/conditionsData.js";
 
 import {
   productOptions,
@@ -105,9 +105,10 @@ const addCondition = (event) => {
 
 // **Remove a Condition**
 const removeCondition = (id) => {
-  localConditions.value = localConditions.value.filter(
+  const index = (localConditions.value = localConditions.value.filter(
     (cond) => cond.id !== id
-  );
+  ));
+  if (index > -1) localConditions.splice(index, 1);
 };
 
 // **Emit Updated Conditions**
@@ -290,12 +291,35 @@ watch(
               class="custom-select-v2"
               @change="updateConditions" />
 
-            <input
-              v-else
+            <el-input
+              v-else-if="isPricingField(condition.field)"
+              v-model.number="condition.value"
+              style="max-width: 600px"
+              placeholder="Please input">
+              <template #append>
+                <span v-html="generalData.currency_symbol || '$'"></span>
+              </template>
+            </el-input>
+
+            <el-cascader
+              v-else-if="isCascadeField(condition.field)"
               v-model="condition.value"
-              type="text"
-              class="w-full h-8 border rounded p-2 text-sm"
-              @input="updateConditions" />
+              :options="countriesOptions"
+              :props="{ multiple: true, checkStrictly: true }"
+              :show-all-levels="false"
+              clearable
+              class="full-width custom-cascade"
+              filterable
+              :loading="isLoadingCountries"
+              placeholder="Select Continent, Country, and State" />
+
+            <input
+              v-else-if="isNumberField(condition.field)"
+              v-model="condition.value"
+              @change="updateConditions"
+              type="number"
+              placeholder="Enter a number"
+              class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           </div>
 
           <!-- Delete Button -->

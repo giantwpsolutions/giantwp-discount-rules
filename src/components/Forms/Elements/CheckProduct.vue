@@ -6,7 +6,7 @@ import {
   conditonsApplies,
   enableConditions,
   operatorOptions,
-} from "@/data/conditionsData.js";
+} from "@/data/form-data/conditionsData.js";
 
 // Reactive Data
 const { __ } = wp.i18n;

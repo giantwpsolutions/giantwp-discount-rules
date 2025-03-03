@@ -7,7 +7,7 @@ import {
   fetchFlatPercentageRule,
   discountRules,
 } from "../api/services/flatPercentageDataServices";
-import { saveFlatPercentageDiscount } from "@/data/saveFlatPercentageDiscount.js";
+import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
 import { deleteMessage } from "@/data/message.js";
 
 const showModal = ref(false);

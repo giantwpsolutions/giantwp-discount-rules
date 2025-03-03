@@ -2,6 +2,7 @@
 
 namespace AIO_WooDiscount\Api;
 
+use AIO_WooDiscount\Api\Controllers\Bogo_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\General_Data;
 use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Category_Controller;
@@ -51,5 +52,8 @@ class Api
 
         $FlatPercentage_Discount_Controller = new FlatPercentage_Discount_Controller();
         $FlatPercentage_Discount_Controller->register_routes();
+
+        $Bogo_Discount_Controller = new Bogo_Discount_Controller();
+        $Bogo_Discount_Controller->register_routes();
     }
 }
