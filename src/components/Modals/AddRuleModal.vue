@@ -34,13 +34,13 @@ const bogoFormRef = ref(null);
 
 const proFeatures = [
   {
-    name: "Bulk Discount",
-    description: "Apply discounts based on bulk purchases",
+    name: "Buy X Get Y",
+    description: "Apply discounts Buy X product Get Y Product",
   },
-  { name: "Cart Based", description: "Discounts based on cart value" },
+  { name: "Shipping Discount", description: "Discounts based on Shipping" },
   {
-    name: "Payment Method Based",
-    description: "Discounts based on payment method",
+    name: "Bulk Discount",
+    description: "Discounts based on bulk purchase",
   },
   { name: "Combo Discount", description: "Discounts for bundled items" },
   { name: "Category Based", description: "Discounts for specific categories" },
@@ -67,11 +67,14 @@ watch(
 
       // Wait for the form component to be rendered
       await nextTick();
+      await nextTick();
       await nextTick(); // Sometimes needed for nested components
 
       if (flatPercentageFormRef.value) {
         console.log("🟢 Passing Data to Form:", newVal);
         flatPercentageFormRef.value.setFormData(structuredClone(newVal));
+      } else if (bogoFormRef.value) {
+        bogoFormRef.value.setFormData(structuredClone(newVal));
       }
     }
   },
@@ -90,7 +93,7 @@ const saveForm = async () => {
       case "Flat/Percentage":
         activeForm = flatPercentageFormRef.value;
         break;
-      case "BOGO":
+      case "Bogo":
         activeForm = bogoFormRef.value;
         break;
     }
@@ -104,13 +107,18 @@ const saveForm = async () => {
 
     if (isEditMode.value && formData.id) {
       console.log("🟡 Editing Existing Discount:", formData);
-      await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
+      if (selectedDiscountsType.value === "Flat/Percentage") {
+        await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
+      } else if (selectedDiscountsType.value === "Bogo") {
+        await saveBogoData.updateDiscount(formData.id, formData);
+      }
+
       updatedDiscountMessage();
     } else {
       console.log("🟢 Creating New Discount:", formData);
       if (selectedDiscountsType.value === "Flat/Percentage") {
         await saveFlatPercentageDiscount.saveCoupon(formData);
-      } else if (selectedDiscountsType.value === "BOGO") {
+      } else if (selectedDiscountsType.value === "Bogo") {
         await saveBogoData.saveCoupon(formData);
       }
 
@@ -194,7 +202,7 @@ const saveForm = async () => {
               <div
                 class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-4 flex flex-col items-center">
                 <button
-                  @click="() => selectDiscountType('BOGO')"
+                  @click="() => selectDiscountType('Bogo')"
                   class="w-full text-center font-medium">
                   {{ __("BOGO", "aio-woodiscount") }}
                 </button>
@@ -233,8 +241,9 @@ const saveForm = async () => {
               ref="flatPercentageFormRef"
               :initialData="props.editingRule" />
             <Bogo
-              v-else-if="selectedDiscountsType === 'BOGO'"
-              ref="bogoFormRef" />
+              v-else-if="selectedDiscountsType === 'Bogo'"
+              ref="bogoFormRef"
+              :initialData="props.editingRule" />
             <p v-else>
               {{ __("Form for", "aio-woodiscount") }}
               {{ selectedDiscountsType }}

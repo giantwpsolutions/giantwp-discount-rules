@@ -47,6 +47,7 @@ export const saveBogoData = {
             // Prepare new discount entry
             const newDiscount = {
                 id: generateUniqueId(),
+                createdAt: new Date().toISOString(),
                 discountType: newData.discountType,
                 status: validateStatus(newData.status),
                 couponName: newData.couponName,
@@ -99,16 +100,15 @@ export const saveBogoData = {
      */
     async updateDiscount(id, updatedFields) {
         try {
-            // Validate status
+            console.log("📡 Sending API Request to update discount:", id, updatedFields);
+
             const payload = {
                 ...updatedFields,
-                status: ['on', 'off'].includes(updatedFields.status)
-                    ? updatedFields.status
-                    : 'on'
+                status: ['on', 'off'].includes(updatedFields.status) ? updatedFields.status : 'on'
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
+                path: `${pluginData.restUrl}update-bogo-discount/${id}`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -117,20 +117,51 @@ export const saveBogoData = {
                 body: JSON.stringify(payload),
             });
 
-            if (!response?.success) {
-                throw new Error(response?.message || 'Update failed');
+            console.log("✅ Received Response from API:", response);
+
+            if (!response || typeof response !== "object" || !response.success) {
+                console.error("❌ API Response Error:", response);
+                throw new Error(response?.message || "Unknown API error");
             }
 
-            return response.data;
+            return response;  // ✅ Fix: Ensure it returns the response
+
         } catch (error) {
-            console.error("Update error:", error);
+            console.error("❌ Update error:", error);
             throw error;
         }
     },
 
+    // async updateDiscount(id, updatedFields) {
+    //     try {
+    //         console.log(`📡 Sending API Request to update discount: ${id}`, updatedFields);
+
+    //         const response = await apiFetch({
+    //             path: `${pluginData.restUrl}update-bogo-discount/${id}`,
+    //             method: "POST",
+    //             headers: {
+    //                 "X-WP-Nonce": pluginData.nonce,
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(updatedFields),
+    //         });
+
+    //         console.log("✅ Received Response from API:", response);
+
+    //         if (!response?.success) {
+    //             throw new Error(response?.message || 'Update failed');
+    //         }
+
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error("❌ Update error:", error);
+    //         throw error;
+    //     }
+    // },
+
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-flatpercentage-discount/${id}`,
+            path: `${pluginData.restUrl}delete-bogo-discount/${id}`,
             method: "DELETE",
             headers: { "X-WP-Nonce": pluginData.nonce },
         });

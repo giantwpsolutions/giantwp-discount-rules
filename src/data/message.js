@@ -47,3 +47,12 @@ export const deleteMessage = () => {
         offset: 100,
     });
 };
+
+export const updatedDiscountStatus = () => {
+    ElNotification({
+        title: __("Status Updated!", "aio-woodiscount"),
+        message: __("The discount status has been updated successfully.", "aio-woodiscount"),
+        type: "success",
+        offset: 100,
+    });
+};

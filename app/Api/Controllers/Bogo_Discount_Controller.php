@@ -55,25 +55,25 @@ class Bogo_Discount_Controller extends WP_REST_Controller
             ]
         );
 
-        // register_rest_route(
-        //     $this->namespace,
-        //     '/update-flatpercentage-discount/(?P<id>[\w-]+)',
-        //     [
-        //         'methods'             => WP_REST_Server::EDITABLE,
-        //         'callback'            => [$this, 'update_discount'],
-        //         'permission_callback' => [$this, 'permission_callback'],
-        //     ]
-        // );
+        register_rest_route(
+            $this->namespace,
+            '/update-bogo-discount/(?P<id>[\w-]+)',
+            [
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => [$this, 'update_discount'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
 
-        // register_rest_route(
-        //     $this->namespace,
-        //     '/delete-flatpercentage-discount/(?P<id>[\w-]+)',
-        //     [
-        //         'methods'             => WP_REST_Server::DELETABLE,
-        //         'callback'            => [$this, 'delete_discount'],
-        //         'permission_callback' => [$this, 'permission_callback'],
-        //     ]
-        // );
+        register_rest_route(
+            $this->namespace,
+            '/delete-bogo-discount/(?P<id>[\w-]+)',
+            [
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'delete_discount'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
     }
 
 
@@ -154,6 +154,106 @@ class Bogo_Discount_Controller extends WP_REST_Controller
     }
 
 
+    /**
+     * Update an existing discount rule.
+     *
+     * @param WP_REST_Request $request The request object.
+     *
+     * @return WP_REST_Response|WP_Error The response object.
+     */
+    public function update_discount(WP_REST_Request $request)
+    {
+        // Sanitize ID from the URL
+        $id = sanitize_text_field($request->get_param('id'));
+
+
+        //Get JSON Data
+        $params = $request->get_json_params();
+        if (empty($params)) {
+            return new WP_Error('missing_data', __('No data received.', 'aio-woodiscount'), ['status' => 400]);
+        }
+
+
+        // Retrieve Existing BOGO Discounts
+        $existing_data = get_option('aio_bogo_discount', []);
+        if (!is_array($existing_data)) {
+            $existing_data = maybe_unserialize($existing_data);
+        }
+        if (!is_array($existing_data)) {
+            $existing_data = [];
+        }
+
+        // Find and Update the Discount by ID
+        $updated = false;
+
+        foreach ($existing_data as &$discount) {
+            if (isset($discount['id']) && $discount['id'] === $id) {
+
+                //Merge ALL FIELDS including `status`
+                $discount = array_merge($discount, $params);
+
+                error_log("🔄 Updated Discount Data: " . print_r($discount, true));
+                $updated = true;
+                break;
+            }
+        }
+
+        if ($updated) {
+            // Save Updated Data
+            $saved = update_option('aio_bogo_discount', maybe_serialize($existing_data));
+
+            if ($saved) {
+                return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'aio-woodiscount')], 200);
+            } else {
+                return new WP_Error('save_failed', __('Failed to save data.', 'aio-woodiscount'), ['status' => 500]);
+            }
+        }
+
+        return new WP_Error('not_found', __('Discount rule not found.', 'aio-woodiscount'), ['status' => 404]);
+    }
+
+
+
+
+
+    /** 
+     * Delete Bogo Discount Data
+     *
+     * @param  \WP_Rest_Request $request
+     *
+     * @return \WP_Rest_Response|WP_Error
+     */
+    public function delete_discount(WP_REST_Request $request)
+    {
+        $id = $request->get_param('id');
+
+        // Ensure existing data is an array
+        $existing_data = get_option('aio_bogo_discount', []);
+
+        if (!is_array($existing_data)) {
+            $existing_data = maybe_unserialize($existing_data);
+        }
+
+        if (!is_array($existing_data)) {
+            return new WP_Error('invalid_data', __('Stored discount data is corrupted.', 'aio-woodiscount'), ['status' => 500]);
+        }
+
+        // Find the discount with matching ID
+        $existing_data = array_filter($existing_data, function ($discount) use ($id) {
+            return isset($discount['id']) && $discount['id'] !== $id;
+        });
+
+        // Re-index array after filtering
+        $existing_data = array_values($existing_data);
+
+        // Save updated data
+        update_option('aio_bogo_discount', maybe_serialize($existing_data));
+
+        return new WP_REST_Response(['success' => true, 'message' => __('Data deleted successfully.', 'aio-woodiscount')], 200);
+    }
+
+
+
     /** 
      * Get Flat-Percentage Discount Data
      *
@@ -164,7 +264,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
 
     public function get_discounts(WP_REST_Request $request)
     {
-        $discounts = get_option('aio_bogo_discount', []);
+        $discounts = get_option('aio_flatpercentage_discount', []);
 
         if (maybe_serialize($discounts)) {
             $discounts = maybe_unserialize($discounts);

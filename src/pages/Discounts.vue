@@ -1,66 +1,89 @@
 <!-- Discount.vue -->
 <script setup>
+// All Imports
 import { ref, onMounted } from "vue";
 import DiscountTable from "../components/DiscountTable.vue";
 import AddRuleModal from "../components/modals/AddRuleModal.vue";
 import {
-  fetchFlatPercentageRule,
+  fetchAllDiscountRules,
   discountRules,
-} from "../api/services/flatPercentageDataServices";
+} from "../api/services/fetchAllDiscountRules";
 import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
-import { deleteMessage } from "@/data/message.js";
+import { deleteMessage, updatedDiscountStatus } from "@/data/message.js";
+import { saveBogoData } from "@/data/save-data/saveBogoData.js";
+
+//Reactive state
 
 const showModal = ref(false);
-const selectedDiscount = ref(null); // Track selected rule for editing
-
+const selectedDiscount = ref(null);
 const fetchDiscountRules = async () => {
-  discountRules.value = await fetchFlatPercentageRule();
+  discountRules.value = await fetchAllDiscountRules();
   console.log("🟢 Discount rules updated:", discountRules.value);
 };
+
+//APi Fetching
 onMounted(fetchDiscountRules);
 
-const deleteRule = async (id) => {
+//Deleting Rules
+const deleteRule = async (rule) => {
   try {
-    await saveFlatPercentageDiscount.deleteCoupon(id);
-    await fetchDiscountRules();
+    console.log("Deleting Rule:", rule);
 
+    if (rule.discountType === "flat/percentage") {
+      await saveFlatPercentageDiscount.deleteCoupon(rule.id);
+    } else if (rule.discountType === "bogo") {
+      await saveBogoData.deleteCoupon(rule.id);
+    }
+
+    await fetchDiscountRules();
     deleteMessage();
   } catch (error) {
     console.error("❌ Failed to delete:", error);
   }
 };
+
 const toggleStatus = async (rule) => {
+  console.log(
+    `🔄 Toggling Status for ID: ${rule.id} | Current Status: ${rule.status}`
+  );
+
   try {
-    const newStatus = rule.status === "on" ? "off" : "on";
+    console.log("📡 Sending Request to update BOGO Discount...");
 
-    // Store original data
-    const originalData = JSON.parse(JSON.stringify(rule));
-
-    // Optimistic update
-    rule.status = newStatus;
-
-    // Send only the status field
-    await saveFlatPercentageDiscount.updateDiscount(rule.id, {
-      status: newStatus,
+    const response = await saveBogoData.updateDiscount(rule.id, {
+      status: rule.status,
     });
 
-    // Force full refresh
-    await fetchDiscountRules();
+    console.log("✅ API Response:", response);
+
+    if (!response || !response.success) {
+      console.error("❌ API Failed to Update Status:", response);
+      return;
+    }
+
+    updatedDiscountStatus();
+    await fetchAllDiscountRules(); // Refresh UI
   } catch (error) {
-    // Revert on error
-    Object.assign(rule, originalData);
-    console.error("Status update failed:", error);
+    console.error("❌ Status update failed:", error);
   }
 };
 
+// ✅ Handle Edit Click for Different Discount Types
+
 // ✅ Handle Edit Click
 const handleEdit = async (rule) => {
+  const formattedSelectedDiscount = rule.discountType
+    .split("/")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join("/");
+
   selectedDiscount.value = structuredClone({
     ...rule,
-    discountType: "Flat/Percentage", // Ensure this matches your type
+    discountType: formattedSelectedDiscount,
   });
   showModal.value = true;
 };
+
 // ✅ Handle New Entry
 const addNewRule = () => {
   selectedDiscount.value = null; // ✅ Reset for new entry

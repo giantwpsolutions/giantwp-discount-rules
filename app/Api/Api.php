@@ -2,6 +2,7 @@
 
 namespace AIO_WooDiscount\Api;
 
+use AIO_WooDiscount\Api\Controllers\All_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Bogo_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\General_Data;
 use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
@@ -55,5 +56,8 @@ class Api
 
         $Bogo_Discount_Controller = new Bogo_Discount_Controller();
         $Bogo_Discount_Controller->register_routes();
+
+        $all_discount = new All_Discount_Controller();
+        $all_discount->register_routes();
     }
 }

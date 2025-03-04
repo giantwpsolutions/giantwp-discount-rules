@@ -61,7 +61,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::EDITABLE,
                 'callback'            => [$this, 'update_discount'],
-                'permission_callback' => [$this, 'permission_callback'],
+                'permission_callback' => [$this, 'permission_callback']
             ]
         );
 

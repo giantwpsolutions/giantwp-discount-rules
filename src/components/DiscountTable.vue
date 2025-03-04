@@ -84,8 +84,8 @@ const handleCancel = () => {
                 v-model="rule.status"
                 :active-value="'on'"
                 :inactive-value="'off'"
-                @change="
-                  (val) => $emit('toggle-status', { ...rule, status: val })
+                @update:model-value="
+                  (val) => onToggleStatus({ ...rule, status: val })
                 " />
             </label>
           </td>
@@ -115,7 +115,7 @@ const handleCancel = () => {
                   'aio-woodiscount'
                 )
               "
-              @confirm="onDelete(rule.id)">
+              @confirm="onDelete(rule)">
               <template #reference>
                 <span>
                   <el-tooltip

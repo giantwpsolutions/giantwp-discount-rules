@@ -1,6 +1,8 @@
 <script setup>
 import { reactive, computed, defineExpose, watch } from "vue";
 
+const { __ } = wp.i18n;
+
 import BogoSameProductBuy from "./Elements/BogoSameProductBuy.vue";
 import CouponName from "./Elements/CouponName.vue";
 import BogoSelection from "./Elements/BogoSelection.vue";
@@ -23,7 +25,7 @@ const formData = reactive({
   getProductCount: 1,
   freeOrDiscount: "freeproduct",
   isRepeat: true,
-  discounttypeBogo: "fixed",
+  discounttypeBogo: null,
   discountValue: null,
   maxValue: null,
   bogoApplies: "any",
@@ -99,24 +101,6 @@ watch(
     }
   },
   { immediate: true, deep: true }
-);
-
-// ✅ Debugging Watches
-watch(
-  () => formData.usageLimits,
-  (newVal) => {
-    console.log("🟡 Parent Usage Limits Updated:", newVal);
-  },
-  { deep: true }
-);
-
-// ✅ Debugging Watches
-watch(
-  () => formData.conditions,
-  (newVal) => {
-    console.log("Conditions Updated:", JSON.parse(JSON.stringify(newVal)));
-  },
-  { deep: true }
 );
 
 watch(

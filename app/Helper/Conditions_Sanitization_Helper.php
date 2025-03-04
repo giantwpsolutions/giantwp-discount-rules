@@ -40,4 +40,16 @@ class Conditions_Sanitization_Helper
 
         return is_numeric($value) ? (int) $value : sanitize_text_field($value);
     }
+
+
+    public static function sanitize_iso8601_datetime($datetime)
+    {
+        // Check if the format matches ISO 8601 (e.g., 2025-03-04T17:33:16.175Z)
+        if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/', $datetime)) {
+            return sanitize_text_field($datetime);
+        }
+
+        // If invalid, fallback to current time in ISO format
+        return current_time('c');
+    }
 }

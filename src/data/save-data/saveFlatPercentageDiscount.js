@@ -38,6 +38,7 @@ export const saveFlatPercentageDiscount = {
             // Prepare new discount entry
             const newDiscount = {
                 id: generateUniqueId(),
+                createdAt: new Date().toISOString(),
                 discountType: newData.discountType,
                 status: validateStatus(newData.status),
                 couponName: newData.couponName,
