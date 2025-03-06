@@ -11,6 +11,7 @@ import {
 import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
 import { deleteMessage, updatedDiscountStatus } from "@/data/message.js";
 import { saveBogoData } from "@/data/save-data/saveBogoData.js";
+import { saveShippingData } from "@/data/save-data/saveShippingData.js";
 
 //Reactive state
 
@@ -27,12 +28,14 @@ onMounted(fetchDiscountRules);
 //Deleting Rules
 const deleteRule = async (rule) => {
   try {
-    console.log("Deleting Rule:", rule);
+    console.log("Deleting Rule now:", rule);
 
     if (rule.discountType === "flat/percentage") {
       await saveFlatPercentageDiscount.deleteCoupon(rule.id);
     } else if (rule.discountType === "bogo") {
       await saveBogoData.deleteCoupon(rule.id);
+    } else if (rule.discountType === "shipping discount") {
+      await saveShippingData.deleteCoupon(rule.id);
     }
 
     await fetchDiscountRules();
@@ -48,34 +51,52 @@ const toggleStatus = async (rule) => {
   );
 
   try {
-    console.log("📡 Sending Request to update BOGO Discount...");
+    let response;
 
-    const response = await saveBogoData.updateDiscount(rule.id, {
-      status: rule.status,
-    });
+    // Determine which update function to use based on discountType
+    if (rule.discountType.toLowerCase() === "bogo") {
+      console.log("📡 Updating BOGO Discount...");
+      response = await saveBogoData.updateDiscount(rule.id, {
+        status: rule.status,
+      });
+    } else if (rule.discountType.toLowerCase() === "flat/percentage") {
+      console.log("📡 Updating Flat/Percentage Discount...");
+      response = await saveFlatPercentageDiscount.updateDiscount(rule.id, {
+        status: rule.status,
+      });
+    } else if (rule.discountType.toLowerCase() === "shipping discount") {
+      console.log("📡 Updating Shipping Discount...");
+      response = await saveShippingData.updateDiscount(rule.id, {
+        status: rule.status,
+      });
+    }
 
-    console.log("✅ API Response:", response);
+    updatedDiscountStatus();
+    console.log("API Response:", response);
 
     if (!response || !response.success) {
       console.error("❌ API Failed to Update Status:", response);
       return;
     }
 
-    updatedDiscountStatus();
-    await fetchAllDiscountRules(); // Refresh UI
+    // Refresh the Discount List
+    await fetchAllDiscountRules();
   } catch (error) {
     console.error("❌ Status update failed:", error);
   }
 };
 
-// ✅ Handle Edit Click for Different Discount Types
-
-// ✅ Handle Edit Click
+// Handle Edit Click
 const handleEdit = async (rule) => {
+  // Capitalize each word, keeping the original delimiter ("/" or " ")
   const formattedSelectedDiscount = rule.discountType
-    .split("/")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join("/");
+    .split(/([/ ])/)
+    .map((word) =>
+      word.trim()
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word
+    )
+    .join("");
 
   selectedDiscount.value = structuredClone({
     ...rule,
@@ -84,15 +105,23 @@ const handleEdit = async (rule) => {
   showModal.value = true;
 };
 
-// ✅ Handle New Entry
+// Handle New Entry
 const addNewRule = () => {
-  selectedDiscount.value = null; // ✅ Reset for new entry
+  selectedDiscount.value = null;
   showModal.value = true;
+
+  // Emit reset event to AddRuleModal
+  setTimeout(() => {
+    showModal.value = true;
+  }, 50);
 };
 
-// ✅ Close Modal
+// Close Modal
 const closeModal = () => {
+  // Reset everything to default state
   selectedDiscount.value = null;
+
+  // Close modal
   showModal.value = false;
 };
 </script>

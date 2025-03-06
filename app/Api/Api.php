@@ -12,8 +12,7 @@ use AIO_WooDiscount\Api\Controllers\Products_Tag_Controller;
 use AIO_WooDiscount\Api\Controllers\Shipping_Zone_Controller;
 use AIO_WooDiscount\Api\Controllers\Users_Controller;
 use AIO_WooDiscount\Api\Controllers\FlatPercentage_Discount_Controller;
-
-
+use AIO_WooDiscount\Api\Controllers\Shipping_Discount_Controller;
 
 /**
  * Rest API Class
@@ -59,5 +58,8 @@ class Api
 
         $all_discount = new All_Discount_Controller();
         $all_discount->register_routes();
+
+        $shipping_discount = new Shipping_Discount_Controller();
+        $shipping_discount->register_routes();
     }
 }

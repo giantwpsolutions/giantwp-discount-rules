@@ -2,7 +2,7 @@
 import apiFetch from "@wordpress/api-fetch";
 import { id } from "element-plus/es/locale/index.mjs";
 
-export const saveFlatPercentageDiscount = {
+export const saveShippingData = {
     /**
    * Save a new discount rule
    */
@@ -10,7 +10,7 @@ export const saveFlatPercentageDiscount = {
         try {
             // Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-flatpercentage-discount`,
+                path: `${pluginData.restUrl}get-shipping-discount`,
                 method: "GET",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -42,7 +42,8 @@ export const saveFlatPercentageDiscount = {
                 discountType: newData.discountType,
                 status: validateStatus(newData.status),
                 couponName: newData.couponName,
-                fpDiscountType: newData.fpDiscountType || "fixed",
+                shippingDiscountType: newData.shippingDiscountType || "reduceFee",
+                pDiscountType: newData.pDiscountType || "fixed",
                 discountValue: newData.discountValue || 0,
                 maxValue: newData.maxValue || null,
                 schedule: {
@@ -65,7 +66,7 @@ export const saveFlatPercentageDiscount = {
 
             //Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-flatpercentage-discount`,
+                path: `${pluginData.restUrl}save-shipping-discount`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -94,7 +95,7 @@ export const saveFlatPercentageDiscount = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
+                path: `${pluginData.restUrl}update-shipping-discount/${id}`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -120,7 +121,7 @@ export const saveFlatPercentageDiscount = {
 
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-flatpercentage-discount/${id}`,
+            path: `${pluginData.restUrl}delete-shipping-discount/${id}`,
             method: "DELETE",
             headers: { "X-WP-Nonce": pluginData.nonce },
         });

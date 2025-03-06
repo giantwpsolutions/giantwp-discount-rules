@@ -27,19 +27,21 @@ class All_Discount_Controller extends WP_REST_Controller
     {
         // Fetch discount data from all three sources
         $flatpercentage_discounts = maybe_unserialize(get_option('aio_flatpercentage_discount', []));
-        $bogo_discounts = maybe_unserialize(get_option('aio_bogo_discount', []));
+        $bogo_discounts           = maybe_unserialize(get_option('aio_bogo_discount', []));
+        $shipping_discounts           = maybe_unserialize(get_option('aio_shipping_discount', []));
 
 
         // Ensure they are arrays
         $flatpercentage_discounts = is_array($flatpercentage_discounts) ? $flatpercentage_discounts : [];
 
         $bogo_discounts = is_array($bogo_discounts) ? $bogo_discounts : [];
+        $shipping_discounts = is_array($shipping_discounts) ? $shipping_discounts : [];
 
 
 
 
         // Merge all discount arrays
-        $all_discounts = array_merge($flatpercentage_discounts, $bogo_discounts);
+        $all_discounts = array_merge($flatpercentage_discounts, $bogo_discounts, $shipping_discounts);
 
         // Sort discounts by `createdAt` (newest first)
         usort($all_discounts, function ($a, $b) {

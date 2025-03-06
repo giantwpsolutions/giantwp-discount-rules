@@ -40,6 +40,19 @@ const localState = reactive({
   maxValue: props.maxValue,
 });
 
+// Watch freeOrDiscount and reset discount-related fields if switched to 'freeproduct'
+watch(
+  () => localState.freeOrDiscount,
+  (newVal, oldVal) => {
+    if (newVal === "freeproduct" && oldVal === "discount_product") {
+      //Reset discount-related fields
+      localState.discounttypeBogo = "fixed";
+      localState.discountValue = null;
+      localState.maxValue = null;
+    }
+  }
+);
+
 // Watch for Prop Changes
 watch(
   () => props,
@@ -168,10 +181,7 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __(
-                    'The maximum usage of this coupon. Once the discount rule is applied in the completed order, it is counted as a discount use.',
-                    'aio-woodiscount'
-                  )
+                  __('The maximum value that can be applied', 'aio-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">

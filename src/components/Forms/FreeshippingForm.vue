@@ -1,124 +1,138 @@
 <script setup>
-import { ref } from 'vue';
+import { reactive, computed, defineExpose, watch } from "vue";
+import CouponName from "./Elements/CouponName.vue";
+import ShippingSelections from "./Elements/ShippingSelections.vue";
+import DateTimePicker from "./Elements/DateTimePicker.vue";
+import UsageLimits from "./Elements/UsageLimits.vue";
+import Conditions from "./Elements/Conditions.vue";
+import AutoApply from "./Elements/AutoApply.vue";
 
-// Form state
-const ruleName = ref('');
-const minOrderAmount = ref(0);
-const startDate = ref('');
-const endDate = ref('');
-const description = ref('');
-const status = ref(true);
+// ** Define Props **
+const props = defineProps({
+  initialData: {
+    type: Object,
+    default: () => ({}),
+  },
+});
 
-// Emits for form submission and cancellation
-const emit = defineEmits(['save', 'cancel']);
+const formData = reactive({
+  id: null,
+  couponName: "",
+  shippingDiscountType: "reduceFee",
+  pDiscountType: "fixed",
+  discountValue: null,
+  maxValue: null,
+  schedule: {
+    enableSchedule: false,
+    scheduleRange: [],
+    startDate: null,
+    endDate: null,
+  },
+  usageLimits: {
+    enableUsage: false,
+    usageLimitsCount: null,
+  },
+  autoApply: false,
+  enableConditions: false,
+  conditionsApplies: "any",
+  conditions: [],
+});
 
-// Save form function
-const saveForm = () => {
-  const formData = {
-    ruleName: ruleName.value,
-    minOrderAmount: minOrderAmount.value,
-    startDate: startDate.value,
-    endDate: endDate.value,
-    description: description.value,
-    status: status.value,
-  };
-  emit('save', formData);
-};
+// Formating Scheduling Range Properly
+const scheduleRange = computed({
+  get: () => {
+    // Return dates in proper format for the picker
+    return [
+      formData.schedule.startDate
+        ? new Date(formData.schedule.startDate)
+        : null,
+      formData.schedule.endDate ? new Date(formData.schedule.endDate) : null,
+    ];
+  },
+  set: (value) => {
+    // Store dates in ISO string format
+    formData.schedule.startDate = value?.[0]?.toISOString() || null;
+    formData.schedule.endDate = value?.[1]?.toISOString() || null;
+    formData.schedule.scheduleRange = value;
+  },
+});
 
-// Cancel form function
-const cancelForm = () => {
-  emit('cancel');
-};
+// Watch for edit mode data updates
+watch(
+  () => props.initialData,
+  (newVal) => {
+    if (newVal && Object.keys(newVal).length > 0) {
+      console.log("🟢 Receiving Initial Data:", newVal);
+
+      // Clone all top-level properties
+      Object.keys(formData).forEach((key) => {
+        if (key in newVal && key !== "schedule") {
+          formData[key] = newVal[key];
+        }
+      });
+
+      // Handle schedule data conversion
+      if (newVal.schedule) {
+        formData.schedule = {
+          enableSchedule: newVal.schedule.enableSchedule || false,
+          startDate: newVal.schedule.startDate || null,
+          endDate: newVal.schedule.endDate || null,
+          // Initialize scheduleRange from stored dates
+          scheduleRange: [
+            newVal.schedule.startDate
+              ? new Date(newVal.schedule.startDate)
+              : null,
+            newVal.schedule.endDate ? new Date(newVal.schedule.endDate) : null,
+          ],
+        };
+      }
+
+      // Handle other nested objects
+      if (newVal.usageLimits) {
+        formData.usageLimits = { ...newVal.usageLimits };
+      }
+    }
+  },
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => formData,
+  (newVal) => {
+    console.log("Full Form Datas:", JSON.parse(JSON.stringify(newVal)));
+  },
+  { deep: true }
+);
+
+defineExpose({
+  getFormData: () => JSON.parse(JSON.stringify(formData)), // Clone reactive object
+  validate: () => {
+    console.log("🔍 Validate Check - Coupon Name:", formData.couponName);
+    return !!formData.couponName.trim();
+  },
+  setFormData: (data) => {
+    console.log("🟢 Setting Form Data in Edit Mode:", data);
+    Object.assign(formData, JSON.parse(JSON.stringify(data)));
+  },
+});
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-lg mx-auto">
-    <h3 class="text-lg font-bold mb-4">{{ __('Free Shipping Rule', 'aio-woodiscount') }}</h3>
-
-    <!-- Rule Name -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-2">{{ __('Rule Name', 'aio-woodiscount') }}</label>
-      <input
-        v-model="ruleName"
-        type="text"
-        class="w-full border rounded-md p-2"
-        placeholder="Enter rule name"
-      />
-    </div>
-
-    <!-- Minimum Order Amount -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-2">{{ __('Minimum Order Amount', 'aio-woodiscount') }}</label>
-      <input
-        v-model="minOrderAmount"
-        type="number"
-        class="w-full border rounded-md p-2"
-        placeholder="Enter minimum order amount"
-        min="0"
-      />
-    </div>
-
-    <!-- Start Date -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-2">{{ __('Start Date', 'aio-woodiscount') }}</label>
-      <input
-        v-model="startDate"
-        type="date"
-        class="w-full border rounded-md p-2"
-      />
-    </div>
-
-    <!-- End Date -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-2">{{ __('End Date', 'aio-woodiscount') }}</label>
-      <input
-        v-model="endDate"
-        type="date"
-        class="w-full border rounded-md p-2"
-      />
-    </div>
-
-    <!-- Description -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium mb-2">{{ __('Description', 'aio-woodiscount') }}</label>
-      <textarea
-        v-model="description"
-        rows="3"
-        class="w-full border rounded-md p-2"
-        placeholder="Enter description"
-      ></textarea>
-    </div>
-
-    <!-- Status Toggle -->
-    <div class="mb-6 flex items-center">
-      <label class="block text-sm font-medium mr-4">{{ __('Enable Rule', 'aio-woodiscount') }}</label>
-      <input
-        v-model="status"
-        type="checkbox"
-        class="h-5 w-5 text-blue-600"
-      />
-    </div>
-
-    <!-- Buttons -->
-    <div class="flex justify-end space-x-4">
-      <button
-        @click="cancelForm"
-        class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-      >
-        {{ __('Cancel', 'aio-woodiscount') }}
-      </button>
-      <button
-        @click="saveForm"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {{ __('Save', 'aio-woodiscount') }}
-      </button>
-    </div>
-  </div>
+  <CouponName v-model="formData.couponName"></CouponName>
+  <ShippingSelections
+    v-model:shippingDiscountType="formData.shippingDiscountType"
+    v-model:pDiscountType="formData.pDiscountType"
+    v-model:discountValue="formData.discountValue"
+    v-model:maxValue="formData.maxValue"></ShippingSelections>
+  <DateTimePicker
+    v-model:enableSchedule="formData.schedule.enableSchedule"
+    v-model:scheduleRange="scheduleRange">
+  </DateTimePicker>
+  <UsageLimits v-model="formData.usageLimits"></UsageLimits>
+  <AutoApply v-model="formData.autoApply"> </AutoApply>
+  <Conditions
+    v-model:value="formData.conditions"
+    v-model:toggle="formData.enableConditions"
+    v-model:conditionsApplies="formData.conditionsApplies">
+  </Conditions>
 </template>
-
-<style scoped>
-input, textarea {
-  outline: none;
-}
-</style>

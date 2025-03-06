@@ -2,8 +2,10 @@
 import { ref, defineEmits, watch, nextTick } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
+import FreeshippingForm from "../Forms/FreeshippingForm.vue";
 import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
 import { saveBogoData } from "@/data/save-data/saveBogoData.js";
+import { saveShippingData } from "@/data/save-data/saveShippingData.js";
 import {
   discountCreatedMessage,
   warningMessage,
@@ -31,19 +33,24 @@ const isEditMode = ref(false);
 
 const flatPercentageFormRef = ref(null);
 const bogoFormRef = ref(null);
+const freeShippingRef = ref(null);
 
 const proFeatures = [
   {
     name: "Buy X Get Y",
     description: "Apply discounts Buy X product Get Y Product",
+    value: "Buyxgety",
   },
-  { name: "Shipping Discount", description: "Discounts based on Shipping" },
+  {
+    name: "Shipping Discount",
+    description: "Discounts based on Shipping",
+    value: "Shipping Discount",
+  },
   {
     name: "Bulk Discount",
     description: "Discounts based on bulk purchase",
+    value: "Bulkdiscount",
   },
-  { name: "Combo Discount", description: "Discounts for bundled items" },
-  { name: "Category Based", description: "Discounts for specific categories" },
 ];
 
 const goBack = () => {
@@ -55,6 +62,17 @@ const selectDiscountType = (type) => {
   selectedDiscountsType.value = type;
   showForm.value = true;
 };
+
+watch(
+  () => props.visible, // 👀 Watch modal visibility
+  (isVisible) => {
+    if (isVisible === false) {
+      // Reset form when modal is closed
+      selectedDiscountsType.value = "";
+      showForm.value = false;
+    }
+  }
+);
 
 // ** Watch Editing Rule to Load Data into Form **
 watch(
@@ -75,6 +93,8 @@ watch(
         flatPercentageFormRef.value.setFormData(structuredClone(newVal));
       } else if (bogoFormRef.value) {
         bogoFormRef.value.setFormData(structuredClone(newVal));
+      } else if (freeShippingRef.value) {
+        freeShippingRef.value.setFormData(structuredClone(newVal));
       }
     }
   },
@@ -96,6 +116,9 @@ const saveForm = async () => {
       case "Bogo":
         activeForm = bogoFormRef.value;
         break;
+      case "Shipping Discount":
+        activeForm = freeShippingRef.value;
+        break;
     }
 
     if (!activeForm || !activeForm.validate()) {
@@ -111,6 +134,8 @@ const saveForm = async () => {
         await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
       } else if (selectedDiscountsType.value === "Bogo") {
         await saveBogoData.updateDiscount(formData.id, formData);
+      } else if (selectedDiscountsType.value === "Shipping Discount") {
+        await saveShippingData.updateDiscount(formData.id, formData);
       }
 
       updatedDiscountMessage();
@@ -120,6 +145,8 @@ const saveForm = async () => {
         await saveFlatPercentageDiscount.saveCoupon(formData);
       } else if (selectedDiscountsType.value === "Bogo") {
         await saveBogoData.saveCoupon(formData);
+      } else if (selectedDiscountsType.value === "Shipping Discount") {
+        await saveShippingData.saveCoupon(formData);
       }
 
       discountCreatedMessage();
@@ -181,7 +208,7 @@ const saveForm = async () => {
               class="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 gap-6">
               <!-- Flat/Percentage -->
               <div
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-4 flex flex-col items-center">
+                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
                 <button
                   @click="() => selectDiscountType('Flat/Percentage')"
                   class="w-full text-center font-medium">
@@ -200,7 +227,7 @@ const saveForm = async () => {
 
               <!-- BOGO -->
               <div
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-4 flex flex-col items-center">
+                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
                 <button
                   @click="() => selectDiscountType('Bogo')"
                   class="w-full text-center font-medium">
@@ -216,9 +243,9 @@ const saveForm = async () => {
               <div
                 v-for="(proFeature, index) in proFeatures"
                 :key="index"
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-4 flex flex-col items-center">
+                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
                 <button
-                  @click="() => selectDiscountType(proFeature.name)"
+                  @click="() => selectDiscountType(proFeature.value)"
                   class="w-full text-center font-medium">
                   {{ __(proFeature.name, "aio-woodiscount") }}
                 </button>
@@ -243,6 +270,13 @@ const saveForm = async () => {
             <Bogo
               v-else-if="selectedDiscountsType === 'Bogo'"
               ref="bogoFormRef"
+              :initialData="props.editingRule" />
+
+            <FreeshippingForm
+              v-else-if="
+                selectedDiscountsType === 'Shipping Discount' && showForm
+              "
+              ref="freeShippingRef"
               :initialData="props.editingRule" />
             <p v-else>
               {{ __("Form for", "aio-woodiscount") }}

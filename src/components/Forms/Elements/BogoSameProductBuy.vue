@@ -174,7 +174,7 @@ watch(
       <div v-if="index > 0" class="mb-2">
         <span class="text-black italic text-sm">
           {{
-            bogoApplies === "anyproduct"
+            bogoApplies === "any"
               ? __("Or", "aio-woodiscount")
               : __("And", "aio-woodiscount")
           }}

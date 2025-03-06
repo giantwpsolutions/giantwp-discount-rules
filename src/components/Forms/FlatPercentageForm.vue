@@ -8,7 +8,6 @@ import CouponName from "./Elements/CouponName.vue";
 import FlatPercentageSelection from "./Elements/FlatPercentageSelection.vue";
 import DateTimePicker from "./Elements/DateTimePicker.vue";
 import UsageLimits from "./Elements/UsageLimits.vue";
-import CheckProduct from "./Elements/CheckProduct.vue";
 import AutoApply from "./Elements/AutoApply.vue";
 
 // ** Define Props **
