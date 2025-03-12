@@ -5,17 +5,20 @@ namespace AIO_WooDiscount\Helper;
 defined('ABSPATH') || exit;
 
 /**
- * Bogo Discount Data Sanitization Helper Class
+ * Buy X Get Y Discount Data Sanitization Helper Class
  */
-class Bogo_Sanitization_Helper
+
+class BuyXGetY_Sanitization_Helper
 {
+
+
     /**
-     * Sanitize Bogo discount data.
+     * Sanitize Buy x Get y discount data.
      *
-     * @param array $data The raw Bogo discount data.
+     * @param array $data The raw Buy x Get y discount data.
      * @return array The sanitized data.
      */
-    public static function Bogo_Data_Sanitization($data)
+    public static function BuyXGetY_Data_Sanitization($data)
     {
         if (!is_array($data)) {
             return [];
@@ -25,23 +28,27 @@ class Bogo_Sanitization_Helper
             'id'        => sanitize_text_field($data['id'] ?? time()),
             'createdAt' => Conditions_Sanitization_Helper::sanitize_iso8601_datetime($data['createdAt'] ?? current_time('c')),
 
-            'discountType'     => strtolower(sanitize_text_field($data['discountType'] ?? 'bogo')),
-            'status'           => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
-            'couponName'       => sanitize_text_field($data['couponName'] ?? ''),
-            'buyProductCount'  => isset($data['buyProductCount']) && is_numeric($data['buyProductCount']) ? intval($data['buyProductCount']) : 1,
-            'getProductCount'  => isset($data['getProductCount']) && is_numeric($data['getProductCount']) ? intval($data['getProductCount']) : 1,
+            'discountType' => strtolower(sanitize_text_field($data['discountType'] ?? 'buy x get y')),
+
+            'status'       => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
+            'couponName'   => sanitize_text_field($data['couponName'] ?? ''),
+            'buyXApplies' => isset($data['buyXApplies']) && in_array($data['buyXApplies'], ['any', 'all'])
+                ? $data['buyXApplies']
+                :   'any',
+            'buyProduct' => isset($data['buyProduct']) && is_array($data['buyProduct'])
+                ? array_map([BogoProduct_Sanitization_Helper::class, 'sanitize_buyXProduct'], $data['buyProduct'])
+                :  [],
             'freeOrDiscount'   => sanitize_text_field($data['freeOrDiscount'] ?? 'freeproduct'),
             'isRepeat'         => isset($data['isRepeat']) ? (bool) $data['isRepeat'] : true,
-            'discounttypeBogo' => sanitize_text_field($data['discounttypeBogo'] ?? 'fixed'),
-            'discountValue'    => isset($data['discountValue']) && is_numeric($data['discountValue']) ? intval($data['discountValue']) : 0,
-            'maxValue'         => isset($data['maxValue']) && is_numeric($data['maxValue']) ? intval($data['maxValue']) : null,
-            'bogoApplies'      => isset($data['bogoApplies']) && in_array($data['bogoApplies'], ['any', 'all'])
-                ? $data['bogoApplies']
+            'discountTypeBxgy' => sanitize_text_field($data['discountTypeBxgy'] ?? 'fixed'),
+            'discountValue'    => isset($data['discountValue']) && is_numeric($data['discountValue']) ? floatval($data['discountValue']) : 0,
+            'maxValue'         => isset($data['maxValue']) && is_numeric($data['maxValue']) ? floatval($data['maxValue']) : null,
+            'getYApplies' => isset($data['getYApplies']) && in_array($data['getYApplies'], ['any', 'all'])
+                ? $data['getYApplies']
                 :    'any',
-
-            'buyProduct' => isset($data['buyProduct']) && is_array($data['buyProduct'])
-                ? array_map([BogoProduct_Sanitization_Helper::class, 'sanitize_bogoBuyProduct'], $data['buyProduct'])
-                : [],
+            'getProduct' => isset($data['getProduct']) && is_array($data['getProduct'])
+                ? array_map([BogoProduct_Sanitization_Helper::class, 'sanitize_getYProduct'], $data['getProduct'])
+                :  [],
 
             'schedule'       => [
                 'enableSchedule' => isset($data['schedule']['enableSchedule']) ? (bool) $data['schedule']['enableSchedule'] : false,

@@ -8,19 +8,14 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-use AIO_WooDiscount\Helper\Bogo_Sanitization_Helper;
+use AIO_WooDiscount\Helper\BuyXGetY_Sanitization_Helper;
 
-/**
- * Bogo Data Save Controller class
- */
-
-class Bogo_Discount_Controller extends WP_REST_Controller
+class BuyXGetY_Discount_Controller extends WP_REST_Controller
 {
-
     public function __construct()
     {
         $this->namespace = 'aio-woodiscount/v2';
-        $this->rest_base = 'save-bogo-discount';
+        $this->rest_base = 'save-bxgy-discount';
     }
 
     /**
@@ -45,7 +40,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         // this route for fetching all discounts
         register_rest_route(
             $this->namespace,
-            '/get-bogo-discount',
+            '/get-bxgy-discount',
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
@@ -57,7 +52,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
 
         register_rest_route(
             $this->namespace,
-            '/update-bogo-discount/(?P<id>[\w-]+)',
+            '/update-bxgy-discount/(?P<id>[\w-]+)',
             [
                 'methods'             => WP_REST_Server::EDITABLE,
                 'callback'            => [$this, 'update_discount'],
@@ -67,7 +62,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
 
         register_rest_route(
             $this->namespace,
-            '/delete-bogo-discount/(?P<id>[\w-]+)',
+            '/delete-bxgy-discount/(?P<id>[\w-]+)',
             [
                 'methods'             => WP_REST_Server::DELETABLE,
                 'callback'            => [$this, 'delete_discount'],
@@ -114,7 +109,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         error_log("🔴 RAW DATA RECEIVED: " . print_r($params, true));
 
         // Get existing discounts
-        $existing_data = get_option('aio_bogo_discount', []);
+        $existing_data = get_option('aio_bxgy_discount', []);
 
         if (!is_array($existing_data)) {
             $existing_data = maybe_unserialize($existing_data);
@@ -125,7 +120,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         }
 
         //Sanitize received data
-        $sanitized_data = Bogo_Sanitization_Helper::Bogo_Data_Sanitization($params);
+        $sanitized_data = BuyXGetY_Sanitization_Helper::BuyXGetY_Data_Sanitization($params);
 
         if (is_wp_error($sanitized_data)) {
             return $sanitized_data;
@@ -135,7 +130,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         $existing_data[] = $sanitized_data;
 
         // Save to Database
-        $saved = update_option('aio_bogo_discount', maybe_serialize($existing_data));
+        $saved = update_option('aio_bxgy_discount', maybe_serialize($existing_data));
 
         if (!$saved) {
             return new WP_Error(
@@ -152,6 +147,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
             200
         );
     }
+
 
 
     /**
@@ -173,7 +169,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         }
 
         // Retrieve Existing BOGO Discounts
-        $existing_data = get_option('aio_bogo_discount', []);
+        $existing_data = get_option('aio_bxgy_discount', []);
         if (!is_array($existing_data)) {
             $existing_data = maybe_unserialize($existing_data);
         }
@@ -191,7 +187,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
                     $discount['status'] = sanitize_text_field($params['status']);
                 } else {
                     // Sanitize the received data for a full update
-                    $sanitized_data = Bogo_Sanitization_Helper::Bogo_Data_Sanitization($params);
+                    $sanitized_data = BuyXGetY_Sanitization_Helper::BuyXGetY_Data_Sanitization($params);
                     if (is_wp_error($sanitized_data)) {
                         return $sanitized_data;
                     }
@@ -208,7 +204,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
 
         if ($updated) {
             // Save Updated Data
-            $saved = update_option('aio_bogo_discount', maybe_serialize($existing_data));
+            $saved = update_option('aio_bxgy_discount', maybe_serialize($existing_data));
 
             if ($saved) {
                 return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'aio-woodiscount')], 200);
@@ -238,7 +234,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         $id = $request->get_param('id');
 
         // Ensure existing data is an array
-        $existing_data = get_option('aio_bogo_discount', []);
+        $existing_data = get_option('aio_bxgy_discount', []);
 
         if (!is_array($existing_data)) {
             $existing_data = maybe_unserialize($existing_data);
@@ -257,10 +253,12 @@ class Bogo_Discount_Controller extends WP_REST_Controller
         $existing_data = array_values($existing_data);
 
         // Save updated data
-        update_option('aio_bogo_discount', maybe_serialize($existing_data));
+        update_option('aio_bxgy_discount', maybe_serialize($existing_data));
 
         return new WP_REST_Response(['success' => true, 'message' => __('Data deleted successfully.', 'aio-woodiscount')], 200);
     }
+
+
 
 
 
@@ -274,7 +272,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller
 
     public function get_discounts(WP_REST_Request $request)
     {
-        $discounts = get_option('aio_bogo_discount', []);
+        $discounts = get_option('aio_bxgy_discount', []);
 
         if (maybe_serialize($discounts)) {
             $discounts = maybe_unserialize($discounts);

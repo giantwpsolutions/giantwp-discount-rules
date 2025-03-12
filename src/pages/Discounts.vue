@@ -12,6 +12,8 @@ import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageD
 import { deleteMessage, updatedDiscountStatus } from "@/data/message.js";
 import { saveBogoData } from "@/data/save-data/saveBogoData.js";
 import { saveShippingData } from "@/data/save-data/saveShippingData.js";
+import { saveBuyXGetYData } from "@/data/save-data/saveBuyXGetYData.js";
+import { saveBulkDiscountData } from "@/data/save-data/saveBulkDiscountData.js";
 
 //Reactive state
 
@@ -36,6 +38,10 @@ const deleteRule = async (rule) => {
       await saveBogoData.deleteCoupon(rule.id);
     } else if (rule.discountType === "shipping discount") {
       await saveShippingData.deleteCoupon(rule.id);
+    } else if (rule.discountType === "buy x get y") {
+      await saveBuyXGetYData.deleteCoupon(rule.id);
+    } else if (rule.discountType === "bulk discount") {
+      await saveBulkDiscountData.deleteCoupon(rule.id);
     }
 
     await fetchDiscountRules();
@@ -67,6 +73,16 @@ const toggleStatus = async (rule) => {
     } else if (rule.discountType.toLowerCase() === "shipping discount") {
       console.log("📡 Updating Shipping Discount...");
       response = await saveShippingData.updateDiscount(rule.id, {
+        status: rule.status,
+      });
+    } else if (rule.discountType.toLowerCase() === "buy x get y") {
+      console.log("📡 Updating Buy X Get Y Discount...");
+      response = await saveBuyXGetYData.updateDiscount(rule.id, {
+        status: rule.status,
+      });
+    } else if (rule.discountType.toLowerCase() === "bulk discount") {
+      console.log("📡 Updating Buy BulkDiscount...");
+      response = await saveBulkDiscountData.updateDiscount(rule.id, {
         status: rule.status,
       });
     }

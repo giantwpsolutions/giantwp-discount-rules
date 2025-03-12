@@ -4,6 +4,8 @@ namespace AIO_WooDiscount\Api;
 
 use AIO_WooDiscount\Api\Controllers\All_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Bogo_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Bulk_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\BuyXGetY_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\General_Data;
 use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
 use AIO_WooDiscount\Api\Controllers\Products_Category_Controller;
@@ -61,5 +63,11 @@ class Api
 
         $shipping_discount = new Shipping_Discount_Controller();
         $shipping_discount->register_routes();
+
+        $buyxgety_discount = new BuyXGetY_Discount_Controller();
+        $buyxgety_discount->register_routes();
+
+        $bulk_discount = new Bulk_Discount_Controller();
+        $bulk_discount->register_routes();
     }
 }

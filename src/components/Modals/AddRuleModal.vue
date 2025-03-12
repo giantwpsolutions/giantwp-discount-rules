@@ -3,9 +3,13 @@ import { ref, defineEmits, watch, nextTick } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
 import FreeshippingForm from "../Forms/FreeshippingForm.vue";
+import BuyXGetY from "../Forms/BuyXGetY.vue";
 import { saveFlatPercentageDiscount } from "@/data/save-data/saveFlatPercentageDiscount.js";
 import { saveBogoData } from "@/data/save-data/saveBogoData.js";
 import { saveShippingData } from "@/data/save-data/saveShippingData.js";
+import { saveBuyXGetYData } from "@/data/save-data/saveBuyXGetYData.js";
+import BulkDiscount from "../Forms/BulkDiscount.vue";
+import { saveBulkDiscountData } from "../../data/save-data/saveBulkDiscountData";
 import {
   discountCreatedMessage,
   warningMessage,
@@ -31,15 +35,18 @@ const showForm = ref(false);
 const isSaving = ref(false);
 const isEditMode = ref(false);
 
+//Define Form ref
 const flatPercentageFormRef = ref(null);
 const bogoFormRef = ref(null);
 const freeShippingRef = ref(null);
+const buyXGetYRef = ref(null);
+const bulkDiscountRef = ref(null);
 
 const proFeatures = [
   {
     name: "Buy X Get Y",
     description: "Apply discounts Buy X product Get Y Product",
-    value: "Buyxgety",
+    value: "Buy X Get Y",
   },
   {
     name: "Shipping Discount",
@@ -49,7 +56,7 @@ const proFeatures = [
   {
     name: "Bulk Discount",
     description: "Discounts based on bulk purchase",
-    value: "Bulkdiscount",
+    value: "Bulk Discount",
   },
 ];
 
@@ -86,7 +93,7 @@ watch(
       // Wait for the form component to be rendered
       await nextTick();
       await nextTick();
-      await nextTick(); // Sometimes needed for nested components
+      await nextTick();
 
       if (flatPercentageFormRef.value) {
         console.log("🟢 Passing Data to Form:", newVal);
@@ -95,6 +102,10 @@ watch(
         bogoFormRef.value.setFormData(structuredClone(newVal));
       } else if (freeShippingRef.value) {
         freeShippingRef.value.setFormData(structuredClone(newVal));
+      } else if (buyXGetYRef.value) {
+        buyXGetYRef.value.setFormData(structuredClone(newVal));
+      } else if (bulkDiscountRef.value) {
+        bulkDiscountRef.value.setFormData(structuredClone(newVal));
       }
     }
   },
@@ -119,6 +130,12 @@ const saveForm = async () => {
       case "Shipping Discount":
         activeForm = freeShippingRef.value;
         break;
+      case "Buy X Get Y":
+        activeForm = buyXGetYRef.value;
+        break;
+      case "Bulk Discount":
+        activeForm = bulkDiscountRef.value;
+        break;
     }
 
     if (!activeForm || !activeForm.validate()) {
@@ -136,6 +153,10 @@ const saveForm = async () => {
         await saveBogoData.updateDiscount(formData.id, formData);
       } else if (selectedDiscountsType.value === "Shipping Discount") {
         await saveShippingData.updateDiscount(formData.id, formData);
+      } else if (selectedDiscountsType.value === "Buy X Get Y") {
+        await saveBuyXGetYData.updateDiscount(formData.id, formData);
+      } else if (selectedDiscountsType.value === "Bulk Discount") {
+        await saveBulkDiscountData.updateDiscount(formData.id, formData);
       }
 
       updatedDiscountMessage();
@@ -147,6 +168,10 @@ const saveForm = async () => {
         await saveBogoData.saveCoupon(formData);
       } else if (selectedDiscountsType.value === "Shipping Discount") {
         await saveShippingData.saveCoupon(formData);
+      } else if (selectedDiscountsType.value === "Buy X Get Y") {
+        await saveBuyXGetYData.saveCoupon(formData);
+      } else if (selectedDiscountsType.value === "Bulk Discount") {
+        await saveBulkDiscountData.saveCoupon(formData);
       }
 
       discountCreatedMessage();
@@ -277,6 +302,14 @@ const saveForm = async () => {
                 selectedDiscountsType === 'Shipping Discount' && showForm
               "
               ref="freeShippingRef"
+              :initialData="props.editingRule" />
+            <BuyXGetY
+              v-else-if="selectedDiscountsType === 'Buy X Get Y'"
+              ref="buyXGetYRef"
+              :initialData="props.editingRule" />
+            <BulkDiscount
+              v-else-if="selectedDiscountsType === 'Bulk Discount'"
+              ref="bulkDiscountRef"
               :initialData="props.editingRule" />
             <p v-else>
               {{ __("Form for", "aio-woodiscount") }}

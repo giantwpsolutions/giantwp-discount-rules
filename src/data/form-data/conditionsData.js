@@ -48,14 +48,14 @@ export const conditionOptions = [
             { label: __('Customer Order Count', 'aio-woodiscount'), value: 'customer_order_count' },
             { label: __('Order History Product', 'aio-woodiscount'), value: 'customer_order_history_product' },
             { label: __('Order History Category', 'aio-woodiscount'), value: 'customer_order_history_category' },
-            { label: __('Shipping Region', 'aio-woodiscount'), value: 'customer_shipping_region' },
+            // { label: __('Shipping Region', 'aio-woodiscount'), value: 'customer_shipping_region' },
         ],
     },
     {
         label: __('Others', 'aio-woodiscount'),
         options: [
             { label: __('Payment Method', 'aio-woodiscount'), value: 'payment_method' },
-            { label: __('Applied Coupons', 'aio-woodiscount'), value: 'applied_coupons' },
+            // { label: __('Applied Coupons', 'aio-woodiscount'), value: 'applied_coupons' },
         ],
     },
 ];

@@ -1,45 +1,22 @@
-
 import apiFetch from "@wordpress/api-fetch";
-import { id } from "element-plus/es/locale/index.mjs";
 
-export const saveFlatPercentageDiscount = {
+export const saveBuyXGetYData = {
     /**
-* Save a new discount rule
-*/
+   * Save a new discount rule
+   */
     async saveCoupon(newData) {
         try {
             // Fetch existing data before appending
-            const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-flatpercentage-discount`,
-                method: "GET",
-                headers: {
-                    "X-WP-Nonce": pluginData.nonce,
-                },
-            });
+            // const existingData = await apiFetch({
+            //     path: `${pluginData.restUrl}get-bxgy-discount`,
+            //     method: "GET",
+            //     headers: {
+            //         "X-WP-Nonce": pluginData.nonce,
+            //     },
+            // });
 
-            const previousDiscounts = Array.isArray(existingData) ? existingData : [];
+            // const previousDiscounts = Array.isArray(existingData) ? existingData : [];
 
-            // Todo: Ensure conditions are formatted properly for cascader
-            // const formattedConditions = Array.isArray(newData.conditions)
-            //     ? newData.conditions.map((c) => {
-            //         let finalValue = Array.isArray(c.value) ? c.value : [c.value];
-
-            //         // ✅ Special handling for customer_shipping_region
-            //         if (c.field === "customer_shipping_region") {
-            //             // Flatten all region paths into a single array
-            //             finalValue = finalValue.flatMap(path => Array.isArray(path) ? path : [path]);
-
-            //             // Remove duplicates
-            //             finalValue = [...new Set(finalValue)];
-            //         }
-
-            //         return {
-            //             field: c.field || "",
-            //             operator: c.operator || "",
-            //             value: finalValue,
-            //         };
-            //     })
-            //     : [];
 
             // Ensure conditions are formatted properly
             const formattedConditions = Array.isArray(newData.conditions)
@@ -50,9 +27,30 @@ export const saveFlatPercentageDiscount = {
                 }))
                 : [];
 
+            // Ensure buy product are formatted properly
+            const formattedBuyxProduct = Array.isArray(newData.buyProduct)
+                ? newData.buyProduct.map((c) => ({
+                    buyProductCount: c.buyProductCount || 1,
+                    field: c.field || "",
+                    operator: c.operator || "",
+                    value: Array.isArray(c.value) && !c.value.some(Array.isArray) ? c.value : [c.value],
 
+                }))
+                : [];
+
+            // Ensure buy product are formatted properly
+            const formattedGetYProduct = Array.isArray(newData.getProduct)
+                ? newData.getProduct.map((c) => ({
+                    getProductCount: c.field || 1,
+                    field: c.field || "",
+                    operator: c.operator || "",
+                    value: Array.isArray(c.value) && !c.value.some(Array.isArray) ? c.value : [c.value],
+
+                }))
+                : [];
 
             console.log("Final Conditions Before Sending:", formattedConditions);
+
 
             const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
@@ -66,9 +64,15 @@ export const saveFlatPercentageDiscount = {
                 discountType: newData.discountType,
                 status: validateStatus(newData.status),
                 couponName: newData.couponName,
-                fpDiscountType: newData.fpDiscountType || "fixed",
+                buyXApplies: newData.buyXApplies ?? "any",
+                buyProduct: formattedBuyxProduct,
+                freeOrDiscount: newData.freeOrDiscount ?? "free_product",
+                isRepeat: newData.isRepeat || true,
+                discountTypeBxgy: newData.discountTypeBxgy || "fixed",
                 discountValue: newData.discountValue || 0,
                 maxValue: newData.maxValue || null,
+                getYApplies: newData.getYApplies ?? "any",
+                getProduct: formattedGetYProduct,
                 schedule: {
                     enableSchedule: newData.schedule?.enableSchedule || false,
                     startDate: newData.schedule?.startDate || null,
@@ -84,17 +88,14 @@ export const saveFlatPercentageDiscount = {
                 conditions: formattedConditions,
             };
 
-            //Append new discount data
-            const updatedDiscounts = [...previousDiscounts, newDiscount];
-
-            //Save the updated data
+            // ✅ Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-flatpercentage-discount`,
+                path: `${pluginData.restUrl}save-bxgy-discount`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
                 },
-                data: newDiscount,   //Send only the new discount entry
+                data: newDiscount,   // ✅ Send only the new discount entry
             });
 
             return response;
@@ -104,10 +105,9 @@ export const saveFlatPercentageDiscount = {
         }
     },
 
-
     /**
-* Update an existing discount rule by index
-*/
+     * Update an existing discount rule by index
+     */
     async updateDiscount(id, updatedFields) {
         try {
             console.log("📡 Sending API Request to update discount:", id, updatedFields);
@@ -118,7 +118,7 @@ export const saveFlatPercentageDiscount = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
+                path: `${pluginData.restUrl}update-bxgy-discount/${id}`,
                 method: "POST",
                 headers: {
                     "X-WP-Nonce": pluginData.nonce,
@@ -127,14 +127,14 @@ export const saveFlatPercentageDiscount = {
                 body: JSON.stringify(payload),
             });
 
-            console.log("Received Response from API:", response);
+            console.log("✅ Received Response from API:", response);
 
             if (!response || typeof response !== "object" || !response.success) {
                 console.error("❌ API Response Error:", response);
                 throw new Error(response?.message || "Unknown API error");
             }
 
-            return response;  //Fix: Ensure it returns the response
+            return response;  // ✅ Fix: Ensure it returns the response
 
         } catch (error) {
             console.error("❌ Update error:", error);
@@ -142,9 +142,11 @@ export const saveFlatPercentageDiscount = {
         }
     },
 
+
+
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-flatpercentage-discount/${id}`,
+            path: `${pluginData.restUrl}delete-bxgy-discount/${id}`,
             method: "DELETE",
             headers: { "X-WP-Nonce": pluginData.nonce },
         });

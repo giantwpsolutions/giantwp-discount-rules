@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'habib/all-in-one-woodiscount',
-        'pretty_version' => 'dev-developer',
-        'version' => 'dev-developer',
-        'reference' => '9ecf83ac5829eabfe1669c3afc389105689cf564',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'ae8c1873ad6a3be90f056b1197bfa176ceade976',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'habib/all-in-one-woodiscount' => array(
-            'pretty_version' => 'dev-developer',
-            'version' => 'dev-developer',
-            'reference' => '9ecf83ac5829eabfe1669c3afc389105689cf564',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'ae8c1873ad6a3be90f056b1197bfa176ceade976',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

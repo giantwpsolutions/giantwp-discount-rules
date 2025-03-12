@@ -16,7 +16,7 @@ if (! defined('ABSPATH')) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__  . '/functions.php';
+require_once __DIR__  . '/app/functions.php';
 
 /**
  * The main plugin class
@@ -79,6 +79,8 @@ final class All_in_one_wooDiscount
         if (class_exists('WooCommerce')) {
             new AIO_WooDiscount\Installer();
             new AIO_WooDiscount\Api\Api();
+            new AIO_WooDiscount\Discount\FlatPercentage_Discount();
+            error_log('🚀 apply_discount() fired');
         } else {
             add_action('admin_notices', [$this, 'woocommerce_missing_notice']);
         }

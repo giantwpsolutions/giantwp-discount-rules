@@ -35,10 +35,12 @@ class Conditions_Sanitization_Helper
     private static function sanitize_condition_value($value)
     {
         if (is_array($value)) {
-            return array_map(fn($item) => is_numeric($item) ? (int) $item : sanitize_text_field($item), $value);
+            return array_map(function ($item) {
+                return is_numeric($item) ? intval($item) : esc_html(sanitize_text_field($item));
+            }, $value);
         }
 
-        return is_numeric($value) ? (int) $value : sanitize_text_field($value);
+        return is_numeric($value) ? intval($value) : esc_html(sanitize_text_field($value));
     }
 
 

@@ -16,9 +16,12 @@ class Assets
     {
 
         add_action('admin_enqueue_scripts', [$this, 'register_plugin_assets'], 50);
+        add_action('admin_enqueue_scripts', [$this, 'register_frontend_plugin_assets'], 50);
+
 
         add_filter('script_loader_tag', [$this, 'add_attribute_type'], 10, 3);
         add_action('in_admin_header', [$this, 'disable_core_update_notifications']);
+        add_action('wp_enqueue_scripts', [$this, 'register_frontend_plugin_assets'], 50);
     }
 
     /**
@@ -38,10 +41,10 @@ class Assets
         wp_enqueue_script('wp-i18n');
         wp_enqueue_script('wp-api-fetch');
 
-        $is_dev = defined('WP_DEBUG') && WP_DEBUG;
+        $is_dev               = defined('WP_DEBUG') && WP_DEBUG;
         $dev_server_js_loader = 'http://localhost:5173/src/main.js';
-        $prod_js_loader = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
-        $prod_css_loader = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
+        $prod_js_loader       = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
+        $prod_css_loader      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
         if ($is_dev) {
             wp_enqueue_script(
@@ -80,8 +83,19 @@ class Assets
     }
 
 
+    public function register_frontend_plugin_assets()
+    {
+        wp_enqueue_script('aio-checkout', plugin_dir_url(__DIR__) . 'assets/js/aio_checkout_ajax.js', array('jquery'), time(), true);
+
+        wp_localize_script('aio-checkout', 'aio_checkout_ajax', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('aio_nonce'),
+        ]);
+    }
+
+
     /**
-     * Add type="module" to the script tag
+     * Add type = "module" to the script tag
      *
      * @param string $tag The script tag.
      * @param string $handle The script handle.
@@ -92,7 +106,7 @@ class Assets
     public function add_attribute_type($tag, $handle, $src)
     {
         if ('aio-woodiscount-vjs' === $handle) {
-            error_log("Script modified for handle: {$handle}"); // Debug log
+            error_log("Script modified for handle: {$handle}");  // Debug log
             $tag = '<script type="module" src="' . esc_url($src) . '"></script>';
         }
         return $tag;
@@ -106,7 +120,7 @@ class Assets
     {
         $current_screen = get_current_screen();
         if ($current_screen && $current_screen->id === 'woocommerce_page_aio-woodiscount') {
-            remove_all_actions('admin_notices'); // Removes ALL admin notices
+            remove_all_actions('admin_notices');  // Removes ALL admin notices
             remove_all_actions('network_admin_notices');
         }
     }

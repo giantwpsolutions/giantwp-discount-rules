@@ -24,7 +24,7 @@ class FlatPercentage_Sanitization_Helper
         return [
             'id' => sanitize_text_field($data['id'] ?? time()),
             'createdAt' => Conditions_Sanitization_Helper::sanitize_iso8601_datetime($data['createdAt'] ?? current_time('c')),
-            'discountType'   => sanitize_text_field($data['discountType'] ?? 'flat/percentage'),
+            'discountType'   => strtolower(sanitize_text_field($data['discountType'] ?? 'flat/percentage')),
             'status'         => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
             'couponName'     => sanitize_text_field($data['couponName'] ?? ''),
             'fpDiscountType' => sanitize_text_field($data['fpDiscountType'] ?? 'fixed'),

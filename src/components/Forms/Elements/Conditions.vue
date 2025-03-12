@@ -85,6 +85,16 @@ onMounted(async () => {
 
     await loadCountriesAndStates();
     cascadeOptions.customer_shipping_region = countriesOptions.value;
+    localConditions.value = props.value.map((c) => {
+      if (
+        c.field === "customer_shipping_region" &&
+        Array.isArray(c.value) &&
+        c.value.every((v) => typeof v === "string")
+      ) {
+        c.value = convertFlatRegionToPaths(c.value, countriesOptions.value);
+      }
+      return c;
+    });
 
     await loadGeneralData();
   } catch (error) {
@@ -301,7 +311,7 @@ watch(
               </template>
             </el-input>
 
-            <el-cascader
+            <!-- <el-cascader
               v-else-if="isCascadeField(condition.field)"
               v-model="condition.value"
               :options="countriesOptions"
@@ -311,7 +321,8 @@ watch(
               class="full-width custom-cascade"
               filterable
               :loading="isLoadingCountries"
-              placeholder="Select Continent, Country, and State" />
+              @change="updateConditions"
+              placeholder="Select Continent, Country, and State" /> -->
 
             <input
               v-else-if="isNumberField(condition.field)"

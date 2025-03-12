@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 /**
  * Bogo Discount Data Sanitization Helper Class
  */
-class Shipping_Sanitization_Helper
+class Bulk_Discount_Sanitization_Helper
 {
     /**
      * Sanitize Bogo discount data.
@@ -15,7 +15,7 @@ class Shipping_Sanitization_Helper
      * @param array $data The raw Bogo discount data.
      * @return array The sanitized data.
      */
-    public static function Shipping_Data_Sanitization($data)
+    public static function Bulk_Discount_Data_Sanitization($data)
     {
         if (!is_array($data)) {
             return [];
@@ -25,14 +25,20 @@ class Shipping_Sanitization_Helper
             'id'        => sanitize_text_field($data['id'] ?? time()),
             'createdAt' => Conditions_Sanitization_Helper::sanitize_iso8601_datetime($data['createdAt'] ?? current_time('c')),
 
-            'discountType'         => strtolower(sanitize_text_field($data['discountType'] ?? 'shipping discount')),
-            'status'               => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
-            'couponName'           => sanitize_text_field($data['couponName'] ?? ''),
-            'shippingDiscountType' => sanitize_text_field($data['shippingDiscountType'] ?? 'reduceFee'),
-            'pDiscountType'        => sanitize_text_field($data['pDiscountType'] ?? 'fixed'),
-            'discountValue'        => isset($data['discountValue']) && is_numeric($data['discountValue']) ? floatval($data['discountValue']) : 0,
-            'maxValue'             => isset($data['maxValue']) && is_numeric($data['maxValue']) ? floatval($data['maxValue']) : null,
-            'schedule'             => [
+            'discountType' => strtolower(sanitize_text_field($data['discountType'] ?? 'bulk discount')),
+            'status'       => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
+            'couponName'   => sanitize_text_field($data['couponName'] ?? ''),
+            'getItem'      => sanitize_text_field($data['getItem'] ?? 'alltogether'),
+            'bulkDiscounts' => isset($data['bulkDiscounts']) && is_array($data['bulkDiscounts'])
+                ? array_map([Bulk_Product_Sanitization::class, 'sanitize_bulkDiscountEntries'], $data['bulkDiscounts'])
+                :   [],
+            'getApplies'      => isset($data['getApplies']) && in_array($data['getApplies'], ['any', 'all'])
+                ? $data['getApplies']
+                :    'any',
+            'buyProducts' => isset($data['buyProducts']) && is_array($data['buyProducts'])
+                ? array_map([Bulk_Product_Sanitization::class, 'sanitize_bulkBuyProduct'], $data['buyProducts'])
+                : [],
+            'schedule'       => [
                 'enableSchedule' => isset($data['schedule']['enableSchedule']) ? (bool) $data['schedule']['enableSchedule'] : false,
                 'startDate'      => sanitize_text_field($data['schedule']['startDate'] ?? ''),
                 'endDate'        => sanitize_text_field($data['schedule']['endDate'] ?? ''),
@@ -44,7 +50,6 @@ class Shipping_Sanitization_Helper
                     ? (int) $data['usageLimits']['usageLimitsCount']
                     :  0,
             ],
-            'autoApply'        => isset($data['autoApply']) ? (bool) $data['autoApply'] : false,
             'enableConditions' => isset($data['enableConditions']) ? (bool) $data['enableConditions'] : false,
 
 
