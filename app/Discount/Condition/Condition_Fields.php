@@ -15,7 +15,7 @@ class Condition_Fields
      *
      * @param array $cart_items Array of WooCommerce cart items.
      * @param array $condition  Condition array with 'operator' and 'value'.
-     *                          Example: ['operator' => 'greater_than', 'value' => [100]]
+     * Example: ['operator' => 'greater_than', 'value' => [100]]
      *
      * @return bool True if the subtotal matches the condition, false otherwise.
      */
@@ -48,12 +48,16 @@ class Condition_Fields
      *
      * @param array $cart_items Array of WooCommerce cart items.
      * @param array $condition  Condition array with 'operator' and 'value'.
-     *                          Example: ['operator' => 'less_than', 'value' => [5]]
+     * Example: ['operator' => 'less_than', 'value' => [5]]
      *
      * @return bool True if quantity matches the condition, false otherwise.
      */
     public static function cart_quantity($cart_items, $condition)
     {
+        if (!is_array($condition) || !isset($condition['field']) && !isset($condition['operator'])) {
+            return false;
+        }
+
         $quantity = 0;
         foreach ($cart_items as $item) {
             $quantity += $item['quantity'];
@@ -61,6 +65,7 @@ class Condition_Fields
 
         return compare_numaric_value($quantity, $condition['operator'], $condition['value']);
     }
+
 
 
     /**
@@ -73,7 +78,7 @@ class Condition_Fields
      *
      * @param array $cart_items Array of WooCommerce cart items.
      * @param array $condition  Condition array with 'operator' and 'value'.
-     *                          Example: ['operator' => 'equal_less_than', 'value' => [10]]
+     * Example: ['operator' => 'equal_less_than', 'value' => [10]]
      *
      * @return bool True if total weight matches the condition, false otherwise.
      */
@@ -95,7 +100,7 @@ class Condition_Fields
             $qty     = $item['quantity'];
 
             if ($product instanceof \WC_Product) {
-                $weight = floatval($product->get_weight());
+                $weight        = floatval($product->get_weight());
                 $total_weight += $weight * $qty;
             }
         }
@@ -134,7 +139,7 @@ class Condition_Fields
                 continue;
             }
 
-            $product = $item['data'];
+            $product       = $item['data'];
             $regular_price = floatval($product->get_regular_price());
 
 
@@ -174,7 +179,7 @@ class Condition_Fields
                 continue;
             }
 
-            $product = $item['data'];
+            $product    = $item['data'];
             $product_id = $product->get_id();
             $parent_id  = $product->get_parent_id();
 
@@ -187,8 +192,8 @@ class Condition_Fields
 
         // Ensure cart IDs are unique and condition value is array of integers
         $product_ids_in_cart = array_unique(array_map('intval', $product_ids_in_cart));
-        $condition_ids = array_map('intval', $condition['value']);
-        $operator = $condition['operator'];
+        $condition_ids       = array_map('intval', $condition['value']);
+        $operator            = $condition['operator'];
 
 
         return compare_cart_items($product_ids_in_cart, $operator, $condition_ids);
@@ -269,7 +274,7 @@ class Condition_Fields
             $product = $item['data'];
 
             // Get category IDs (include parent + subcategories)
-            $term_ids = wc_get_product_term_ids($product->get_id(), 'product_cat');
+            $term_ids          = wc_get_product_term_ids($product->get_id(), 'product_cat');
             $cart_category_ids = array_merge($cart_category_ids, $term_ids);
         }
 
@@ -313,7 +318,7 @@ class Condition_Fields
             $product = $item['data'];
 
             // Get tag IDs (term IDs) for this product
-            $term_ids = wc_get_product_term_ids($product->get_id(), 'product_tag');
+            $term_ids        = wc_get_product_term_ids($product->get_id(), 'product_tag');
             $tag_ids_in_cart = array_merge($tag_ids_in_cart, $term_ids);
         }
 
@@ -332,7 +337,7 @@ class Condition_Fields
      *
      * @param array $cart_items (Not used here, passed for consistency.)
      * @param array $condition  Condition array with 'operator' and 'value'.
-     *                          Example: ['operator' => 'greater_than', 'value' => [3]]
+     * Example: ['operator' => 'greater_than', 'value' => [3]]
      *
      * @return bool True if the customer's order count matches the condition.
      */
@@ -346,17 +351,17 @@ class Condition_Fields
             return false;
         }
 
-        $user_id = get_current_user_id();
+        $user_id  = get_current_user_id();
         $operator = $condition['operator'];
         $value    = is_array($condition['value']) ? intval($condition['value'][0]) : intval($condition['value']);
 
         $args = [
             'customer_id' => $user_id,
-            'status'      => ['wc-completed', 'wc-processing', 'wc-on-hold'], // filter valid order statuses
+            'status'      => ['wc-completed', 'wc-processing', 'wc-on-hold'],   // filter valid order statuses
             'return'      => 'ids',
         ];
 
-        $orders = wc_get_orders($args);
+        $orders      = wc_get_orders($args);
         $order_count = count($orders);
 
         return compare_numaric_value($order_count, $operator, $value);
@@ -387,18 +392,18 @@ class Condition_Fields
             return false;
         }
 
-        $user_id = get_current_user_id();
-        $operator = $condition['operator'];
-        $condition_ids = array_map('intval', $condition['value']); // Expected product IDs
+        $user_id       = get_current_user_id();
+        $operator      = $condition['operator'];
+        $condition_ids = array_map('intval', $condition['value']);  // Expected product IDs
 
         $args = [
             'customer_id' => $user_id,
-            'status'      => ['wc-completed', 'wc-processing'], // Limit to valid orders
+            'status'      => ['wc-completed', 'wc-processing'],   // Limit to valid orders
             'return'      => 'ids',
             'limit'       => -1,
         ];
 
-        $orders = wc_get_orders($args);
+        $orders                = wc_get_orders($args);
         $purchased_product_ids = [];
 
         foreach ($orders as $order_id) {
@@ -455,9 +460,9 @@ class Condition_Fields
             return false;
         }
 
-        $user_id        = get_current_user_id();
-        $operator       = $condition['operator'];
-        $condition_ids  = array_map('intval', $condition['value']);
+        $user_id         = get_current_user_id();
+        $operator        = $condition['operator'];
+        $condition_ids   = array_map('intval', $condition['value']);
         $ordered_cat_ids = [];
 
         $args = [
@@ -480,7 +485,7 @@ class Condition_Fields
                 if (!$product || !($product instanceof \WC_Product)) continue;
 
                 // Get product category IDs
-                $term_ids = wc_get_product_term_ids($product->get_id(), 'product_cat');
+                $term_ids        = wc_get_product_term_ids($product->get_id(), 'product_cat');
                 $ordered_cat_ids = array_merge($ordered_cat_ids, $term_ids);
             }
         }

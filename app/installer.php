@@ -6,6 +6,9 @@ use AIO_WooDiscount\Traits\SingletonTrait;
 use AIO_WooDiscount\Admin\Menu;
 use AIO_WooDiscount\Assets;
 use AIO_WooDiscount\Ajax\Checkout_Ajax_Handler;
+use AIO_WooDiscount\Ajax\TriggerCart;
+use AIO_WooDiscount\Discount\Manager\CouponDisplay;
+use AIO_WooDiscount\Discount\Manager\FlatPercentage_Validator;
 
 
 /**
@@ -27,8 +30,9 @@ class Installer
         if (is_admin()) {
             Menu::instance();
         }
-
-
+        FlatPercentage_Validator::instance();
+        CouponDisplay::instance();
         Checkout_Ajax_Handler::instance();
+        new TriggerCart();
     }
 }

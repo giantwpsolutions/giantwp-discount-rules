@@ -86,10 +86,16 @@ class Assets
     public function register_frontend_plugin_assets()
     {
         wp_enqueue_script('aio-checkout', plugin_dir_url(__DIR__) . 'assets/js/aio_checkout_ajax.js', array('jquery'), time(), true);
+        wp_enqueue_script('aio-trigger', plugin_dir_url(__DIR__) . 'assets/js/trigger.js', array('jquery'), time(), true);
 
         wp_localize_script('aio-checkout', 'aio_checkout_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('aio_nonce'),
+        ]);
+
+        wp_localize_script('aio-trigger', 'aioDiscountAjax', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('aio_trigger_nonce'),
         ]);
     }
 

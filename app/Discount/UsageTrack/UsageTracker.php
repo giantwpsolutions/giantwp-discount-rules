@@ -14,10 +14,9 @@ class UsageTracker
 
     public static function increase_use_time($order_id, string $option_key, string $meta_key)
     {
-        error_log("🔍 increase_use_time called on order #$order_id using meta {$meta_key}");
+        error_log("🔍 increase_use_time called on order #{$order_id} using meta {$meta_key}");
 
         $used_rule_ids = get_post_meta($order_id, $meta_key, true);
-
         if (empty($used_rule_ids) || !is_array($used_rule_ids)) {
             error_log("⚠️ No rule IDs found in order #{$order_id} for meta {$meta_key}");
             return;

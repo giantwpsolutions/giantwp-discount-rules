@@ -35,7 +35,6 @@ const formData = reactive({
     enableUsage: false,
     usageLimitsCount: 0, // ✅ Ensure default is a number
   },
-  autoApply: false,
   enableConditions: false,
   conditionsApplies: "any",
   conditions: [],
@@ -138,8 +137,6 @@ defineExpose({
 
     <!-- ✅ Fix UsageLimits syncing -->
     <UsageLimits v-model="formData.usageLimits"></UsageLimits>
-
-    <AutoApply v-model="formData.autoApply"> </AutoApply>
 
     <Conditions
       v-model:value="formData.conditions"

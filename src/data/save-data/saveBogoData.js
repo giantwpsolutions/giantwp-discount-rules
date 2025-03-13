@@ -69,7 +69,7 @@ export const saveBogoData = {
                     enableUsage: newData.usageLimits?.enableUsage ?? false,
                     usageLimitsCount: newData.usageLimits?.usageLimitsCount ?? 0,
                 },
-                autoApply: newData.autoApply || false,
+                usedCount: newData.usedCount || 0,
                 enableConditions: newData.enableConditions || false,
                 conditionsApplies: newData.conditionsApplies ?? "any",
                 conditions: formattedConditions,

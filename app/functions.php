@@ -92,18 +92,18 @@ function compare_list($current, $operator, $expected)
     }
 }
 
-$GLOBALS['aio_applied_rule_ids'] = [];
-function aio_track_applied_rule($rule_id)
-{
-    if (!in_array($rule_id, $GLOBALS['aio_applied_rule_ids'], true)) {
-        $GLOBALS['aio_applied_rule_ids'][] = $rule_id;
-    }
-}
-function aio_get_tracked_rules()
-{
-    return $GLOBALS['aio_applied_rule_ids'];
-}
 
+
+
+function aio_check_woocommerce_hpos()
+{
+    if (class_exists(\Automattic\WooCommerce\Utilities\OrderUtil::class)) {
+        if (\Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled()) {
+            return true;
+        }
+    }
+    return false;
+}
 
 function WoocommerceDeactivationAlert()
 {

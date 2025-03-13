@@ -231,7 +231,6 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
 
         // ✅ Ensure existing data is an array
         $existing_data = get_option('aio_flatpercentage_discount', []);
-
         if (!is_array($existing_data)) {
             $existing_data = maybe_unserialize($existing_data);
         }
@@ -240,19 +239,36 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
             return new WP_Error('invalid_data', __('Stored discount data is corrupted.', 'all-in-one-woodiscount'), ['status' => 500]);
         }
 
-        // ✅ Find the discount with matching ID
-        $existing_data = array_filter($existing_data, function ($discount) use ($id) {
-            return isset($discount['id']) && $discount['id'] !== $id;
+        $deleted_coupon_code = null;
+
+        // ✅ Remove the rule and get the coupon code if found
+        $filtered_data = array_filter($existing_data, function ($discount) use ($id, &$deleted_coupon_code) {
+            if (isset($discount['id']) && $discount['id'] === $id) {
+                // Get coupon code to delete
+                $deleted_coupon_code = $discount['couponName'] ?? null;
+                return false; // remove this one
+            }
+            return true; // keep the rest
         });
 
-        // ✅ Re-index array after filtering
-        $existing_data = array_values($existing_data);
+        // ✅ Delete WooCommerce coupon if it exists
+        if ($deleted_coupon_code) {
+            $coupon = new \WC_Coupon($deleted_coupon_code);
+            if ($coupon->get_id()) {
+                wp_delete_post($coupon->get_id(), true); // true = force delete
+                error_log("🧹 Deleted WooCommerce coupon: {$deleted_coupon_code}");
+            }
+        }
 
         // ✅ Save updated data
-        update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
+        update_option('aio_flatpercentage_discount', maybe_serialize(array_values($filtered_data)));
 
-        return new WP_REST_Response(['success' => true, 'message' => __('Data deleted successfully.', 'all-in-one-woodiscount')], 200);
+        return new \WP_REST_Response([
+            'success' => true,
+            'message' => __('Discount and coupon deleted successfully.', 'all-in-one-woodiscount'),
+        ], 200);
     }
+
 
 
     /** 
