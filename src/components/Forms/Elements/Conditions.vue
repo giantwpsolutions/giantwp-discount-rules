@@ -206,10 +206,10 @@ watch(
         v-model="enableConditions"
         @change="updateEnableConditions"
         inline-prompt
-        :active-text="__('On', 'aio-woodiscount')"
-        :inactive-text="__('Off', 'aio-woodiscount')" />
+        :active-text="__('On', 'all-in-one-woodiscount')"
+        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
       <label class="text-sm font-medium text-gray-900">
-        {{ __("Enable Conditions?", "aio-woodiscount") }}
+        {{ __("Enable Conditions?", "all-in-one-woodiscount") }}
       </label>
     </div>
 
@@ -219,20 +219,20 @@ watch(
       <div class="flex items-center gap-2 mt-6 mb-1">
         <label
           class="text-sm font-medium text-gray-900 flex items-center gap-1">
-          {{ __("Apply conditions if matches", "aio-woodiscount") }}
+          {{ __("Apply conditions if matches", "all-in-one-woodiscount") }}
         </label>
         <el-radio-group
           v-model="conditionsApplies"
           @change="updateConditionsApplies">
-          <el-radio-button :label="__('Any', 'aio-woodiscount')" value="any" />
+          <el-radio-button :label="__('Any', 'all-in-one-woodiscount')" value="any" />
 
-          <el-radio-button :label="__('All', 'aio-woodiscount')" value="all" />
+          <el-radio-button :label="__('All', 'all-in-one-woodiscount')" value="all" />
         </el-radio-group>
       </div>
 
       <!-- condition add -->
       <label class="block text-sm font-medium text-gray-900">
-        {{ __("Add Conditions", "aio-woodiscount") }}
+        {{ __("Add Conditions", "all-in-one-woodiscount") }}
       </label>
 
       <div
@@ -244,8 +244,8 @@ watch(
           <span class="text-black italic text-sm">
             {{
               conditionsApplies === "any"
-                ? __("Or", "aio-woodiscount")
-                : __("And", "aio-woodiscount")
+                ? __("Or", "all-in-one-woodiscount")
+                : __("And", "all-in-one-woodiscount")
             }}
           </span>
         </div>
@@ -258,7 +258,7 @@ watch(
               class="w-full h-8 border rounded p-2 text-sm"
               @change="updateConditions">
               <option value="">
-                {{ __("Please select", "aio-woodiscount") }}
+                {{ __("Please select", "all-in-one-woodiscount") }}
               </option>
               <template v-for="group in conditionOptions" :key="group.label">
                 <optgroup
@@ -349,7 +349,7 @@ watch(
       <button
         @click="addCondition"
         class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-        {{ __("Add Condition", "aio-woodiscount") }}
+        {{ __("Add Condition", "all-in-one-woodiscount") }}
       </button>
     </div>
   </div>

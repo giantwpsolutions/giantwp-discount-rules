@@ -106,7 +106,6 @@ class Assets
     public function add_attribute_type($tag, $handle, $src)
     {
         if ('aio-woodiscount-vjs' === $handle) {
-            error_log("Script modified for handle: {$handle}");  // Debug log
             $tag = '<script type="module" src="' . esc_url($src) . '"></script>';
         }
         return $tag;

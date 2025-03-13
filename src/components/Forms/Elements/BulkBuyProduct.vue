@@ -133,12 +133,14 @@ watch(
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
         <!-- Heading Text -->
-        <span>{{ __("Get Y Product", "aio-woodiscount") }}</span>
+        <span>{{ __("Get Y Product", "all-in-one-woodiscount") }}</span>
         <!-- Tooltip Icon -->
         <el-tooltip
           class="box-item"
           effect="dark"
-          :content="__('Which product will get the rule?', 'aio-woodiscount')"
+          :content="
+            __('Which product will get the rule?', 'all-in-one-woodiscount')
+          "
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
@@ -149,12 +151,16 @@ watch(
 
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Rules apply to products if matches", "aio-woodiscount") }}
+        {{ __("Rules apply to products if matches", "all-in-one-woodiscount") }}
       </label>
       <div class="group relative">
         <el-radio-group v-model="getApplies" @change="updateGetApplies">
-          <el-radio-button :label="__('Any', 'aio-woodiscount')" value="any" />
-          <el-radio-button :label="__('All', 'aio-woodiscount')" value="all" />
+          <el-radio-button
+            :label="__('Any', 'all-in-one-woodiscount')"
+            value="any" />
+          <el-radio-button
+            :label="__('All', 'all-in-one-woodiscount')"
+            value="all" />
         </el-radio-group>
       </div>
     </div>
@@ -169,8 +175,8 @@ watch(
         <span class="text-black italic text-sm">
           {{
             getApplies === "any"
-              ? __("Or", "aio-woodiscount")
-              : __("And", "aio-woodiscount")
+              ? __("Or", "all-in-one-woodiscount")
+              : __("And", "all-in-one-woodiscount")
           }}
         </span>
       </div>
@@ -212,7 +218,7 @@ watch(
             v-model="buyProduct.value"
             @change="updateBuyProducts"
             :options="getProductDropdown(buyProduct.field)"
-            :placeholder="__('Select', 'aio-woodiscount')"
+            :placeholder="__('Select', 'all-in-one-woodiscount')"
             filterable
             multiple
             :loading="isLoadingProducts"
@@ -252,7 +258,7 @@ watch(
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Get Product", "aio-woodiscount") }}
+      {{ __("Assign Get Product", "all-in-one-woodiscount") }}
     </button>
   </div>
 </template>

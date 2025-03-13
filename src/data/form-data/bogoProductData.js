@@ -4,55 +4,55 @@ const { __ } = wp.i18n;
 
 export const bogoBuyProductOptions = [
     {
-        label: __('All Products', 'aio-woodiscount'),
+        label: __('All Products', 'all-in-one-woodiscount'),
         value: 'all_products',
     },
     {
-        label: __('Product', 'aio-woodiscount'),
+        label: __('Product', 'all-in-one-woodiscount'),
         value: 'product',
     },
     {
-        label: __('Product Variation', 'aio-woodiscount'),
+        label: __('Product Variation', 'all-in-one-woodiscount'),
         value: 'product_variation',
     },
     {
-        label: __('Product Tags', 'aio-woodiscount'),
+        label: __('Product Tags', 'all-in-one-woodiscount'),
         value: 'product_tags',
     },
     {
-        label: __('Product Category', 'aio-woodiscount'),
+        label: __('Product Category', 'all-in-one-woodiscount'),
         value: 'product_category',
     },
     {
-        label: __('Product Price', 'aio-woodiscount'),
+        label: __('Product Price', 'all-in-one-woodiscount'),
         value: 'product_price',
     },
     {
-        label: __('Product in Stock', 'aio-woodiscount'),
+        label: __('Product in Stock', 'all-in-one-woodiscount'),
         value: 'product_instock',
     },
 ];
 
 export const bogoBuyProductOperator = {
     default: [
-        { label: __('Greater Than', 'aio-woodiscount'), value: 'greater_than' },
-        { label: __('Less Than', 'aio-woodiscount'), value: 'less_than' },
+        { label: __('Greater Than', 'all-in-one-woodiscount'), value: 'greater_than' },
+        { label: __('Less Than', 'all-in-one-woodiscount'), value: 'less_than' },
         {
-            label: __('Greater Than or Equal', 'aio-woodiscount'),
+            label: __('Greater Than or Equal', 'all-in-one-woodiscount'),
             value: 'equal_greater_than',
         },
         {
-            label: __('Less Than or Equal', 'aio-woodiscount'),
+            label: __('Less Than or Equal', 'all-in-one-woodiscount'),
             value: 'equal_less_than',
         },
     ],
     inList: [
         {
-            label: __('In List', 'aio-woodiscount'),
+            label: __('In List', 'all-in-one-woodiscount'),
             value: 'in_list',
         },
         {
-            label: __('Not in List', 'aio-woodiscount'),
+            label: __('Not in List', 'all-in-one-woodiscount'),
             value: 'not_in_list',
         },
     ],

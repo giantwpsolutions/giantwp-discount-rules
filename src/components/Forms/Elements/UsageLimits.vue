@@ -50,13 +50,15 @@ watch(
       <el-switch
         v-model="usageData.enableUsage"
         inline-prompt
-        :active-text="__('On', 'aio-woodiscount')"
-        :inactive-text="__('Off', 'aio-woodiscount')" />
+        :active-text="__('On', 'all-in-one-woodiscount')"
+        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Enable Usage?", "aio-woodiscount") }}
+        {{ __("Enable Usage?", "all-in-one-woodiscount") }}
         <el-tooltip
           effect="dark"
-          :content="__('The maximum usage of this coupon.', 'aio-woodiscount')"
+          :content="
+            __('The maximum usage of this coupon.', 'all-in-one-woodiscount')
+          "
           placement="top">
           <QuestionMarkCircleIcon
             class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
@@ -70,12 +72,12 @@ watch(
         <label
           for="usageLimit"
           class="block text-sm font-medium text-gray-900 my-1">
-          {{ __("Usage Limits", "aio-woodiscount") }}
+          {{ __("Usage Limits", "all-in-one-woodiscount") }}
         </label>
         <div class="flex items-center">
           <span
             class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-left text-gray-700 bg-gray-100">
-            {{ __("Usage/", "aio-woodiscount") }}0
+            {{ __("Limits", "all-in-one-woodiscount") }}
           </span>
           <input
             v-model.number="usageData.usageLimitsCount"

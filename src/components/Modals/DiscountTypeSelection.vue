@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
-const selectedType = ref('');
+const selectedType = ref("");
 const showUpgradeMessage = (type) => {
   console.log(`Upgrade to Pro for access to ${type}`);
 };
 
 const selectDiscountType = (type) => {
   selectedType.value = type; // Update the active state
-  $emit('select', type); // Emit the type to parent
+  $emit("select", type); // Emit the type to parent
 };
 </script>
 
@@ -20,13 +20,20 @@ const selectDiscountType = (type) => {
         @click="() => selectDiscountType('Flat/Percentage')"
         :class="[
           'p-4 rounded-md text-center font-medium w-full',
-          selectedType === 'Flat/Percentage' ? 'bg-blue-200' : 'bg-gray-100 hover:bg-blue-100 active:scale-95'
-        ]"
-      >
-        {{ __('Flat/Percentage', 'aio-woodiscount') }}
+          selectedType === 'Flat/Percentage'
+            ? 'bg-blue-200'
+            : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
+        ]">
+        {{ __("Flat/Percentage", "all-in-one-woodiscount") }}
       </button>
-      <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-        {{ __('Apply a fixed amount or percentage discount', 'aio-woodiscount') }}
+      <div
+        class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
+        {{
+          __(
+            "Apply a fixed amount or percentage discount",
+            "all-in-one-woodiscount"
+          )
+        }}
       </div>
     </div>
 
@@ -36,28 +43,37 @@ const selectDiscountType = (type) => {
         @click="() => selectDiscountType('BOGO')"
         :class="[
           'p-4 rounded-md text-center font-medium w-full',
-          selectedType === 'BOGO' ? 'bg-blue-200' : 'bg-gray-100 hover:bg-blue-100 active:scale-95'
-        ]"
-      >
-        {{ __('BOGO', 'aio-woodiscount') }}
+          selectedType === 'BOGO'
+            ? 'bg-blue-200'
+            : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
+        ]">
+        {{ __("BOGO", "all-in-one-woodiscount") }}
       </button>
-      <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-        {{ __('Buy One Get One free discount', 'aio-woodiscount') }}
+      <div
+        class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
+        {{ __("Buy One Get One free discount", "all-in-one-woodiscount") }}
       </div>
     </div>
 
     <!-- Pro Features -->
     <div
-      v-for="proFeature in ['Bulk Discount', 'Cart Based', 'Payment Method Based', 'Combo Discount', 'Category Based']"
+      v-for="proFeature in [
+        'Bulk Discount',
+        'Cart Based',
+        'Payment Method Based',
+        'Combo Discount',
+        'Category Based',
+      ]"
       :key="proFeature"
-      class="relative group"
-    >
+      class="relative group">
       <button
         @click="() => showUpgradeMessage(proFeature)"
-        class="p-4 bg-gray-100 rounded-md text-center font-medium w-full cursor-not-allowed opacity-50"
-      >
-        {{ __(proFeature, 'aio-woodiscount') }}
-        <span class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">Pro</span>
+        class="p-4 bg-gray-100 rounded-md text-center font-medium w-full cursor-not-allowed opacity-50">
+        {{ __(proFeature, "all-in-one-woodiscount") }}
+        <span
+          class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+          >Pro</span
+        >
       </button>
     </div>
   </div>

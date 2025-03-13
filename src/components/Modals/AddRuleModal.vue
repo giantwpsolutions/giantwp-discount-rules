@@ -221,7 +221,7 @@ const saveForm = async () => {
             {{
               showForm
                 ? selectedDiscountsType
-                : __("Select Discount Type", "aio-woodiscount")
+                : __("Select Discount Type", "all-in-one-woodiscount")
             }}
           </h3>
         </div>
@@ -237,14 +237,14 @@ const saveForm = async () => {
                 <button
                   @click="() => selectDiscountType('Flat/Percentage')"
                   class="w-full text-center font-medium">
-                  {{ __("Flat/Percentage", "aio-woodiscount") }}
+                  {{ __("Flat/Percentage", "all-in-one-woodiscount") }}
                 </button>
                 <div
                   class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
                   {{
                     __(
                       "Apply a fixed amount or percentage discount",
-                      "aio-woodiscount"
+                      "all-in-one-woodiscount"
                     )
                   }}
                 </div>
@@ -256,11 +256,16 @@ const saveForm = async () => {
                 <button
                   @click="() => selectDiscountType('Bogo')"
                   class="w-full text-center font-medium">
-                  {{ __("BOGO", "aio-woodiscount") }}
+                  {{ __("BOGO", "all-in-one-woodiscount") }}
                 </button>
                 <div
                   class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-                  {{ __("Buy One Get One free discount", "aio-woodiscount") }}
+                  {{
+                    __(
+                      "Buy One Get One free discount",
+                      "all-in-one-woodiscount"
+                    )
+                  }}
                 </div>
               </div>
 
@@ -272,7 +277,7 @@ const saveForm = async () => {
                 <button
                   @click="() => selectDiscountType(proFeature.value)"
                   class="w-full text-center font-medium">
-                  {{ __(proFeature.name, "aio-woodiscount") }}
+                  {{ __(proFeature.name, "all-in-one-woodiscount") }}
                 </button>
                 <span
                   class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">
@@ -280,7 +285,7 @@ const saveForm = async () => {
                 </span>
                 <div
                   class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-                  {{ __(proFeature.description, "aio-woodiscount") }}
+                  {{ __(proFeature.description, "all-in-one-woodiscount") }}
                 </div>
               </div>
             </div>
@@ -312,7 +317,7 @@ const saveForm = async () => {
               ref="bulkDiscountRef"
               :initialData="props.editingRule" />
             <p v-else>
-              {{ __("Form for", "aio-woodiscount") }}
+              {{ __("Form for", "all-in-one-woodiscount") }}
               {{ selectedDiscountsType }}
             </p>
           </template>
@@ -323,7 +328,7 @@ const saveForm = async () => {
           <button
             @click="emit('close')"
             class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
-            {{ __("Close", "aio-woodiscount") }}
+            {{ __("Close", "all-in-one-woodiscount") }}
           </button>
           <button
             v-if="showForm"
@@ -332,8 +337,8 @@ const saveForm = async () => {
             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             {{
               isSaving
-                ? __("Saving...", "aio-woodiscount")
-                : __("Save", "aio-woodiscount")
+                ? __("Saving...", "all-in-one-woodiscount")
+                : __("Save", "all-in-one-woodiscount")
             }}
           </button>
         </div>

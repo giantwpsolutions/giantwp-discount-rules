@@ -80,7 +80,7 @@ class Condition_Fields
     public static function cart_total_weight($cart_items, $condition)
     {
         if (!is_array($condition) || !isset($condition['operator'], $condition['value'])) {
-            error_log('❌ Invalid condition structure in cart_total_weight');
+
             return false;
         }
 
@@ -123,7 +123,6 @@ class Condition_Fields
             !is_array($condition) ||
             !isset($condition['operator'], $condition['value'])
         ) {
-            error_log('❌ Invalid condition structure in cart_item_regular_price');
             return false;
         }
 
@@ -132,22 +131,17 @@ class Condition_Fields
 
         foreach ($cart_items as $item) {
             if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
-                error_log('⚠️ Invalid product in cart item: ' . print_r($item, true));
                 continue;
             }
 
             $product = $item['data'];
             $regular_price = floatval($product->get_regular_price());
 
-            error_log("🔍 Product ID: {$product->get_id()} | Regular Price: $regular_price");
 
             if (compare_numaric_value($regular_price, $operator, $value)) {
-                error_log("✅ Match found! Regular price $regular_price $operator $value");
                 return true;
             }
         }
-
-        error_log("❌ No cart items matched regular price $operator $value");
         return false;
     }
 
@@ -218,7 +212,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid condition structure in cart_item_variation');
             return false;
         }
 
@@ -240,11 +233,6 @@ class Condition_Fields
         $variation_ids_in_cart = array_unique(array_map('intval', $variation_ids_in_cart));
         $condition_ids         = array_map('intval', $condition['value']);
         $operator              = $condition['operator'];
-
-        // Debug
-        error_log('🧪 cart_item_variation → Variation IDs: ' . implode(',', $variation_ids_in_cart));
-        error_log('🧪 cart_item_variation → Condition IDs: ' . implode(',', $condition_ids));
-        error_log('🧪 cart_item_variation → Operator: ' . $operator);
 
         return compare_cart_items($variation_ids_in_cart, $operator, $condition_ids);
     }
@@ -268,7 +256,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid condition structure in cart_item_category');
             return false;
         }
 
@@ -313,7 +300,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid condition structure in cart_item_tag');
             return false;
         }
 
@@ -357,7 +343,6 @@ class Condition_Fields
             !is_array($condition) ||
             !isset($condition['operator'], $condition['value'])
         ) {
-            error_log('❌ Invalid structure or guest user in customer_order_count');
             return false;
         }
 
@@ -373,9 +358,6 @@ class Condition_Fields
 
         $orders = wc_get_orders($args);
         $order_count = count($orders);
-
-        // Debug
-        error_log("📦 customer_order_count → Orders found: $order_count | Operator: $operator | Value: $value");
 
         return compare_numaric_value($order_count, $operator, $value);
     }
@@ -470,7 +452,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid structure or guest user in customer_order_history_category');
             return false;
         }
 
@@ -506,10 +487,6 @@ class Condition_Fields
 
         $ordered_cat_ids = array_unique($ordered_cat_ids);
 
-        // Optional debug logs
-        error_log('📂 Order History → Category IDs: ' . implode(',', $ordered_cat_ids));
-        error_log('📋 Condition → Operator: ' . $operator . ' | Value: ' . implode(',', $condition_ids));
-
         return compare_cart_items($ordered_cat_ids, $operator, $condition_ids);
     }
 
@@ -531,7 +508,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid structure in payment_method condition');
             return false;
         }
 
@@ -542,12 +518,8 @@ class Condition_Fields
         $chosen_method = WC()->session->get('chosen_payment_method') ?: WC()->session->get('aio_selected_payment_method');
 
         if (empty($chosen_method)) {
-            error_log('❌ No payment method selected');
             return false;
         }
-
-        error_log("💳 Detected Payment Method: $chosen_method");
-        error_log("🧾 Expected Methods: " . implode(', ', $expected_methods));
 
         return compare_list($chosen_method, $operator, $expected_methods);
     }
@@ -569,7 +541,6 @@ class Condition_Fields
             !isset($condition['operator']) ||
             !in_array($condition['operator'], ['logged_in', 'not_logged_in'], true)
         ) {
-            error_log('❌ Invalid condition structure in customer_is_logged_in');
             return false;
         }
 
@@ -595,12 +566,10 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid structure in customer_role condition');
             return false;
         }
 
         if (!is_user_logged_in()) {
-            error_log('❌ User not logged in');
             return false;
         }
 
@@ -628,7 +597,6 @@ class Condition_Fields
             !isset($condition['operator'], $condition['value']) ||
             !is_array($condition['value'])
         ) {
-            error_log('❌ Invalid structure or user not logged in for specific_customer');
             return false;
         }
 

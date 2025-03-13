@@ -47,7 +47,7 @@ export const loadProducts = async () => {
 
     } catch (error) {
         console.error("Error loading products:", error);
-        productError.value = __("Failed to load products.", "aio-woodiscount");
+        productError.value = __("Failed to load products.", "all-in-one-woodiscount");
     } finally {
         isLoadingProducts.value = false;
     }

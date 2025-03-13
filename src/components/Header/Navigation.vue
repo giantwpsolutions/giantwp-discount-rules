@@ -1,8 +1,8 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
 // Props from parent component
-const props = defineProps(['navigation']);
+const props = defineProps(["navigation"]);
 
 // Get the current route
 const route = useRoute();
@@ -16,13 +16,16 @@ const route = useRoute();
         v-if="!item.isExternal"
         :to="item.href"
         :class="[
-          route.path === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-          'rounded-md px-3 py-2 text-sm font-medium flex items-center'
-        ]"
-      >
+          route.path === item.href
+            ? 'bg-gray-900 text-white'
+            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+          'rounded-md px-3 py-2 text-sm font-medium flex items-center',
+        ]">
         <span>{{ item.name }}</span>
-        <span v-if="item.isPro" class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
-          {{ __('Pro', 'aio-woodiscount') }}
+        <span
+          v-if="item.isPro"
+          class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+          {{ __("Pro", "all-in-one-woodiscount") }}
         </span>
       </router-link>
 
@@ -31,11 +34,12 @@ const route = useRoute();
         :href="item.href"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium flex items-center"
-      >
+        class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium flex items-center">
         <span>{{ item.name }}</span>
-        <span v-if="item.isPro" class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
-          {{ __('Pro', 'aio-woodiscount') }}
+        <span
+          v-if="item.isPro"
+          class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+          {{ __("Pro", "all-in-one-woodiscount") }}
         </span>
       </a>
     </template>

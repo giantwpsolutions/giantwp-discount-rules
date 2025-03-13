@@ -1,6 +1,6 @@
 <?php
 
-namespace AIO_WooDiscount\Api\Controllers;
+namespace AIO_WooDiscount\Api\Controllers\Discounts;
 
 use WP_REST_Controller;
 use WP_REST_Server;

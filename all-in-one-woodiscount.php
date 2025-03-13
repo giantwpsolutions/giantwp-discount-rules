@@ -11,6 +11,7 @@ Text Domain: aio-woodiscount
 Domain Path: /languages/
 */
 
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -74,13 +75,13 @@ final class All_in_one_wooDiscount
      */
     public function on_plugins_loaded()
     {
-        load_plugin_textdomain('aio-woodiscount', false, AIOWD_LANG_DIR);
+        load_plugin_textdomain('all-in-one-woodiscount', false, AIOWD_LANG_DIR);
 
         if (class_exists('WooCommerce')) {
             new AIO_WooDiscount\Installer();
             new AIO_WooDiscount\Api\Api();
             new AIO_WooDiscount\Discount\FlatPercentage_Discount();
-            error_log('🚀 apply_discount() fired');
+            new AIO_WooDiscount\Discount\UsageTrack\FlatPercentageUsage();
         } else {
             add_action('admin_notices', [$this, 'woocommerce_missing_notice']);
         }
@@ -105,8 +106,8 @@ final class All_in_one_wooDiscount
         if (! class_exists('WooCommerce')) {
             deactivate_plugins(plugin_basename(__FILE__));
             wp_die(
-                __('All-in-One WooDiscount requires WooCommerce to be installed and active.', 'aio-woodiscount'),
-                __('Plugin dependency check', 'aio-woodiscount'),
+                __('All-in-One WooDiscount requires WooCommerce to be installed and active.', 'all-in-one-woodiscount'),
+                __('Plugin dependency check', 'all-in-one-woodiscount'),
                 ['back_link' => true]
             );
         }

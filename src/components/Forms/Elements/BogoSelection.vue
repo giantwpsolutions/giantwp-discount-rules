@@ -86,7 +86,7 @@ watch(
         <!-- Column 1 -->
         <div class="flex items-center space-x-2">
           <label for="buyProductCount" class="text-gray-950 text-sm">
-            {{ __("Buy:", "aio-woodiscount") }}
+            {{ __("Buy:", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
             id="buyProductCount"
@@ -100,7 +100,7 @@ watch(
         <!-- Column 2 -->
         <div class="flex items-center space-x-2">
           <label for="getProductCount" class="text-gray-950 text-sm">
-            {{ __("Get:", "aio-woodiscount") }}
+            {{ __("Get:", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
             id="getProductCount"
@@ -115,10 +115,10 @@ watch(
         <div>
           <el-radio-group v-model="localState.freeOrDiscount">
             <el-radio-button
-              :label="__('Free', 'aio-woodiscount')"
+              :label="__('Free', 'all-in-one-woodiscount')"
               value="freeproduct" />
             <el-radio-button
-              :label="__('Discount', 'aio-woodiscount')"
+              :label="__('Discount', 'all-in-one-woodiscount')"
               value="discount_product" />
           </el-radio-group>
         </div>
@@ -133,7 +133,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "aio-woodiscount") }}
+            {{ __("Pricing Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="localState.discounttypeBogo"
@@ -141,13 +141,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'aio-woodiscount')">
-              {{ __("Fixed Discount", "aio-woodiscount") }}
+              :label="__('Fixed Discount', 'all-in-one-woodiscount')">
+              {{ __("Fixed Discount", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'aio-woodiscount')">
-              {{ __("Percentage Discount", "aio-woodiscount") }}
+              :label="__('Percentage Discount', 'all-in-one-woodiscount')">
+              {{ __("Percentage Discount", "all-in-one-woodiscount") }}
             </el-option>
           </el-select>
         </div>
@@ -155,7 +155,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "aio-woodiscount") }}
+            {{ __("Pricing Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -176,12 +176,15 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -208,17 +211,17 @@ watch(
       <el-switch
         v-model="localState.isRepeat"
         inline-prompt
-        :active-text="__('On', 'aio-woodiscount')"
-        :inactive-text="__('Off', 'aio-woodiscount')" />
+        :active-text="__('On', 'all-in-one-woodiscount')"
+        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Is Repeat?", "aio-woodiscount") }}
+        {{ __("Is Repeat?", "all-in-one-woodiscount") }}
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Discount will apply once or repeat after each quantities matching',
-              'aio-woodiscount'
+              'all-in-one-woodiscount'
             )
           "
           placement="top"

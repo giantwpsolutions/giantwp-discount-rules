@@ -2,19 +2,19 @@
 
 namespace AIO_WooDiscount\Api;
 
-use AIO_WooDiscount\Api\Controllers\All_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Bogo_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Bulk_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\BuyXGetY_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\General_Data;
-use AIO_WooDiscount\Api\Controllers\Payment_Gateways_Controller;
-use AIO_WooDiscount\Api\Controllers\Products_Category_Controller;
-use AIO_WooDiscount\Api\Controllers\Products_Controller;
-use AIO_WooDiscount\Api\Controllers\Products_Tag_Controller;
-use AIO_WooDiscount\Api\Controllers\Shipping_Zone_Controller;
-use AIO_WooDiscount\Api\Controllers\Users_Controller;
-use AIO_WooDiscount\Api\Controllers\FlatPercentage_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Shipping_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\All_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\Bogo_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\Bulk_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\BuyXGetY_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\General_Data;
+use AIO_WooDiscount\Api\Controllers\Shared\Payment_Gateways_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\Products_Category_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\Products_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\Products_Tag_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\Shipping_Zone_Controller;
+use AIO_WooDiscount\Api\Controllers\Shared\Users_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\Shipping_Discount_Controller;
 
 /**
  * Rest API Class

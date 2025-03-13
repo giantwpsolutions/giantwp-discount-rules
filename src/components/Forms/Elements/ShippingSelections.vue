@@ -57,17 +57,17 @@ watch(
     <!-- Discount Type Selection -->
     <div class="w-full max-w-md mb-6">
       <label for="discountType" class="block text-sm font-medium text-gray-900">
-        {{ __("Discount Type", "aio-woodiscount") }}
+        {{ __("Discount Type", "all-in-one-woodiscount") }}
       </label>
       <select
         v-model="localState.shippingDiscountType"
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
         <option value="reduceFee">
-          {{ __("Shipping Fee Discount", "aio-woodiscount") }}
+          {{ __("Shipping Fee Discount", "all-in-one-woodiscount") }}
         </option>
         <option value="customFee">
-          {{ __("Add Custom Fee", "aio-woodiscount") }}
+          {{ __("Add Custom Fee", "all-in-one-woodiscount") }}
         </option>
       </select>
     </div>
@@ -80,7 +80,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "aio-woodiscount") }}
+            {{ __("Pricing Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -88,13 +88,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'aio-woodiscount')">
-              {{ __("Fixed Discount", "aio-woodiscount") }}
+              :label="__('Fixed Discount', 'all-in-one-woodiscount')">
+              {{ __("Fixed Discount", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'aio-woodiscount')">
-              {{ __("Percentage Discount", "aio-woodiscount") }}
+              :label="__('Percentage Discount', 'all-in-one-woodiscount')">
+              {{ __("Percentage Discount", "all-in-one-woodiscount") }}
             </el-option>
           </el-select>
         </div>
@@ -102,7 +102,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "aio-woodiscount") }}
+            {{ __("Pricing Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -123,12 +123,12 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -158,7 +158,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Type", "aio-woodiscount") }}
+            {{ __("Fee Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -166,13 +166,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Fee', 'aio-woodiscount')">
-              {{ __("Fixed Fee", "aio-woodiscount") }}
+              :label="__('Fixed Fee', 'all-in-one-woodiscount')">
+              {{ __("Fixed Fee", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Fee', 'aio-woodiscount')">
-              {{ __("Percentage Fee", "aio-woodiscount") }}
+              :label="__('Percentage Fee', 'all-in-one-woodiscount')">
+              {{ __("Percentage Fee", "all-in-one-woodiscount") }}
             </el-option>
           </el-select>
         </div>
@@ -180,7 +180,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Value", "aio-woodiscount") }}
+            {{ __("Fee Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -201,12 +201,12 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Fee Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Maximum Fee Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">

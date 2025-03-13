@@ -1,6 +1,6 @@
 <?php
 
-namespace AIO_WooDiscount\Api\Controllers;
+namespace AIO_WooDiscount\Api\Controllers\Shared;
 
 use WP_REST_Controller;
 use WP_REST_Server;
@@ -59,7 +59,7 @@ class Payment_Gateways_Controller extends WP_REST_Controller
         if (!class_exists('WC_Payment_Gateways')) {
             return new \WP_Error(
                 'woocommerce_inactive',
-                __('WooCommerce is not active.', 'aio-woodiscount'),
+                __('WooCommerce is not active.', 'all-in-one-woodiscount'),
                 ['status' => 500]
             );
         }

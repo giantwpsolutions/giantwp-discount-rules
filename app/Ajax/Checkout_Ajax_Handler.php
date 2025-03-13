@@ -19,7 +19,6 @@ class Checkout_Ajax_Handler
     public function aio_set_payment_method()
     {
         check_ajax_referer('aio_nonce', 'security');
-        error_log("📡 AIO: Received AJAX request to set payment method");
 
         // Ensure WC session is initialized in AJAX context
         if (null === WC()->session || !WC()->session->has_session()) {
@@ -31,8 +30,6 @@ class Checkout_Ajax_Handler
         if (empty($method)) {
             wp_send_json_error(['message' => 'No method provided']);
         }
-
-        error_log("💳 Method received: " . $method);
 
         WC()->session->set('aio_selected_payment_method', $method);
         wp_send_json_success(['message' => 'Payment method stored']);

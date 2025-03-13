@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { fetchGeneralData } from "@/api/services/generalDataService";
 
 // Reactive variables
@@ -6,10 +6,9 @@ export const generalData = ref([]);
 export const isLoadingGeneralData = ref(true);
 export const generalDataError = ref(null);
 
-
+// Load general data once
 export const loadGeneralData = async () => {
     try {
-        // Fetch data using the service
         const data = await fetchGeneralData();
         generalData.value = data;
     } catch (error) {
@@ -18,4 +17,5 @@ export const loadGeneralData = async () => {
     } finally {
         isLoadingGeneralData.value = false;
     }
-}
+};
+

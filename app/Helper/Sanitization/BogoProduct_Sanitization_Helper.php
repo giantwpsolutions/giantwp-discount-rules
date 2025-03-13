@@ -1,6 +1,6 @@
 <?php
 
-namespace AIO_WooDiscount\Helper;
+namespace AIO_WooDiscount\Helper\Sanitization;
 
 
 defined('ABSPATH') || exit;

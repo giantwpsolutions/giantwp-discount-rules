@@ -51,7 +51,6 @@ function compare_cart_items($cart_ids, $operator, $condition_ids)
             return count(array_intersect($cart_ids, $condition_ids)) === count($condition_ids);
 
         default:
-            error_log("❌ Unsupported operator in cart_item_product: $operator");
             return false;
     }
 }
@@ -93,6 +92,17 @@ function compare_list($current, $operator, $expected)
     }
 }
 
+$GLOBALS['aio_applied_rule_ids'] = [];
+function aio_track_applied_rule($rule_id)
+{
+    if (!in_array($rule_id, $GLOBALS['aio_applied_rule_ids'], true)) {
+        $GLOBALS['aio_applied_rule_ids'][] = $rule_id;
+    }
+}
+function aio_get_tracked_rules()
+{
+    return $GLOBALS['aio_applied_rule_ids'];
+}
 
 
 function WoocommerceDeactivationAlert()
@@ -102,7 +112,7 @@ function WoocommerceDeactivationAlert()
         <p>
             <?php _e(
                 'WooCommerce is deactivated! The "All-in-One WooDiscount" plugin requires WooCommerce to function properly. Please reactivate WooCommerce.',
-                'aio-woodiscount'
+                'all-in-one-woodiscount'
             ); ?>
         </p>
     </div>
@@ -117,7 +127,7 @@ function WoocommerceMissingAlert()
         <p>
             <?php _e(
                 'All-in-One WooDiscount requires WooCommerce to be installed and active.',
-                'aio-woodiscount'
+                'all-in-one-woodiscount'
             ); ?>
         </p>
     </div>

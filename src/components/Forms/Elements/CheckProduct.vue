@@ -84,10 +84,10 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
       <el-switch
         v-model="enableConditions"
         inline-prompt
-        :active-text="__('On', 'aio-woodiscount')"
-        :inactive-text="__('Off', 'aio-woodiscount')" />
+        :active-text="__('On', 'all-in-one-woodiscount')"
+        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Enable Conditions?", "aio-woodiscount") }}
+        {{ __("Enable Conditions?", "all-in-one-woodiscount") }}
       </label>
     </div>
 
@@ -95,15 +95,15 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
       <div class="flex items-center gap-2 mt-6 mb-1">
         <label
           class="text-sm font-medium text-gray-900 flex items-center gap-1">
-          {{ __("Apply conditions if matches", "aio-woodiscount") }}
+          {{ __("Apply conditions if matches", "all-in-one-woodiscount") }}
         </label>
         <div class="group relative">
           <el-radio-group v-model="conditonsApplies">
             <el-radio-button
-              :label="__('Any', 'aio-woodiscount')"
+              :label="__('Any', 'all-in-one-woodiscount')"
               value="any" />
             <el-radio-button
-              :label="__('All', 'aio-woodiscount')"
+              :label="__('All', 'all-in-one-woodiscount')"
               value="all" />
           </el-radio-group>
         </div>
@@ -112,7 +112,7 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
       <label
         for="add_conditions"
         class="block text-sm font-medium text-gray-900 my-5">
-        {{ __("Add Conditions", "aio-woodiscount") }}
+        {{ __("Add Conditions", "all-in-one-woodiscount") }}
       </label>
 
       <!-- Dynamic Conditions -->
@@ -125,9 +125,9 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
           <select
             v-model="condition.field"
             class="border h-8 rounded p-2 flex-1 basis-1/4 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            :aria-label="__('Condition Field', 'aio-woodiscount')">
+            :aria-label="__('Condition Field', 'all-in-one-woodiscount')">
             <option value="">
-              {{ __("Please select", "aio-woodiscount") }}
+              {{ __("Please select", "all-in-one-woodiscount") }}
             </option>
             <template v-for="group in conditionOptions" :key="group.label">
               <optgroup
@@ -148,9 +148,9 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
           <select
             v-model="condition.operator"
             class="border h-8 rounded p-2 flex basis-1/4 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            :aria-label="__('Condition Operator', 'aio-woodiscount')">
+            :aria-label="__('Condition Operator', 'all-in-one-woodiscount')">
             <option value="" disabled>
-              {{ __("Select Operator", "aio-woodiscount") }}
+              {{ __("Select Operator", "all-in-one-woodiscount") }}
             </option>
             <option
               v-for="op in getOperators(condition.field)"
@@ -175,7 +175,7 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
                 v-model="usageLimitsCount"
                 type="number"
                 id="usageLimit"
-                :placeholder="__('Enter Value', 'aio-woodiscount')"
+                :placeholder="__('Enter Value', 'all-in-one-woodiscount')"
                 class="w-5/6 h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
               <span
                 class="ml-0 w-1/6 h-8 px-2.5 py-2.5 border rounded-custom-aio-right text-gray-700 bg-gray-100">
@@ -197,7 +197,7 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
             </select>
 
             <span v-else class="text-gray-500">{{
-              __("No value needed", "aio-woodiscount")
+              __("No value needed", "all-in-one-woodiscount")
             }}</span>
           </div>
         </div>
@@ -215,8 +215,8 @@ const getDropdownOptions = (field) => dropdownOptions[field] || [];
       <button
         @click="addCondition"
         class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-        :aria-label="__('Add Condition', 'aio-woodiscount')">
-        {{ __("Add Condition", "aio-woodiscount") }}
+        :aria-label="__('Add Condition', 'all-in-one-woodiscount')">
+        {{ __("Add Condition", "all-in-one-woodiscount") }}
       </button>
     </div>
   </div>

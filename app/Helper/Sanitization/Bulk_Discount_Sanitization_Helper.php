@@ -1,24 +1,21 @@
 <?php
 
-namespace AIO_WooDiscount\Helper;
+namespace AIO_WooDiscount\Helper\Sanitization;
 
 defined('ABSPATH') || exit;
 
 /**
- * Buy X Get Y Discount Data Sanitization Helper Class
+ * Bogo Discount Data Sanitization Helper Class
  */
-
-class BuyXGetY_Sanitization_Helper
+class Bulk_Discount_Sanitization_Helper
 {
-
-
     /**
-     * Sanitize Buy x Get y discount data.
+     * Sanitize Bogo discount data.
      *
-     * @param array $data The raw Buy x Get y discount data.
+     * @param array $data The raw Bogo discount data.
      * @return array The sanitized data.
      */
-    public static function BuyXGetY_Data_Sanitization($data)
+    public static function Bulk_Discount_Data_Sanitization($data)
     {
         if (!is_array($data)) {
             return [];
@@ -28,28 +25,19 @@ class BuyXGetY_Sanitization_Helper
             'id'        => sanitize_text_field($data['id'] ?? time()),
             'createdAt' => Conditions_Sanitization_Helper::sanitize_iso8601_datetime($data['createdAt'] ?? current_time('c')),
 
-            'discountType' => strtolower(sanitize_text_field($data['discountType'] ?? 'buy x get y')),
-
+            'discountType' => strtolower(sanitize_text_field($data['discountType'] ?? 'bulk discount')),
             'status'       => isset($data['status']) && in_array($data['status'], ['on', 'off']) ? $data['status'] : 'on',
             'couponName'   => sanitize_text_field($data['couponName'] ?? ''),
-            'buyXApplies' => isset($data['buyXApplies']) && in_array($data['buyXApplies'], ['any', 'all'])
-                ? $data['buyXApplies']
-                :   'any',
-            'buyProduct' => isset($data['buyProduct']) && is_array($data['buyProduct'])
-                ? array_map([BogoProduct_Sanitization_Helper::class, 'sanitize_buyXProduct'], $data['buyProduct'])
-                :  [],
-            'freeOrDiscount'   => sanitize_text_field($data['freeOrDiscount'] ?? 'freeproduct'),
-            'isRepeat'         => isset($data['isRepeat']) ? (bool) $data['isRepeat'] : true,
-            'discountTypeBxgy' => sanitize_text_field($data['discountTypeBxgy'] ?? 'fixed'),
-            'discountValue'    => isset($data['discountValue']) && is_numeric($data['discountValue']) ? floatval($data['discountValue']) : 0,
-            'maxValue'         => isset($data['maxValue']) && is_numeric($data['maxValue']) ? floatval($data['maxValue']) : null,
-            'getYApplies' => isset($data['getYApplies']) && in_array($data['getYApplies'], ['any', 'all'])
-                ? $data['getYApplies']
+            'getItem'      => sanitize_text_field($data['getItem'] ?? 'alltogether'),
+            'bulkDiscounts' => isset($data['bulkDiscounts']) && is_array($data['bulkDiscounts'])
+                ? array_map([Bulk_Product_Sanitization::class, 'sanitize_bulkDiscountEntries'], $data['bulkDiscounts'])
+                :   [],
+            'getApplies'      => isset($data['getApplies']) && in_array($data['getApplies'], ['any', 'all'])
+                ? $data['getApplies']
                 :    'any',
-            'getProduct' => isset($data['getProduct']) && is_array($data['getProduct'])
-                ? array_map([BogoProduct_Sanitization_Helper::class, 'sanitize_getYProduct'], $data['getProduct'])
-                :  [],
-
+            'buyProducts' => isset($data['buyProducts']) && is_array($data['buyProducts'])
+                ? array_map([Bulk_Product_Sanitization::class, 'sanitize_bulkBuyProduct'], $data['buyProducts'])
+                : [],
             'schedule'       => [
                 'enableSchedule' => isset($data['schedule']['enableSchedule']) ? (bool) $data['schedule']['enableSchedule'] : false,
                 'startDate'      => sanitize_text_field($data['schedule']['startDate'] ?? ''),

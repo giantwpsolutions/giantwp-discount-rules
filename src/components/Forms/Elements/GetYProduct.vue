@@ -202,12 +202,12 @@ watch(
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
         <!-- Heading Text -->
-        <span>{{ __("Get Y Product", "aio-woodiscount") }}</span>
+        <span>{{ __("Get Y Product", "all-in-one-woodiscount") }}</span>
         <!-- Tooltip Icon -->
         <el-tooltip
           class="box-item"
           effect="dark"
-          :content="__('Which product will get the rule?', 'aio-woodiscount')"
+          :content="__('Which product will get the rule?', 'all-in-one-woodiscount')"
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
@@ -222,17 +222,17 @@ watch(
         v-model="isrepeat"
         @change="updateIsrepeat"
         inline-prompt
-        :active-text="__('On', 'aio-woodiscount')"
-        :inactive-text="__('Off', 'aio-woodiscount')" />
+        :active-text="__('On', 'all-in-one-woodiscount')"
+        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Is Repeat?", "aio-woodiscount") }}
+        {{ __("Is Repeat?", "all-in-one-woodiscount") }}
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Discount will apply once or repeat after each quantities matching',
-              'aio-woodiscount'
+              'all-in-one-woodiscount'
             )
           "
           placement="top"
@@ -247,15 +247,15 @@ watch(
 
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Get Item", "aio-woodiscount") }}
+        {{ __("Get Item", "all-in-one-woodiscount") }}
       </label>
       <div class="group relative">
         <el-radio-group v-model="freeorDiscount" @change="updateFreeorDiscount">
           <el-radio-button
-            :label="__('Free', 'aio-woodiscount')"
+            :label="__('Free', 'all-in-one-woodiscount')"
             value="free_product" />
           <el-radio-button
-            :label="__('Discount', 'aio-woodiscount')"
+            :label="__('Discount', 'all-in-one-woodiscount')"
             value="discount_product" />
         </el-radio-group>
       </div>
@@ -267,7 +267,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "aio-woodiscount") }}
+            {{ __("Pricing Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="discountTypeBxgy"
@@ -276,13 +276,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'aio-woodiscount')">
-              {{ __("Fixed Discount", "aio-woodiscount") }}
+              :label="__('Fixed Discount', 'all-in-one-woodiscount')">
+              {{ __("Fixed Discount", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'aio-woodiscount')">
-              {{ __("Percentage Discount", "aio-woodiscount") }}
+              :label="__('Percentage Discount', 'all-in-one-woodiscount')">
+              {{ __("Percentage Discount", "all-in-one-woodiscount") }}
             </el-option>
           </el-select>
         </div>
@@ -290,7 +290,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "aio-woodiscount") }}
+            {{ __("Pricing Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="discountValue"
@@ -311,12 +311,12 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -340,12 +340,12 @@ watch(
 
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Rules apply to products if matches", "aio-woodiscount") }}
+        {{ __("Rules apply to products if matches", "all-in-one-woodiscount") }}
       </label>
       <div class="group relative">
         <el-radio-group v-model="getYApplies" @change="updateGetYApplies">
-          <el-radio-button :label="__('Any', 'aio-woodiscount')" value="any" />
-          <el-radio-button :label="__('All', 'aio-woodiscount')" value="all" />
+          <el-radio-button :label="__('Any', 'all-in-one-woodiscount')" value="any" />
+          <el-radio-button :label="__('All', 'all-in-one-woodiscount')" value="all" />
         </el-radio-group>
       </div>
     </div>
@@ -360,8 +360,8 @@ watch(
         <span class="text-black italic text-sm">
           {{
             getYApplies === "any"
-              ? __("Or", "aio-woodiscount")
-              : __("And", "aio-woodiscount")
+              ? __("Or", "all-in-one-woodiscount")
+              : __("And", "all-in-one-woodiscount")
           }}
         </span>
       </div>
@@ -415,7 +415,7 @@ watch(
             v-model="getYProduct.value"
             @change="updateGetYProducts"
             :options="getProductDropdown(getYProduct.field)"
-            :placeholder="__('Select', 'aio-woodiscount')"
+            :placeholder="__('Select', 'all-in-one-woodiscount')"
             filterable
             multiple
             :loading="isLoadingProducts"
@@ -455,7 +455,7 @@ watch(
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Get Product", "aio-woodiscount") }}
+      {{ __("Assign Get Product", "all-in-one-woodiscount") }}
     </button>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <?php
 
-namespace AIO_WooDiscount\Helper;
+namespace AIO_WooDiscount\Helper\Sanitization;
 
 defined('ABSPATH') || exit;
 
@@ -44,7 +44,7 @@ class FlatPercentage_Sanitization_Helper
                     :  0,
             ],
 
-            'autoApply'        => isset($data['autoApply']) ? (bool) $data['autoApply'] : false,
+            'usedCount'       => isset($data['usedCount']) && is_numeric($data['usedCount']) ? intval($data['usedCount']) : 0,
             'enableConditions' => isset($data['enableConditions']) ? (bool) $data['enableConditions'] : false,
 
             // ✅ Fix: Ensure 'conditionsApplies' key exists before checking in_array()

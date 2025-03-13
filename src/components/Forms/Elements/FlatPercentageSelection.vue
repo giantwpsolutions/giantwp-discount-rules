@@ -46,16 +46,18 @@ onMounted(() => {
     <!-- Discount Type Selection -->
     <div class="w-full max-w-md mb-6">
       <label for="discountType" class="block text-sm font-medium text-gray-900">
-        {{ __("Discount Type", "aio-woodiscount") }}
+        {{ __("Discount Type", "all-in-one-woodiscount") }}
       </label>
       <select
         v-model="selectedFPDiscountType"
         @change="updateDiscountType"
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
-        <option value="fixed">{{ __("Fixed", "aio-woodiscount") }}</option>
+        <option value="fixed">
+          {{ __("Fixed", "all-in-one-woodiscount") }}
+        </option>
         <option value="percentage">
-          {{ __("Percentage", "aio-woodiscount") }}
+          {{ __("Percentage", "all-in-one-woodiscount") }}
         </option>
       </select>
     </div>
@@ -67,7 +69,7 @@ onMounted(() => {
         <label
           for="discountValue"
           class="block text-sm font-medium text-gray-900 my-1">
-          {{ __("Discount Value", "aio-woodiscount") }}
+          {{ __("Discount Value", "all-in-one-woodiscount") }}
         </label>
         <div class="flex items-center">
           <input
@@ -75,7 +77,7 @@ onMounted(() => {
             @input="updateDiscountValue"
             type="number"
             id="discountValue"
-            :placeholder="__('Enter discount value', 'aio-woodiscount')"
+            :placeholder="__('Enter discount value', 'all-in-one-woodiscount')"
             class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span
             class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100"
@@ -93,11 +95,14 @@ onMounted(() => {
         <label
           for="maxValue"
           class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
-          {{ __("Maximum Value", "aio-woodiscount") }}
+          {{ __("Maximum Value", "all-in-one-woodiscount") }}
           <el-tooltip
             effect="dark"
             :content="
-              __('The maximum value that can be applied', 'aio-woodiscount')
+              __(
+                'The maximum value that can be applied',
+                'all-in-one-woodiscount'
+              )
             "
             placement="top"
             popper-class="custom-tooltip">
@@ -111,7 +116,7 @@ onMounted(() => {
             @input="updateMaxValue"
             type="number"
             id="maxValue"
-            :placeholder="__('Enter maximum value', 'aio-woodiscount')"
+            :placeholder="__('Enter maximum value', 'all-in-one-woodiscount')"
             :disabled="selectedFPDiscountType === 'fixed'"
             class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
           <span

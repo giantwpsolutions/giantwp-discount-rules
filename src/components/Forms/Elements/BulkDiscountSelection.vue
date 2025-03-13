@@ -86,7 +86,7 @@ watch(
     <div class="flex gap-2 mt-6 mb-1 w-[30%]">
       <label
         class="text-sm font-medium text-gray-900 w-[25%] flex items-center gap-1">
-        {{ __("Get Item", "aio-woodiscount") }}
+        {{ __("Get Item", "all-in-one-woodiscount") }}
       </label>
       <div class="group relative w-full">
         <el-select
@@ -96,13 +96,13 @@ watch(
           popper-class="custom-dropdown">
           <el-option
             :value="'alltogether'"
-            :label="__('All together', 'aio-woodiscount')">
-            {{ __("All together", "aio-woodiscount") }}
+            :label="__('All together', 'all-in-one-woodiscount')">
+            {{ __("All together", "all-in-one-woodiscount") }}
           </el-option>
           <el-option
             :value="'iq_each'"
-            :label="__('Item quantity each cart line', 'aio-woodiscount')">
-            {{ __("Item quantity each cart line", "aio-woodiscount") }}
+            :label="__('Item quantity each cart line', 'all-in-one-woodiscount')">
+            {{ __("Item quantity each cart line", "all-in-one-woodiscount") }}
           </el-option>
         </el-select>
       </div>
@@ -122,12 +122,12 @@ watch(
         <div class="w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("From", "aio-woodiscount") }}</span>
+              <span>{{ __("From", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -149,12 +149,12 @@ watch(
         <div class="w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("To", "aio-woodiscount") }}</span>
+              <span>{{ __("To", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -177,12 +177,12 @@ watch(
         <div class="w-[22%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Discount Type", "aio-woodiscount") }}</span>
+              <span>{{ __("Discount Type", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -196,18 +196,18 @@ watch(
             @change="updateBulkDiscount"
             size="default"
             popper-class="custom-dropdown">
-            <el-option :value="'fixed'" :label="__('Fixed', 'aio-woodiscount')">
-              {{ __("Fixed", "aio-woodiscount") }}
+            <el-option :value="'fixed'" :label="__('Fixed', 'all-in-one-woodiscount')">
+              {{ __("Fixed", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage', 'aio-woodiscount')">
-              {{ __("Percentage", "aio-woodiscount") }}
+              :label="__('Percentage', 'all-in-one-woodiscount')">
+              {{ __("Percentage", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
               :value="'flat_price'"
-              :label="__('Flat Price', 'aio-woodiscount')">
-              {{ __("Flat Price", "aio-woodiscount") }}
+              :label="__('Flat Price', 'all-in-one-woodiscount')">
+              {{ __("Flat Price", "all-in-one-woodiscount") }}
             </el-option>
           </el-select>
         </div>
@@ -216,12 +216,12 @@ watch(
         <div class="w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Discount Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Discount Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -250,12 +250,12 @@ watch(
         <div class="w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "aio-woodiscount") }}</span>
+              <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'aio-woodiscount')
+                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -296,7 +296,7 @@ watch(
     <button
       @click="addBulkDiscount"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Bulk Discount", "aio-woodiscount") }}
+      {{ __("Assign Bulk Discount", "all-in-one-woodiscount") }}
     </button>
   </div>
 </template>

@@ -7,6 +7,7 @@ use AIO_WooDiscount\Admin\Menu;
 use AIO_WooDiscount\Assets;
 use AIO_WooDiscount\Ajax\Checkout_Ajax_Handler;
 
+
 /**
  * Plugin Functions Installer Class
  */

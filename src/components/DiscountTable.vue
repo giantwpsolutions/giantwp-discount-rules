@@ -33,6 +33,16 @@ const formatDate = (dateString) => {
   return date.toISOString().split("T")[0]; // Extracts "YYYY-MM-DD"
 };
 
+const formatUsage = (rule) => {
+  const enabled = rule.usageLimits?.enableUsage;
+  const total = Number(rule.usageLimits?.usageLimitsCount ?? 0);
+  const used = Number(rule.usedCount ?? 0);
+
+  return enabled
+    ? `${used} / ${total}`
+    : __("Unlimited", "all-in-one-woodiscount");
+};
+
 // Track clicked state for confirmation
 const clicked = ref(false);
 
@@ -49,19 +59,34 @@ const handleCancel = () => {
           <th class="px-4 py-2 border-b w-12">
             <input type="checkbox" class="h-5 w-5" />
           </th>
-          <th class="px-4 py-2 border-b">Discount Name</th>
-          <th class="px-4 py-2 border-b">Type</th>
-          <th class="px-4 py-2 border-b">Start Date</th>
-          <th class="px-4 py-2 border-b">End Date</th>
-          <th class="px-4 py-2 border-b">Status</th>
-          <th class="px-4 py-2 border-b">Actions</th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Discount Name", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Type", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Start Date", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("End Date", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Usage Limits", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Status", "all-in-one-woodiscount") }}
+          </th>
+          <th class="px-4 py-2 border-b">
+            {{ __("Actions", "all-in-one-woodiscount") }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <!-- No Data Row -->
         <tr v-if="discountRules.length === 0">
           <td colspan="7" class="text-center px-4 py-6 text-gray-500">
-            {{ __("No discount rules created", "aio-woodiscount") }}
+            {{ __("No discount rules created", "all-in-one-woodiscount") }}
           </td>
         </tr>
 
@@ -77,6 +102,10 @@ const handleCancel = () => {
           </td>
           <td class="px-4 py-2 border-b">
             {{ formatDate(rule.schedule?.endDate) || "--" }}
+          </td>
+
+          <td class="px-4 py-2 border-b">
+            {{ formatUsage(rule) }}
           </td>
           <td class="px-4 py-2 border-b">
             <label class="inline-flex relative items-center cursor-pointer">
@@ -94,7 +123,7 @@ const handleCancel = () => {
             <el-tooltip
               class="box-item"
               effect="dark"
-              :content="__('Edit Rule', 'aio-woodiscount')"
+              :content="__('Edit Rule', 'all-in-one-woodiscount')"
               placement="top">
               <el-icon
                 @click="onEdit(rule)"
@@ -112,7 +141,7 @@ const handleCancel = () => {
               :title="
                 __(
                   'Are you sure you want to delete this discount?',
-                  'aio-woodiscount'
+                  'all-in-one-woodiscount'
                 )
               "
               @confirm="onDelete(rule)">
@@ -120,7 +149,7 @@ const handleCancel = () => {
                 <span>
                   <el-tooltip
                     effect="dark"
-                    :content="__('Delete Rule', 'aio-woodiscount')"
+                    :content="__('Delete Rule', 'all-in-one-woodiscount')"
                     placement="top">
                     <el-icon
                       class="text-red-600 hover:text-red-800 hover:cursor-pointer"
