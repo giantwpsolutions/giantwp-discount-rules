@@ -44,7 +44,7 @@ class Shipping_Sanitization_Helper
                     ? (int) $data['usageLimits']['usageLimitsCount']
                     :  0,
             ],
-            'autoApply'        => isset($data['autoApply']) ? (bool) $data['autoApply'] : false,
+            'usedCount'       => isset($data['usedCount']) && is_numeric($data['usedCount']) ? intval($data['usedCount']) : 0,
             'enableConditions' => isset($data['enableConditions']) ? (bool) $data['enableConditions'] : false,
 
 
