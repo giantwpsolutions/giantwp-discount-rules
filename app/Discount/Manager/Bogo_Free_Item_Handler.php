@@ -15,6 +15,19 @@ class Bogo_Free_Item_Handler
         // Display correct price in cart
         add_filter('woocommerce_cart_item_price', [$this, 'display_cart_price'], PHP_INT_MAX, 3);
         add_filter('woocommerce_cart_item_subtotal', [$this, 'display_cart_subtotal'], PHP_INT_MAX, 3);
+
+        add_filter('woocommerce_update_cart_validation', function ($check, $cart_item_key, $values) {
+            if (empty($values['aio_bogo_free_item'])) {
+                return $check;
+            }
+
+            $cart_contents = WC()->cart->cart_contents;
+            if (!isset($cart_contents[$cart_item_key])) {
+                return false; // Block update if item mysteriously vanished
+            }
+
+            return $check;
+        }, 1000, 3);
     }
 
     public function set_bogo_item_prices($cart)

@@ -6,14 +6,27 @@ use AIO_WooDiscount\Discount\Condition\Conditions;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuyProduct;
 
+/**
+ * Class Bogo_Discount
+ * Handles Buy One Get One discount logic, including free items and discounted items.
+ */
 class Bogo_Discount
 {
+    /**
+     * Register WooCommerce hooks.
+     */
     public function __construct()
     {
         add_action('woocommerce_cart_loaded_from_session', [$this, 'maybe_apply_discount'], 20);
         add_action('woocommerce_before_calculate_totals', [$this, 'adjust_discounted_items'], PHP_INT_MAX);
     }
 
+    /**
+     * Evaluate BOGO rules and apply free or discounted items to the cart.
+     *
+     * @param \WC_Cart|null $cart
+     * @return void
+     */
     public function maybe_apply_discount($cart = null)
     {
         if (is_null($cart)) {
@@ -23,7 +36,7 @@ class Bogo_Discount
         if (is_admin() && !defined('DOING_AJAX')) return;
         if (!$cart || $cart->is_empty()) return;
 
-        // ❌ Remove old discount data and free items
+        // Clear previous BOGO data
         foreach ($cart->get_cart() as $key => $item) {
             if (!empty($item['aio_bogo_discount'])) {
                 unset($cart->cart_contents[$key]['aio_bogo_discount']);
@@ -38,11 +51,8 @@ class Bogo_Discount
         if (empty($rules)) return;
 
         foreach ($rules as $rule) {
-            if (
-                !isset($rule['discountType']) || strtolower($rule['discountType']) !== 'bogo' ||
-                ($rule['status'] ?? '')                                     !== 'on'
-            ) continue;
-
+            if (!isset($rule['discountType']) || strtolower($rule['discountType']) !== 'bogo') continue;
+            if (($rule['status'] ?? '') !== 'on') continue;
             if (!$this->is_schedule_active($rule)) continue;
             if (!$this->check_usage_limit($rule)) continue;
 
@@ -61,12 +71,16 @@ class Bogo_Discount
                 $this->mark_discounted_items($rule);
             }
 
-            break;  // Only apply first matched rule
+            break;
         }
     }
 
-
-
+    /**
+     * Apply free items to the cart based on matched rule.
+     *
+     * @param array $rule
+     * @return void
+     */
     private function apply_free_item($rule)
     {
         $cart_items = WC()->cart->get_cart();
@@ -98,6 +112,12 @@ class Bogo_Discount
         }
     }
 
+    /**
+     * Mark cart items with discount metadata for BOGO rules.
+     *
+     * @param array $rule
+     * @return void
+     */
     private function mark_discounted_items($rule)
     {
         $cart       = WC()->cart;
@@ -122,9 +142,8 @@ class Bogo_Discount
 
         $total_quantity = array_sum(array_map(fn($i) => $i['item']['quantity'] ?? 0, $eligible));
         $needed_qty     = $buy_count + $get_count;
-
-        $repeat_times = $repeat ? floor($total_quantity / $needed_qty) : ($total_quantity >= $needed_qty ? 1 : 0);
-        $discount_qty = $repeat_times * $get_count;
+        $repeat_times   = $repeat ? floor($total_quantity / $needed_qty) : ($total_quantity >= $needed_qty ? 1 : 0);
+        $discount_qty   = $repeat_times * $get_count;
 
         if ($discount_qty <= 0) return;
 
@@ -158,8 +177,12 @@ class Bogo_Discount
         }
     }
 
-
-
+    /**
+     * Apply price adjustments for discounted items or set free item price to zero.
+     *
+     * @param \WC_Cart $cart
+     * @return void
+     */
     public function adjust_discounted_items($cart)
     {
         foreach ($cart->get_cart() as $key => $item) {
@@ -181,10 +204,8 @@ class Bogo_Discount
                     $discount = min($discount, $info['max']);
                 }
 
-                // Apply discount only to part of quantity (assume each quantity = one line)
                 $new_price = $original_price;
                 if ($item['quantity'] > $qty_to_discount) {
-                    // Blend: partial discount per qty
                     $full_price_qty   = $item['quantity'] - $qty_to_discount;
                     $discounted_total = $qty_to_discount * ($original_price - $discount);
                     $normal_total     = $full_price_qty * $original_price;
@@ -199,9 +220,13 @@ class Bogo_Discount
         }
     }
 
-
-
-
+    /**
+     * Get products from cart matching the rule's buy conditions.
+     *
+     * @param array $cart_items
+     * @param array $buy_conditions
+     * @return array
+     */
     private function get_eligible_products($cart_items, $buy_conditions)
     {
         $eligible = [];
@@ -218,6 +243,12 @@ class Bogo_Discount
         return $eligible;
     }
 
+    /**
+     * Remove free items from cart by rule ID.
+     *
+     * @param string|int $rule_id
+     * @return void
+     */
     private function remove_bogo_items($rule_id)
     {
         foreach (WC()->cart->get_cart() as $key => $item) {
@@ -227,11 +258,22 @@ class Bogo_Discount
         }
     }
 
+    /**
+     * Get BOGO discount rules from DB.
+     *
+     * @return array
+     */
     private function get_discount_rules(): array
     {
         return maybe_unserialize(get_option('aio_bogo_discount', [])) ?: [];
     }
 
+    /**
+     * Check if a rule is within its valid schedule.
+     *
+     * @param array $rule
+     * @return bool
+     */
     private function is_schedule_active($rule): bool
     {
         if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
@@ -245,6 +287,12 @@ class Bogo_Discount
         return ($now >= $start && $now <= $end);
     }
 
+    /**
+     * Check if usage limits are respected.
+     *
+     * @param array $rule
+     * @return bool
+     */
     private function check_usage_limit($rule): bool
     {
         if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {

@@ -5,89 +5,87 @@ namespace AIO_WooDiscount;
 use AIO_WooDiscount\Traits\SingletonTrait;
 
 /**
- * Assets Loading class
+ * Class Assets
+ *
+ * Handles enqueueing of all plugin assets, including Vue frontend scripts and AJAX triggers
+ * for both admin and frontend (checkout/cart) pages.
+ *
+ * @package AIO_WooDiscount
  */
 class Assets
 {
-
     use SingletonTrait;
 
+    /**
+     * Assets constructor.
+     *
+     * Hooks into various WordPress actions to enqueue scripts and styles.
+     */
     public function __construct()
     {
-
         add_action('admin_enqueue_scripts', [$this, 'register_plugin_assets'], 50);
         add_action('admin_enqueue_scripts', [$this, 'register_frontend_plugin_assets'], 50);
+        add_action('wp_enqueue_scripts',    [$this, 'register_frontend_plugin_assets'], 50);
 
-
-        add_filter('script_loader_tag', [$this, 'add_attribute_type'], 10, 3);
-        add_action('in_admin_header', [$this, 'disable_core_update_notifications']);
-        add_action('wp_enqueue_scripts', [$this, 'register_frontend_plugin_assets'], 50);
+        add_filter('script_loader_tag',     [$this, 'add_attribute_type'], 10, 3);
+        add_action('in_admin_header',       [$this, 'disable_core_update_notifications']);
     }
 
     /**
-     * Load assets
+     * Enqueue admin panel plugin assets.
+     * Loads Vue build and related styles/scripts only on AIO WooDiscount settings page.
      */
     public function register_plugin_assets()
     {
-        if (! is_admin()) {
-            return;
-        }
+        if (!is_admin()) return;
 
         $screen = get_current_screen();
-        if (! $screen || $screen->id !== 'woocommerce_page_aio-woodiscount') {
-            return;
-        }
+        if (!$screen || $screen->id !== 'woocommerce_page_aio-woodiscount') return;
 
         wp_enqueue_script('wp-i18n');
         wp_enqueue_script('wp-api-fetch');
 
-        $is_dev               = defined('WP_DEBUG') && WP_DEBUG;
-        $dev_server_js_loader = 'http://localhost:5173/src/main.js';
-        $prod_js_loader       = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
-        $prod_css_loader      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
+        $is_dev           = defined('WP_DEBUG') && WP_DEBUG;
+        $dev_server_js    = 'http://localhost:5173/src/main.js';
+        $prod_js          = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
+        $prod_css         = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
         if ($is_dev) {
-            wp_enqueue_script(
-                'aio-woodiscount-vjs',
-                $dev_server_js_loader,
-                ['wp-i18n'],
-                '1.0',
-                true
-            );
+            wp_enqueue_script('aio-woodiscount-vjs', $dev_server_js, ['wp-i18n'], '1.0', true);
         } else {
-            wp_enqueue_script(
-                'aio-woodiscount-vjs',
-                $prod_js_loader,
-                ['wp-i18n'],
-                '1.0',
-                true
-            );
-
-            wp_enqueue_style(
-                'aio-woodiscount-styles',
-                $prod_css_loader,
-                [],
-                '1.0'
-            );
+            wp_enqueue_script('aio-woodiscount-vjs', $prod_js, ['wp-i18n'], '1.0', true);
+            wp_enqueue_style('aio-woodiscount-styles', $prod_css, [], '1.0');
         }
-
-        $pro_url = esc_url('https://giantwpsolutions.com/');
 
         wp_localize_script('aio-woodiscount-vjs', 'pluginData', [
             'pluginUrl' => esc_url(plugin_dir_url(__DIR__)),
             'restUrl'   => esc_url_raw(rest_url(trailingslashit('aio-woodiscount/v2'))),
             'nonce'     => wp_create_nonce('wp_rest'),
-            'proUrl'    => esc_url($pro_url),
-
+            'proUrl'    => esc_url('https://giantwpsolutions.com/'),
         ]);
     }
 
-
+    /**
+     * Enqueue frontend JavaScript files for handling AJAX triggers.
+     * Localizes separate script variables for each discount type.
+     */
     public function register_frontend_plugin_assets()
     {
-        wp_enqueue_script('aio-checkout', plugin_dir_url(__DIR__) . 'assets/js/aio_checkout_ajax.js', array('jquery'), time(), true);
-        wp_enqueue_script('aio-trigger', plugin_dir_url(__DIR__) . 'assets/js/trigger.js', array('jquery'), time(), true);
-        wp_enqueue_script('aio-trigger-bogo', plugin_dir_url(__DIR__) . 'assets/js/triggerBogo.js', array('jquery'), time(), true);
+        wp_enqueue_script(
+            'aio-checkout',
+            plugin_dir_url(__DIR__) . 'assets/js/aio_checkout_ajax.js',
+            ['jquery'],
+            time(),
+            true
+        );
+
+        wp_enqueue_script(
+            'aio-trigger',
+            plugin_dir_url(__DIR__) . 'assets/js/trigger.js',
+            ['jquery'],
+            time(),
+            true
+        );
 
         wp_localize_script('aio-checkout', 'aio_checkout_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -99,7 +97,6 @@ class Assets
             'nonce'    => wp_create_nonce('aio_trigger_nonce'),
         ]);
 
-        // Only load on cart/checkout pages
         if (is_cart() || is_checkout()) {
             wp_enqueue_script(
                 'aio-trigger-bogo',
@@ -113,38 +110,38 @@ class Assets
                 'ajax_url'    => admin_url('admin-ajax.php'),
                 'nonce'       => wp_create_nonce('aio_triggerBogo_nonce'),
                 'is_cart'     => is_cart(),
-                'is_checkout' => is_checkout()
+                'is_checkout' => is_checkout(),
             ]);
         }
     }
 
-
     /**
-     * Add type = "module" to the script tag
+     * Modify script tag to use type="module" for Vue builds.
      *
-     * @param string $tag The script tag.
-     * @param string $handle The script handle.
-     * @param string $src The script source URL.
+     * @param string $tag    Script tag.
+     * @param string $handle Script handle.
+     * @param string $src    Script source URL.
      *
-     * @return string Modified script tag.
+     * @return string
      */
     public function add_attribute_type($tag, $handle, $src)
     {
-        if ('aio-woodiscount-vjs' === $handle) {
-            $tag = '<script type="module" src="' . esc_url($src) . '"></script>';
+        if ($handle === 'aio-woodiscount-vjs') {
+            return '<script type="module" src="' . esc_url($src) . '"></script>';
         }
+
         return $tag;
     }
 
     /**
-     * Remove Wordpress Core Notice from Plugin admin page
-     *
+     * Removes all admin notices from plugin settings page.
+     * Ensures a clean experience inside AIO WooDiscount's admin interface.
      */
     public function disable_core_update_notifications()
     {
-        $current_screen = get_current_screen();
-        if ($current_screen && $current_screen->id === 'woocommerce_page_aio-woodiscount') {
-            remove_all_actions('admin_notices');  // Removes ALL admin notices
+        $screen = get_current_screen();
+        if ($screen && $screen->id === 'woocommerce_page_aio-woodiscount') {
+            remove_all_actions('admin_notices');
             remove_all_actions('network_admin_notices');
         }
     }

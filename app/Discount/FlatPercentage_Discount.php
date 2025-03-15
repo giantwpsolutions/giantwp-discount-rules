@@ -6,16 +6,29 @@ defined('ABSPATH') || exit;
 
 use AIO_WooDiscount\Discount\Condition\Conditions;
 
+/**
+ * Class FlatPercentage_Discount
+ *
+ * Handles flat or percentage-based cart-wide discounts using real WooCommerce coupons.
+ */
 class FlatPercentage_Discount
 {
+    /**
+     * Constructor - attaches hooks for cart fee calculation and suppressing messages.
+     */
     public function __construct()
     {
-        // Always runs on cart update, AJAX or not
         add_action('woocommerce_cart_calculate_fees', [$this, 'maybe_apply_discount'], 20);
         add_filter('woocommerce_coupon_message', [$this, 'suppress_coupon_message'], 100, 3);
         add_filter('woocommerce_coupon_error', [$this, 'suppress_coupon_message'], 100, 3);
     }
 
+    /**
+     * Conditionally applies a flat or percentage discount coupon to the cart.
+     *
+     * @param \WC_Cart $cart WooCommerce cart object
+     * @return void
+     */
     public function maybe_apply_discount($cart)
     {
         if (is_admin() && !defined('DOING_AJAX')) return;
@@ -30,18 +43,14 @@ class FlatPercentage_Discount
             if (
                 !isset($rule['discountType']) ||
                 strtolower($rule['discountType']) !== 'flat/percentage' ||
-                ($rule['status'] ?? '') !== 'on'
+                ($rule['status'] ?? '')           !== 'on'
             ) {
                 continue;
             }
 
-            // ✅ Schedule check
             if (!$this->is_schedule_active($rule)) continue;
-
-            // ✅ Usage limit
             if (!$this->check_usage_limit($rule)) continue;
 
-            // ✅ Condition check
             if (
                 isset($rule['enableConditions']) && $rule['enableConditions'] &&
                 !Conditions::check_all($cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all')
@@ -49,15 +58,15 @@ class FlatPercentage_Discount
                 continue;
             }
 
-            // ✅ Calculate discount
             $fp_type        = $rule['fpDiscountType'] ?? 'fixed';
             $discount_value = floatval($rule['discountValue'] ?? 0);
             $max_value      = isset($rule['maxValue']) ? floatval($rule['maxValue']) : null;
 
-            $cart_total          = $cart->get_subtotal();
+            $cart_total = $cart->get_subtotal();
+
             $calculated_discount = ($fp_type === 'percentage')
                 ? ($cart_total * ($discount_value / 100))
-                : $discount_value;
+                :  $discount_value;
 
             if ($max_value !== null) {
                 $calculated_discount = min($calculated_discount, $max_value);
@@ -72,7 +81,6 @@ class FlatPercentage_Discount
             }
         }
 
-        // ❌ If no match, remove our coupons
         if (!$matched) {
             foreach ($cart->get_applied_coupons() as $code) {
                 $coupon = new \WC_Coupon($code);
@@ -84,10 +92,17 @@ class FlatPercentage_Discount
         }
     }
 
+    /**
+     * Creates or updates a real WooCommerce coupon with calculated discount.
+     *
+     * @param array $rule The discount rule
+     * @param float $amount The discount amount to apply
+     * @return void
+     */
     private function create_or_update_coupon($rule, $amount)
     {
-        $coupon_code = $rule['couponName'];
-        $coupon = new \WC_Coupon($coupon_code);
+        $coupon_code   = $rule['couponName'];
+        $coupon        = new \WC_Coupon($coupon_code);
         $discount_type = ($rule['fpDiscountType'] ?? 'fixed') === 'percentage' ? 'percent' : 'fixed_cart';
 
         if (!$coupon->get_id()) {
@@ -107,11 +122,22 @@ class FlatPercentage_Discount
         }
     }
 
+    /**
+     * Fetch discount rules from database.
+     *
+     * @return array
+     */
     private function get_discount_rules(): array
     {
         return maybe_unserialize(get_option('aio_flatpercentage_discount', [])) ?: [];
     }
 
+    /**
+     * Check if the rule is currently active based on schedule.
+     *
+     * @param array $rule
+     * @return bool
+     */
     private function is_schedule_active($rule): bool
     {
         if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
@@ -125,6 +151,12 @@ class FlatPercentage_Discount
         return ($now >= $start && $now <= $end);
     }
 
+    /**
+     * Checks if the rule has reached its usage limit.
+     *
+     * @param array $rule
+     * @return bool
+     */
     private function check_usage_limit($rule): bool
     {
         if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {
@@ -137,11 +169,18 @@ class FlatPercentage_Discount
         return $used < $limit;
     }
 
-    // Add this method explicitly to your class
+    /**
+     * Suppress frontend coupon messages for hidden/internal coupons.
+     *
+     * @param string $message
+     * @param string $message_code
+     * @param \WC_Coupon $coupon
+     * @return string
+     */
     public function suppress_coupon_message($message, $message_code, $coupon)
     {
         if ($coupon instanceof \WC_Coupon && $coupon->get_meta('aio_is_hidden_coupon')) {
-            return '';  // Hide messages explicitly
+            return ''; // Hide all coupon messages
         }
 
         return $message;
