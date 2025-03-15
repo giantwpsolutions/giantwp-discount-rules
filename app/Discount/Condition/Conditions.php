@@ -43,7 +43,7 @@ class Conditions
                     $result = Condition_Fields::cart_item_product($cart_items, $condition);
                     break;
                 case 'cart_item_variation':
-                    $result = Condition_Fields::cart_item_product($cart_items, $condition);
+                    $result = Condition_Fields::cart_item_variation($cart_items, $condition);
                     break;
                 case 'cart_item_category':
                     $result = Condition_Fields::cart_item_category($cart_items, $condition);

@@ -13,7 +13,8 @@ class TriggerCart
 
     public function aio_check_cart_discounts()
     {
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'aio_discount_nonce')) {
+
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'aio_trigger_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
@@ -23,6 +24,8 @@ class TriggerCart
 
         // Apply discount logic
         (new \AIO_WooDiscount\Discount\FlatPercentage_Discount())->maybe_apply_discount(true);
+
+
 
         wp_send_json_success(['message' => 'Discount checked']);
     }

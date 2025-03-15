@@ -82,6 +82,7 @@ final class All_in_one_wooDiscount
             new AIO_WooDiscount\Api\Api();
             new AIO_WooDiscount\Discount\FlatPercentage_Discount();
             new AIO_WooDiscount\Discount\UsageTrack\FlatPercentageUsage();
+            new AIO_WooDiscount\Discount\Bogo_Discount();
         } else {
             add_action('admin_notices', [$this, 'woocommerce_missing_notice']);
         }

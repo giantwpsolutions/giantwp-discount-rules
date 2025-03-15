@@ -137,12 +137,13 @@ class FlatPercentage_Discount
         return $used < $limit;
     }
 
+    // Add this method explicitly to your class
     public function suppress_coupon_message($message, $message_code, $coupon)
     {
         if ($coupon instanceof \WC_Coupon && $coupon->get_meta('aio_is_hidden_coupon')) {
-            return ''; // Suppress message for auto-generated hidden coupons
+            return '';  // Hide messages explicitly
         }
 
-        return $message; // Show default for others
+        return $message;
     }
 }

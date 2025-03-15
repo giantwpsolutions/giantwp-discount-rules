@@ -87,6 +87,7 @@ class Assets
     {
         wp_enqueue_script('aio-checkout', plugin_dir_url(__DIR__) . 'assets/js/aio_checkout_ajax.js', array('jquery'), time(), true);
         wp_enqueue_script('aio-trigger', plugin_dir_url(__DIR__) . 'assets/js/trigger.js', array('jquery'), time(), true);
+        wp_enqueue_script('aio-trigger-bogo', plugin_dir_url(__DIR__) . 'assets/js/triggerBogo.js', array('jquery'), time(), true);
 
         wp_localize_script('aio-checkout', 'aio_checkout_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -97,6 +98,24 @@ class Assets
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('aio_trigger_nonce'),
         ]);
+
+        // Only load on cart/checkout pages
+        if (is_cart() || is_checkout()) {
+            wp_enqueue_script(
+                'aio-trigger-bogo',
+                plugin_dir_url(__DIR__) . 'assets/js/triggerBogo.js',
+                ['jquery', 'wc-cart'],
+                filemtime(plugin_dir_path(__DIR__) . 'assets/js/triggerBogo.js'),
+                true
+            );
+
+            wp_localize_script('aio-trigger-bogo', 'aioDiscountBogo', [
+                'ajax_url'    => admin_url('admin-ajax.php'),
+                'nonce'       => wp_create_nonce('aio_triggerBogo_nonce'),
+                'is_cart'     => is_cart(),
+                'is_checkout' => is_checkout()
+            ]);
+        }
     }
 
 
