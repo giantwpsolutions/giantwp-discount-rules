@@ -14,7 +14,11 @@ use AIO_WooDiscount\Discount\Manager\FlatPercentage_Validator;
 use AIO_WooDiscount\Discount\Bxgy_Discount;
 use AIO_WooDiscount\Discount\UsageTrack\Bxgy_Usage_Handler;
 use AIO_WooDiscount\Discount\UsageTrack\Bogo_Usage_Handler;
-
+use AIO_WooDiscount\Discount\Bulk_Discount;
+use AIO_WooDiscount\Discount\Manager\FrontEnd;
+use AIO_WooDiscount\Discount\Shipping_Discount;
+use AIO_WooDiscount\Discount\UsageTrack\Bulk_Usage_Handler;
+use AIO_WooDiscount\Discount\UsageTrack\Shipping_Usage_Handler;
 
 /**
  * Plugin Functions Installer Class
@@ -42,5 +46,10 @@ class Installer
         new TriggerBogo();
         new Bogo_Free_Item_Handler();
         new Bogo_Usage_Handler();
+        new Bulk_Discount();
+        new FrontEnd();
+        new Bulk_Usage_Handler();
+        new Shipping_Discount();
+        new Shipping_Usage_Handler();
     }
 }

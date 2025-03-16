@@ -5,6 +5,7 @@ namespace AIO_WooDiscount\Discount;
 use AIO_WooDiscount\Discount\Condition\Conditions;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuyProduct;
+use AIO_WooDiscount\Discount\Manager\Discount_Helper;
 
 /**
  * Class Bogo_Discount
@@ -53,8 +54,8 @@ class Bogo_Discount
         foreach ($rules as $rule) {
             if (!isset($rule['discountType']) || strtolower($rule['discountType']) !== 'bogo') continue;
             if (($rule['status'] ?? '') !== 'on') continue;
-            if (!$this->is_schedule_active($rule)) continue;
-            if (!$this->check_usage_limit($rule)) continue;
+            if (!Discount_Helper::is_schedule_active($rule)) continue;
+            if (!Discount_Helper::check_usage_limit($rule)) continue;
 
             if (
                 isset($rule['enableConditions']) && $rule['enableConditions'] &&
@@ -269,42 +270,5 @@ class Bogo_Discount
     private function get_discount_rules(): array
     {
         return maybe_unserialize(get_option('aio_bogo_discount', [])) ?: [];
-    }
-
-    /**
-     * Check if a rule is within its valid schedule.
-     *
-     * @param array $rule
-     * @return bool
-     */
-    private function is_schedule_active($rule): bool
-    {
-        if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
-            return true;
-        }
-
-        $now   = current_time('timestamp');
-        $start = strtotime($rule['schedule']['startDate'] ?? '');
-        $end   = strtotime($rule['schedule']['endDate'] ?? '');
-
-        return ($now >= $start && $now <= $end);
-    }
-
-    /**
-     * Check if usage limits are respected.
-     *
-     * @param array $rule
-     * @return bool
-     */
-    private function check_usage_limit($rule): bool
-    {
-        if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {
-            return true;
-        }
-
-        $limit = intval($rule['usageLimits']['usageLimitsCount'] ?? 0);
-        $used  = intval($rule['usedCount'] ?? 0);
-
-        return $used < $limit;
     }
 }

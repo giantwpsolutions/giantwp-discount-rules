@@ -5,7 +5,12 @@ namespace AIO_WooDiscount\Discount\Manager;
 
 class Discount_Helper
 {
-
+    /**
+     * Check if a rule is within its valid schedule.
+     *
+     * @param array $rule
+     * @return bool
+     */
     public static function is_schedule_active($rule): bool
     {
         if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
@@ -19,6 +24,13 @@ class Discount_Helper
         return ($now >= $start && $now <= $end);
     }
 
+
+    /**
+     * Check if usage limits are respected.
+     *
+     * @param array $rule
+     * @return bool
+     */
     public static function check_usage_limit($rule): bool
     {
         if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {

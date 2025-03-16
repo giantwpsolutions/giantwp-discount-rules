@@ -133,13 +133,16 @@ watch(
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
         <!-- Heading Text -->
-        <span>{{ __("Get Y Product", "all-in-one-woodiscount") }}</span>
+        <span>{{ __("Select Product", "all-in-one-woodiscount") }}</span>
         <!-- Tooltip Icon -->
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
-            __('Which product will get the rule?', 'all-in-one-woodiscount')
+            __(
+              'Which product will get the bulk rule?',
+              'all-in-one-woodiscount'
+            )
           "
           placement="top"
           popper-class="custom-tooltip">
@@ -258,7 +261,7 @@ watch(
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Get Product", "all-in-one-woodiscount") }}
+      {{ __("Assign Bulk Product", "all-in-one-woodiscount") }}
     </button>
   </div>
 </template>

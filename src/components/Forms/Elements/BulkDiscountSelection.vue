@@ -91,7 +91,7 @@ watch(
       <div class="group relative w-full">
         <el-select
           v-model="getItem"
-          @change=""
+          @change="updateGetItem"
           size="default"
           popper-class="custom-dropdown">
           <el-option
@@ -101,7 +101,9 @@ watch(
           </el-option>
           <el-option
             :value="'iq_each'"
-            :label="__('Item quantity each cart line', 'all-in-one-woodiscount')">
+            :label="
+              __('Item quantity each cart line', 'all-in-one-woodiscount')
+            ">
             {{ __("Item quantity each cart line", "all-in-one-woodiscount") }}
           </el-option>
         </el-select>
@@ -127,7 +129,10 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -141,7 +146,6 @@ watch(
             v-model="bulkDiscount.fromcount"
             @change="updateBulkDiscount"
             :min="1"
-            :max="10"
             controls-position="right"
             class="w-full" />
         </div>
@@ -154,7 +158,10 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -168,7 +175,6 @@ watch(
             v-model="bulkDiscount.toCount"
             @change="updateBulkDiscount"
             :min="1"
-            :max="10"
             controls-position="right"
             class="w-full" />
         </div>
@@ -182,7 +188,10 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -196,7 +205,9 @@ watch(
             @change="updateBulkDiscount"
             size="default"
             popper-class="custom-dropdown">
-            <el-option :value="'fixed'" :label="__('Fixed', 'all-in-one-woodiscount')">
+            <el-option
+              :value="'fixed'"
+              :label="__('Fixed', 'all-in-one-woodiscount')">
               {{ __("Fixed", "all-in-one-woodiscount") }}
             </el-option>
             <el-option
@@ -221,7 +232,10 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -255,7 +269,10 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -269,7 +286,9 @@ watch(
             @change="updateBulkDiscount"
             style="max-width: 600px"
             placeholder="Please input"
-            :disabled="bulkDiscount.discountTypeBulk === 'fixed'">
+            :disabled="
+              bulkDiscount.discountTypeBulk === 'fixed' || 'flat_price'
+            ">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>
