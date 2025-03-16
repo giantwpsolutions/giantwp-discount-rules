@@ -11,6 +11,9 @@ use AIO_WooDiscount\Ajax\TriggerBogo;
 use AIO_WooDiscount\Discount\Manager\CouponDisplay;
 use AIO_WooDiscount\Discount\Manager\Bogo_Free_Item_Handler;
 use AIO_WooDiscount\Discount\Manager\FlatPercentage_Validator;
+use AIO_WooDiscount\Discount\Bxgy_Discount;
+use AIO_WooDiscount\Discount\UsageTrack\Bxgy_Usage_Handler;
+use AIO_WooDiscount\Discount\UsageTrack\Bogo_Usage_Handler;
 
 
 /**
@@ -38,5 +41,6 @@ class Installer
         new TriggerCart();
         new TriggerBogo();
         new Bogo_Free_Item_Handler();
+        new Bogo_Usage_Handler();
     }
 }

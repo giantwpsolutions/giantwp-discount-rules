@@ -70,6 +70,7 @@ class Bogo_Discount
             } else {
                 $this->mark_discounted_items($rule);
             }
+            WC()->session->set('_aio_bogo_applied_rules', [$rule['id']]);
 
             break;
         }
@@ -94,21 +95,23 @@ class Bogo_Discount
         $add_count      = $repeat_times * $get_count;
 
         $added = 0;
-        foreach ($eligible as $item) {
-            if ($added >= $add_count) break;
+        while ($added < $add_count) {
+            foreach ($eligible as $item) {
+                if ($added >= $add_count) break;
 
-            WC()->cart->add_to_cart(
-                $item['product_id'],
-                1,
-                $item['variation_id'] ?? 0,
-                [],
-                [
-                    'aio_bogo_free_item' => true,
-                    'aio_bogo_rule_id'   => $rule['id']
-                ]
-            );
+                WC()->cart->add_to_cart(
+                    $item['product_id'],
+                    1,
+                    $item['variation_id'] ?? 0,
+                    [],
+                    [
+                        'aio_bogo_free_item' => true,
+                        'aio_bogo_rule_id'   => $rule['id']
+                    ]
+                );
 
-            $added++;
+                $added++;
+            }
         }
     }
 
@@ -198,7 +201,7 @@ class Bogo_Discount
 
                 $discount = $info['type'] === 'percentage'
                     ? ($original_price * $info['value'] / 100)
-                    :  $info['value'];
+                    :     $info['value'];
 
                 if ($info['max'] > 0) {
                     $discount = min($discount, $info['max']);
@@ -280,9 +283,9 @@ class Bogo_Discount
             return true;
         }
 
-        $now = current_time('timestamp');
+        $now   = current_time('timestamp');
         $start = strtotime($rule['schedule']['startDate'] ?? '');
-        $end = strtotime($rule['schedule']['endDate'] ?? '');
+        $end   = strtotime($rule['schedule']['endDate'] ?? '');
 
         return ($now >= $start && $now <= $end);
     }
@@ -300,7 +303,7 @@ class Bogo_Discount
         }
 
         $limit = intval($rule['usageLimits']['usageLimitsCount'] ?? 0);
-        $used = intval($rule['usedCount'] ?? 0);
+        $used  = intval($rule['usedCount'] ?? 0);
 
         return $used < $limit;
     }

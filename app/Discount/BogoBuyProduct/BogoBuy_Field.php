@@ -13,7 +13,7 @@ class BogoBuy_Field
      */
     public static function all_products($cart_items, $condition)
     {
-        return true; // All products allowed
+        return true;  // All products allowed
     }
 
     /**
@@ -33,16 +33,10 @@ class BogoBuy_Field
         foreach ($cart_items as $item) {
             if (isset($item['product_id'])) {
                 $product_ids[] = (int) $item['product_id'];
-
-                // ✅ Debug
-                error_log("BOGO: Found cart product_id: " . $item['product_id']);
             }
         }
 
         $condition_ids = array_map('intval', $condition['value']);
-        error_log("BOGO: Condition operator: " . $condition['operator']);
-        error_log("BOGO: Condition product IDs: " . implode(',', $condition_ids));
-        error_log("BOGO: Cart product IDs: " . implode(',', $product_ids));
 
         return compare_list($product_ids, $condition['operator'], $condition_ids);
     }
@@ -83,8 +77,8 @@ class BogoBuy_Field
         $tags_in_cart = [];
 
         foreach ($cart_items as $item) {
-            $product_id = $item['product_id'] ?? 0;
-            $tag_ids = wc_get_product_term_ids($product_id, 'product_tag');
+            $product_id   = $item['product_id'] ?? 0;
+            $tag_ids      = wc_get_product_term_ids($product_id, 'product_tag');
             $tags_in_cart = array_merge($tags_in_cart, $tag_ids);
         }
 
@@ -108,7 +102,7 @@ class BogoBuy_Field
 
         foreach ($cart_items as $item) {
             $product_id = $item['product_id'] ?? 0;
-            $cat_ids = array_merge($cat_ids, wc_get_product_term_ids($product_id, 'product_cat'));
+            $cat_ids    = array_merge($cat_ids, wc_get_product_term_ids($product_id, 'product_cat'));
         }
 
         return compare_list(array_unique($cat_ids), $condition['operator'], $condition['value']);
@@ -127,7 +121,7 @@ class BogoBuy_Field
             return false;
         }
 
-        $value = is_array($condition['value']) ? floatval($condition['value'][0]) : floatval($condition['value']);
+        $value    = is_array($condition['value']) ? floatval($condition['value'][0]) : floatval($condition['value']);
         $operator = $condition['operator'];
 
         foreach ($cart_items as $item) {
@@ -156,7 +150,7 @@ class BogoBuy_Field
             return false;
         }
 
-        $value = is_array($condition['value']) ? intval($condition['value'][0]) : intval($condition['value']);
+        $value    = is_array($condition['value']) ? intval($condition['value'][0]) : intval($condition['value']);
         $operator = $condition['operator'];
 
         foreach ($cart_items as $item) {

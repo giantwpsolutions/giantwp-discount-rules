@@ -78,11 +78,13 @@ final class All_in_one_wooDiscount
         load_plugin_textdomain('all-in-one-woodiscount', false, AIOWD_LANG_DIR);
 
         if (class_exists('WooCommerce')) {
+            new AIO_WooDiscount\Discount\UsageTrack\Bxgy_Usage_Handler();
             new AIO_WooDiscount\Installer();
             new AIO_WooDiscount\Api\Api();
             new AIO_WooDiscount\Discount\FlatPercentage_Discount();
             new AIO_WooDiscount\Discount\UsageTrack\FlatPercentageUsage();
             new AIO_WooDiscount\Discount\Bogo_Discount();
+            new AIO_WooDiscount\Discount\Bxgy_Discount();
         } else {
             add_action('admin_notices', [$this, 'woocommerce_missing_notice']);
         }

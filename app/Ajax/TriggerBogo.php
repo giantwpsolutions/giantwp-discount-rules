@@ -6,26 +6,18 @@ class TriggerBogo
 {
     public function __construct()
     {
-        add_action('wp_ajax_aio_check_bogo_discounts', [$this, 'run_bogo_logic']);
-        add_action('wp_ajax_nopriv_aio_check_bogo_discounts', [$this, 'run_bogo_logic']);
+        add_action('wp_ajax_aio_check_bogo_discounts', [$this, 'aio_check_bogo_discounts']);
+        add_action('wp_ajax_nopriv_aio_check_bogo_discounts', [$this, 'aio_check_bogo_discounts']);
     }
 
-    public function run_bogo_logic()
+    public function aio_check_bogo_discounts()
     {
         check_ajax_referer('aio_triggerBogo_nonce', 'nonce');
 
-        if (!WC()->cart || WC()->cart->is_empty()) {
-            wp_send_json_error(['message' => 'Cart is empty']);
-        }
-
-        $discount = new \AIO_WooDiscount\Discount\Bogo_Discount();
-        $discount->maybe_apply_discount(WC()->cart);
+        // 🔥 Safe trigger
+        do_action('aio_run_bogo_discount', WC()->cart);
         WC()->cart->calculate_totals();
-        WC()->cart->set_session();
 
-        wp_send_json_success([
-            'message' => 'BOGO discount applied',
-            'fragments' => \WC_AJAX::get_refreshed_fragments()
-        ]);
+        wp_send_json_success(['message' => '[AIO BOGO] Applied!']);
     }
 }

@@ -3,12 +3,31 @@
 namespace AIO_WooDiscount\Discount\BogoBuyProduct;
 
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
+use WC_Cart;
 
+/**
+ * Class BogoBuyProduct
+ *
+ * Handles evaluation of BOGO and BXGY "buy" and "get" conditions.
+ *
+ * This class dispatches condition checks to the appropriate static methods
+ * in the BogoBuy_Field class based on the condition type.
+ */
 class BogoBuyProduct
 {
-    public static function check_all($cart, $conditions, $match_type = 'all')
+    /**
+     * Evaluate all BOGO/BXGY conditions against the cart.
+     *
+     * @param WC_Cart $cart        The WooCommerce cart object.
+     * @param array   $conditions  The array of condition rules to evaluate.
+     * @param string  $match_type  Whether to match 'all' or 'any' conditions.
+     *
+     * @return bool True if matched according to $match_type, false otherwise.
+     */
+    public static function check_all($cart_or_items, $conditions, $match_type = 'all')
     {
-        $cart_items = $cart->get_cart();
+        // Accept either cart object or raw cart items
+        $cart_items = is_array($cart_or_items) ? $cart_or_items : $cart_or_items->get_cart();
         $results    = [];
 
         foreach ($conditions as $condition) {
