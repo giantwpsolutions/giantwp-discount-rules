@@ -62,6 +62,7 @@ class Assets
             'restUrl'   => esc_url_raw(rest_url(trailingslashit('aio-woodiscount/v2'))),
             'nonce'     => wp_create_nonce('wp_rest'),
             'proUrl'    => esc_url('https://giantwpsolutions.com/'),
+            'proActive' => defined('AIO_WOODISCOUNT_PRO_ACTIVE') && AIO_WOODISCOUNT_PRO_ACTIVE,
         ]);
     }
 

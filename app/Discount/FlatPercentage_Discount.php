@@ -37,6 +37,9 @@ class FlatPercentage_Discount
         $rules = $this->get_discount_rules();
         if (empty($rules)) return;
 
+        $settings    = maybe_unserialize(get_option('aio_woodiscount_settings', []));
+        $use_regular = isset($settings['discountBasedOn']) && $settings['discountBasedOn'] === 'regular_price';
+
         $matched = false;
 
         foreach ($rules as $rule) {
@@ -62,11 +65,16 @@ class FlatPercentage_Discount
             $discount_value = floatval($rule['discountValue'] ?? 0);
             $max_value      = isset($rule['maxValue']) ? floatval($rule['maxValue']) : null;
 
-            $cart_total = $cart->get_subtotal();
+            // ✅ Use regular price if setting is enabled
+            $cart_total = $use_regular
+                ? array_sum(array_map(function ($item) {
+                    return $item['quantity'] * $item['data']->get_regular_price();
+                }, $cart->get_cart()))
+                :  $cart->get_subtotal();
 
             $calculated_discount = ($fp_type === 'percentage')
                 ? ($cart_total * ($discount_value / 100))
-                :  $discount_value;
+                :   $discount_value;
 
             if ($max_value !== null) {
                 $calculated_discount = min($calculated_discount, $max_value);
@@ -75,22 +83,22 @@ class FlatPercentage_Discount
             if ($calculated_discount > 0) {
                 $this->create_or_update_coupon($rule, $calculated_discount);
                 $cart->apply_coupon($rule['couponName']);
-                error_log("✅ Coupon applied via AJAX: {$rule['couponName']}");
                 $matched = true;
                 break;
             }
         }
 
+        // ❌ Remove previously applied coupons if no rule matched
         if (!$matched) {
             foreach ($cart->get_applied_coupons() as $code) {
                 $coupon = new \WC_Coupon($code);
                 if ($coupon->get_meta('aio_is_hidden_coupon')) {
                     $cart->remove_coupon($code);
-                    error_log("❌ Coupon removed via AJAX: {$code}");
                 }
             }
         }
     }
+
 
     /**
      * Creates or updates a real WooCommerce coupon with calculated discount.

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits, watch, nextTick } from "vue";
+import { ref, defineEmits, watch, nextTick, computed, onMounted } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
 import FreeshippingForm from "../Forms/FreeshippingForm.vue";
@@ -9,13 +9,34 @@ import { saveBogoData } from "@/data/save-data/saveBogoData.js";
 import { saveShippingData } from "@/data/save-data/saveShippingData.js";
 import { saveBuyXGetYData } from "@/data/save-data/saveBuyXGetYData.js";
 import BulkDiscount from "../Forms/BulkDiscount.vue";
+import { isEqual } from "lodash-es";
 import { saveBulkDiscountData } from "../../data/save-data/saveBulkDiscountData";
+import {
+  licenseKey,
+  licenseStatus,
+  isLoadingLicense,
+  fetchLicenseStatus,
+  activateLicense,
+  deactivateLicense,
+} from "@/data/save-data/licenseApi";
 import {
   discountCreatedMessage,
   warningMessage,
   errorMessage,
   updatedDiscountMessage,
 } from "@/data/message";
+
+const { __ } = wp.i18n;
+
+const isLicenseActive = computed(() => {
+  return pluginData.proActive && licenseStatus.value === "valid";
+});
+
+onMounted(() => {
+  if (pluginData.proActive) {
+    fetchLicenseStatus();
+  }
+});
 
 const props = defineProps({
   visible: {
@@ -44,18 +65,24 @@ const bulkDiscountRef = ref(null);
 
 const proFeatures = [
   {
-    name: "Buy X Get Y",
-    description: "Apply discounts Buy X product Get Y Product",
+    name: __("Buy X Get Y", "all-in-one-woodiscount"),
+    description: __(
+      "Apply discounts Buy X product Get Y Product",
+      "all-in-one-woodiscount"
+    ),
     value: "Buy X Get Y",
   },
   {
-    name: "Shipping Discount",
-    description: "Discounts based on Shipping",
+    name: __("Shipping Discount", "all-in-one-woodiscount"),
+    description: __("Discounts based on Shipping", "all-in-one-woodiscount"),
     value: "Shipping Discount",
   },
   {
-    name: "Bulk Discount",
-    description: "Discounts based on bulk purchase",
+    name: __("Bulk Discount", "all-in-one-woodiscount"),
+    description: __(
+      "Discounts based on bulk purchase",
+      "all-in-one-woodiscount"
+    ),
     value: "Bulk Discount",
   },
 ];
@@ -96,7 +123,6 @@ watch(
       await nextTick();
 
       if (flatPercentageFormRef.value) {
-        console.log("🟢 Passing Data to Form:", newVal);
         flatPercentageFormRef.value.setFormData(structuredClone(newVal));
       } else if (bogoFormRef.value) {
         bogoFormRef.value.setFormData(structuredClone(newVal));
@@ -146,7 +172,15 @@ const saveForm = async () => {
     formData = activeForm.getFormData();
 
     if (isEditMode.value && formData.id) {
-      console.log("🟡 Editing Existing Discount:", formData);
+      const original = JSON.stringify(props.editingRule);
+      const current = JSON.stringify(formData);
+
+      if (original === current) {
+        noChanges(); // ✅ <--- This is your message function
+        isSaving.value = false;
+        return;
+      }
+
       if (selectedDiscountsType.value === "Flat/Percentage") {
         await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
       } else if (selectedDiscountsType.value === "Bogo") {
@@ -161,7 +195,7 @@ const saveForm = async () => {
 
       updatedDiscountMessage();
     } else {
-      console.log("🟢 Creating New Discount:", formData);
+      // console.log("🟢 Creating New Discount:", formData);
       if (selectedDiscountsType.value === "Flat/Percentage") {
         await saveFlatPercentageDiscount.saveCoupon(formData);
       } else if (selectedDiscountsType.value === "Bogo") {
@@ -196,7 +230,7 @@ const saveForm = async () => {
       v-if="visible"
       class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
       <div
-        class="bg-white rounded-lg shadow-lg h-[75vh] w-[70vw] p-6 flex flex-col">
+        class="bg-white rounded-lg shadow-lg h-[75vh] w-[80vw] md:w-[75vw] p-6 flex flex-col">
         <!-- Modal Header -->
         <div class="border-b pb-4 mb-4 flex items-center space-x-4">
           <button
@@ -270,19 +304,28 @@ const saveForm = async () => {
               </div>
 
               <!-- Pro Features -->
+              <!-- Pro Features -->
               <div
                 v-for="(proFeature, index) in proFeatures"
                 :key="index"
                 class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
                 <button
+                  :disabled="!isLicenseActive"
+                  :class="
+                    !isLicenseActive ? 'opacity-50 cursor-not-allowed' : ''
+                  "
                   @click="() => selectDiscountType(proFeature.value)"
                   class="w-full text-center font-medium">
                   {{ __(proFeature.name, "all-in-one-woodiscount") }}
                 </button>
+
+                <!-- 🔒 Show Pro badge only when license is not active -->
                 <span
+                  v-if="!isLicenseActive"
                   class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">
                   Pro
                 </span>
+
                 <div
                   class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
                   {{ __(proFeature.description, "all-in-one-woodiscount") }}

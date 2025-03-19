@@ -2,12 +2,12 @@
 /*
 Plugin Name: All In One WooDiscount 
 Plugin URI: https://giantwpsolutions.com
-Description: All in one WooDiscount is a one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
+Description: All in one WooDiscount is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
 Version: 1.0
 Author: Giant WP Solutions
 Author URI: https://giantwpsolutions.com
 License: GPLv2 or later
-Text Domain: aio-woodiscount
+Text Domain: all-in-one-woodiscount
 Domain Path: /languages/
 */
 
@@ -28,7 +28,7 @@ final class All_in_one_wooDiscount
     /**
      * The plugin version
      */
-    const version = '1.1';
+    const version = '1.0';
 
     /**
      * Class Constructor
@@ -78,13 +78,12 @@ final class All_in_one_wooDiscount
         load_plugin_textdomain('all-in-one-woodiscount', false, AIOWD_LANG_DIR);
 
         if (class_exists('WooCommerce')) {
-            new AIO_WooDiscount\Discount\UsageTrack\Bxgy_Usage_Handler();
+
             new AIO_WooDiscount\Installer();
             new AIO_WooDiscount\Api\Api();
             new AIO_WooDiscount\Discount\FlatPercentage_Discount();
             new AIO_WooDiscount\Discount\UsageTrack\FlatPercentageUsage();
             new AIO_WooDiscount\Discount\Bogo_Discount();
-            new AIO_WooDiscount\Discount\Bxgy_Discount();
         } else {
             add_action('admin_notices', [$this, 'woocommerce_missing_notice']);
         }

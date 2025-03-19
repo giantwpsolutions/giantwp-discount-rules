@@ -5,7 +5,7 @@ export const discountRules = ref([]);
 
 export const fetchAllDiscountRules = async () => {
     try {
-        console.log("📡 Fetching fresh discount rules...");
+        // console.log("📡 Fetching fresh discount rules...");
 
         const response = await apiFetch({
             path: `${pluginData.restUrl}get-all-discounts`,  // ✅ Ensure API is correct
@@ -15,7 +15,7 @@ export const fetchAllDiscountRules = async () => {
             },
         });
 
-        console.log("✅ API Response for Discounts:", response);
+        // console.log("✅ API Response for Discounts:", response);
 
         if (!Array.isArray(response)) {
             console.error("❌ Unexpected API response format:", response);

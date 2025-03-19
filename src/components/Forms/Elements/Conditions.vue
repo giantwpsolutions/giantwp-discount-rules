@@ -166,7 +166,7 @@ const getCascadeOptions = (field) => cascadeOptions[field] || [];
 watch(
   localConditions,
   (newVal) => {
-    console.log("Child Conditions Updated:", newVal);
+    // console.log("Child Conditions Updated:", newVal);
     emit("update:value", [...newVal]);
   },
   { deep: true } // Single watcher handles all changes
@@ -182,10 +182,10 @@ watch(conditionsApplies, () => {
 
 // Single debounced watcher for all changes
 const emitUpdates = debounce(() => {
-  console.log(
-    "Child Conditions (Debounced):",
-    JSON.parse(JSON.stringify(localConditions.value))
-  );
+  // console.log(
+  //   "Child Conditions (Debounced):",
+  //   JSON.parse(JSON.stringify(localConditions.value))
+  // );
   emit("update:value", [...localConditions.value]);
 }, 300);
 
@@ -199,15 +199,17 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 w-5/6">
+  <div class="space-y-4 w-full md:w-5/6">
     <!-- Enable Conditions -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
-      <el-switch
-        v-model="enableConditions"
-        @change="updateEnableConditions"
-        inline-prompt
-        :active-text="__('On', 'all-in-one-woodiscount')"
-        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+    <div class="flex flex-wrap items-center gap-2 my-6">
+      <div class="shrink-0">
+        <el-switch
+          v-model="enableConditions"
+          @change="updateEnableConditions"
+          inline-prompt
+          :active-text="__('On', 'all-in-one-woodiscount')"
+          :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+      </div>
       <label class="text-sm font-medium text-gray-900">
         {{ __("Enable Conditions?", "all-in-one-woodiscount") }}
       </label>
@@ -216,25 +218,29 @@ watch(
     <!-- Conditions Section -->
     <div class="space-y-4 w-full" v-if="enableConditions">
       <!-- Apply Conditions Mode (Any/All) -->
-      <div class="flex items-center gap-2 mt-6 mb-1">
-        <label
-          class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-6 mb-1">
+        <label class="text-sm font-medium text-gray-900">
           {{ __("Apply conditions if matches", "all-in-one-woodiscount") }}
         </label>
         <el-radio-group
           v-model="conditionsApplies"
           @change="updateConditionsApplies">
-          <el-radio-button :label="__('Any', 'all-in-one-woodiscount')" value="any" />
-
-          <el-radio-button :label="__('All', 'all-in-one-woodiscount')" value="all" />
+          <el-radio-button
+            :label="__('Any', 'all-in-one-woodiscount')"
+            value="any" />
+          <el-radio-button
+            :label="__('All', 'all-in-one-woodiscount')"
+            value="all" />
         </el-radio-group>
       </div>
 
-      <!-- condition add -->
+      <!-- Add Conditions Label -->
       <label class="block text-sm font-medium text-gray-900">
         {{ __("Add Conditions", "all-in-one-woodiscount") }}
       </label>
 
+      <!-- Loop Through Conditions -->
       <div
         v-for="(condition, index) in localConditions"
         :key="condition.id"
@@ -250,12 +256,13 @@ watch(
           </span>
         </div>
 
-        <div class="flex items-center gap-2 mb-2">
+        <!-- Condition Row -->
+        <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
           <!-- Field Selector -->
-          <div class="w-[30%]">
+          <div class="w-full md:w-[30%]">
             <select
               v-model="condition.field"
-              class="w-full h-8 border rounded p-2 text-sm"
+              class="w-full h-8 border rounded p-2 text-sm sm:text-sm"
               @change="updateConditions">
               <option value="">
                 {{ __("Please select", "all-in-one-woodiscount") }}
@@ -276,7 +283,7 @@ watch(
           </div>
 
           <!-- Operator Selector -->
-          <div class="w-[20%]">
+          <div class="w-full md:w-[20%]">
             <select
               v-model="condition.operator"
               class="w-full h-8 border rounded p-2 text-sm"
@@ -290,39 +297,26 @@ watch(
             </select>
           </div>
 
-          <!-- Value Input -->
-          <div class="w-[45%]">
+          <!-- Value Field -->
+          <div class="w-full md:w-[45%]">
             <el-select-v2
               v-if="isDropdownField(condition.field)"
               v-model="condition.value"
               :options="getDropdownOptions(condition.field)"
               filterable
               multiple
-              class="custom-select-v2"
+              class="custom-select-v2 w-full"
               @change="updateConditions" />
 
             <el-input
               v-else-if="isPricingField(condition.field)"
               v-model.number="condition.value"
-              style="max-width: 600px"
-              placeholder="Please input">
+              placeholder="Please input"
+              class="w-full">
               <template #append>
                 <span v-html="generalData.currency_symbol || '$'"></span>
               </template>
             </el-input>
-
-            <!-- <el-cascader
-              v-else-if="isCascadeField(condition.field)"
-              v-model="condition.value"
-              :options="countriesOptions"
-              :props="{ multiple: true, checkStrictly: true }"
-              :show-all-levels="false"
-              clearable
-              class="full-width custom-cascade"
-              filterable
-              :loading="isLoadingCountries"
-              @change="updateConditions"
-              placeholder="Select Continent, Country, and State" /> -->
 
             <input
               v-else-if="isNumberField(condition.field)"
@@ -333,8 +327,9 @@ watch(
               class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           </div>
 
-          <!-- Delete Button -->
-          <div class="w-[5%] flex justify-center items-center">
+          <!-- Delete -->
+          <div
+            class="w-full md:w-[5%] flex justify-start md:justify-center items-center">
             <el-icon
               @click="removeCondition(condition.id)"
               size="20px"
@@ -345,7 +340,7 @@ watch(
         </div>
       </div>
 
-      <!-- Add Condition Button -->
+      <!-- Add Button -->
       <button
         @click="addCondition"
         class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">

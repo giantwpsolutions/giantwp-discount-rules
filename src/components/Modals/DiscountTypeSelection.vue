@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const selectedType = ref("");
 const showUpgradeMessage = (type) => {
-  console.log(`Upgrade to Pro for access to ${type}`);
+  // console.log(`Upgrade to Pro for access to ${type}`);
 };
 
 const selectDiscountType = (type) => {

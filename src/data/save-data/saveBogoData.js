@@ -36,8 +36,8 @@ export const saveBogoData = {
                 }))
                 : [];
 
-            console.log("Final Conditions Before Sending:", formattedConditions);
-            console.log("Final buy Product Before Sending:", formattedBuyProduct);
+            // console.log("Final Conditions Before Sending:", formattedConditions);
+            // console.log("Final buy Product Before Sending:", formattedBuyProduct);
 
             const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
@@ -100,7 +100,7 @@ export const saveBogoData = {
      */
     async updateDiscount(id, updatedFields) {
         try {
-            console.log("📡 Sending API Request to update discount:", id, updatedFields);
+            // console.log("📡 Sending API Request to update discount:", id, updatedFields);
 
             const payload = {
                 ...updatedFields,
@@ -117,7 +117,7 @@ export const saveBogoData = {
                 body: JSON.stringify(payload),
             });
 
-            console.log("✅ Received Response from API:", response);
+            // console.log("✅ Received Response from API:", response);
 
             if (!response || typeof response !== "object" || !response.success) {
                 console.error("❌ API Response Error:", response);

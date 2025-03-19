@@ -81,38 +81,41 @@ watch(
 <template>
   <div class="space-y-4 max-w-full">
     <!-- Pricing or product set -->
-    <div class="w-1/2">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div class="md:w-3/4 sm:w-full">
+      <div
+        class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
         <!-- Column 1 -->
-        <div class="flex items-center space-x-2">
-          <label for="buyProductCount" class="text-gray-950 text-sm">
+        <div class="flex items-center space-x-2 w-full md:w-auto">
+          <label
+            for="buyProductCount"
+            class="text-gray-950 text-sm whitespace-nowrap">
             {{ __("Buy:", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
             id="buyProductCount"
             v-model="localState.buyProductCount"
             :min="1"
-            :max="10"
             controls-position="right"
-            class="w-full" />
+            class="w-full sm:w-60 md:w-80" />
         </div>
 
         <!-- Column 2 -->
-        <div class="flex items-center space-x-2">
-          <label for="getProductCount" class="text-gray-950 text-sm">
+        <div class="flex items-center space-x-2 w-full md:w-auto">
+          <label
+            for="getProductCount"
+            class="text-gray-950 text-sm whitespace-nowrap">
             {{ __("Get:", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
             id="getProductCount"
             v-model="localState.getProductCount"
             :min="1"
-            :max="10"
             controls-position="right"
-            class="w-full" />
+            class="w-full max-w-xs" />
         </div>
 
         <!-- Column 3 -->
-        <div>
+        <div class="w-full md:w-auto">
           <el-radio-group v-model="localState.freeOrDiscount">
             <el-radio-button
               :label="__('Free', 'all-in-one-woodiscount')"
@@ -128,17 +131,19 @@ watch(
     <!-- Fixed or percentage discount for BOGO -->
     <div
       v-if="localState.freeOrDiscount === 'discount_product'"
-      class="w-3/4 mt-5">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <!-- Column 1 -->
-        <div>
+      class="md:w-3/4 mt-5">
+      <div
+        class="flex flex-col md:flex-row md:items-end md:space-x-6 space-y-4 md:space-y-0">
+        <!-- Column 1: Pricing Type -->
+        <div class="w-full md:w-1/3">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             {{ __("Pricing Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="localState.discounttypeBogo"
             size="default"
-            popper-class="custom-dropdown">
+            popper-class="custom-dropdown"
+            class="w-full">
             <el-option
               :value="'fixed'"
               :label="__('Fixed Discount', 'all-in-one-woodiscount')">
@@ -152,15 +157,15 @@ watch(
           </el-select>
         </div>
 
-        <!-- Column 2 -->
-        <div>
+        <!-- Column 2: Discount Value -->
+        <div class="w-full md:w-1/3">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             {{ __("Pricing Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
-            style="max-width: 600px"
-            placeholder="Please input">
+            placeholder="Please input"
+            class="w-full">
             <template #append>
               <span
                 v-html="
@@ -172,8 +177,8 @@ watch(
           </el-input>
         </div>
 
-        <!-- Column 3 -->
-        <div>
+        <!-- Column 3: Max Value -->
+        <div class="w-full md:w-1/3">
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
@@ -195,9 +200,9 @@ watch(
           </label>
           <el-input
             v-model.number="localState.maxValue"
-            style="max-width: 600px"
             placeholder="Please input"
-            :disabled="localState.discounttypeBogo === 'fixed'">
+            :disabled="localState.discounttypeBogo === 'fixed'"
+            class="w-full">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>

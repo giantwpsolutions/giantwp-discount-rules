@@ -48,13 +48,16 @@ onMounted(() => {
 <template>
   <div>
     <!-- Toggle Switch -->
-    <div class="flex items-center gap-2 my-6">
-      <el-switch
-        v-model="localEnableSchedule"
-        inline-prompt
-        :active-text="__('On', 'all-in-one-woodiscount')"
-        :inactive-text="__('Off', 'all-in-one-woodiscount')" />
-      <label class="text-sm font-medium text-gray-900">
+    <div class="flex flex-wrap items-center gap-2 my-6">
+      <div class="shrink-0">
+        <el-switch
+          v-model="localEnableSchedule"
+          inline-prompt
+          :active-text="__('On', 'all-in-one-woodiscount')"
+          :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+      </div>
+
+      <label class="text-sm font-medium text-gray-900 whitespace-nowrap">
         {{ __("Enable Schedule?", "all-in-one-woodiscount") }}
       </label>
     </div>
@@ -72,7 +75,7 @@ onMounted(() => {
         format="YYYY-MM-DD HH:mm:ss"
         date-format="YYYY/MM/DD ddd"
         time-format="A hh:mm:ss"
-        class="my-custom-popper"
+        class="w-full my-custom-popper"
         size="large" />
     </div>
   </div>

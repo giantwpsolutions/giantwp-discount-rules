@@ -33,7 +33,7 @@ const logoUrl = `${pluginData.pluginUrl}assets/images/AIO_Discount_Logo.png`;
       <div class="flex h-16 items-center justify-between">
         <!-- Logo & Desktop Navigation -->
         <div class="flex items-center">
-          <img :src="logoUrl" alt="Logo" class="h-8 w-auto mr-4 pl-10" />
+          <img :src="logoUrl" alt="Logo" class="h-10 w-auto mr-4 pl-10" />
           <div class="hidden md:block">
             <Navigation :navigation="navigation" />
           </div>

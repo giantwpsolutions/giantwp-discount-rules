@@ -21,7 +21,7 @@ const showModal = ref(false);
 const selectedDiscount = ref(null);
 const fetchDiscountRules = async () => {
   discountRules.value = await fetchAllDiscountRules();
-  console.log("🟢 Discount rules updated:", discountRules.value);
+  // console.log("🟢 Discount rules updated:", discountRules.value);
 };
 
 //APi Fetching
@@ -30,7 +30,7 @@ onMounted(fetchDiscountRules);
 //Deleting Rules
 const deleteRule = async (rule) => {
   try {
-    console.log("Deleting Rule now:", rule);
+    // console.log("Deleting Rule now:", rule);
 
     if (rule.discountType === "flat/percentage") {
       await saveFlatPercentageDiscount.deleteCoupon(rule.id);
@@ -52,43 +52,43 @@ const deleteRule = async (rule) => {
 };
 
 const toggleStatus = async (rule) => {
-  console.log(
-    `🔄 Toggling Status for ID: ${rule.id} | Current Status: ${rule.status}`
-  );
+  // console.log(
+  //   `🔄 Toggling Status for ID: ${rule.id} | Current Status: ${rule.status}`
+  // );
 
   try {
     let response;
 
     // Determine which update function to use based on discountType
     if (rule.discountType.toLowerCase() === "bogo") {
-      console.log("📡 Updating BOGO Discount...");
+      // console.log("📡 Updating BOGO Discount...");
       response = await saveBogoData.updateDiscount(rule.id, {
         status: rule.status,
       });
     } else if (rule.discountType.toLowerCase() === "flat/percentage") {
-      console.log("📡 Updating Flat/Percentage Discount...");
+      // console.log("📡 Updating Flat/Percentage Discount...");
       response = await saveFlatPercentageDiscount.updateDiscount(rule.id, {
         status: rule.status,
       });
     } else if (rule.discountType.toLowerCase() === "shipping discount") {
-      console.log("📡 Updating Shipping Discount...");
+      // console.log("📡 Updating Shipping Discount...");
       response = await saveShippingData.updateDiscount(rule.id, {
         status: rule.status,
       });
     } else if (rule.discountType.toLowerCase() === "buy x get y") {
-      console.log("📡 Updating Buy X Get Y Discount...");
+      // console.log("📡 Updating Buy X Get Y Discount...");
       response = await saveBuyXGetYData.updateDiscount(rule.id, {
         status: rule.status,
       });
     } else if (rule.discountType.toLowerCase() === "bulk discount") {
-      console.log("📡 Updating Buy BulkDiscount...");
+      // console.log("📡 Updating Buy BulkDiscount...");
       response = await saveBulkDiscountData.updateDiscount(rule.id, {
         status: rule.status,
       });
     }
 
     updatedDiscountStatus();
-    console.log("API Response:", response);
+    // console.log("API Response:", response);
 
     if (!response || !response.success) {
       console.error("❌ API Failed to Update Status:", response);

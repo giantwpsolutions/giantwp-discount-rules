@@ -107,7 +107,8 @@ watch(
           <el-input
             v-model.number="localState.discountValue"
             style="max-width: 600px"
-            placeholder="Please input">
+            placeholder="Please input"
+            class="w-full">
             <template #append>
               <span
                 v-html="
@@ -128,10 +129,13 @@ watch(
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
-                popper-class="custom-tooltip">
+                popper-class="custom-tooltip w-full">
                 <QuestionMarkCircleIcon
                   class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
               </el-tooltip>
@@ -201,12 +205,17 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Fee Value", "all-in-one-woodiscount") }}</span>
+              <span>{{
+                __("Maximum Fee Value", "all-in-one-woodiscount")
+              }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">

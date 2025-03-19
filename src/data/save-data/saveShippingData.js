@@ -28,7 +28,7 @@ export const saveShippingData = {
                 }))
                 : [];
 
-            console.log("Final Conditions Before Sending:", formattedConditions);
+            // console.log("Final Conditions Before Sending:", formattedConditions);
 
             const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
@@ -55,7 +55,6 @@ export const saveShippingData = {
                     enableUsage: newData.usageLimits?.enableUsage ?? false,
                     usageLimitsCount: newData.usageLimits?.usageLimitsCount ?? 0,
                 },
-                usedCount: newData.usedCount || 0,
                 enableConditions: newData.enableConditions || false,
                 conditionsApplies: newData.conditionsApplies ?? "any",
                 conditions: formattedConditions,
@@ -87,7 +86,7 @@ export const saveShippingData = {
    */
     async updateDiscount(id, updatedFields) {
         try {
-            console.log("📡 Sending API Request to update discount:", id, updatedFields);
+            // console.log("📡 Sending API Request to update discount:", id, updatedFields);
 
             const payload = {
                 ...updatedFields,
@@ -104,7 +103,7 @@ export const saveShippingData = {
                 body: JSON.stringify(payload),
             });
 
-            console.log("Received Response from API:", response);
+            // console.log("Received Response from API:", response);
 
             if (!response || typeof response !== "object" || !response.success) {
                 console.error("❌ API Response Error:", response);

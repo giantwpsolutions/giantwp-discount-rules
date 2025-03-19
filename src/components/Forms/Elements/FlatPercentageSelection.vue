@@ -63,9 +63,9 @@ onMounted(() => {
     </div>
 
     <!-- Discount Value & Max Value Fields -->
-    <div class="flex gap-4 items-start">
+    <div class="flex flex-col md:flex-row gap-4 items-start w-full">
       <!-- Discount Value -->
-      <div class="relative flex-1">
+      <div class="relative w-full md:flex-1">
         <label
           for="discountValue"
           class="block text-sm font-medium text-gray-900 my-1">
@@ -78,9 +78,9 @@ onMounted(() => {
             type="number"
             id="discountValue"
             :placeholder="__('Enter discount value', 'all-in-one-woodiscount')"
-            class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
+            class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />
           <span
-            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100"
+            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100 text-sm"
             v-html="
               selectedFPDiscountType === 'percentage'
                 ? '%'
@@ -91,7 +91,7 @@ onMounted(() => {
       </div>
 
       <!-- Maximum Value -->
-      <div class="relative flex-1">
+      <div class="relative w-full md:flex-1">
         <label
           for="maxValue"
           class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
@@ -118,9 +118,9 @@ onMounted(() => {
             id="maxValue"
             :placeholder="__('Enter maximum value', 'all-in-one-woodiscount')"
             :disabled="selectedFPDiscountType === 'fixed'"
-            class="w-full h-8 rounded-custom-aio-left border-gray-300 shadow-sm sm:text-sm pr-4" />
+            class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />
           <span
-            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100"
+            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100 text-sm"
             v-html="generalData.currency_symbol || '$'">
           </span>
         </div>

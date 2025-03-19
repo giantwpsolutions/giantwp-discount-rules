@@ -154,7 +154,7 @@ const updateGetYApplies = () => {
 watch(
   getYProducts,
   (newVal) => {
-    console.log("Child Conditions Updated:", newVal);
+    // console.log("Child Conditions Updated:", newVal);
     emit("update:value", [...newVal]);
   },
   { deep: true } // Single watcher handles all changes
@@ -181,10 +181,10 @@ watch(maxValue, () => {
 
 // Single debounced watcher for all changes
 const emitUpdates = debounce(() => {
-  console.log(
-    "Child Get Y (Debounced):",
-    JSON.parse(JSON.stringify(getYProducts.value))
-  );
+  // console.log(
+  //   "Child Get Y (Debounced):",
+  //   JSON.parse(JSON.stringify(getYProducts.value))
+  // );
   emit("update:value", [...getYProducts.value]);
 }, 300);
 
@@ -201,13 +201,13 @@ watch(
   <div class="space-y-4 max-w-full mt-2 mb-6 border-b py-6">
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
-        <!-- Heading Text -->
         <span>{{ __("Get Y Product", "all-in-one-woodiscount") }}</span>
-        <!-- Tooltip Icon -->
         <el-tooltip
           class="box-item"
           effect="dark"
-          :content="__('Which product will get the rule?', 'all-in-one-woodiscount')"
+          :content="
+            __('Which product will get the rule?', 'all-in-one-woodiscount')
+          "
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
@@ -216,8 +216,7 @@ watch(
       </div>
     </h3>
 
-    <!-- Is Repeat -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
+    <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
       <el-switch
         v-model="isrepeat"
         @change="updateIsrepeat"
@@ -243,28 +242,25 @@ watch(
       </label>
     </div>
 
-    <!-- Get Item free or discount -->
-
-    <div class="flex items-center gap-2 mt-6 mb-1">
+    <!-- Get Item: Free or Discount -->
+    <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
         {{ __("Get Item", "all-in-one-woodiscount") }}
       </label>
-      <div class="group relative">
-        <el-radio-group v-model="freeorDiscount" @change="updateFreeorDiscount">
-          <el-radio-button
-            :label="__('Free', 'all-in-one-woodiscount')"
-            value="free_product" />
-          <el-radio-button
-            :label="__('Discount', 'all-in-one-woodiscount')"
-            value="discount_product" />
-        </el-radio-group>
-      </div>
+      <el-radio-group v-model="freeorDiscount" @change="updateFreeorDiscount">
+        <el-radio-button
+          :label="__('Free', 'all-in-one-woodiscount')"
+          value="free_product" />
+        <el-radio-button
+          :label="__('Discount', 'all-in-one-woodiscount')"
+          value="discount_product" />
+      </el-radio-group>
     </div>
 
-    <!-- Fixed or percentage discount for BOGO -->
-    <div v-if="freeorDiscount === 'discount_product'" class="w-3/4 mt-5">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <!-- Column 1 -->
+    <!-- Discount Config -->
+    <div v-if="freeorDiscount === 'discount_product'" class="w-full mt-5">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Pricing Type -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             {{ __("Pricing Type", "all-in-one-woodiscount") }}
@@ -276,26 +272,19 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'all-in-one-woodiscount')">
-              {{ __("Fixed Discount", "all-in-one-woodiscount") }}
-            </el-option>
+              :label="__('Fixed Discount', 'all-in-one-woodiscount')" />
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'all-in-one-woodiscount')">
-              {{ __("Percentage Discount", "all-in-one-woodiscount") }}
-            </el-option>
+              :label="__('Percentage Discount', 'all-in-one-woodiscount')" />
           </el-select>
         </div>
 
-        <!-- Column 2 -->
+        <!-- Pricing Value -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             {{ __("Pricing Value", "all-in-one-woodiscount") }}
           </label>
-          <el-input
-            v-model.number="discountValue"
-            style="max-width: 600px"
-            placeholder="Please input">
+          <el-input v-model.number="discountValue" placeholder="Please input">
             <template #append>
               <span
                 v-html="
@@ -307,16 +296,18 @@ watch(
           </el-input>
         </div>
 
-        <!-- Column 3 -->
+        <!-- Max Value -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
               <el-tooltip
-                class="box-item"
                 effect="dark"
                 :content="
-                  __('The maximum value that can be applied', 'all-in-one-woodiscount')
+                  __(
+                    'The maximum value that can be applied',
+                    'all-in-one-woodiscount'
+                  )
                 "
                 placement="top"
                 popper-class="custom-tooltip">
@@ -327,7 +318,6 @@ watch(
           </label>
           <el-input
             v-model.number="maxValue"
-            style="max-width: 600px"
             placeholder="Please input"
             :disabled="discountTypeBxgy === 'fixed'">
             <template #append>
@@ -338,24 +328,26 @@ watch(
       </div>
     </div>
 
+    <!-- Match condition type -->
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
         {{ __("Rules apply to products if matches", "all-in-one-woodiscount") }}
       </label>
-      <div class="group relative">
-        <el-radio-group v-model="getYApplies" @change="updateGetYApplies">
-          <el-radio-button :label="__('Any', 'all-in-one-woodiscount')" value="any" />
-          <el-radio-button :label="__('All', 'all-in-one-woodiscount')" value="all" />
-        </el-radio-group>
-      </div>
+      <el-radio-group v-model="getYApplies" @change="updateGetYApplies">
+        <el-radio-button
+          :label="__('Any', 'all-in-one-woodiscount')"
+          value="any" />
+        <el-radio-button
+          :label="__('All', 'all-in-one-woodiscount')"
+          value="all" />
+      </el-radio-group>
     </div>
 
-    <!-- All Fields  -->
+    <!-- All Fields -->
     <div
       v-for="(getYProduct, index) in getYProducts"
       :key="getYProduct.id"
-      class="max-w-full">
-      <!-- Add /Or text -->
+      class="w-full">
       <div v-if="index > 0" class="mb-2">
         <span class="text-black italic text-sm">
           {{
@@ -366,25 +358,22 @@ watch(
         </span>
       </div>
       <div class="flex flex-wrap gap-2">
-        <!-- Field 1: 30% width -->
-        <div class="w-[12%]">
+        <!-- Quantity -->
+        <div class="w-full sm:w-[12%]">
           <el-input-number
-            id="getProductCount"
             v-model="getYProduct.getProductCount"
-            @change="updateGetYProducts"
-            placeholder="Number of Product"
-            :max="100"
+            placeholder="Qty"
             controls-position="right"
+            :max="100"
             class="w-full" />
         </div>
 
-        <!-- Field 2: 30% width -->
-        <div class="w-[20%]">
+        <!-- Field -->
+        <div class="w-full sm:w-[20%]">
           <el-select
             v-model="getYProduct.field"
             clearable
-            @change="updateGetYProducts"
-            style="">
+            @change="updateGetYProducts">
             <el-option
               v-for="item in productOption"
               :key="item.value"
@@ -393,13 +382,12 @@ watch(
           </el-select>
         </div>
 
-        <!-- Field 3: 25% width -->
-        <div class="w-[20%]">
+        <!-- Operator -->
+        <div class="w-full sm:w-[20%]">
           <el-select
             v-if="getProductOperator(getYProduct.field)?.length"
             v-model="getYProduct.operator"
-            @change="updateGetYProducts"
-            style="">
+            @change="updateGetYProducts">
             <el-option
               v-for="item in getProductOperator(getYProduct.field)"
               :key="item.value"
@@ -408,14 +396,12 @@ watch(
           </el-select>
         </div>
 
-        <!-- Field 4: 35% width -->
-        <div class="w-[30%]">
+        <!-- Value -->
+        <div class="w-full sm:w-[30%]">
           <el-select-v2
             v-if="ProductIsDropdown(getYProduct.field)"
             v-model="getYProduct.value"
-            @change="updateGetYProducts"
             :options="getProductDropdown(getYProduct.field)"
-            :placeholder="__('Select', 'all-in-one-woodiscount')"
             filterable
             multiple
             :loading="isLoadingProducts"
@@ -423,35 +409,32 @@ watch(
 
           <el-input
             v-else-if="productisPricingField(getYProduct.field)"
-            v-model="getYProduct.value"
-            @change="updateGetYProducts">
-            <template #append
-              ><span v-html="generalData.currency_symbol || '$'"></span
-            ></template>
+            v-model="getYProduct.value">
+            <template #append>
+              <span v-html="generalData.currency_symbol || '$'"></span>
+            </template>
           </el-input>
 
           <el-input-number
             v-else-if="productisNumberField(getYProduct.field)"
             v-model="getYProduct.value"
-            @change="updateGetYProducts"
-            class="mx-4"
             controls-position="right"
-            style="width: -webkit-fill-available" />
+            class="w-full" />
         </div>
 
-        <!-- Field 5: 10% width with icons -->
-        <div class="w-[10%] flex items-center gap-4 border-gray-300 rounded">
+        <!-- Delete -->
+        <div class="w-full sm:w-[10%] flex items-center">
           <el-icon
             @click="removeProduct(getYProduct.id)"
             size="20px"
-            color="red"
             class="cursor-pointer text-red-500">
             <Delete />
           </el-icon>
         </div>
       </div>
     </div>
-    <!-- Add Product Assign Button Button -->
+
+    <!-- Add Button -->
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">

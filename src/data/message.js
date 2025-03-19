@@ -56,3 +56,21 @@ export const updatedDiscountStatus = () => {
         offset: 100,
     });
 };
+
+export const noChanges = () => {
+    ElNotification({
+        title: __("No Changes!", "all-in-one-woodiscount"),
+        message: __("No changes were made in this rule.", "all-in-one-woodiscount"),
+        type: "warning",
+        offset: 100,
+    });
+};
+
+export const settingsUpdate = () => {
+    ElNotification({
+        title: __("Updated Settings!", "all-in-one-woodiscount"),
+        message: __("The Settings has been updated successfully.", "all-in-one-woodiscount"),
+        type: "success",
+        offset: 100,
+    });
+};

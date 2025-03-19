@@ -57,7 +57,7 @@ const updateGetItem = () => {
 watch(
   bulkDiscounts,
   (newVal) => {
-    console.log("Child bulk Discount Updated:", newVal);
+    // console.log("Child bulk Discount Updated:", newVal);
     emit("update:value", [...newVal]);
   },
   { deep: true } // Single watcher handles all changes
@@ -65,10 +65,10 @@ watch(
 
 // Single debounced watcher for all changes
 const emitUpdates = debounce(() => {
-  console.log(
-    "Child Bulk discount (Debounced):",
-    JSON.parse(JSON.stringify(bulkDiscounts.value))
-  );
+  // console.log(
+  //   "Child Bulk discount (Debounced):",
+  //   JSON.parse(JSON.stringify(bulkDiscounts.value))
+  // );
   emit("update:value", [...bulkDiscounts.value]);
 }, 300);
 
@@ -83,95 +83,56 @@ watch(
 
 <template>
   <div class="space-y-4 max-w-full my-4 border-t border-b py-4">
-    <div class="flex gap-2 mt-6 mb-1 w-[30%]">
+    <!-- Get Item Selector -->
+    <div class="flex flex-wrap gap-2 mt-6 mb-1 w-full sm:w-[30%]">
       <label
-        class="text-sm font-medium text-gray-900 w-[25%] flex items-center gap-1">
+        class="text-sm font-medium text-gray-900 flex items-center gap-1 w-full sm:w-[25%]">
         {{ __("Get Item", "all-in-one-woodiscount") }}
       </label>
-      <div class="group relative w-full">
+      <div class="w-full sm:w-[75%]">
         <el-select
           v-model="getItem"
           @change="updateGetItem"
           size="default"
-          popper-class="custom-dropdown">
+          popper-class="custom-dropdown"
+          class="w-full">
           <el-option
             :value="'alltogether'"
-            :label="__('All together', 'all-in-one-woodiscount')">
-            {{ __("All together", "all-in-one-woodiscount") }}
-          </el-option>
+            :label="__('All together', 'all-in-one-woodiscount')" />
           <el-option
             :value="'iq_each'"
             :label="
               __('Item quantity each cart line', 'all-in-one-woodiscount')
-            ">
-            {{ __("Item quantity each cart line", "all-in-one-woodiscount") }}
-          </el-option>
+            " />
         </el-select>
       </div>
     </div>
 
-    <!-- Assign Discount -->
-
-    <!-- All Fields  -->
+    <!-- Bulk Discounts -->
     <div
       v-for="(bulkDiscount, index) in bulkDiscounts"
       :key="bulkDiscount.id"
       class="max-w-full pt-4">
-      <!-- Add /Or text -->
-
       <div class="flex flex-wrap gap-2">
-        <!-- Field 1: 15% width -->
-        <div class="w-[12%]">
+        <!-- From -->
+        <div class="w-full sm:w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
-              <span>{{ __("From", "all-in-one-woodiscount") }}</span>
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                :content="
-                  __(
-                    'The maximum value that can be applied',
-                    'all-in-one-woodiscount'
-                  )
-                "
-                placement="top"
-                popper-class="custom-tooltip">
-                <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            {{ __("From", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
-            id="buyProductCount"
             v-model="bulkDiscount.fromcount"
             @change="updateBulkDiscount"
             :min="1"
             controls-position="right"
             class="w-full" />
         </div>
-        <!-- Field 2: 30% width -->
-        <div class="w-[12%]">
+
+        <!-- To -->
+        <div class="w-full sm:w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
-              <span>{{ __("To", "all-in-one-woodiscount") }}</span>
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                :content="
-                  __(
-                    'The maximum value that can be applied',
-                    'all-in-one-woodiscount'
-                  )
-                "
-                placement="top"
-                popper-class="custom-tooltip">
-                <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            {{ __("To", "all-in-one-woodiscount") }}
           </label>
           <el-input-number
-            id="buyProductCount"
             v-model="bulkDiscount.toCount"
             @change="updateBulkDiscount"
             :min="1"
@@ -179,76 +140,38 @@ watch(
             class="w-full" />
         </div>
 
-        <!-- Field 3: 30% width -->
-        <div class="w-[22%]">
+        <!-- Discount Type -->
+        <div class="w-full sm:w-[22%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
-              <span>{{ __("Discount Type", "all-in-one-woodiscount") }}</span>
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                :content="
-                  __(
-                    'The maximum value that can be applied',
-                    'all-in-one-woodiscount'
-                  )
-                "
-                placement="top"
-                popper-class="custom-tooltip">
-                <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            {{ __("Discount Type", "all-in-one-woodiscount") }}
           </label>
           <el-select
             v-model="bulkDiscount.discountTypeBulk"
             @change="updateBulkDiscount"
             size="default"
+            class="w-full"
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed', 'all-in-one-woodiscount')">
-              {{ __("Fixed", "all-in-one-woodiscount") }}
-            </el-option>
+              :label="__('Fixed', 'all-in-one-woodiscount')" />
             <el-option
               :value="'percentage'"
-              :label="__('Percentage', 'all-in-one-woodiscount')">
-              {{ __("Percentage", "all-in-one-woodiscount") }}
-            </el-option>
+              :label="__('Percentage', 'all-in-one-woodiscount')" />
             <el-option
               :value="'flat_price'"
-              :label="__('Flat Price', 'all-in-one-woodiscount')">
-              {{ __("Flat Price", "all-in-one-woodiscount") }}
-            </el-option>
+              :label="__('Flat Price', 'all-in-one-woodiscount')" />
           </el-select>
         </div>
 
-        <!-- Field 4: 25% width -->
-        <div class="w-[20%]">
+        <!-- Discount Value -->
+        <div class="w-full sm:w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
-              <span>{{ __("Discount Value", "all-in-one-woodiscount") }}</span>
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                :content="
-                  __(
-                    'The maximum value that can be applied',
-                    'all-in-one-woodiscount'
-                  )
-                "
-                placement="top"
-                popper-class="custom-tooltip">
-                <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            {{ __("Discount Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="bulkDiscount.discountValue"
             @change="updateBulkDiscount"
-            style="max-width: 600px"
-            placeholder="Please input">
+            placeholder="Enter value">
             <template #append>
               <span
                 v-html="
@@ -260,48 +183,30 @@ watch(
           </el-input>
         </div>
 
-        <!-- Field 5: 35% width -->
-        <div class="w-[20%]">
+        <!-- Max Value -->
+        <div class="w-full sm:w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "all-in-one-woodiscount") }}</span>
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                :content="
-                  __(
-                    'The maximum value that can be applied',
-                    'all-in-one-woodiscount'
-                  )
-                "
-                placement="top"
-                popper-class="custom-tooltip">
-                <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            {{ __("Maximum Value", "all-in-one-woodiscount") }}
           </label>
           <el-input
             v-model.number="bulkDiscount.maxValue"
             @change="updateBulkDiscount"
-            style="max-width: 600px"
-            placeholder="Please input"
             :disabled="
-              bulkDiscount.discountTypeBulk === 'fixed' || 'flat_price'
-            ">
+              bulkDiscount.discountTypeBulk === 'fixed' ||
+              bulkDiscount.discountTypeBulk === 'flat_price'
+            "
+            placeholder="Enter value">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>
           </el-input>
         </div>
 
-        <!-- Field 6: 10% width with icons -->
-        <div
-          class="flex items-center w-[10%] pt-4 gap-4 border-gray-300 rounded">
+        <!-- Delete Icon -->
+        <div class="w-full sm:w-[10%] flex items-center pt-6">
           <el-icon
             @click="removeDiscount(bulkDiscount.id)"
             size="20px"
-            color="red"
             class="cursor-pointer text-red-500">
             <Delete />
           </el-icon>
@@ -309,12 +214,10 @@ watch(
       </div>
     </div>
 
-    <!-- End Assign Discount -->
-
-    <!-- Add Product Assign Button Button -->
+    <!-- Add Button -->
     <button
       @click="addBulkDiscount"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-4">
       {{ __("Assign Bulk Discount", "all-in-one-woodiscount") }}
     </button>
   </div>

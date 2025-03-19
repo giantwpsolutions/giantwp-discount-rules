@@ -1,49 +1,159 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
+import {
+  licenseKey,
+  licenseStatus,
+  isLoadingLicense,
+  fetchLicenseStatus,
+  activateLicense,
+  deactivateLicense,
+} from "@/data/save-data/licenseApi";
 
-// Define reactive license key
-const licenseKey = ref("");
+import {
+  saveSettingsData,
+  loadSettings,
+  saveSettings,
+  isLoadingSettings,
+} from "@/data/save-data/saveSettingsData";
 
-// Save settings function
-const saveSettings = () => {
-  console.log("License Key:", licenseKey.value);
-  // Add logic to save the license key (e.g., via REST API or AJAX)
-};
+import { settingsUpdate, errorMessage } from "@/data/message.js";
+
 const { __ } = wp.i18n;
+
+const isProActive = ref(false);
+
+onMounted(() => {
+  isProActive.value = !!pluginData?.proActive;
+
+  if (isProActive.value) {
+    fetchLicenseStatus();
+    loadSettings();
+  }
+});
+
+const handleAction = async () => {
+  if (licenseStatus.value === "valid") {
+    await deactivateLicense();
+  } else {
+    await activateLicense(licenseKey.value);
+  }
+};
+
+const handleSaveSettings = async () => {
+  try {
+    await saveSettings();
+    settingsUpdate();
+  } catch (error) {
+    errorMessage();
+  }
+};
 </script>
 
 <template>
   <div
     class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6 flex flex-col">
-    <h3 class="text-xl font-bold mb-6">
-      {{ __("General Settings", "all-in-one-woodiscount") }}
-    </h3>
+    <h4 class="text-xl font-bold mb-6">
+      {{ __("Settings", "all-in-one-woodiscount") }}
+    </h4>
 
-    <!-- License Input Field with Label on the Left -->
-    <div class="w-full max-w-md flex items-center mb-6">
-      <label for="license" class="text-base font-medium text-dark w-32">
-        {{ __("License Key", "all-in-one-woodiscount") }}
-      </label>
-      <input
-        type="text"
-        id="license"
-        v-model="licenseKey"
-        :placeholder="__('Enter your license key', 'all-in-one-woodiscount')"
-        class="flex-1 bg-gray-100 rounded-md border border-gray-300 h-10 px-5 text-gray-700 outline-none transition focus:border-blue-500" />
+    <!-- License -->
+    <div v-if="isProActive">
+      <div class="w-full max-w-2xl flex items-center mb-2 gap-3">
+        <label class="text-base font-medium text-dark w-32">
+          {{ __("License Key", "all-in-one-woodiscount") }}
+        </label>
+
+        <el-input
+          v-model="licenseKey"
+          style="width: 300px"
+          :placeholder="__('Enter License Key', 'all-in-one-woodiscount')" />
+
+        <el-button
+          :type="licenseStatus === 'valid' ? 'danger' : 'primary'"
+          :loading="isLoadingLicense"
+          @click="handleAction">
+          {{
+            licenseStatus === "valid"
+              ? __("Deactivate", "all-in-one-woodiscount")
+              : __("Activate", "all-in-one-woodiscount")
+          }}
+        </el-button>
+      </div>
+
+      <div
+        v-if="licenseStatus !== 'unknown'"
+        class="pl-32 text-sm mt-1 text-gray-700">
+        <template v-if="licenseStatus === 'valid'">
+          ✅ {{ __("Your license is active", "all-in-one-woodiscount") }}
+        </template>
+        <template v-else>
+          ❌ {{ __("License is invalid or expired", "all-in-one-woodiscount") }}
+        </template>
+      </div>
     </div>
 
-    <!-- Spacer to Push Button to the Bottom -->
-    <div class="flex-grow"></div>
+    <!-- General Settings -->
+    <div class="mt-6">
+      <!-- Discount Based On -->
+      <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
+        <label class="text-base font-medium text-dark w-32">
+          {{ __("Rule Apply on", "all-in-one-woodiscount") }}
+        </label>
 
-    <!-- Save Button -->
-    <div class="w-full">
-      <button
-        @click="saveSettings"
-        class="bg-blue-600 text-white font-medium py-3 px-6 rounded-md hover:bg-blue-700 transition w-full md:w-auto">
-        {{ __("Save Changes", "all-in-one-woodiscount") }}
-      </button>
+        <el-select
+          v-model="saveSettingsData.discountBasedOn"
+          size="default"
+          style="width: 240px"
+          popper-class="custom-dropdown">
+          <el-option
+            :value="'regular_price'"
+            :label="__('Regular Price', 'all-in-one-woodiscount')" />
+          <el-option
+            :value="'sale_price'"
+            :label="__('Sale Price', 'all-in-one-woodiscount')" />
+        </el-select>
+      </div>
+
+      <!-- Order Page Label -->
+      <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
+        <label
+          class="text-base font-medium text-dark w-32 flex items-center gap-2">
+          {{ __("Order Label", "all-in-one-woodiscount") }}
+          <div class="group relative">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="
+                __(
+                  'Show a label on admin order page if discount applied',
+                  'all-in-one-woodiscount'
+                )
+              "
+              placement="top"
+              popper-class="custom-tooltip">
+              <QuestionMarkCircleIcon
+                class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            </el-tooltip>
+          </div>
+        </label>
+
+        <el-switch
+          v-model="saveSettingsData.orderPageLabel"
+          inline-prompt
+          :active-text="__('On', 'all-in-one-woodiscount')"
+          :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+      </div>
+
+      <!-- Save Settings Button -->
+      <div class="mt-4">
+        <el-button
+          type="primary"
+          :loading="isLoadingSettings"
+          @click="handleSaveSettings">
+          {{ __("Save Settings", "all-in-one-woodiscount") }}
+        </el-button>
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped></style>

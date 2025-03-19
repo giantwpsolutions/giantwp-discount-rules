@@ -203,14 +203,8 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
         }
 
         if ($updated) {
-            // Save Updated Data
-            $saved = update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
-
-            if ($saved) {
-                return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'all-in-one-woodiscount')], 200);
-            } else {
-                return new WP_Error('save_failed', __('Failed to save data.', 'all-in-one-woodiscount'), ['status' => 500]);
-            }
+            update_option('aio_flatpercentage_discount', maybe_serialize($existing_data));
+            return new WP_REST_Response(['success' => true, 'message' => __('Data updated successfully.', 'all-in-one-woodiscount')], 200);
         }
 
         return new WP_Error('not_found', __('Discount rule not found.', 'all-in-one-woodiscount'), ['status' => 404]);

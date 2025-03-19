@@ -6,6 +6,7 @@ use AIO_WooDiscount\Discount\Condition\Conditions;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuyProduct;
 use AIO_WooDiscount\Discount\Manager\Discount_Helper;
+use AIO_WooDiscount\Discount\UsageTrack\Bogo_Usage_Handler;
 
 /**
  * Class Bogo_Discount
@@ -35,7 +36,11 @@ class Bogo_Discount
         }
 
         if (is_admin() && !defined('DOING_AJAX')) return;
-        if (!$cart || $cart->is_empty()) return;
+        if (!$cart || $cart->is_empty()) {
+            WC()->session->__unset('_aio_bogo_applied_rules');
+            return;
+        }
+
 
         // Clear previous BOGO data
         foreach ($cart->get_cart() as $key => $item) {
@@ -66,12 +71,23 @@ class Bogo_Discount
 
             $free_or_discount = $rule['freeOrDiscount'] ?? 'freeproduct';
 
+            $applied = false;
+
             if ($free_or_discount === 'freeproduct') {
                 $this->apply_free_item($rule);
+                $applied = true;
             } else {
                 $this->mark_discounted_items($rule);
+                $applied = true;
             }
-            WC()->session->set('_aio_bogo_applied_rules', [$rule['id']]);
+
+            if ($applied) {
+                WC()->session->set('_aio_bogo_applied_rules', [$rule['id']]);
+                Bogo_Usage_Handler::instance();
+            } else {
+                WC()->session->__unset('_aio_bogo_applied_rules');
+            }
+
 
             break;
         }
@@ -189,6 +205,9 @@ class Bogo_Discount
      */
     public function adjust_discounted_items($cart)
     {
+        $settings          = maybe_unserialize(get_option('aio_woodiscount_settings', []));
+        $use_regular_price = isset($settings['discountBasedOn']) && $settings['discountBasedOn'] === 'regular_price';
+
         foreach ($cart->get_cart() as $key => $item) {
             if (!empty($item['aio_bogo_free_item'])) {
                 $item['data']->set_price(0);
@@ -197,29 +216,27 @@ class Bogo_Discount
 
             if (!empty($item['aio_bogo_discount'])) {
                 $info            = $item['aio_bogo_discount'];
-                $original_price  = $item['data']->get_price();
+                $product         = $item['data'];
+                $original_price  = $use_regular_price && $product instanceof \WC_Product ? $product->get_regular_price() : $product->get_price();
                 $qty_to_discount = $info['qty'] ?? 0;
 
                 $discount = $info['type'] === 'percentage'
                     ? ($original_price * $info['value'] / 100)
-                    :     $info['value'];
+                    :  $info['value'];
 
                 if ($info['max'] > 0) {
                     $discount = min($discount, $info['max']);
                 }
 
-                $new_price = $original_price;
                 if ($item['quantity'] > $qty_to_discount) {
                     $full_price_qty   = $item['quantity'] - $qty_to_discount;
                     $discounted_total = $qty_to_discount * ($original_price - $discount);
                     $normal_total     = $full_price_qty * $original_price;
                     $blended_price    = ($discounted_total + $normal_total) / $item['quantity'];
-                    $new_price        = $blended_price;
+                    $item['data']->set_price($blended_price);
                 } else {
-                    $new_price = $original_price - $discount;
+                    $item['data']->set_price($original_price - $discount);
                 }
-
-                $item['data']->set_price($new_price);
             }
         }
     }

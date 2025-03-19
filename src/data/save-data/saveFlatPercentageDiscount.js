@@ -52,7 +52,7 @@ export const saveFlatPercentageDiscount = {
 
 
 
-            console.log("Final Conditions Before Sending:", formattedConditions);
+            // console.log("Final Conditions Before Sending:", formattedConditions);
 
             const generateUniqueId = () => `dsc-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
 
@@ -110,7 +110,7 @@ export const saveFlatPercentageDiscount = {
 */
     async updateDiscount(id, updatedFields) {
         try {
-            console.log("📡 Sending API Request to update discount:", id, updatedFields);
+            // console.log("📡 Sending API Request to update discount:", id, updatedFields);
 
             const payload = {
                 ...updatedFields,
@@ -127,7 +127,7 @@ export const saveFlatPercentageDiscount = {
                 body: JSON.stringify(payload),
             });
 
-            console.log("Received Response from API:", response);
+            // console.log("Received Response from API:", response);
 
             if (!response || typeof response !== "object" || !response.success) {
                 console.error("❌ API Response Error:", response);

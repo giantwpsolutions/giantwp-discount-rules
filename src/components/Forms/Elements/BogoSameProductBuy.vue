@@ -105,7 +105,7 @@ const updateBogoApplies = () => {
 watch(
   buyProductsBogoSame,
   (newVal) => {
-    console.log("Child Conditions Updated:", newVal);
+    // console.log("Child Conditions Updated:", newVal);
     emit("update:value", [...newVal]);
   },
   { deep: true } // Single watcher handles all changes
@@ -117,10 +117,10 @@ watch(bogoApplies, () => {
 
 // Single debounced watcher for all changes
 const emitUpdates = debounce(() => {
-  console.log(
-    "Child Conditions (Debounced):",
-    JSON.parse(JSON.stringify(buyProductsBogoSame.value))
-  );
+  // console.log(
+  //   "Child Conditions (Debounced):",
+  //   JSON.parse(JSON.stringify(buyProductsBogoSame.value))
+  // );
   emit("update:value", [...buyProductsBogoSame.value]);
 }, 300);
 
@@ -137,9 +137,7 @@ watch(
   <div class="space-y-4 max-w-full my-6 border-t border-b py-6">
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
-        <!-- Heading Text -->
         <span>{{ __("Buy Product", "all-in-one-woodiscount") }}</span>
-        <!-- Tooltip Icon -->
         <el-tooltip
           class="box-item"
           effect="dark"
@@ -157,27 +155,25 @@ watch(
       </div>
     </h3>
 
+    <!-- Rule Applies -->
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
         {{ __("Rules apply to products if matches", "all-in-one-woodiscount") }}
       </label>
-      <div class="group relative">
-        <el-radio-group v-model="bogoApplies" @change="updateBogoApplies">
-          <el-radio-button
-            :label="__('Any', 'all-in-one-woodiscount')"
-            value="any" />
-          <el-radio-button
-            :label="__('All', 'all-in-one-woodiscount')"
-            value="all" />
-        </el-radio-group>
-      </div>
+      <el-radio-group v-model="bogoApplies" @change="updateBogoApplies">
+        <el-radio-button
+          :label="__('Any', 'all-in-one-woodiscount')"
+          value="any" />
+        <el-radio-button
+          :label="__('All', 'all-in-one-woodiscount')"
+          value="all" />
+      </el-radio-group>
     </div>
 
-    <!-- All Fields  -->
+    <!-- Fields -->
     <div
       v-for="(buyProductBogoSame, index) in buyProductsBogoSame"
       :key="buyProductBogoSame.id">
-      <!-- Add /Or text -->
       <div v-if="index > 0" class="mb-2">
         <span class="text-black italic text-sm">
           {{
@@ -187,14 +183,15 @@ watch(
           }}
         </span>
       </div>
-      <div class="flex flex-wrap gap-2">
-        <!-- Field 1: 30% width -->
-        <div class="w-[25%]">
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <!-- Field 1 -->
+        <div>
           <el-select
             v-model="buyProductBogoSame.field"
             clearable
             @change="updateBuyProductsBogoSame"
-            style="">
+            class="w-full">
             <el-option
               v-for="item in bogoBuyProductOptions"
               :key="item.value"
@@ -203,13 +200,13 @@ watch(
           </el-select>
         </div>
 
-        <!-- Field 2: 25% width -->
-        <div class="w-[20%]">
+        <!-- Field 2 -->
+        <div>
           <el-select
             v-if="getBogoBuyProductOperator(buyProductBogoSame.field)?.length"
             v-model="buyProductBogoSame.operator"
             @change="updateBuyProductsBogoSame"
-            style="">
+            class="w-full">
             <el-option
               v-for="item in getBogoBuyProductOperator(
                 buyProductBogoSame.field
@@ -220,39 +217,39 @@ watch(
           </el-select>
         </div>
 
-        <!-- Field 3: 35% width -->
-        <div class="w-[30%]">
+        <!-- Field 3 -->
+        <div>
           <el-select-v2
             v-if="bogoSameProductBuyIsDropdown(buyProductBogoSame.field)"
             v-model="buyProductBogoSame.value"
             @change="updateBuyProductsBogoSame"
             :options="getBogoSameProductDropdown(buyProductBogoSame.field)"
-            :placeholder="__('Select', 'all-in-one-woodiscount')"
             filterable
             multiple
             :loading="isLoadingProducts"
-            class="custom-select-v2" />
+            class="custom-select-v2 w-full"
+            :placeholder="__('Select', 'all-in-one-woodiscount')" />
 
           <el-input
             v-else-if="bogoSameProductisPricingField(buyProductBogoSame.field)"
             v-model="buyProductBogoSame.value"
-            @change="updateBuyProductsBogoSame">
-            <template #append
-              ><span v-html="generalData.currency_symbol || '$'"></span
-            ></template>
+            @change="updateBuyProductsBogoSame"
+            class="w-full">
+            <template #append>
+              <span v-html="generalData.currency_symbol || '$'"></span>
+            </template>
           </el-input>
 
           <el-input-number
             v-else-if="bogoSameProductisNumberField(buyProductBogoSame.field)"
             v-model="buyProductBogoSame.value"
             @change="updateBuyProductsBogoSame"
-            class="mx-4"
             controls-position="right"
-            style="width: -webkit-fill-available" />
+            class="w-full" />
         </div>
 
-        <!-- Field 4: 10% width with icons -->
-        <div class="w-[20%] flex items-center gap-4 border-gray-300 rounded">
+        <!-- Field 4 -->
+        <div class="flex items-center">
           <el-icon
             @click="removeProductBogoSame(buyProductBogoSame.id)"
             size="20px"
@@ -263,10 +260,11 @@ watch(
         </div>
       </div>
     </div>
-    <!-- Add Product Assign Button Button -->
+
+    <!-- Add Button -->
     <button
       @click="addProductBogoSame"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-4">
       {{ __("Assign Product", "all-in-one-woodiscount") }}
     </button>
   </div>

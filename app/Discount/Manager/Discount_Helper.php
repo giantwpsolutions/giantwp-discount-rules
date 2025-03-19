@@ -17,9 +17,16 @@ class Discount_Helper
             return true;
         }
 
-        $now   = current_time('timestamp');
-        $start = strtotime($rule['schedule']['startDate'] ?? '');
-        $end   = strtotime($rule['schedule']['endDate'] ?? '');
+        $now = current_time('timestamp');
+
+        // Use fallback if empty
+        $start = !empty($rule['schedule']['startDate'])
+            ? strtotime($rule['schedule']['startDate'])
+            : (!empty($rule['createdAt']) ? strtotime($rule['createdAt']) : 0);
+
+        $end = !empty($rule['schedule']['endDate'])
+            ? strtotime($rule['schedule']['endDate'])
+            : PHP_INT_MAX; // No end date means it's always active after start
 
         return ($now >= $start && $now <= $end);
     }
@@ -37,7 +44,12 @@ class Discount_Helper
             return true;
         }
 
-        $limit = intval($rule['usageLimits']['usageLimitsCount'] ?? 0);
+        // If the field is not set or is 0 or empty, treat it as unlimited
+        if (empty($rule['usageLimits']['usageLimitsCount'])) {
+            return true;
+        }
+
+        $limit = intval($rule['usageLimits']['usageLimitsCount']);
         $used  = intval($rule['usedCount'] ?? 0);
 
         return $used < $limit;

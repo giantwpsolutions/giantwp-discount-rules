@@ -2,6 +2,7 @@
 
 namespace AIO_WooDiscount\Discount\UsageTrack;
 
+use AIO_WooDiscount\Traits\SingletonTrait;
 use WC_Order;
 use WC;
 
@@ -15,6 +16,7 @@ use WC;
 class Bogo_Usage_Handler
 {
 
+    use SingletonTrait;
     /**
      * Constructor - Hooks into WooCommerce events for Bogo tracking.
      */

@@ -4,8 +4,6 @@ namespace AIO_WooDiscount\Api;
 
 use AIO_WooDiscount\Api\Controllers\Discounts\All_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Discounts\Bogo_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\Bulk_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\BuyXGetY_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Shared\General_Data;
 use AIO_WooDiscount\Api\Controllers\Shared\Payment_Gateways_Controller;
 use AIO_WooDiscount\Api\Controllers\Shared\Products_Category_Controller;
@@ -14,7 +12,7 @@ use AIO_WooDiscount\Api\Controllers\Shared\Products_Tag_Controller;
 use AIO_WooDiscount\Api\Controllers\Shared\Shipping_Zone_Controller;
 use AIO_WooDiscount\Api\Controllers\Shared\Users_Controller;
 use AIO_WooDiscount\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\Shipping_Discount_Controller;
+use AIO_WooDiscount\Api\Controllers\Discounts\Settings_Controller;
 
 /**
  * Rest API Class
@@ -58,16 +56,10 @@ class Api
         $Bogo_Discount_Controller = new Bogo_Discount_Controller();
         $Bogo_Discount_Controller->register_routes();
 
+        $settings = new Settings_Controller();
+        $settings->register_routes();
+
         $all_discount = new All_Discount_Controller();
         $all_discount->register_routes();
-
-        $shipping_discount = new Shipping_Discount_Controller();
-        $shipping_discount->register_routes();
-
-        $buyxgety_discount = new BuyXGetY_Discount_Controller();
-        $buyxgety_discount->register_routes();
-
-        $bulk_discount = new Bulk_Discount_Controller();
-        $bulk_discount->register_routes();
     }
 }
