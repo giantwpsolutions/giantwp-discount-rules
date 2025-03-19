@@ -124,7 +124,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
         }
 
         //Sanitize received data
-        $sanitized_data = FlatPercentage_Sanitization_Helper::FlatPercentage_Data_Sanitization($params);
+        $sanitized_data = FlatPercentage_Sanitization_Helper::flatPercentage_Data_Sanitization($params);
 
         if (is_wp_error($sanitized_data)) {
             return $sanitized_data;
@@ -188,7 +188,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
                     $discount['status'] = sanitize_text_field($params['status']);
                 } else {
                     // Sanitize the received data for a full update
-                    $sanitized_data = FlatPercentage_Sanitization_Helper::FlatPercentage_Data_Sanitization($params);
+                    $sanitized_data = FlatPercentage_Sanitization_Helper::flatPercentage_Data_Sanitization($params);
                     if (is_wp_error($sanitized_data)) {
                         return $sanitized_data;
                     }
@@ -250,7 +250,6 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller
             $coupon = new \WC_Coupon($deleted_coupon_code);
             if ($coupon->get_id()) {
                 wp_delete_post($coupon->get_id(), true); // true = force delete
-                error_log("🧹 Deleted WooCommerce coupon: {$deleted_coupon_code}");
             }
         }
 

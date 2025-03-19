@@ -15,7 +15,7 @@ class FlatPercentage_Sanitization_Helper
      * @param array $data The raw flat/percentage discount data.
      * @return array The sanitized data.
      */
-    public static function FlatPercentage_Data_Sanitization($data)
+    public static function flatPercentage_Data_Sanitization($data)
     {
         if (!is_array($data)) {
             return [];
