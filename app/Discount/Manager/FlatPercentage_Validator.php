@@ -1,50 +1,66 @@
 <?php
+  /**
+ * Flat/Percentage Discount Validator.
+ *
+ * Validates auto-generated coupons for flat/percentage discounts based on
+ * schedule, usage limits, and conditional logic.
+ *
+ * @package AIO_WooDiscount\Discount\Manager
+ */
 
 namespace AIO_WooDiscount\Discount\Manager;
 
-use AIO_WooDiscount\Discount\Condition\Conditions;
-use AIO_WooDiscount\Traits\SingletonTrait;
-use Engramium\Optimator\Traits\Singleton;
-
 defined('ABSPATH') || exit;
 
-class FlatPercentage_Validator
-{
+use AIO_WooDiscount\Discount\Condition\Conditions;
+use AIO_WooDiscount\Traits\SingletonTrait;
+
+/**
+ * Class FlatPercentage_Validator
+ */
+class FlatPercentage_Validator {
+
     use SingletonTrait;
 
-    public function __construct()
-    {
-        add_filter('woocommerce_coupon_is_valid', [$this, 'validate_coupon_conditions'], 10, 2);
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        add_filter( 'woocommerce_coupon_is_valid', [ $this, 'validate_coupon_conditions' ], 10, 2 );
     }
 
-    /**
-     * Prevent usage if conditions are not met (manual usage).
+     /**
+     * Validates coupon against rule conditions, usage limits and schedule.
+     *
+     * @param bool      $valid  Whether the coupon is valid.
+     * @param \WC_Coupon $coupon Coupon object.
+     *
+     * @return bool
      */
-    public function validate_coupon_conditions($valid, $coupon)
-    {
-        if (!$coupon instanceof \WC_Coupon) return $valid;
+    public function validate_coupon_conditions( $valid, $coupon ) {
+        if ( ! $coupon instanceof \WC_Coupon ) return $valid;
 
         // Only process hidden plugin-generated coupons
-        if (!$coupon->get_meta('aio_is_hidden_coupon')) return $valid;
+        if ( ! $coupon->get_meta( 'aio_is_hidden_coupon' )) return $valid;
 
-        $rule_id = $coupon->get_meta('aio_rule_id');
-        if (!$rule_id) return false;
+        $rule_id = $coupon->get_meta( 'aio_rule_id' );
+        if ( ! $rule_id ) return false;
 
-        $rules = maybe_unserialize(get_option('aio_flatpercentage_discount', [])) ?: [];
+        $rules = maybe_unserialize( get_option( 'aio_flatpercentage_discount', [] ) ) ?: [];
 
-        foreach ($rules as $rule) {
+        foreach ( $rules as $rule ) {
             if ($rule['id'] !== $rule_id) continue;
 
-            // ✅ Check schedule
-            if (!self::is_schedule_active($rule)) return false;
+            //Check schedule
+            if ( ! Discount_Helper::is_schedule_active( $rule ) ) return false;
 
-            // ✅ Check usage limit
-            if (!self::check_usage_limit($rule)) return false;
+            // Check usage limit
+            if ( ! Discount_Helper::check_usage_limit( $rule ) ) return false;
 
-            // ✅ Check conditions
+            // Check conditions
             if (
-                isset($rule['enableConditions']) && $rule['enableConditions'] &&
-                !Conditions::check_all(WC()->cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all')
+                isset( $rule['enableConditions'] ) && $rule['enableConditions'] &&
+                !Conditions::check_all( WC()->cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all' )
             ) {
                 return false;
             }
@@ -55,28 +71,4 @@ class FlatPercentage_Validator
         return false;
     }
 
-    private static function is_schedule_active($rule): bool
-    {
-        if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
-            return true;
-        }
-
-        $now   = current_time('timestamp');
-        $start = strtotime($rule['schedule']['startDate'] ?? '');
-        $end   = strtotime($rule['schedule']['endDate'] ?? '');
-
-        return ($now >= $start && $now <= $end);
-    }
-
-    private static function check_usage_limit($rule): bool
-    {
-        if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {
-            return true;
-        }
-
-        $limit = intval($rule['usageLimits']['usageLimitsCount'] ?? 0);
-        $used  = intval($rule['usedCount'] ?? 0);
-
-        return $used < $limit;
-    }
 }

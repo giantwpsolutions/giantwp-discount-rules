@@ -1,19 +1,26 @@
 <?php
+  /**
+ * Product List REST API Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
 
+
 /**
- * Product Controller Class
+ * Class Products_Controller
+ *
+ * Retrieves a list of WooCommerce products (including variations).
  */
+class Products_Controller extends WP_REST_Controller {
 
-class Products_Controller extends WP_REST_Controller
-{
-
-    public function __construct()
-    {
+    public function __construct() {
         $this->namespace = 'aio-woodiscount/v2';
         $this->rest_base = 'products';
     }
@@ -23,16 +30,15 @@ class Products_Controller extends WP_REST_Controller
      *
      * @return void
      */
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_products_item'],
-                    'permission_callback' => [$this, 'get_products_item_permission'],
+                    'callback'            => [ $this, 'get_products_item' ],
+                    'permission_callback' => [ $this, 'get_products_item_permission' ],
                 ]
             ]
         );
@@ -45,9 +51,8 @@ class Products_Controller extends WP_REST_Controller
      * @param  \WP_REST_Request $request The request object.
      * @return bool True if the user has permission, false otherwise.
      */
-    public function get_products_item_permission()
-    {
-        if (current_user_can('manage_woocommerce')) {
+    public function get_products_item_permission() {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
             return true;
         }
 
@@ -63,26 +68,25 @@ class Products_Controller extends WP_REST_Controller
      * @return \WP_Rest_Response|WP_Error
      */
 
-    public function get_products_item($request)
-    {
+    public function get_products_item( $request ) {
         $args = [
             'status' => 'publish',
             'limit'  => -1,
         ];
 
         // Get all products
-        $products = wc_get_products($args);
+        $products = wc_get_products( $args );
 
         $data = [];
-        foreach ($products as $product) {
+        foreach ( $products as $product ) {
             // Check if the product has variations
-            if ($product->is_type('variable')) {
+            if ( $product->is_type( 'variable' ) ) {
                 $variations = $product->get_children(); // Get variation IDs
 
                 $variation_data = [];
-                foreach ($variations as $variation_id) {
-                    $variation = wc_get_product($variation_id);
-                    if ($variation) {
+                foreach ( $variations as $variation_id ) {
+                    $variation = wc_get_product( $variation_id );
+                    if ( $variation ) {
                         $variation_data[] = [
                             'id'         => $variation->get_id(),
                             'name'       => $variation->get_name(),
@@ -109,6 +113,6 @@ class Products_Controller extends WP_REST_Controller
             }
         }
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 }

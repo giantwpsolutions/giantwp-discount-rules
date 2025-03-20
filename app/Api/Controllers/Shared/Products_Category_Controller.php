@@ -1,6 +1,13 @@
 <?php
+  /**
+ * Product Categories REST API Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
@@ -8,14 +15,11 @@ use WP_REST_Server;
 /**
  * Product Category Controller Class
  */
+class Products_Category_Controller extends WP_REST_Controller {
 
-class Products_Category_Controller extends WP_REST_Controller
-{
+    public function __construct() {
 
-    public function __construct()
-    {
         $this->namespace = 'aio-woodiscount/v2';
-
         $this->rest_base = 'categories';
     }
 
@@ -25,16 +29,15 @@ class Products_Category_Controller extends WP_REST_Controller
      *
      * @return void
      */
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_product_categories'],
-                    'permission_callback' => [$this, 'get_category_permission'],
+                    'callback'            => [ $this, 'get_product_categories' ],
+                    'permission_callback' => [ $this, 'get_category_permission' ],
 
                 ]
             ]
@@ -51,15 +54,13 @@ class Products_Category_Controller extends WP_REST_Controller
      * 
      */
 
-    public function get_category_permission()
-    {
-        if (current_user_can('manage_woocommerce')) {
+    public function get_category_permission() {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
             return true;
         }
 
         return true;
     }
-
 
     /** 
      * Retrieves list of categories
@@ -68,45 +69,49 @@ class Products_Category_Controller extends WP_REST_Controller
      *
      * @return \WP_Rest_Response|WP_Error
      */
-    public function get_product_categories($request)
-    {
+    public function get_product_categories( $request ) {
         $args = [
             'taxonomy'     => 'product_cat',
             'hide_empty'   => false,
             'hierarchical' => true,
         ];
 
-        $categories = get_terms($args);
+        $categories = get_terms( $args );
 
-        if (is_wp_error($categories)) {
-            return rest_ensure_response($categories);
+        if ( is_wp_error( $categories ) ) {
+            return rest_ensure_response( $categories );
         }
 
-        $data = $this->format_categories($categories);
+        $data = $this->format_categories( $categories );
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 
+
     /**
-     * Format categories with parent-child structure.
+     * Recursively formats categories into a parent-child hierarchy with labels.
+     *
+     * @param array  $categories List of term objects.
+     * @param int    $parent_id  Parent category ID.
+     * @param string $prefix     Prefix for child labels.
+     * @return array
      */
-    private function format_categories($categories, $parent_id = 0, $prefix = '')
-    {
+    private function format_categories( $categories, $parent_id = 0, $prefix = '' ) {
         $output = [];
 
-        foreach ($categories as $category) {
-            if ($category->parent == $parent_id) {
+        foreach ( $categories as $category ) {
+            if ( $category->parent == $parent_id ) {
                 $formatted_category = [
                     'id'   => $category->term_id,
                     'name' => $prefix . $category->name,
                     'slug' => $category->slug,
                 ];
 
-                $children = $this->format_categories($categories, $category->term_id, $prefix . $category->name . ' ⇒ ');
+                $children = $this->format_categories( $categories, $category->term_id, $prefix . $category->name . ' ⇒ ' );
                 $output[] = $formatted_category;
 
-                if (! empty($children)) {
-                    $output = array_merge($output, $children);
+                if ( ! empty( $children ) ) {
+                    $output = array_merge( $output, $children );
                 }
             }
         }

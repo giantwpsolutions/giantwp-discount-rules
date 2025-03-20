@@ -1,18 +1,28 @@
 <?php
+/**
+ * Users and Roles REST API Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
 
 /**
- * Users Controller Class
+ * Class Users_Controller
+ *
+ * Provides endpoints for listing users and user roles.
  */
-class Users_Controller extends WP_REST_Controller
-{
+class Users_Controller extends WP_REST_Controller {
 
-    public function __construct()
-    {
+    /**
+    * Constructor.
+    */
+    public function __construct() {
         $this->namespace = 'aio-woodiscount/v2';
         $this->rest_base = 'users';
     }
@@ -22,16 +32,15 @@ class Users_Controller extends WP_REST_Controller
      * Registers the routes for the object
      */
 
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_users'],
-                    'permission_callback' => [$this, 'get_users_permission'],
+                    'callback'            => [ $this, 'get_users' ],
+                    'permission_callback' => [ $this, 'get_users_permission' ],
                 ]
             ]
         );
@@ -42,8 +51,8 @@ class Users_Controller extends WP_REST_Controller
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_roles'],
-                    'permission_callback' => [$this, 'get_users_permission'],
+                    'callback'            => [ $this, 'get_roles' ],
+                    'permission_callback' => [ $this, 'get_users_permission' ],
                 ]
             ]
         );
@@ -56,9 +65,8 @@ class Users_Controller extends WP_REST_Controller
      *@return bool True if the user has permission, false otherwise.
      */
 
-    public function get_users_permission()
-    {
-        if (current_user_can('manage_woocommerce')) {
+    public function get_users_permission() {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
             return true;
         };
 
@@ -72,24 +80,23 @@ class Users_Controller extends WP_REST_Controller
      * @return \WP_Rest_Response|WP_Error
      */
 
-    public function get_users($request)
-    {
-        $role = $request->get_param('role');
+    public function get_users( $request ) {
+        $role = $request->get_param( 'role' );
         $args = [
             'orderby' => 'display_name',
             'order'   => 'ASC',
             'number'  => 100,
         ];
 
-        if (!empty($role)) {
+        if ( ! empty( $role )) {
             $args['role'] = $role;
         }
 
-        $user_query = new \WP_User_Query($args);
+        $user_query = new \WP_User_Query( $args );
         $users      = $user_query->get_results();
 
         $data = [];
-        foreach ($users as $user) {
+        foreach ( $users as $user ) {
             $data[] = [
                 'id'           => $user->ID,
                 'display_name' => $user->display_name,
@@ -98,7 +105,7 @@ class Users_Controller extends WP_REST_Controller
             ];
         }
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 
 
@@ -106,28 +113,30 @@ class Users_Controller extends WP_REST_Controller
      * Checks if a given request has access to read roles.
      */
 
-    public function get_roles_permission()
-    {
-        return current_user_can('manage_options');
+    public function get_roles_permission() {
+
+        return current_user_can( 'manage_options' );
     }
 
 
     /**
-     * Retrieves a list of all roles on the site
+     * Retrieves a list of all user roles on the site.
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return \WP_REST_Response
      */
 
-    public function get_roles($request)
-    {
+    public function get_roles( $request ) {
         global $wp_roles;
 
-        if (!isset($wp_roles)) {
+        if ( ! isset( $wp_roles ) ) {
             $wp_roles = new \WP_Roles();
         }
 
         $roles = $wp_roles->roles;
 
         $data = [];
-        foreach ($roles as $role_key => $role) {
+        foreach ( $roles as $role_key => $role ) {
             $data[] = [
                 'key'         => $role_key,
                 'name'        => $role['name'],
@@ -135,6 +144,6 @@ class Users_Controller extends WP_REST_Controller
             ];
         }
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 }

@@ -1,12 +1,15 @@
 <?php
+  /**
+ * Condition Field Dispatcher.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Discount\Condition;
 
-
 defined('ABSPATH') || exit;
 
-class Condition_Fields
-{
+class Condition_Fields {
 
     /**
      * Checking 'cart_subtotal_price' condition.
@@ -19,9 +22,8 @@ class Condition_Fields
      *
      * @return bool True if the subtotal matches the condition, false otherwise.
      */
-    public static function cart_subtotal_price($cart_items, $condition)
-    {
-        if (!is_array($condition) || !isset($condition['field']) && !isset($condition['operator'])) {
+    public static function cart_subtotal_price( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['field'] ) && !isset( $condition['operator'] ) ) {
 
             return false;
         }
@@ -30,14 +32,14 @@ class Condition_Fields
         $raw_value   = $condition['value'] ?? [];
 
         // Handle value as scalar or array
-        $value = is_array($raw_value) ? $raw_value[0] : $raw_value;
+        $value = is_array( $raw_value ) ? $raw_value[0] : $raw_value;
 
         $subtotal = 0;
-        foreach ($cart_items as $item) {
+        foreach ( $cart_items as $item ) {
             $subtotal += $item['line_subtotal'] ?? 0;
         }
 
-        return compare_numaric_value($subtotal, $comparation, $value);
+        return aio_compare_numaric_value( $subtotal, $comparation, $value );
     }
 
 
@@ -52,18 +54,17 @@ class Condition_Fields
      *
      * @return bool True if quantity matches the condition, false otherwise.
      */
-    public static function cart_quantity($cart_items, $condition)
-    {
-        if (!is_array($condition) || !isset($condition['field']) && !isset($condition['operator'])) {
+    public static function cart_quantity( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['field']) && ! isset( $condition['operator'] ) ) {
             return false;
         }
 
         $quantity = 0;
-        foreach ($cart_items as $item) {
+        foreach ( $cart_items as $item ) {
             $quantity += $item['quantity'];
         }
 
-        return compare_numaric_value($quantity, $condition['operator'], $condition['value']);
+        return aio_compare_numaric_value( $quantity, $condition['operator'], $condition['value'] );
     }
 
 
@@ -82,16 +83,15 @@ class Condition_Fields
      *
      * @return bool True if total weight matches the condition, false otherwise.
      */
-    public static function cart_total_weight($cart_items, $condition)
-    {
-        if (!is_array($condition) || !isset($condition['operator'], $condition['value'])) {
+    public static function cart_total_weight( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) ) {
 
             return false;
         }
 
         $comparation = $condition['operator'];
         $raw_value   = $condition['value'];
-        $value       = is_array($raw_value) ? $raw_value[0] : $raw_value;
+        $value       = is_array( $raw_value ) ? $raw_value[0] : $raw_value;
 
         $total_weight = 0;
 
@@ -99,13 +99,13 @@ class Condition_Fields
             $product = $item['data'];      // WC_Product object
             $qty     = $item['quantity'];
 
-            if ($product instanceof \WC_Product) {
-                $weight        = floatval($product->get_weight());
+            if ( $product instanceof \WC_Product ) {
+                $weight        = floatval( $product->get_weight() );
                 $total_weight += $weight * $qty;
             }
         }
 
-        return compare_numaric_value($total_weight, $comparation, $value);
+        return aio_compare_numaric_value( $total_weight, $comparation, $value );
     }
 
 
@@ -122,28 +122,24 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function cart_item_regular_price($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value'])
-        ) {
+    public static function cart_item_regular_price( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) ) {
             return false;
         }
 
         $operator = $condition['operator'];
-        $value    = floatval($condition['value']);
+        $value    = floatval( $condition['value'] );
 
-        foreach ($cart_items as $item) {
-            if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
+        foreach ( $cart_items as $item ) {
+            if ( ! isset( $item['data']) || ! ( $item['data'] instanceof \WC_Product ) ) {
                 continue;
             }
 
             $product       = $item['data'];
-            $regular_price = floatval($product->get_regular_price());
+            $regular_price = floatval( $product->get_regular_price() );
 
 
-            if (compare_numaric_value($regular_price, $operator, $value)) {
+            if ( aio_compare_numaric_value( $regular_price, $operator, $value ) ) {
                 return true;
             }
         }
@@ -162,20 +158,17 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function cart_item_product($cart_items, $condition)
-    {
+    public static function cart_item_product( $cart_items, $condition ) {
         if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
+            ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] )
         ) {
             return false;
         }
 
         $product_ids_in_cart = [];
 
-        foreach ($cart_items as $item) {
-            if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
+        foreach ( $cart_items as $item ) {
+            if ( ! isset( $item['data'] ) || ! ( $item['data'] instanceof \WC_Product ) ) {
                 continue;
             }
 
@@ -185,18 +178,18 @@ class Condition_Fields
 
             // Add product ID and parent ID to cart list
             $product_ids_in_cart[] = $product_id;
-            if (!empty($parent_id)) {
+            if ( ! empty( $parent_id ) ) {
                 $product_ids_in_cart[] = $parent_id;
             }
         }
 
         // Ensure cart IDs are unique and condition value is array of integers
-        $product_ids_in_cart = array_unique(array_map('intval', $product_ids_in_cart));
-        $condition_ids       = array_map('intval', $condition['value']);
+        $product_ids_in_cart = array_unique( array_map( 'intval', $product_ids_in_cart ) );
+        $condition_ids       = array_map( 'intval', $condition['value'] );
         $operator            = $condition['operator'];
 
 
-        return compare_cart_items($product_ids_in_cart, $operator, $condition_ids);
+        return aio_compare_cart_items( $product_ids_in_cart, $operator, $condition_ids );
     }
 
 
@@ -210,36 +203,31 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function cart_item_variation($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function cart_item_variation( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
         $variation_ids_in_cart = [];
 
-        foreach ($cart_items as $item) {
-            if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
+        foreach ( $cart_items as $item ) {
+            if ( ! isset( $item['data']) || ! ( $item['data'] instanceof \WC_Product ) ) {
                 continue;
             }
 
             $product = $item['data'];
 
             // Only consider variations
-            if ($product->is_type('variation')) {
+            if ( $product->is_type( 'variation' ) ) {
                 $variation_ids_in_cart[] = $product->get_id();
             }
         }
 
-        $variation_ids_in_cart = array_unique(array_map('intval', $variation_ids_in_cart));
-        $condition_ids         = array_map('intval', $condition['value']);
+        $variation_ids_in_cart = array_unique( array_map( 'intval', $variation_ids_in_cart ) );
+        $condition_ids         = array_map( 'intval', $condition['value'] );
         $operator              = $condition['operator'];
 
-        return compare_cart_items($variation_ids_in_cart, $operator, $condition_ids);
+        return aio_compare_cart_items( $variation_ids_in_cart, $operator, $condition_ids );
     }
 
     /**
@@ -254,36 +242,31 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function cart_item_category($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function cart_item_category( $cart_items, $condition ) {
+        if ( ! is_array($condition) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value']) ) {
             return false;
         }
 
         $cart_category_ids = [];
 
-        foreach ($cart_items as $item) {
-            if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
+        foreach ( $cart_items as $item ) {
+            if ( ! isset($item['data']) || ! ( $item['data'] instanceof \WC_Product ) ) {
                 continue;
             }
 
             $product = $item['data'];
 
             // Get category IDs (include parent + subcategories)
-            $term_ids          = wc_get_product_term_ids($product->get_id(), 'product_cat');
-            $cart_category_ids = array_merge($cart_category_ids, $term_ids);
+            $term_ids          = wc_get_product_term_ids( $product->get_id(), 'product_cat' );
+            $cart_category_ids = array_merge( $cart_category_ids, $term_ids );
         }
 
-        $cart_category_ids = array_unique(array_map('intval', $cart_category_ids));
-        $condition_ids     = array_map('intval', $condition['value']);
+        $cart_category_ids = array_unique( array_map( 'intval', $cart_category_ids ) );
+        $condition_ids     = array_map( 'intval', $condition['value'] );
         $operator          = $condition['operator'];
 
 
-        return compare_cart_items($cart_category_ids, $operator, $condition_ids);
+        return aio_compare_cart_items( $cart_category_ids, $operator, $condition_ids );
     }
 
     /**
@@ -298,35 +281,30 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function cart_item_tag($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function cart_item_tag( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
         $tag_ids_in_cart = [];
 
-        foreach ($cart_items as $item) {
-            if (!isset($item['data']) || !($item['data'] instanceof \WC_Product)) {
+        foreach ( $cart_items as $item ) {
+            if ( ! isset( $item['data']) || ! ( $item['data'] instanceof \WC_Product ) ) {
                 continue;
             }
 
             $product = $item['data'];
 
             // Get tag IDs (term IDs) for this product
-            $term_ids        = wc_get_product_term_ids($product->get_id(), 'product_tag');
-            $tag_ids_in_cart = array_merge($tag_ids_in_cart, $term_ids);
+            $term_ids        = wc_get_product_term_ids( $product->get_id(), 'product_tag' );
+            $tag_ids_in_cart = array_merge( $tag_ids_in_cart, $term_ids );
         }
 
-        $tag_ids_in_cart = array_unique(array_map('intval', $tag_ids_in_cart));
-        $condition_ids   = array_map('intval', $condition['value']);
+        $tag_ids_in_cart = array_unique( array_map( 'intval', $tag_ids_in_cart ) );
+        $condition_ids   = array_map( 'intval', $condition['value'] );
         $operator        = $condition['operator'];
 
-        return compare_cart_items($tag_ids_in_cart, $operator, $condition_ids);
+        return aio_compare_cart_items( $tag_ids_in_cart, $operator, $condition_ids );
     }
 
 
@@ -341,30 +319,25 @@ class Condition_Fields
      *
      * @return bool True if the customer's order count matches the condition.
      */
-    public static function customer_order_count($cart_items, $condition)
-    {
-        if (
-            !is_user_logged_in() ||
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value'])
-        ) {
+    public static function customer_order_count( $cart_items, $condition ) {
+        if ( ! is_user_logged_in() || ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) ) {
             return false;
         }
 
         $user_id  = get_current_user_id();
         $operator = $condition['operator'];
-        $value    = is_array($condition['value']) ? intval($condition['value'][0]) : intval($condition['value']);
+        $value    = is_array( $condition['value'] ) ? intval( $condition['value'][0] ) : intval( $condition['value'] );
 
         $args = [
             'customer_id' => $user_id,
-            'status'      => ['wc-completed', 'wc-processing', 'wc-on-hold'],   // filter valid order statuses
+            'status'      => [ 'wc-completed', 'wc-processing', 'wc-on-hold' ],   // filter valid order statuses
             'return'      => 'ids',
         ];
 
-        $orders      = wc_get_orders($args);
-        $order_count = count($orders);
+        $orders      = wc_get_orders( $args );
+        $order_count = count( $orders );
 
-        return compare_numaric_value($order_count, $operator, $value);
+        return aio_compare_numaric_value( $order_count, $operator, $value );
     }
 
 
@@ -381,45 +354,39 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function customer_order_history_product($cart_items, $condition)
-    {
-        if (
-            !is_user_logged_in() ||
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function customer_order_history_product( $cart_items, $condition ) {
+        if ( ! is_user_logged_in() || ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] )){
             return false;
         }
 
         $user_id       = get_current_user_id();
         $operator      = $condition['operator'];
-        $condition_ids = array_map('intval', $condition['value']);  // Expected product IDs
+        $condition_ids = array_map( 'intval', $condition['value'] );  // Expected product IDs
 
         $args = [
             'customer_id' => $user_id,
-            'status'      => ['wc-completed', 'wc-processing'],   // Limit to valid orders
+            'status'      => [ 'wc-completed', 'wc-processing' ],   // Limit to valid orders
             'return'      => 'ids',
             'limit'       => -1,
         ];
 
-        $orders                = wc_get_orders($args);
+        $orders                = wc_get_orders( $args );
         $purchased_product_ids = [];
 
-        foreach ($orders as $order_id) {
-            $order = wc_get_order($order_id);
-            if (!$order) {
+        foreach ( $orders as $order_id ) {
+            $order = wc_get_order( $order_id );
+            if ( ! $order) {
                 continue;
             }
 
-            foreach ($order->get_items() as $item) {
-                if (!($item instanceof \WC_Order_Item_Product)) {
+            foreach ( $order->get_items() as $item ) {
+                if ( ! ( $item instanceof \WC_Order_Item_Product )) {
                     continue;
                 }
 
                 $product = $item->get_product();
 
-                if (!$product || !($product instanceof \WC_Product)) {
+                if ( ! $product || ! ( $product instanceof \WC_Product ) ) {
                     continue;
                 }
 
@@ -427,15 +394,15 @@ class Condition_Fields
                 $parent_id               = $product->get_parent_id();
                 $purchased_product_ids[] = $product_id;
 
-                if ($parent_id) {
+                if ( $parent_id ) {
                     $purchased_product_ids[] = $parent_id;
                 }
             }
         }
 
-        $purchased_product_ids = array_unique($purchased_product_ids);
+        $purchased_product_ids = array_unique( $purchased_product_ids );
 
-        return compare_cart_items($purchased_product_ids, $operator, $condition_ids);
+        return aio_compare_cart_items( $purchased_product_ids, $operator, $condition_ids );
     }
 
 
@@ -449,50 +416,44 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function customer_order_history_category($cart_items, $condition)
-    {
-        if (
-            !is_user_logged_in() ||
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function customer_order_history_category( $cart_items, $condition ) {
+        if ( ! is_user_logged_in() || ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value']) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
         $user_id         = get_current_user_id();
         $operator        = $condition['operator'];
-        $condition_ids   = array_map('intval', $condition['value']);
+        $condition_ids   = array_map( 'intval', $condition['value'] );
         $ordered_cat_ids = [];
 
         $args = [
             'customer_id' => $user_id,
-            'status'      => ['wc-completed', 'wc-processing'],
+            'status'      => [ 'wc-completed', 'wc-processing' ],
             'return'      => 'ids',
             'limit'       => -1,
         ];
 
-        $orders = wc_get_orders($args);
+        $orders = wc_get_orders( $args );
 
-        foreach ($orders as $order_id) {
-            $order = wc_get_order($order_id);
-            if (!$order) continue;
+        foreach ( $orders as $order_id ) {
+            $order = wc_get_order( $order_id );
+            if ( ! $order ) continue;
 
-            foreach ($order->get_items() as $item) {
-                if (!($item instanceof \WC_Order_Item_Product)) continue;
+            foreach ( $order->get_items() as $item ) {
+                if ( ! ( $item instanceof \WC_Order_Item_Product ) ) continue;
 
                 $product = $item->get_product();
-                if (!$product || !($product instanceof \WC_Product)) continue;
+                if ( ! $product || ! ( $product instanceof \WC_Product ) ) continue;
 
                 // Get product category IDs
-                $term_ids        = wc_get_product_term_ids($product->get_id(), 'product_cat');
-                $ordered_cat_ids = array_merge($ordered_cat_ids, $term_ids);
+                $term_ids        = wc_get_product_term_ids( $product->get_id(), 'product_cat' );
+                $ordered_cat_ids = array_merge( $ordered_cat_ids, $term_ids );
             }
         }
 
-        $ordered_cat_ids = array_unique($ordered_cat_ids);
+        $ordered_cat_ids = array_unique( $ordered_cat_ids );
 
-        return compare_cart_items($ordered_cat_ids, $operator, $condition_ids);
+        return aio_compare_cart_items( $ordered_cat_ids, $operator, $condition_ids );
     }
 
 
@@ -506,27 +467,22 @@ class Condition_Fields
      *
      * @return bool
      */
-    public static function payment_method($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function payment_method( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
         $operator         = $condition['operator'];
-        $expected_methods = array_map('sanitize_text_field', $condition['value']);
+        $expected_methods = array_map( 'sanitize_text_field', $condition['value'] );
 
         // Try both Woo default and plugin-specific session
-        $chosen_method = WC()->session->get('chosen_payment_method') ?: WC()->session->get('aio_selected_payment_method');
+        $chosen_method = WC()->session->get( 'chosen_payment_method' ) ?: WC()->session->get( 'aio_selected_payment_method' );
 
-        if (empty($chosen_method)) {
+        if ( empty( $chosen_method ) ) {
             return false;
         }
 
-        return compare_list($chosen_method, $operator, $expected_methods);
+        return aio_compare_list( $chosen_method, $operator, $expected_methods );
     }
 
     /**
@@ -539,19 +495,14 @@ class Condition_Fields
      *
      * @return bool True if condition passes.
      */
-    public static function customer_is_logged_in($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator']) ||
-            !in_array($condition['operator'], ['logged_in', 'not_logged_in'], true)
-        ) {
+    public static function customer_is_logged_in( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'] ) || ! in_array( $condition['operator'], ['logged_in', 'not_logged_in'], true ) ) {
             return false;
         }
 
         $is_logged_in = is_user_logged_in();
 
-        return $condition['operator'] === 'logged_in' ? $is_logged_in : !$is_logged_in;
+        return $condition['operator'] === 'logged_in' ? $is_logged_in : ! $is_logged_in;
     }
 
     /**
@@ -564,24 +515,19 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function customer_role($cart_items, $condition)
-    {
-        if (
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function customer_role( $cart_items, $condition ) {
+        if ( ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
-        if (!is_user_logged_in()) {
+        if ( ! is_user_logged_in() ) {
             return false;
         }
 
         $current_user = wp_get_current_user();
         $user_roles   = (array) $current_user->roles;
 
-        return compare_list($user_roles, $condition['operator'], $condition['value']);
+        return aio_compare_list( $user_roles, $condition['operator'], $condition['value'] );
     }
 
     /**
@@ -594,19 +540,13 @@ class Condition_Fields
      *
      * @return bool True if condition passes, false otherwise.
      */
-    public static function specific_customer($cart_items, $condition)
-    {
-        if (
-            !is_user_logged_in() ||
-            !is_array($condition) ||
-            !isset($condition['operator'], $condition['value']) ||
-            !is_array($condition['value'])
-        ) {
+    public static function specific_customer( $cart_items, $condition ) {
+        if ( ! is_user_logged_in() || ! is_array( $condition ) || ! isset( $condition['operator'], $condition['value'] ) || ! is_array( $condition['value'] ) ) {
             return false;
         }
 
         $current_user_id = get_current_user_id();
 
-        return compare_list($current_user_id, $condition['operator'], $condition['value']);
+        return aio_compare_list( $current_user_id, $condition['operator'], $condition['value'] );
     }
 }

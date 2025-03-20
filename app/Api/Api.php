@@ -1,6 +1,13 @@
 <?php
+    /**
+ * Checkout AJAX Handler for AIO WooDiscount.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api;
+
+defined( 'ABSPATH' ) || exit;
 
 use AIO_WooDiscount\Api\Controllers\Discounts\All_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Discounts\Bogo_Discount_Controller;
@@ -14,19 +21,26 @@ use AIO_WooDiscount\Api\Controllers\Shared\Users_Controller;
 use AIO_WooDiscount\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
 use AIO_WooDiscount\Api\Controllers\Discounts\Settings_Controller;
 
-/**
- * Rest API Class
- */
-class Api
-{
 
-    public function __construct()
-    {
-        add_action('rest_api_init', [$this, 'aio_register_api']);
+/**
+ * Registers all REST API routes.
+ */
+class Api {
+
+
+    /**
+     * Class constructor.
+     */
+    public function __construct() {
+        add_action( 'rest_api_init', [ $this, 'aio_register_api' ] );
     }
 
-    public function aio_register_api()
-    {
+    /**
+     * Registers REST API routes for all controllers.
+     *
+     * @return void
+     */
+    public function aio_register_api() {
 
         $product_controller = new Products_Controller();
         $product_controller->register_routes();

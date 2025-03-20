@@ -1,26 +1,38 @@
 <?php
 
+  /**
+ * Bogo Class.
+ *
+ * Handles Bogo Discount
+ *
+ * @package AIO_WooDiscount
+ */
+
 namespace AIO_WooDiscount\Discount;
+
+defined( 'ABSPATH' ) || exit;
+
 
 use AIO_WooDiscount\Discount\Condition\Conditions;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
 use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuyProduct;
 use AIO_WooDiscount\Discount\Manager\Discount_Helper;
 use AIO_WooDiscount\Discount\UsageTrack\Bogo_Usage_Handler;
+use AIO_WooDiscount\Traits\SingletonTrait;
 
 /**
  * Class Bogo_Discount
  * Handles Buy One Get One discount logic, including free items and discounted items.
  */
-class Bogo_Discount
-{
+class Bogo_Discount {
+
+    use SingletonTrait;
     /**
      * Register WooCommerce hooks.
      */
-    public function __construct()
-    {
-        add_action('woocommerce_cart_loaded_from_session', [$this, 'maybe_apply_discount'], 20);
-        add_action('woocommerce_before_calculate_totals', [$this, 'adjust_discounted_items'], PHP_INT_MAX);
+    public function __construct() {
+        add_action( 'woocommerce_cart_loaded_from_session', [ $this, 'maybe_apply_discount' ], 20 );
+        add_action( 'woocommerce_before_calculate_totals', [ $this, 'adjust_discounted_items' ], PHP_INT_MAX );
     }
 
     /**
@@ -29,92 +41,90 @@ class Bogo_Discount
      * @param \WC_Cart|null $cart
      * @return void
      */
-    public function maybe_apply_discount($cart = null)
-    {
-        if (is_null($cart)) {
+    public function maybe_apply_discount( $cart = null ) {
+        if ( is_null( $cart ) ) {
             $cart = WC()->cart;
         }
 
-        if (is_admin() && !defined('DOING_AJAX')) return;
-        if (!$cart || $cart->is_empty()) {
-            WC()->session->__unset('_aio_bogo_applied_rules');
+        if ( is_admin() && !defined( 'DOING_AJAX' ) ) return;
+        if ( !$cart || $cart->is_empty() ) {
+            WC()->session->__unset( '_aio_bogo_applied_rules' );
             return;
         }
 
 
         // Clear previous BOGO data
-        foreach ($cart->get_cart() as $key => $item) {
-            if (!empty($item['aio_bogo_discount'])) {
-                unset($cart->cart_contents[$key]['aio_bogo_discount']);
+        foreach ( $cart->get_cart() as $key => $item ) {
+            if ( !empty( $item['aio_bogo_discount'] ) ) {
+                unset( $cart->cart_contents[$key]['aio_bogo_discount'] );
             }
 
-            if (!empty($item['aio_bogo_free_item'])) {
-                $cart->remove_cart_item($key);
+            if ( !empty( $item['aio_bogo_free_item'] ) ) {
+                $cart->remove_cart_item( $key );
             }
         }
 
         $rules = $this->get_discount_rules();
-        if (empty($rules)) return;
+        if ( empty( $rules ) ) return;
 
-        foreach ($rules as $rule) {
-            if (!isset($rule['discountType']) || strtolower($rule['discountType']) !== 'bogo') continue;
-            if (($rule['status'] ?? '') !== 'on') continue;
-            if (!Discount_Helper::is_schedule_active($rule)) continue;
-            if (!Discount_Helper::check_usage_limit($rule)) continue;
+        foreach ( $rules as $rule ) {
+            if ( ! isset( $rule['discountType'] ) || strtolower( $rule['discountType'] ) !== 'bogo' ) continue;
+            if ( ( $rule['status'] ?? '' ) !== 'on' ) continue;
+            if ( !Discount_Helper::is_schedule_active( $rule ) ) continue;
+            if ( !Discount_Helper::check_usage_limit( $rule ) ) continue;
 
             if (
-                isset($rule['enableConditions']) && $rule['enableConditions'] &&
-                !Conditions::check_all($cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all')
+                isset( $rule['enableConditions'] ) && $rule['enableConditions'] &&
+                !Conditions::check_all( $cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all' )
             ) continue;
 
-            if (!BogoBuyProduct::check_all($cart, $rule['buyProduct'] ?? [], $rule['bogoApplies'] ?? 'all')) continue;
+            if ( !BogoBuyProduct::check_all( $cart, $rule['buyProduct'] ?? [], $rule['bogoApplies'] ?? 'all' ) ) continue;
 
             $free_or_discount = $rule['freeOrDiscount'] ?? 'freeproduct';
 
             $applied = false;
 
-            if ($free_or_discount === 'freeproduct') {
-                $this->apply_free_item($rule);
+            if ( $free_or_discount === 'freeproduct' ) {
+                $this->apply_free_item( $rule );
                 $applied = true;
             } else {
-                $this->mark_discounted_items($rule);
+                $this->mark_discounted_items( $rule );
                 $applied = true;
             }
 
-            if ($applied) {
-                WC()->session->set('_aio_bogo_applied_rules', [$rule['id']]);
+            if ( $applied ) {
+                WC()->session->set( '_aio_bogo_applied_rules', [ $rule['id'] ] );
                 Bogo_Usage_Handler::instance();
             } else {
-                WC()->session->__unset('_aio_bogo_applied_rules');
+                WC()->session->__unset( '_aio_bogo_applied_rules' );
             }
 
 
             break;
         }
     }
-
+ 
     /**
      * Apply free items to the cart based on matched rule.
      *
      * @param array $rule
      * @return void
      */
-    private function apply_free_item($rule)
-    {
+    private function apply_free_item( $rule ) {
         $cart_items = WC()->cart->get_cart();
-        $eligible   = $this->get_eligible_products($cart_items, $rule['buyProduct']);
-        $buy_count  = intval($rule['buyProductCount'] ?? 1);
-        $get_count  = intval($rule['getProductCount'] ?? 1);
+        $eligible   = $this->get_eligible_products( $cart_items, $rule['buyProduct'] );
+        $buy_count  = intval( $rule['buyProductCount'] ?? 1 );
+        $get_count  = intval( $rule['getProductCount'] ?? 1 );
         $repeat     = $rule['isRepeat'] ?? false;
 
-        $total_quantity = array_sum(array_column($eligible, 'quantity'));
-        $repeat_times   = $repeat ? floor($total_quantity / $buy_count) : ($total_quantity >= $buy_count ? 1 : 0);
+        $total_quantity = array_sum( array_column( $eligible, 'quantity' ) );
+        $repeat_times   = $repeat ? floor( $total_quantity / $buy_count ) : ( $total_quantity >= $buy_count ? 1 : 0 );
         $add_count      = $repeat_times * $get_count;
 
         $added = 0;
-        while ($added < $add_count) {
-            foreach ($eligible as $item) {
-                if ($added >= $add_count) break;
+        while ( $added < $add_count ) {
+            foreach ( $eligible as $item ) {
+                if ( $added >= $add_count ) break;
 
                 WC()->cart->add_to_cart(
                     $item['product_id'],
@@ -138,50 +148,49 @@ class Bogo_Discount
      * @param array $rule
      * @return void
      */
-    private function mark_discounted_items($rule)
-    {
+    private function mark_discounted_items( $rule ) {
         $cart       = WC()->cart;
         $cart_items = $cart->get_cart();
         $eligible   = [];
 
-        foreach ($cart_items as $key => $item) {
-            if (!empty($item['aio_bogo_free_item'])) continue;
+        foreach ( $cart_items as $key => $item ) {
+            if ( ! empty( $item['aio_bogo_free_item'] ) ) continue;
 
-            foreach ($rule['buyProduct'] as $condition) {
+            foreach ( $rule['buyProduct'] as $condition ) {
                 $field = $condition['field'] ?? '';
-                if (method_exists(BogoBuy_Field::class, $field) && BogoBuy_Field::$field([$item], $condition)) {
+                if ( method_exists( BogoBuy_Field::class, $field ) && BogoBuy_Field::$field( [$item], $condition ) ) {
                     $eligible[] = ['key' => $key, 'item' => $item];
                     break;
                 }
             }
         }
 
-        $buy_count = intval($rule['buyProductCount'] ?? 1);
-        $get_count = intval($rule['getProductCount'] ?? 1);
+        $buy_count = intval( $rule['buyProductCount'] ?? 1 );
+        $get_count = intval( $rule['getProductCount'] ?? 1 );
         $repeat    = $rule['isRepeat'] ?? false;
 
-        $total_quantity = array_sum(array_map(fn($i) => $i['item']['quantity'] ?? 0, $eligible));
+        $total_quantity = array_sum( array_map( fn($i) => $i['item']['quantity'] ?? 0, $eligible ) );
         $needed_qty     = $buy_count + $get_count;
-        $repeat_times   = $repeat ? floor($total_quantity / $needed_qty) : ($total_quantity >= $needed_qty ? 1 : 0);
+        $repeat_times   = $repeat ? floor( $total_quantity / $needed_qty ) : ( $total_quantity >= $needed_qty ? 1 : 0 );
         $discount_qty   = $repeat_times * $get_count;
 
-        if ($discount_qty <= 0) return;
+        if ( $discount_qty <= 0 ) return;
 
-        usort($eligible, function ($a, $b) {
+        usort( $eligible, function ( $a, $b ) {
             return $a['item']['data']->get_price() <=> $b['item']['data']->get_price();
         });
 
         $discounted     = 0;
         $discount_type  = $rule['discounttypeBogo'] ?? 'fixed';
-        $discount_value = floatval($rule['discountValue'] ?? 0);
-        $max            = floatval($rule['maxValue'] ?? 0);
+        $discount_value = floatval( $rule['discountValue'] ?? 0 );
+        $max            = floatval( $rule['maxValue'] ?? 0 );
         $rule_id        = $rule['id'];
 
-        foreach ($eligible as $entry) {
+        foreach ( $eligible as $entry ) {
             $key  = $entry['key'];
-            $item = &$cart->cart_contents[$key];
+            $item = &$cart->cart_contents[ $key ];
 
-            $qty_to_discount = min($item['quantity'], $discount_qty - $discounted);
+            $qty_to_discount = min( $item['quantity'], $discount_qty - $discounted );
             if ($qty_to_discount <= 0) continue;
 
             $item['aio_bogo_discount'] = [
@@ -193,7 +202,7 @@ class Bogo_Discount
             ];
 
             $discounted += $qty_to_discount;
-            if ($discounted >= $discount_qty) break;
+            if ( $discounted >= $discount_qty ) break;
         }
     }
 
@@ -203,39 +212,38 @@ class Bogo_Discount
      * @param \WC_Cart $cart
      * @return void
      */
-    public function adjust_discounted_items($cart)
-    {
-        $settings          = maybe_unserialize(get_option('aio_woodiscount_settings', []));
-        $use_regular_price = isset($settings['discountBasedOn']) && $settings['discountBasedOn'] === 'regular_price';
+    public function adjust_discounted_items( $cart ) {
+        $settings          = maybe_unserialize( get_option( 'aio_woodiscount_settings', [] ) );
+        $use_regular_price = isset( $settings['discountBasedOn'] ) && $settings['discountBasedOn'] === 'regular_price';
 
-        foreach ($cart->get_cart() as $key => $item) {
-            if (!empty($item['aio_bogo_free_item'])) {
-                $item['data']->set_price(0);
+        foreach ( $cart->get_cart() as $key => $item ) {
+            if ( ! empty( $item['aio_bogo_free_item'] ) ) {
+                $item['data']->set_price( 0 );
                 continue;
             }
 
-            if (!empty($item['aio_bogo_discount'])) {
+            if ( ! empty( $item['aio_bogo_discount'] ) ) {
                 $info            = $item['aio_bogo_discount'];
                 $product         = $item['data'];
                 $original_price  = $use_regular_price && $product instanceof \WC_Product ? $product->get_regular_price() : $product->get_price();
                 $qty_to_discount = $info['qty'] ?? 0;
 
                 $discount = $info['type'] === 'percentage'
-                    ? ($original_price * $info['value'] / 100)
+                    ? ( $original_price * $info['value'] / 100 )
                     :  $info['value'];
 
-                if ($info['max'] > 0) {
-                    $discount = min($discount, $info['max']);
+                if ( $info['max'] > 0 ) {
+                    $discount = min( $discount, $info['max'] );
                 }
 
-                if ($item['quantity'] > $qty_to_discount) {
+                if ( $item['quantity'] > $qty_to_discount ) {
                     $full_price_qty   = $item['quantity'] - $qty_to_discount;
                     $discounted_total = $qty_to_discount * ($original_price - $discount);
                     $normal_total     = $full_price_qty * $original_price;
-                    $blended_price    = ($discounted_total + $normal_total) / $item['quantity'];
-                    $item['data']->set_price($blended_price);
+                    $blended_price    = ( $discounted_total + $normal_total ) / $item['quantity'];
+                    $item['data']->set_price( $blended_price );
                 } else {
-                    $item['data']->set_price($original_price - $discount);
+                    $item['data']->set_price( $original_price - $discount );
                 }
             }
         }
@@ -248,14 +256,13 @@ class Bogo_Discount
      * @param array $buy_conditions
      * @return array
      */
-    private function get_eligible_products($cart_items, $buy_conditions)
-    {
+    private function get_eligible_products( $cart_items, $buy_conditions ) {
         $eligible = [];
-        foreach ($cart_items as $item) {
-            if (!empty($item['aio_bogo_free_item'])) continue;
-            foreach ($buy_conditions as $condition) {
+        foreach ( $cart_items as $item ) {
+            if ( ! empty( $item['aio_bogo_free_item'] ) ) continue;
+            foreach ( $buy_conditions as $condition ) {
                 $field = $condition['field'] ?? '';
-                if (method_exists(BogoBuy_Field::class, $field) && BogoBuy_Field::$field([$item], $condition)) {
+                if ( method_exists( BogoBuy_Field::class, $field) && BogoBuy_Field::$field([$item], $condition ) ) {
                     $eligible[] = $item;
                     break;
                 }
@@ -270,11 +277,10 @@ class Bogo_Discount
      * @param string|int $rule_id
      * @return void
      */
-    private function remove_bogo_items($rule_id)
-    {
-        foreach (WC()->cart->get_cart() as $key => $item) {
-            if (!empty($item['aio_bogo_free_item']) && ($item['aio_bogo_rule_id'] ?? '') === $rule_id) {
-                WC()->cart->remove_cart_item($key);
+    private function remove_bogo_items( $rule_id ) {
+        foreach ( WC()->cart->get_cart() as $key => $item ) {
+            if ( ! empty( $item['aio_bogo_free_item'] ) && ( $item['aio_bogo_rule_id'] ?? '' ) === $rule_id ) {
+                WC()->cart->remove_cart_item( $key );
             }
         }
     }
@@ -284,8 +290,7 @@ class Bogo_Discount
      *
      * @return array
      */
-    private function get_discount_rules(): array
-    {
-        return maybe_unserialize(get_option('aio_bogo_discount', [])) ?: [];
+    private function get_discount_rules(): array {
+        return maybe_unserialize( get_option( 'aio_bogo_discount', [] ) ) ?: [];
     }
 }

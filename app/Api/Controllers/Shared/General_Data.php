@@ -1,19 +1,27 @@
 <?php
+  /**
+ * General WooCommerce Data REST Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
 
-/**
- * General Data Class
+  /**
+ * Class General_Data
+ *
+ * Provides general WooCommerce data via REST (e.g. currency info).
  */
-
-class General_Data extends WP_REST_Controller
-{
-
-    public function __construct()
-    {
+class General_Data extends WP_REST_Controller {
+   /**
+     * Constructor.
+     */
+    public function __construct() {
         $this->namespace = 'aio-woodiscount/v2';
         $this->rest_base = 'general';
     }
@@ -23,16 +31,15 @@ class General_Data extends WP_REST_Controller
      * Registers the routes for the object
      */
 
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_general_data'],
-                    'permission_callback' => [$this, 'get_general_data_permission'],
+                    'callback'            => [ $this, 'get_general_data' ],
+                    'permission_callback' => [ $this, 'get_general_data_permission' ],
                 ],
             ]
         );
@@ -44,13 +51,11 @@ class General_Data extends WP_REST_Controller
      * @param  \WP_REST_Request $request The request object.
      *@return bool True if the user has permission, false otherwise.
      */
-    public function get_general_data_permission()
-    {
+    public function get_general_data_permission() {
 
-        if (current_user_can('manage_woocommerce')) {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
             return true;
         }
-
         return true;
     }
 
@@ -61,11 +66,9 @@ class General_Data extends WP_REST_Controller
      * @return \WP_Rest_Response|WP_Error
      */
 
-    public function get_general_data($request)
-    {
-
+    public function get_general_data( $request ) {
         $currency        = get_woocommerce_currency();
-        $currency_symbol = get_woocommerce_currency_symbol($currency);
+        $currency_symbol = get_woocommerce_currency_symbol( $currency );
 
         $data = [
             'currency_code'   => $currency,
@@ -73,7 +76,6 @@ class General_Data extends WP_REST_Controller
 
         ];
 
-
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 }

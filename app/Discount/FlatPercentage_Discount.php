@@ -1,26 +1,35 @@
 <?php
+/**
+ * Flatpercentage  Class.
+ *
+ * Handles Flat/Percentage Discount
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Discount;
 
 defined('ABSPATH') || exit;
 
 use AIO_WooDiscount\Discount\Condition\Conditions;
+use AIO_WooDiscount\Discount\Manager\Discount_Helper;
+use AIO_WooDiscount\Traits\SingletonTrait;
 
 /**
  * Class FlatPercentage_Discount
  *
  * Handles flat or percentage-based cart-wide discounts using real WooCommerce coupons.
  */
-class FlatPercentage_Discount
-{
+class FlatPercentage_Discount {
+
+    use SingletonTrait;
     /**
      * Constructor - attaches hooks for cart fee calculation and suppressing messages.
      */
-    public function __construct()
-    {
-        add_action( 'woocommerce_cart_calculate_fees', [$this, 'maybe_apply_discount'], 20);
-        add_filter('woocommerce_coupon_message', [$this, 'suppress_coupon_message'], 100, 3);
-        add_filter('woocommerce_coupon_error', [$this, 'suppress_coupon_message'], 100, 3);
+    public function __construct() {
+        add_action( 'woocommerce_cart_calculate_fees', [ $this, 'maybe_apply_discount' ], 20 );
+        add_filter( 'woocommerce_coupon_message', [ $this, 'suppress_coupon_message' ], 100, 3 );
+        add_filter( 'woocommerce_coupon_error', [ $this, 'suppress_coupon_message' ], 100, 3 );
     }
 
     /**
@@ -57,11 +66,11 @@ class FlatPercentage_Discount
                 continue;
             }
     
-            if ( ! $this->is_schedule_active( $rule ) ) {
+            if ( ! Discount_Helper::is_schedule_active( $rule ) ) {
                 continue;
             }
     
-            if ( ! $this->check_usage_limit( $rule ) ) {
+            if ( ! Discount_Helper::check_usage_limit( $rule ) ) {
                 continue;
             }
     
@@ -85,7 +94,7 @@ class FlatPercentage_Discount
                 )
                 : $cart->get_subtotal();
     
-            // ✅ Calculate discount
+            // Calculate discount
             if ( $fp_type === 'percentage' ) {
                 $calculated_discount = ( $cart_total * $discount_value / 100 );
               
@@ -93,7 +102,7 @@ class FlatPercentage_Discount
                 $calculated_discount = $discount_value;
             }
     
-            // ✅ Always treat max_value as amount (not percent)
+            // Always treat max_value as amount (not percent)
             if ( $max_value > 0 ) {
                 $calculated_discounts = min( $calculated_discount, $max_value );
             }
@@ -106,7 +115,7 @@ class FlatPercentage_Discount
             }
         }
     
-        // ❌ Remove hidden coupon if not matched
+        // Remove hidden coupon if not matched
         if ( ! $matched ) {
             foreach ( $cart->get_applied_coupons() as $code ) {
                 $coupon = new \WC_Coupon( $code );
@@ -127,23 +136,22 @@ class FlatPercentage_Discount
      * @param float $amount The discount amount to apply
      * @return void
      */
-    private function create_or_update_coupon($rule, $amount)
-    {
+    private function create_or_update_coupon( $rule, $amount ) {
         $coupon_code   = $rule['couponName'];
         $fp_type       = $rule['fpDiscountType'] ?? 'fixed';
         $discount_type = 'fixed_cart'; // default fallback
     
         // Determine if the discount is capped
-        $original_discount_value = floatval($rule['discountValue'] ?? 0);
+        $original_discount_value = floatval( $rule['discountValue'] ?? 0 );
         $cart_total = WC()->cart->get_subtotal();
         $calculated_discount = $fp_type === 'percentage'
-            ? ($cart_total * $original_discount_value / 100)
+            ? ( $cart_total * $original_discount_value / 100 )
             : $original_discount_value;
     
         $is_capped = $amount < $calculated_discount;
     
         // Final discount type logic
-        if ($fp_type === 'percentage' && ! $is_capped) {
+        if ( $fp_type === 'percentage' && ! $is_capped ) {
             $discount_type = 'percent';
         } else {
             $discount_type = 'fixed_cart';
@@ -163,38 +171,38 @@ class FlatPercentage_Discount
             ]
         ]);
     
-        if (!empty($existing)) {
+        if ( ! empty( $existing ) ) {
             // Existing coupon found by rule ID
-            $coupon = new \WC_Coupon($existing[0]->ID);
+            $coupon = new \WC_Coupon( $existing[0]->ID );
     
             // Update name if changed
-            if ($coupon->get_code() !== $coupon_code) {
+            if ( $coupon->get_code() !== $coupon_code ) {
                 wp_update_post([
                     'ID'         => $coupon->get_id(),
                     'post_title' => $coupon_code,
                     'post_name'  => $coupon_code,
                 ]);
-                $coupon = new \WC_Coupon($coupon_code); // Reload with updated code
+                $coupon = new \WC_Coupon( $coupon_code ); // Reload with updated code
             }
         } else {
             // Create new coupon
             $coupon = new \WC_Coupon();
-            $coupon->set_code($coupon_code);
-            $coupon->set_discount_type($discount_type);
-            $coupon->set_individual_use(false);
-            $coupon->set_usage_limit(999999);
-            $coupon->set_description(__('Auto-generated by AIO WooDiscount', 'aio-woodiscount'));
-            $coupon->update_meta_data('aio_rule_id', $rule['id']);
-            $coupon->update_meta_data('aio_is_hidden_coupon', true);
+            $coupon->set_code( $coupon_code );
+            $coupon->set_discount_type( $discount_type );
+            $coupon->set_individual_use( false );
+            $coupon->set_usage_limit( 999999 );
+            $coupon->set_description( __('Auto-generated by AIO WooDiscount', 'all-in-one-woodiscount') );
+            $coupon->update_meta_data( 'aio_rule_id', $rule['id'] );
+            $coupon->update_meta_data( 'aio_is_hidden_coupon', true );
         }
     
         // Always update the amount and discount type
-        $coupon->set_discount_type($discount_type);
-        $coupon->set_amount($amount);
+        $coupon->set_discount_type( $discount_type );
+        $coupon->set_amount( $amount );
     
         // Optional debug info for admin trace
-        if ($is_capped) {
-            $coupon->update_meta_data('aio_debug_note', "Discount capped from {$calculated_discount} to {$amount}");
+        if ( $is_capped ) {
+            $coupon->update_meta_data( 'aio_debug_note', "Discount capped from {$calculated_discount} to {$amount}" );
         }
     
         $coupon->save();
@@ -206,47 +214,10 @@ class FlatPercentage_Discount
      *
      * @return array
      */
-    private function get_discount_rules(): array
-    {
-        return maybe_unserialize(get_option('aio_flatpercentage_discount', [])) ?: [];
+    private function get_discount_rules(): array {
+        return maybe_unserialize( get_option( 'aio_flatpercentage_discount', [] ) ) ?: [];
     }
 
-    /**
-     * Check if the rule is currently active based on schedule.
-     *
-     * @param array $rule
-     * @return bool
-     */
-    private function is_schedule_active($rule): bool
-    {
-        if (!isset($rule['schedule']['enableSchedule']) || !$rule['schedule']['enableSchedule']) {
-            return true;
-        }
-
-        $now   = current_time('timestamp');
-        $start = strtotime($rule['schedule']['startDate'] ?? '');
-        $end   = strtotime($rule['schedule']['endDate'] ?? '');
-
-        return ($now >= $start && $now <= $end);
-    }
-
-    /**
-     * Checks if the rule has reached its usage limit.
-     *
-     * @param array $rule
-     * @return bool
-     */
-    private function check_usage_limit($rule): bool
-    {
-        if (!isset($rule['usageLimits']['enableUsage']) || !$rule['usageLimits']['enableUsage']) {
-            return true;
-        }
-
-        $limit = intval($rule['usageLimits']['usageLimitsCount'] ?? 0);
-        $used  = intval($rule['usedCount'] ?? 0);
-
-        return $used < $limit;
-    }
 
     /**
      * Suppress frontend coupon messages for hidden/internal coupons.
@@ -256,9 +227,8 @@ class FlatPercentage_Discount
      * @param \WC_Coupon $coupon
      * @return string
      */
-    public function suppress_coupon_message($message, $message_code, $coupon)
-    {
-        if ($coupon instanceof \WC_Coupon && $coupon->get_meta('aio_is_hidden_coupon')) {
+    public function suppress_coupon_message( $message, $message_code, $coupon ) {
+        if ( $coupon instanceof \WC_Coupon && $coupon->get_meta( 'aio_is_hidden_coupon' ) ) {
             return ''; // Hide all coupon messages
         }
 

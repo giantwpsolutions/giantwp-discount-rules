@@ -1,21 +1,29 @@
 <?php
+  /**
+ * Product Tags REST API Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
 
-/**
- * Product Category Controller Class
+  /**
+ * Class Products_Tag_Controller
+ *
+ * Retrieves WooCommerce product tags.
  */
+class Products_Tag_Controller extends WP_REST_Controller {
 
-class Products_Tag_Controller extends WP_REST_Controller
-{
-
-    public function __construct()
-    {
+    /**
+     * Constructor.
+     */
+    public function __construct() {
         $this->namespace = 'aio-woodiscount/v2';
-
         $this->rest_base = 'tags';
     }
 
@@ -25,16 +33,15 @@ class Products_Tag_Controller extends WP_REST_Controller
      *
      * @return void
      */
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_product_tags'],
-                    'permission_callback' => [$this, 'get_tag_permission'],
+                    'callback'            => [ $this, 'get_product_tags' ],
+                    'permission_callback' => [ $this, 'get_tag_permission' ],
 
                 ]
             ]
@@ -50,9 +57,8 @@ class Products_Tag_Controller extends WP_REST_Controller
      * @return bool True if the user has permission, false otherwise.
      * 
      */
-    public function get_tag_permission()
-    {
-        if (current_user_can('manage_woocommerce')) {
+    public function get_tag_permission() {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
 
             return true;
         }
@@ -69,27 +75,26 @@ class Products_Tag_Controller extends WP_REST_Controller
      *
      * @return \WP_Rest_Response|WP_Error
      */
-    public function get_product_tags($request)
-    {
+    public function get_product_tags( $request ) {
         $args = [
             'taxonomy'   => 'product_tag',
             'hide_empty' => false,
         ];
 
-        $tags = get_terms($args);
+        $tags = get_terms( $args );
 
-        if (is_wp_error($tags)) {
-            return rest_ensure_response($tags);
+        if ( is_wp_error( $tags ) ) {
+            return rest_ensure_response( $tags );
         }
 
-        $data = array_map(function ($tag) {
+        $data = array_map( function ( $tag ) {
             return [
                 'id'   => $tag->term_id,
                 'name' => $tag->name,
                 'slug' => $tag->slug,
             ];
-        }, $tags);
+        }, $tags );
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 }

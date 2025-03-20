@@ -1,9 +1,16 @@
 <?php
+  /**
+ * Display applied discount rules in WooCommerce Orders list.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Discount\Manager;
 
+use AIO_WooDiscount\Traits\SingletonTrait;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class DiscountLabel
  *
@@ -14,28 +21,29 @@ defined('ABSPATH') || exit;
  *
  * @package AIO_WooDiscount\Discount\Manager
  */
-class DiscountLabel
-{
+class DiscountLabel {
+
+    use SingletonTrait;
+    
     /**
      * Constructor.
      *
      * Sets up hooks to modify the WooCommerce orders table to display applied discounts.
      */
-    public function __construct()
-    {
+    public function __construct() {
         // Only load if the setting is enabled
-        $settings = maybe_unserialize(get_option('aio_woodiscount_settings', []));
-        if (empty($settings['orderPageLabel'])) {
+        $settings = maybe_unserialize( get_option( 'aio_woodiscount_settings', [] ) );
+        if ( empty( $settings['orderPageLabel'] ) ) {
             return;
         }
 
         // Classic WooCommerce order screen
-        add_filter('manage_edit-shop_order_columns', [$this, 'add_discount_column'], 20);
-        add_action('manage_shop_order_posts_custom_column', [$this, 'render_discount_column'], 20, 2);
+        add_filter( 'manage_edit-shop_order_columns', [ $this, 'add_discount_column' ], 20 );
+        add_action( 'manage_shop_order_posts_custom_column', [ $this, 'render_discount_column' ], 20, 2 );
 
         // HPOS screen (WooCommerce block editor interface)
-        add_filter('manage_woocommerce_page_wc-orders_columns', [$this, 'add_discount_column'], 20);
-        add_action('manage_woocommerce_page_wc-orders_custom_column', [$this, 'render_discount_column'], 20, 2);
+        add_filter( 'manage_woocommerce_page_wc-orders_columns', [ $this, 'add_discount_column' ], 20);
+        add_action( 'manage_woocommerce_page_wc-orders_custom_column', [ $this, 'render_discount_column' ], 20, 2 );
     }
 
     /**
@@ -44,19 +52,18 @@ class DiscountLabel
      * @param array $columns Existing columns in the orders table.
      * @return array Modified columns with discount label added.
      */
-    public function add_discount_column($columns)
-    {
+    public function add_discount_column( $columns ) {
         $new_columns = [];
 
-        foreach ($columns as $key => $label) {
+        foreach ( $columns as $key => $label ) {
             $new_columns[$key] = $label;
-            if ('order_status' === $key) {
-                $new_columns['aio_discount_label'] = __('Discount Rules', 'aio-woodiscount');
+            if ( 'order_status' === $key ) {
+                $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-woodiscount' );
             }
         }
 
-        if (!isset($new_columns['aio_discount_label'])) {
-            $new_columns['aio_discount_label'] = __('Discount Rules', 'aio-woodiscount');
+        if ( ! isset( $new_columns['aio_discount_label'] ) ) {
+            $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-woodiscount' );
         }
 
         return $new_columns;
@@ -68,34 +75,32 @@ class DiscountLabel
      * @param string $column   Column identifier.
      * @param int    $post_id  Order ID.
      */
-    public function render_discount_column($column, $post_id)
-    {
-        if ($column !== 'aio_discount_label') {
+    public function render_discount_column( $column, $post_id ) {
+        if ( $column !== 'aio_discount_label' ) {
             return;
         }
 
         $labels = [];
 
         $meta_keys = [
-            '_aio_bogo_applied_rules'     => __('BOGO', 'aio-woodiscount'),
-            '_aio_bxgy_applied_rules'     => __('Buy X Get Y', 'aio-woodiscount'),
-            '_aio_bulk_applied_rules'     => __('Bulk', 'aio-woodiscount'),
-            '_aio_shipping_applied_rules' => __('Shipping', 'aio-woodiscount'),
+            '_aio_bogo_applied_rules'     => __( 'BOGO', 'all-in-one-woodiscount' ),
+            '_aio_bxgy_applied_rules'     => __( 'Buy X Get Y', 'all-in-one-woodiscount' ),
+            '_aio_bulk_applied_rules'     => __( 'Bulk', 'all-in-one-woodiscount' ),
+            '_aio_shipping_applied_rules' => __( 'Shipping', 'all-in-one-woodiscount' ),
         ];
 
-        $order = wc_get_order($post_id);
+        $order = wc_get_order( $post_id );
 
-        foreach ($meta_keys as $meta_key => $label) {
-            $value = $order ? $order->get_meta($meta_key, true) : get_post_meta($post_id, $meta_key, true);
+        foreach ( $meta_keys as $meta_key => $label ) {
+            $value = $order ? $order->get_meta( $meta_key, true ) : get_post_meta( $post_id, $meta_key, true );
 
             // Accept both arrays or strings
-            if (!empty($value)) {
+            if ( ! empty( $value ) ) {
                 $labels[] = $label;
             }
         }
 
-        echo !empty($labels)
-            ? implode('<br>', array_unique($labels))
-            : '<em>' . esc_html__('None', 'aio-woodiscount') . '</em>';
+        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'all-in-one-woodiscount' ) . '</em>';
+
     }
 }

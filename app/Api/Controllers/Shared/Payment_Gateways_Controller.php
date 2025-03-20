@@ -1,6 +1,13 @@
 <?php
+/**
+ * Payment Gateways REST API Controller.
+ *
+ * @package AIO_WooDiscount
+ */
 
 namespace AIO_WooDiscount\Api\Controllers\Shared;
+
+defined( 'ABSPATH' ) || exit;
 
 use WP_REST_Controller;
 use WP_REST_Server;
@@ -9,11 +16,9 @@ use WP_REST_Server;
  * Payment Gateway Controller Class
  */
 
-class Payment_Gateways_Controller extends WP_REST_Controller
-{
+class Payment_Gateways_Controller extends WP_REST_Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->namespace = 'aio-woodiscount/v2';
         $this->rest_base = 'payment-gateways';
     }
@@ -21,16 +26,15 @@ class Payment_Gateways_Controller extends WP_REST_Controller
     /**
      * Registers the routes for the objects of the controller.
      */
-    public function register_routes()
-    {
+    public function register_routes() {
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base,
             [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [$this, 'get_payment_gateways'],
-                    'permission_callback' => [$this, 'permission_check'],
+                    'callback'            => [ $this, 'get_payment_gateways' ],
+                    'permission_callback' => [ $this, 'permission_check' ],
                 ]
             ]
         );
@@ -42,9 +46,8 @@ class Payment_Gateways_Controller extends WP_REST_Controller
      *  @param  \WP_REST_Request $request The request object.
      *@return bool True if the user has permission, false otherwise.
      */
-    public function permission_check()
-    {
-        if (current_user_can('manage_woocommerce')) {
+    public function permission_check() {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
             return true;
         };
 
@@ -54,12 +57,11 @@ class Payment_Gateways_Controller extends WP_REST_Controller
     /**
      * Retrieves the list of all payment gateways, including enabled and disabled ones.
      */
-    public function get_payment_gateways($request)
-    {
-        if (!class_exists('WC_Payment_Gateways')) {
+    public function get_payment_gateways( $request ) {
+        if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
             return new \WP_Error(
                 'woocommerce_inactive',
-                __('WooCommerce is not active.', 'all-in-one-woodiscount'),
+                __( 'WooCommerce is not active.', 'all-in-one-woodiscount' ),
                 ['status' => 500]
             );
         }
@@ -67,14 +69,14 @@ class Payment_Gateways_Controller extends WP_REST_Controller
         // Retrieve all payment gateways
         $payment_gateways = WC()->payment_gateways->payment_gateways();
 
-        if (empty($payment_gateways)) {
+        if ( empty( $payment_gateways ) ) {
             return [
                 'message' => 'No payment gateways available.',
             ];
         }
 
         $data = [];
-        foreach ($payment_gateways as $gateway) {
+        foreach ( $payment_gateways as $gateway ) {
             $data[] = [
                 'id' => $gateway->id,
                 'title'        => $gateway->get_title(),
@@ -84,6 +86,6 @@ class Payment_Gateways_Controller extends WP_REST_Controller
             ];
         }
 
-        return rest_ensure_response($data);
+        return rest_ensure_response( $data );
     }
 }

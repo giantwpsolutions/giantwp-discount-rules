@@ -11,7 +11,7 @@
  *
  * @return bool True if the comparison passes, false otherwise.
  */
-function compare_numaric_value($left, $operator, $right)
+function aio_compare_numaric_value($left, $operator, $right)
 {
     switch ($operator) {
         case 'greater_than':
@@ -38,7 +38,7 @@ function compare_numaric_value($left, $operator, $right)
  *
  * @return bool True if the condition is satisfied, false otherwise.
  */
-function compare_cart_items($cart_ids, $operator, $condition_ids)
+function aio_compare_cart_items($cart_ids, $operator, $condition_ids)
 {
     switch ($operator) {
         case 'contain_in_list':
@@ -67,7 +67,7 @@ function compare_cart_items($cart_ids, $operator, $condition_ids)
  *
  * @return bool True if the comparison passes, false otherwise.
  */
-function compare_list($current, $operator, $expected)
+function aio_compare_list($current, $operator, $expected)
 {
     if (!is_array($expected)) {
         return false;
@@ -93,8 +93,6 @@ function compare_list($current, $operator, $expected)
 }
 
 
-
-
 function aio_check_woocommerce_hpos()
 {
     if (class_exists(\Automattic\WooCommerce\Utilities\OrderUtil::class)) {
@@ -105,12 +103,12 @@ function aio_check_woocommerce_hpos()
     return false;
 }
 
-function WoocommerceDeactivationAlert()
+function aio_WoocommerceDeactivationAlert()
 {
 ?>
     <div class="notice notice-error is-dismissible">
         <p>
-            <?php _e(
+            <?php esc_html_e(
                 'WooCommerce is deactivated! The "All-in-One WooDiscount" plugin requires WooCommerce to function properly. Please reactivate WooCommerce.',
                 'all-in-one-woodiscount'
             ); ?>
@@ -120,12 +118,12 @@ function WoocommerceDeactivationAlert()
 }
 
 
-function WoocommerceMissingAlert()
+function aio_WoocommerceMissingAlert()
 {
 ?>
     <div class="notice notice-error is-dismissible">
         <p>
-            <?php _e(
+            <?php esc_html_e(
                 'All-in-One WooDiscount requires WooCommerce to be installed and active.',
                 'all-in-one-woodiscount'
             ); ?>
