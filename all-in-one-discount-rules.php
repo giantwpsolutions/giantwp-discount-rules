@@ -3,7 +3,7 @@
 * Plugin Name: All In One Discount Rules
 * Plugin URI: https://giantwpsolutions.com/plugins/all-in-one-discount-rules
 * Description: All In One Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
-* Version: 1.0
+* Version: 1.0.1
 * Author: Giant WP Solutions
 * Author URI: https://giantwpsolutions.com
 * License: GPLv2 or later
@@ -13,7 +13,7 @@
 * Requires PHP: 7.4
 * WooCommerce HPOS support: yes
 * Domain Path: /languages
-*@package All-in-one WooDiscount
+*@package All-in-one Discount Rules
 */
 
 
@@ -33,7 +33,7 @@ final class All_in_one_Discount_Rules
     /**
      * The plugin version
      */
-    const version = '1.0';
+    const version = '1.0.1';
 
     /**
      * Class Constructor
@@ -43,7 +43,7 @@ final class All_in_one_Discount_Rules
         register_activation_hook( __FILE__ , [ $this, 'activate' ] );
         add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded'] );
         add_action( 'admin_notices', [ $this, 'check_woocommerce_active' ] );
-        add_filter( 'plugin_action_links_all-in-one-discount-rules/all-in-one-discount-rules.php', [ $this, 'aio_woodiscount_settings_link' ] );
+        add_filter( 'plugin_action_links_all-in-one-discount-rules/all-in-one-discount-rules.php', [ $this, 'aio_discount_settings_link' ] );
         $this->declare_hpos_compatibility();
         $this->define_constants();
     }
@@ -51,7 +51,7 @@ final class All_in_one_Discount_Rules
     /**
      * Initializes a singleton instance
      * 
-     * @return All_in_one_wooDiscount
+     * @return All_in_one_Discount_Rules
      */
     public static function init()
     {
@@ -114,7 +114,7 @@ final class All_in_one_Discount_Rules
             deactivate_plugins( plugin_basename( __FILE__ ) );
         
             wp_die(
-                esc_html__( 'All-in-One WooDiscount requires WooCommerce to be installed and active.', 'all-in-one-discount-rules' ),
+                esc_html__( 'All-in-One Discount Rules requires WooCommerce to be installed and active.', 'all-in-one-discount-rules' ),
                 esc_html__( 'Plugin dependency check', 'all-in-one-discount-rules' ),
                 [ 'back_link' => true ]
             );
@@ -147,8 +147,8 @@ final class All_in_one_Discount_Rules
      * @param array $links An array of existing action links.
      * @return array Modified array of action links with the added "Settings" link.
      */
-    public function aio_woodiscount_settings_link( $links ) {
-        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=aio-woodiscount#' ) ) . '">' . esc_html__( 'Settings', 'all-in-one-discount-rules' ) . '</a>';
+    public function aio_discount_settings_link( $links ) {
+        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=aio-discount-rules#' ) ) . '">' . esc_html__( 'Settings', 'all-in-one-discount-rules' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }
@@ -174,7 +174,7 @@ final class All_in_one_Discount_Rules
 
 /**
  * Initializes the main plugin
- * @return \All_in_one_wooDiscount
+ * @return \All_in_one_Discount_Rules
  */
 function all_in_one_discount_rules()
 {

@@ -213,7 +213,7 @@ class Bogo_Discount {
      * @return void
      */
     public function adjust_discounted_items( $cart ) {
-        $settings          = maybe_unserialize( get_option( 'aio_woodiscount_settings', [] ) );
+        $settings          = maybe_unserialize( get_option( 'aio_discountrules_settings', [] ) );
         $use_regular_price = isset( $settings['discountBasedOn'] ) && $settings['discountBasedOn'] === 'regular_price';
 
         foreach ( $cart->get_cart() as $key => $item ) {

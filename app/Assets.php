@@ -67,7 +67,7 @@ class Assets
             'restUrl'   => esc_url_raw( rest_url( trailingslashit('aio-discountrules/v2') ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
-            'proActive' => defined( 'AIO_WOODISCOUNT_PRO_ACTIVE' ) && AIO_WOODISCOUNT_PRO_ACTIVE,
+            'proActive' => defined( 'AIO_DISCOUNT_RULES_PRO_ACTIVE' ) && AIO_DISCOUNT_RULES_PRO_ACTIVE,
         ] );
     }
 
@@ -150,7 +150,7 @@ class Assets
      */
     public function disable_core_update_notifications() {
         $screen = get_current_screen();
-        if ( $screen && $screen->id === 'woocommerce_page_aio-woodiscount' ) {
+        if ( $screen && $screen->id === 'woocommerce_page_aio-discount-rules' ) {
             remove_all_actions( 'admin_notices' );
             remove_all_actions( 'network_admin_notices' );
         }

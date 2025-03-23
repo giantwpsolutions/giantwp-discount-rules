@@ -109,8 +109,8 @@ function aio_WoocommerceDeactivationAlert()
     <div class="notice notice-error is-dismissible">
         <p>
             <?php esc_html_e(
-                'WooCommerce is deactivated! The "All-in-One WooDiscount" plugin requires WooCommerce to function properly. Please reactivate WooCommerce.',
-                'all-in-one-woodiscount'
+                'WooCommerce is deactivated! The "All-in-One Discount Rules" plugin requires WooCommerce to function properly. Please reactivate WooCommerce.',
+                'all-in-one-discount-rules'
             ); ?>
         </p>
     </div>
@@ -124,8 +124,8 @@ function aio_WoocommerceMissingAlert()
     <div class="notice notice-error is-dismissible">
         <p>
             <?php esc_html_e(
-                'All-in-One WooDiscount requires WooCommerce to be installed and active.',
-                'all-in-one-woodiscount'
+                'All-in-One Discount Rules requires WooCommerce to be installed and active.',
+                'all-in-one-discount-rules'
             ); ?>
         </p>
     </div>
