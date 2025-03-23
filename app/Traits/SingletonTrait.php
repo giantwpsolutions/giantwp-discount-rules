@@ -1,6 +1,6 @@
 <?php 
 
-namespace AIO_WooDiscount\Traits;
+namespace AIO_DiscountRules\Traits;
 
 /**
  * Singleton Instance Trait

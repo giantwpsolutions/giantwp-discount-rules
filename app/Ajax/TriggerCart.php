@@ -2,12 +2,12 @@
 /**
  * Cart Discount Trigger AJAX Handler.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Ajax;
+namespace AIO_DiscountRules\Ajax;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,9 +35,12 @@ class TriggerCart{
      */
     public function aio_check_cart_discounts() {
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'aio_trigger_nonce' ) ) {
-            wp_send_json_error( ['message' => 'Invalid nonce'] );
+        $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'aio_trigger_nonce' ) ) {
+            wp_send_json_error( [ 'message' => 'Invalid nonce' ] );
         }
+        
 
         if ( ! WC()->cart ) {
             wp_send_json_error( ['message' => 'Cart not found'] );

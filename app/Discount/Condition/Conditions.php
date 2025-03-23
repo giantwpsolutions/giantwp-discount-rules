@@ -2,10 +2,10 @@
 /**
  * Condition Dispatcher.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\Condition;
+namespace AIO_DiscountRules\Discount\Condition;
 
 defined('ABSPATH') || exit;
 

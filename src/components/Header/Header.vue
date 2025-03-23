@@ -8,14 +8,18 @@ const { __ } = wp.i18n;
 
 // Navigation links with the Upgrade link marked as external
 const navigation = [
-  { name: __("Discounts", "all-in-one-woodiscount"), href: "/", current: true },
   {
-    name: __("Settings", "all-in-one-woodiscount"),
+    name: __("Discounts", "all-in-one-discount-rules"),
+    href: "/",
+    current: true,
+  },
+  {
+    name: __("Settings", "all-in-one-discount-rules"),
     href: "/settings",
     current: false,
   },
   {
-    name: __("Upgrade", "all-in-one-woodiscount"),
+    name: __("Upgrade", "all-in-one-discount-rules"),
     href: pluginData.proUrl,
     current: false,
     isPro: true,
@@ -44,7 +48,7 @@ const logoUrl = `${pluginData.pluginUrl}assets/images/AIO_Discount_Logo.png`;
           <DisclosureButton
             class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span class="sr-only">{{
-              __("Open main menu", "all-in-one-woodiscount")
+              __("Open main menu", "all-in-one-discount-rules")
             }}</span>
             <Bars3Icon v-if="!open" class="block size-6" aria-hidden="true" />
             <XMarkIcon v-else class="block size-6" aria-hidden="true" />

@@ -4,12 +4,12 @@
  *
  * Syncs WooCommerce coupon usage with internal rule usage count.
  *
- * @package AIO_WooDiscount\Discount\UsageTrack
+ * @package AIO_DiscountRules\Discount\UsageTrack
  */
 
-namespace AIO_WooDiscount\Discount\UsageTrack;
+namespace AIO_DiscountRules\Discount\UsageTrack;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 

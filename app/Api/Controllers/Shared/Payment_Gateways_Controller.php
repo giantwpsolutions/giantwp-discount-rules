@@ -2,10 +2,10 @@
 /**
  * Payment Gateways REST API Controller.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Shared;
+namespace AIO_DiscountRules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ use WP_REST_Server;
 class Payment_Gateways_Controller extends WP_REST_Controller {
 
     public function __construct() {
-        $this->namespace = 'aio-woodiscount/v2';
+        $this->namespace = 'aio-discountrules/v2';
         $this->rest_base = 'payment-gateways';
     }
 
@@ -61,7 +61,7 @@ class Payment_Gateways_Controller extends WP_REST_Controller {
         if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
             return new \WP_Error(
                 'woocommerce_inactive',
-                __( 'WooCommerce is not active.', 'all-in-one-woodiscount' ),
+                __( 'WooCommerce is not active.', 'all-in-one-discount-rules' ),
                 ['status' => 500]
             );
         }

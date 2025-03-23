@@ -2,10 +2,10 @@
   /**
  * Product Categories REST API Controller.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Shared;
+namespace AIO_DiscountRules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ class Products_Category_Controller extends WP_REST_Controller {
 
     public function __construct() {
 
-        $this->namespace = 'aio-woodiscount/v2';
+        $this->namespace = 'aio-discountrules/v2';
         $this->rest_base = 'categories';
     }
 

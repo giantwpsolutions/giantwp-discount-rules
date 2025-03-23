@@ -137,14 +137,14 @@ watch(
   <div class="space-y-4 max-w-full my-6 border-t border-b py-6">
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
-        <span>{{ __("Buy Product", "all-in-one-woodiscount") }}</span>
+        <span>{{ __("Buy Product", "all-in-one-discount-rules") }}</span>
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Which product will receive the BOGO rule?',
-              'all-in-one-woodiscount'
+              'all-in-one-discount-rules'
             )
           "
           placement="top"
@@ -158,14 +158,16 @@ watch(
     <!-- Rule Applies -->
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Rules apply to products if matches", "all-in-one-woodiscount") }}
+        {{
+          __("Rules apply to products if matches", "all-in-one-discount-rules")
+        }}
       </label>
       <el-radio-group v-model="bogoApplies" @change="updateBogoApplies">
         <el-radio-button
-          :label="__('Any', 'all-in-one-woodiscount')"
+          :label="__('Any', 'all-in-one-discount-rules')"
           value="any" />
         <el-radio-button
-          :label="__('All', 'all-in-one-woodiscount')"
+          :label="__('All', 'all-in-one-discount-rules')"
           value="all" />
       </el-radio-group>
     </div>
@@ -178,8 +180,8 @@ watch(
         <span class="text-black italic text-sm">
           {{
             bogoApplies === "any"
-              ? __("Or", "all-in-one-woodiscount")
-              : __("And", "all-in-one-woodiscount")
+              ? __("Or", "all-in-one-discount-rules")
+              : __("And", "all-in-one-discount-rules")
           }}
         </span>
       </div>
@@ -228,7 +230,7 @@ watch(
             multiple
             :loading="isLoadingProducts"
             class="custom-select-v2 w-full"
-            :placeholder="__('Select', 'all-in-one-woodiscount')" />
+            :placeholder="__('Select', 'all-in-one-discount-rules')" />
 
           <el-input
             v-else-if="bogoSameProductisPricingField(buyProductBogoSame.field)"
@@ -265,7 +267,7 @@ watch(
     <button
       @click="addProductBogoSame"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-4">
-      {{ __("Assign Product", "all-in-one-woodiscount") }}
+      {{ __("Assign Product", "all-in-one-discount-rules") }}
     </button>
   </div>
 </template>

@@ -53,25 +53,25 @@ onMounted(() => {
         <el-switch
           v-model="localEnableSchedule"
           inline-prompt
-          :active-text="__('On', 'all-in-one-woodiscount')"
-          :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+          :active-text="__('On', 'all-in-one-discount-rules')"
+          :inactive-text="__('Off', 'all-in-one-discount-rules')" />
       </div>
 
       <label class="text-sm font-medium text-gray-900 whitespace-nowrap">
-        {{ __("Enable Schedule?", "all-in-one-woodiscount") }}
+        {{ __("Enable Schedule?", "all-in-one-discount-rules") }}
       </label>
     </div>
 
     <!-- Date-Time Picker -->
     <div v-if="localEnableSchedule" class="w-full my-6">
       <label class="block text-sm mb-3 font-medium text-gray-900">
-        {{ __("Start Date and End Date", "all-in-one-woodiscount") }}
+        {{ __("Start Date and End Date", "all-in-one-discount-rules") }}
       </label>
       <el-date-picker
         v-model="localScheduleRange"
         type="datetimerange"
-        :start-placeholder="__('Start date', 'all-in-one-woodiscount')"
-        :end-placeholder="__('End date', 'all-in-one-woodiscount')"
+        :start-placeholder="__('Start date', 'all-in-one-discount-rules')"
+        :end-placeholder="__('End date', 'all-in-one-discount-rules')"
         format="YYYY-MM-DD HH:mm:ss"
         date-format="YYYY/MM/DD ddd"
         time-format="A hh:mm:ss"

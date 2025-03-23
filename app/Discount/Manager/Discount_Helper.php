@@ -2,10 +2,10 @@
   /**
  * Discount helper utilities for validating schedule and usage limits.
  *
- * @package AIO_WooDiscount\Discount\Manager
+ * @package AIO_DiscountRules\Discount\Manager
  */
 
-namespace AIO_WooDiscount\Discount\Manager;
+namespace AIO_DiscountRules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 

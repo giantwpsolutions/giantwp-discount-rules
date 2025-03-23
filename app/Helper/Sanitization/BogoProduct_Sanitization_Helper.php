@@ -2,10 +2,10 @@
   /**
  * BOGO Product Condition Sanitization Helper.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Helper\Sanitization;
+namespace AIO_DiscountRules\Helper\Sanitization;
 
 defined( 'ABSPATH' ) || exit;
 

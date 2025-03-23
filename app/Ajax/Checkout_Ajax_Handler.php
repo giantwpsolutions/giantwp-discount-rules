@@ -2,14 +2,14 @@
   /**
  * Checkout AJAX Handler for AIO WooDiscount.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
- namespace AIO_WooDiscount\Ajax;
+ namespace AIO_DiscountRules\Ajax;
 
  defined( 'ABSPATH' ) || exit;
  
- use AIO_WooDiscount\Traits\SingletonTrait;
+ use AIO_DiscountRules\Traits\SingletonTrait;
 
 /**
  * Class Checkout_Ajax_Handler
@@ -41,7 +41,8 @@ class Checkout_Ajax_Handler {
             WC()->session->set_customer_session_cookie( true );
         }
 
-        $method = isset( $_POST['payment_method'] ) ? sanitize_text_field( $_POST['payment_method'] ) : '';
+        $method = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
+
 
         if ( empty( $method ) ) {
             wp_send_json_error( ['message' => 'No method provided'] );

@@ -24,14 +24,14 @@ const selectDiscountType = (type) => {
             ? 'bg-blue-200'
             : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
         ]">
-        {{ __("Flat/Percentage", "all-in-one-woodiscount") }}
+        {{ __("Flat/Percentage", "all-in-one-discount-rules") }}
       </button>
       <div
         class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
         {{
           __(
             "Apply a fixed amount or percentage discount",
-            "all-in-one-woodiscount"
+            "all-in-one-discount-rules"
           )
         }}
       </div>
@@ -47,11 +47,11 @@ const selectDiscountType = (type) => {
             ? 'bg-blue-200'
             : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
         ]">
-        {{ __("BOGO", "all-in-one-woodiscount") }}
+        {{ __("BOGO", "all-in-one-discount-rules") }}
       </button>
       <div
         class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-        {{ __("Buy One Get One free discount", "all-in-one-woodiscount") }}
+        {{ __("Buy One Get One free discount", "all-in-one-discount-rules") }}
       </div>
     </div>
 
@@ -69,7 +69,7 @@ const selectDiscountType = (type) => {
       <button
         @click="() => showUpgradeMessage(proFeature)"
         class="p-4 bg-gray-100 rounded-md text-center font-medium w-full cursor-not-allowed opacity-50">
-        {{ __(proFeature, "all-in-one-woodiscount") }}
+        {{ __(proFeature, "all-in-one-discount-rules") }}
         <span
           class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
           >Pro</span

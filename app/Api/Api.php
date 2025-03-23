@@ -2,24 +2,24 @@
     /**
  * Checkout AJAX Handler for AIO WooDiscount.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api;
+namespace AIO_DiscountRules\Api;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_WooDiscount\Api\Controllers\Discounts\All_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\Bogo_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\General_Data;
-use AIO_WooDiscount\Api\Controllers\Shared\Payment_Gateways_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\Products_Category_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\Products_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\Products_Tag_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\Shipping_Zone_Controller;
-use AIO_WooDiscount\Api\Controllers\Shared\Users_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
-use AIO_WooDiscount\Api\Controllers\Discounts\Settings_Controller;
+use AIO_DiscountRules\Api\Controllers\Discounts\All_Discount_Controller;
+use AIO_DiscountRules\Api\Controllers\Discounts\Bogo_Discount_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\General_Data;
+use AIO_DiscountRules\Api\Controllers\Shared\Payment_Gateways_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\Products_Category_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\Products_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\Products_Tag_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\Shipping_Zone_Controller;
+use AIO_DiscountRules\Api\Controllers\Shared\Users_Controller;
+use AIO_DiscountRules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
+use AIO_DiscountRules\Api\Controllers\Discounts\Settings_Controller;
 
 
 /**

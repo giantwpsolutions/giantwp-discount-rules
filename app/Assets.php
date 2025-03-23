@@ -2,14 +2,14 @@
   /**
  * Assets Class For the plugin
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount;
+namespace AIO_DiscountRules;
 
 defined('ABSPATH') || exit; 
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
     /**
  * Class Assets
@@ -17,7 +17,7 @@ use AIO_WooDiscount\Traits\SingletonTrait;
  * Handles enqueueing of all plugin assets, including Vue frontend scripts and AJAX triggers
  * for both admin and frontend (checkout/cart) pages.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 class Assets
 {
@@ -32,7 +32,6 @@ class Assets
         add_action( 'admin_enqueue_scripts', [ $this, 'register_plugin_assets' ], 50);
         add_action( 'admin_enqueue_scripts', [ $this, 'register_frontend_plugin_assets' ], 50 );
         add_action('wp_enqueue_scripts', [ $this, 'register_frontend_plugin_assets' ], 50 );
-
         add_filter( 'script_loader_tag',     [ $this, 'add_attribute_type' ], 10, 3 );
         add_action( 'in_admin_header',       [ $this, 'disable_core_update_notifications' ] );
     }
@@ -45,26 +44,27 @@ class Assets
         if ( ! is_admin() ) return;
 
         $screen = get_current_screen();
-        if ( ! $screen || $screen->id !== 'woocommerce_page_aio-woodiscount' ) return;
+        if ( ! $screen || $screen->id !== 'woocommerce_page_aio-discount-rules' ) return;
 
         wp_enqueue_script( 'wp-i18n' );
         wp_enqueue_script( 'wp-api-fetch' );
-
-        $is_dev        = defined( 'WP_DEBUG' ) && WP_DEBUG;
+        $is_dev = defined( 'WP_DEBUG' ) && WP_DEBUG;
         $dev_server_js = 'http://localhost:5173/src/main.js';
         $prod_js       = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
         $prod_css      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
         if ( $is_dev ) {
-            wp_enqueue_script( 'aio-woodiscount-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
-        } else {
-            wp_enqueue_script( 'aio-woodiscount-vjs', $prod_js, ['wp-i18n'], '1.0', true );
-            wp_enqueue_style( 'aio-woodiscount-styles', $prod_css, [], '1.0' );
+            wp_enqueue_script( 'aio-discountrule-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
+        }else{
+            wp_enqueue_script( 'aio-discountrule-vjs', $prod_js, ['wp-i18n'], '1.0', true );
+            wp_enqueue_style( 'aio-discountrule-styles', $prod_css, [], '1.0' );
         }
 
-        wp_localize_script( 'aio-woodiscount-vjs', 'pluginData', [
+           
+
+        wp_localize_script( 'aio-discountrule-vjs', 'pluginData', [
             'pluginUrl' => esc_url( plugin_dir_url(__DIR__) ),
-            'restUrl'   => esc_url_raw( rest_url( trailingslashit('aio-woodiscount/v2') ) ),
+            'restUrl'   => esc_url_raw( rest_url( trailingslashit('aio-discountrules/v2') ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
             'proActive' => defined( 'AIO_WOODISCOUNT_PRO_ACTIVE' ) && AIO_WOODISCOUNT_PRO_ACTIVE,
@@ -120,7 +120,7 @@ class Assets
         }
     }
 
-        /**
+    /**
      * Modify script tag to use type = "module" for Vue builds.
      *
      * @param string $tag    Script tag.
@@ -130,12 +130,18 @@ class Assets
      * @return string
      */
     public function add_attribute_type( $tag, $handle, $src ) {
-        if ( $handle === 'aio-woodiscount-vjs' ) {
-            return '<script type="module" src="' . esc_url( $src ) . '"></script>';
+        if ( 'aio-discountrule-vjs' === $handle ) {
+            // Use regex to add type="module" to the existing <script> tag
+            return str_replace(
+                '<script ',
+                '<script type="module" ',
+                $tag
+            );
         }
-
+    
         return $tag;
     }
+    
 
     /**
      * Removes all admin notices from plugin settings page.

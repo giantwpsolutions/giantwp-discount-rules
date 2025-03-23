@@ -54,20 +54,20 @@ const handleSaveSettings = async () => {
   <div
     class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6 flex flex-col">
     <h4 class="text-xl font-bold mb-6">
-      {{ __("Settings", "all-in-one-woodiscount") }}
+      {{ __("Settings", "all-in-one-discount-rules") }}
     </h4>
 
     <!-- License -->
     <div v-if="isProActive">
       <div class="w-full max-w-2xl flex items-center mb-2 gap-3">
         <label class="text-base font-medium text-dark w-32">
-          {{ __("License Key", "all-in-one-woodiscount") }}
+          {{ __("License Key", "all-in-one-discount-rules") }}
         </label>
 
         <el-input
           v-model="licenseKey"
           style="width: 300px"
-          :placeholder="__('Enter License Key', 'all-in-one-woodiscount')" />
+          :placeholder="__('Enter License Key', 'all-in-one-discount-rules')" />
 
         <el-button
           :type="licenseStatus === 'valid' ? 'danger' : 'primary'"
@@ -75,8 +75,8 @@ const handleSaveSettings = async () => {
           @click="handleAction">
           {{
             licenseStatus === "valid"
-              ? __("Deactivate", "all-in-one-woodiscount")
-              : __("Activate", "all-in-one-woodiscount")
+              ? __("Deactivate", "all-in-one-discount-rules")
+              : __("Activate", "all-in-one-discount-rules")
           }}
         </el-button>
       </div>
@@ -85,10 +85,10 @@ const handleSaveSettings = async () => {
         v-if="licenseStatus !== 'unknown'"
         class="pl-32 text-sm mt-1 text-gray-700">
         <template v-if="licenseStatus === 'valid'">
-          ✅ {{ __("Your license is active", "all-in-one-woodiscount") }}
+          ✅ {{ __("Your license is active", "all-in-one-discount-rules") }}
         </template>
         <template v-else>
-          ❌ {{ __("License is invalid or expired", "all-in-one-woodiscount") }}
+          ❌ {{ __("License is invalid or expired", "all-in-one-discount-rules") }}
         </template>
       </div>
     </div>
@@ -98,7 +98,7 @@ const handleSaveSettings = async () => {
       <!-- Discount Based On -->
       <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
         <label class="text-base font-medium text-dark w-32">
-          {{ __("Rule Apply on", "all-in-one-woodiscount") }}
+          {{ __("Rule Apply on", "all-in-one-discount-rules") }}
         </label>
 
         <el-select
@@ -108,10 +108,10 @@ const handleSaveSettings = async () => {
           popper-class="custom-dropdown">
           <el-option
             :value="'regular_price'"
-            :label="__('Regular Price', 'all-in-one-woodiscount')" />
+            :label="__('Regular Price', 'all-in-one-discount-rules')" />
           <el-option
             :value="'sale_price'"
-            :label="__('Sale Price', 'all-in-one-woodiscount')" />
+            :label="__('Sale Price', 'all-in-one-discount-rules')" />
         </el-select>
       </div>
 
@@ -119,7 +119,7 @@ const handleSaveSettings = async () => {
       <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
         <label
           class="text-base font-medium text-dark w-32 flex items-center gap-2">
-          {{ __("Order Label", "all-in-one-woodiscount") }}
+          {{ __("Order Label", "all-in-one-discount-rules") }}
           <div class="group relative">
             <el-tooltip
               class="box-item"
@@ -127,7 +127,7 @@ const handleSaveSettings = async () => {
               :content="
                 __(
                   'Show a label on admin order page if discount applied',
-                  'all-in-one-woodiscount'
+                  'all-in-one-discount-rules'
                 )
               "
               placement="top"
@@ -141,8 +141,8 @@ const handleSaveSettings = async () => {
         <el-switch
           v-model="saveSettingsData.orderPageLabel"
           inline-prompt
-          :active-text="__('On', 'all-in-one-woodiscount')"
-          :inactive-text="__('Off', 'all-in-one-woodiscount')" />
+          :active-text="__('On', 'all-in-one-discount-rules')"
+          :inactive-text="__('Off', 'all-in-one-discount-rules')" />
       </div>
 
       <!-- Save Settings Button -->
@@ -151,7 +151,7 @@ const handleSaveSettings = async () => {
           type="primary"
           :loading="isLoadingSettings"
           @click="handleSaveSettings">
-          {{ __("Save Settings", "all-in-one-woodiscount") }}
+          {{ __("Save Settings", "all-in-one-discount-rules") }}
         </el-button>
       </div>
     </div>

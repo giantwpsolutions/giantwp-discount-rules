@@ -17,45 +17,45 @@ export const conditions = reactive([
 // Dynamic condition options with i18n
 export const conditionOptions = [
     {
-        label: __('Cart', 'all-in-one-woodiscount'),
+        label: __('Cart', 'all-in-one-discount-rules'),
         options: [
-            { label: __('Cart Subtotal Price', 'all-in-one-woodiscount'), value: 'cart_subtotal_price' },
-            { label: __('Cart Quantity', 'all-in-one-woodiscount'), value: 'cart_quantity' },
-            { label: __('Cart Total Weight', 'all-in-one-woodiscount'), value: 'cart_total_weight' },
+            { label: __('Cart Subtotal Price', 'all-in-one-discount-rules'), value: 'cart_subtotal_price' },
+            { label: __('Cart Quantity', 'all-in-one-discount-rules'), value: 'cart_quantity' },
+            { label: __('Cart Total Weight', 'all-in-one-discount-rules'), value: 'cart_total_weight' },
         ],
     },
     {
-        label: __('Cart Items', 'all-in-one-woodiscount'),
+        label: __('Cart Items', 'all-in-one-discount-rules'),
         options: [
-            { label: __('Cart Item - Product', 'all-in-one-woodiscount'), value: 'cart_item_product' },
-            { label: __('Cart Item - Variation', 'all-in-one-woodiscount'), value: 'cart_item_variation' },
-            { label: __('Cart Item - Category', 'all-in-one-woodiscount'), value: 'cart_item_category' },
-            { label: __('Cart Item - Tag', 'all-in-one-woodiscount'), value: 'cart_item_tag' },
-            { label: __('Cart Item - Regular Price', 'all-in-one-woodiscount'), value: 'cart_item_regular_price' },
+            { label: __('Cart Item - Product', 'all-in-one-discount-rules'), value: 'cart_item_product' },
+            { label: __('Cart Item - Variation', 'all-in-one-discount-rules'), value: 'cart_item_variation' },
+            { label: __('Cart Item - Category', 'all-in-one-discount-rules'), value: 'cart_item_category' },
+            { label: __('Cart Item - Tag', 'all-in-one-discount-rules'), value: 'cart_item_tag' },
+            { label: __('Cart Item - Regular Price', 'all-in-one-discount-rules'), value: 'cart_item_regular_price' },
         ],
     },
     {
-        label: __('Customer', 'all-in-one-woodiscount'),
+        label: __('Customer', 'all-in-one-discount-rules'),
         options: [
-            { label: __('Customer Is Logged In', 'all-in-one-woodiscount'), value: 'customer_is_logged_in' },
-            { label: __('Customer Role', 'all-in-one-woodiscount'), value: 'customer_role' },
-            { label: __('Specific Customer', 'all-in-one-woodiscount'), value: 'specific_customer' },
+            { label: __('Customer Is Logged In', 'all-in-one-discount-rules'), value: 'customer_is_logged_in' },
+            { label: __('Customer Role', 'all-in-one-discount-rules'), value: 'customer_role' },
+            { label: __('Specific Customer', 'all-in-one-discount-rules'), value: 'specific_customer' },
         ],
     },
     {
-        label: __('Purchase History', 'all-in-one-woodiscount'),
+        label: __('Purchase History', 'all-in-one-discount-rules'),
         options: [
-            { label: __('Customer Order Count', 'all-in-one-woodiscount'), value: 'customer_order_count' },
-            { label: __('Order History Product', 'all-in-one-woodiscount'), value: 'customer_order_history_product' },
-            { label: __('Order History Category', 'all-in-one-woodiscount'), value: 'customer_order_history_category' },
-            // { label: __('Shipping Region', 'all-in-one-woodiscount'), value: 'customer_shipping_region' },
+            { label: __('Customer Order Count', 'all-in-one-discount-rules'), value: 'customer_order_count' },
+            { label: __('Order History Product', 'all-in-one-discount-rules'), value: 'customer_order_history_product' },
+            { label: __('Order History Category', 'all-in-one-discount-rules'), value: 'customer_order_history_category' },
+            // { label: __('Shipping Region', 'all-in-one-discount-rules'), value: 'customer_shipping_region' },
         ],
     },
     {
-        label: __('Others', 'all-in-one-woodiscount'),
+        label: __('Others', 'all-in-one-discount-rules'),
         options: [
-            { label: __('Payment Method', 'all-in-one-woodiscount'), value: 'payment_method' },
-            // { label: __('Applied Coupons', 'all-in-one-woodiscount'), value: 'applied_coupons' },
+            { label: __('Payment Method', 'all-in-one-discount-rules'), value: 'payment_method' },
+            // { label: __('Applied Coupons', 'all-in-one-discount-rules'), value: 'applied_coupons' },
         ],
     },
 ];
@@ -64,48 +64,48 @@ export const conditionOptions = [
 // Operator Options
 export const operatorOptions = {
     default: [
-        { label: __('Greater Than', 'all-in-one-woodiscount'), value: 'greater_than' },
-        { label: __('Less Than', 'all-in-one-woodiscount'), value: 'less_than' },
+        { label: __('Greater Than', 'all-in-one-discount-rules'), value: 'greater_than' },
+        { label: __('Less Than', 'all-in-one-discount-rules'), value: 'less_than' },
         {
-            label: __('Equal or Greater Than', 'all-in-one-woodiscount'),
+            label: __('Equal or Greater Than', 'all-in-one-discount-rules'),
             value: 'equal_greater_than',
         },
         {
-            label: __('Equal or Less Than', 'all-in-one-woodiscount'),
+            label: __('Equal or Less Than', 'all-in-one-discount-rules'),
             value: 'equal_less_than',
         },
     ],
 
     contain: [
-        { label: __('Contains All', 'all-in-one-woodiscount'), value: 'contain_all' },
+        { label: __('Contains All', 'all-in-one-discount-rules'), value: 'contain_all' },
         {
-            label: __('Contains in List', 'all-in-one-woodiscount'),
+            label: __('Contains in List', 'all-in-one-discount-rules'),
             value: 'contain_in_list',
         },
         {
-            label: __('Not Contain in List', 'all-in-one-woodiscount'),
+            label: __('Not Contain in List', 'all-in-one-discount-rules'),
             value: 'not_contain_inlist',
         },
     ],
 
     isLoggedIn: [
         {
-            label: __('Logged In', 'all-in-one-woodiscount'),
+            label: __('Logged In', 'all-in-one-discount-rules'),
             value: 'logged_in',
         },
         {
-            label: __('Not Logged In', 'all-in-one-woodiscount'),
+            label: __('Not Logged In', 'all-in-one-discount-rules'),
             value: 'not_logged_in',
         },
     ],
 
     inList: [
         {
-            label: __('In List', 'all-in-one-woodiscount'),
+            label: __('In List', 'all-in-one-discount-rules'),
             value: 'in_list',
         },
         {
-            label: __('Not in List', 'all-in-one-woodiscount'),
+            label: __('Not in List', 'all-in-one-discount-rules'),
             value: 'not_in_list',
         },
     ],

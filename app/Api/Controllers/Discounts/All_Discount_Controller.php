@@ -2,10 +2,10 @@
   /**
  * All Discount REST API Controller
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Discounts;
+namespace AIO_DiscountRules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,7 +21,7 @@ class All_Discount_Controller extends WP_REST_Controller {
      * Constructor to set namespace and rest base.
      */
     public function __construct() {
-        $this->namespace = 'aio-woodiscount/v2';
+        $this->namespace = 'aio-discountrules/v2';
         $this->rest_base = 'get-all-discounts';
     }
 

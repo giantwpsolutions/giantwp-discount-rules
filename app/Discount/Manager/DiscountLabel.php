@@ -2,12 +2,12 @@
   /**
  * Display applied discount rules in WooCommerce Orders list.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\Manager;
+namespace AIO_DiscountRules\Discount\Manager;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Only displays if the "orderPageLabel" setting is enabled.
  *
- * @package AIO_WooDiscount\Discount\Manager
+ * @package AIO_DiscountRules\Discount\Manager
  */
 class DiscountLabel {
 
@@ -58,12 +58,12 @@ class DiscountLabel {
         foreach ( $columns as $key => $label ) {
             $new_columns[$key] = $label;
             if ( 'order_status' === $key ) {
-                $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-woodiscount' );
+                $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-discount-rules' );
             }
         }
 
         if ( ! isset( $new_columns['aio_discount_label'] ) ) {
-            $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-woodiscount' );
+            $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-discount-rules' );
         }
 
         return $new_columns;
@@ -83,10 +83,10 @@ class DiscountLabel {
         $labels = [];
 
         $meta_keys = [
-            '_aio_bogo_applied_rules'     => __( 'BOGO', 'all-in-one-woodiscount' ),
-            '_aio_bxgy_applied_rules'     => __( 'Buy X Get Y', 'all-in-one-woodiscount' ),
-            '_aio_bulk_applied_rules'     => __( 'Bulk', 'all-in-one-woodiscount' ),
-            '_aio_shipping_applied_rules' => __( 'Shipping', 'all-in-one-woodiscount' ),
+            '_aio_bogo_applied_rules'     => __( 'BOGO', 'all-in-one-discount-rules' ),
+            '_aio_bxgy_applied_rules'     => __( 'Buy X Get Y', 'all-in-one-discount-rules' ),
+            '_aio_bulk_applied_rules'     => __( 'Bulk', 'all-in-one-discount-rules' ),
+            '_aio_shipping_applied_rules' => __( 'Shipping', 'all-in-one-discount-rules' ),
         ];
 
         $order = wc_get_order( $post_id );
@@ -100,7 +100,7 @@ class DiscountLabel {
             }
         }
 
-        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'all-in-one-woodiscount' ) . '</em>';
+        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'all-in-one-discount-rules' ) . '</em>';
 
     }
 }

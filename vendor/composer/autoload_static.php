@@ -7,18 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInit59058e8f9c97e12f7316df60fd37ba3a
 {
     public static $files = array (
-        'e4bb54eb3377f6e3d65b4ba1202f0981' => __DIR__ . '/../..' . '/app/functions.php',
+        'c2209a9021541c0cedfe9083bd73f248' => __DIR__ . '/../..' . '/app/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
-            'AIO_WooDiscount\\' => 16,
+            'AIO_DiscountRules\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'AIO_WooDiscount\\' => 
+        'AIO_DiscountRules\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),

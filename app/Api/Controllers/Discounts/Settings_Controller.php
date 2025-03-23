@@ -2,10 +2,10 @@
   /**
  * Plugin Settings REST API Controller.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Discounts;
+namespace AIO_DiscountRules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,7 +20,7 @@ use WP_REST_Controller;
  * - discountBasedOn: whether to calculate discounts from regular or sale price.
  * - orderPageLabel: whether to show applied discount labels in the admin orders page.
  *
- * Route: /aio-woodiscount/v2/settings
+ * Route: /aio-discountrules/v2/settings
  *
  * @package AIO_WooDiscount\Api\Controllers\Discounts
  */
@@ -33,7 +33,7 @@ class Settings_Controller extends WP_REST_Controller
      */
     public function register_routes() {
         // Save settings (POST/PUT)
-        register_rest_route( 'aio-woodiscount/v2', '/settings', [
+        register_rest_route( 'aio-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [ $this, 'save_settings' ],
             'permission_callback' => function () {
@@ -42,7 +42,7 @@ class Settings_Controller extends WP_REST_Controller
         ] );
 
         // Get settings (GET)
-        register_rest_route( 'aio-woodiscount/v2', '/settings', [
+        register_rest_route( 'aio-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [ $this, 'get_settings' ],
             'permission_callback' => function () {

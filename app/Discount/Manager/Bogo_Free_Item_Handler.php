@@ -2,12 +2,12 @@
 /**
  * Handles BOGO Free Item display and price override in cart.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\Manager;
+namespace AIO_DiscountRules\Discount\Manager;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 defined('ABSPATH') || exit;
 
@@ -66,7 +66,7 @@ class Bogo_Free_Item_Handler {
     public function filter_cart_price( $price_html, $cart_item, $cart_item_key ) {
         if ( ! empty( $cart_item['aio_bogo_free_item'] ) ) {
             if ( floatval( $cart_item['override_price'] ) === 0.0 ) {
-                return '<span class="aio-free-price">' . esc_html__('Free', 'all-in-one-woodiscount') . '</span>';
+                return '<span class="aio-free-price">' . esc_html__('Free', 'all-in-one-discount-rules') . '</span>';
             }
             return wc_price( floatval( $cart_item['override_price'] ) );
         }
@@ -87,7 +87,7 @@ class Bogo_Free_Item_Handler {
         if ( ! empty( $cart_item['aio_bogo_free_item'] ) ) {
             $price = floatval( $cart_item['override_price'] ?? 0.0 );
             if ( $price === 0.0 ) {
-                return '<span class="aio-free-subtotal">' . esc_html__('Free', 'all-in-one-woodiscount') . '</span>';
+                return '<span class="aio-free-subtotal">' . esc_html__('Free', 'all-in-one-discount-rules') . '</span>';
             }
             return wc_price( $price * $cart_item['quantity'] );
         }

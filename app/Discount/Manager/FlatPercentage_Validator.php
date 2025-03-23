@@ -5,15 +5,15 @@
  * Validates auto-generated coupons for flat/percentage discounts based on
  * schedule, usage limits, and conditional logic.
  *
- * @package AIO_WooDiscount\Discount\Manager
+ * @package AIO_DiscountRules\Discount\Manager
  */
 
-namespace AIO_WooDiscount\Discount\Manager;
+namespace AIO_DiscountRules\Discount\Manager;
 
 defined('ABSPATH') || exit;
 
-use AIO_WooDiscount\Discount\Condition\Conditions;
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Discount\Condition\Conditions;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 /**
  * Class FlatPercentage_Validator

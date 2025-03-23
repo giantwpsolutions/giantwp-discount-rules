@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'AIO_WooDiscount\\' => array($baseDir . '/app'),
+    'AIO_DiscountRules\\' => array($baseDir . '/app'),
 );

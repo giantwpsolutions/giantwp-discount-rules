@@ -4,10 +4,10 @@
  *
  * Handles condition-based checks for BOGO discount applicability.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\BogoBuyProduct;
+namespace AIO_DiscountRules\Discount\BogoBuyProduct;
 
 defined( 'ABSPATH' ) || exit;
 

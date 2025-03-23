@@ -2,14 +2,14 @@
 /**
  * Handles hiding of auto-generated coupons from the WooCommerce admin list.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\Manager;
+namespace AIO_DiscountRules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 /**
  * Class CouponDisplay

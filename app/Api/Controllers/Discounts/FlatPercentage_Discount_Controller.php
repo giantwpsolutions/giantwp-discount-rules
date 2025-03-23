@@ -2,10 +2,10 @@
   /**
  * Flat/Percentage Discount REST API Controller.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Discounts;
+namespace AIO_DiscountRules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use AIO_WooDiscount\Helper\Sanitization\FlatPercentage_Sanitization_Helper;
+use AIO_DiscountRules\Helper\Sanitization\FlatPercentage_Sanitization_Helper;
 
 
 /**
@@ -28,7 +28,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
      */
     public function __construct() {
 
-        $this->namespace = 'aio-woodiscount/v2';
+        $this->namespace = 'aio-discountrules/v2';
         $this->rest_base = 'save-flatpercentage-discount';
     }
 
@@ -113,7 +113,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         if ( empty( $params ) ) {
             return new WP_Error(
                 'missing_data',
-                __( 'No data received.', 'all-in-one-woodiscount' ),
+                __( 'No data received.', 'all-in-one-discount-rules' ),
                 ['status' => 400]
             );
         }
@@ -145,13 +145,13 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         if ( ! $saved ) {
             return new WP_Error(
                 'save_failed',
-                __( 'Failed to save data.', 'all-in-one-woodiscount' ),
+                __( 'Failed to save data.', 'all-in-one-discount-rules' ),
                 ['status' => 500]
             );
         }
 
         return new WP_REST_Response(
-            ['success' => true, 'message' => __( 'Data saved successfully.', 'all-in-one-woodiscount' ) ],
+            ['success' => true, 'message' => __( 'Data saved successfully.', 'all-in-one-discount-rules' ) ],
             200
         );
     }
@@ -171,7 +171,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         // Get JSON Data
         $params = $request->get_json_params();
         if ( empty( $params ) ) {
-            return new WP_Error( 'missing_data', __( 'No data received.', 'all-in-one-woodiscount' ), ['status' => 400] );
+            return new WP_Error( 'missing_data', __( 'No data received.', 'all-in-one-discount-rules' ), ['status' => 400] );
         }
 
         // Retrieve Existing BOGO Discounts
@@ -209,10 +209,10 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
 
         if ( $updated ) {
             update_option( 'aio_flatpercentage_discount', maybe_serialize( $existing_data ) );
-            return new WP_REST_Response( ['success' => true, 'message' => __( 'Data updated successfully.', 'all-in-one-woodiscount' ) ], 200 );
+            return new WP_REST_Response( ['success' => true, 'message' => __( 'Data updated successfully.', 'all-in-one-discount-rules' ) ], 200 );
         }
 
-        return new WP_Error( 'not_found', __( 'Discount rule not found.', 'all-in-one-woodiscount' ), ['status' => 404] );
+        return new WP_Error( 'not_found', __( 'Discount rule not found.', 'all-in-one-discount-rules' ), ['status' => 404] );
     }
 
 
@@ -234,7 +234,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         }
 
         if ( ! is_array( $existing_data ) ) {
-            return new WP_Error( 'invalid_data', __( 'Stored discount data is corrupted.', 'all-in-one-woodiscount' ), ['status' => 500] );
+            return new WP_Error( 'invalid_data', __( 'Stored discount data is corrupted.', 'all-in-one-discount-rules' ), ['status' => 500] );
         }
 
         $deleted_coupon_code = null;
@@ -262,7 +262,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
 
         return new \WP_REST_Response([
             'success' => true,
-            'message' => __( 'Discount and coupon deleted successfully.', 'all-in-one-woodiscount' ),
+            'message' => __( 'Discount and coupon deleted successfully.', 'all-in-one-discount-rules' ),
         ], 200 );
     }
 

@@ -2,12 +2,12 @@
   /**
  * BOGO Discount Trigger AJAX Handler.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Ajax;
+namespace AIO_DiscountRules\Ajax;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 

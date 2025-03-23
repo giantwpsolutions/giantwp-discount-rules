@@ -2,10 +2,10 @@
   /**
  * General WooCommerce Data REST Controller.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Api\Controllers\Shared;
+namespace AIO_DiscountRules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ class General_Data extends WP_REST_Controller {
      * Constructor.
      */
     public function __construct() {
-        $this->namespace = 'aio-woodiscount/v2';
+        $this->namespace = 'aio-discountrules/v2';
         $this->rest_base = 'general';
     }
 

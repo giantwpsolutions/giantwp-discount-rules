@@ -5,20 +5,20 @@
  *
  * Handles Bogo Discount
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount;
+namespace AIO_DiscountRules\Discount;
 
 defined( 'ABSPATH' ) || exit;
 
 
-use AIO_WooDiscount\Discount\Condition\Conditions;
-use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
-use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuyProduct;
-use AIO_WooDiscount\Discount\Manager\Discount_Helper;
-use AIO_WooDiscount\Discount\UsageTrack\Bogo_Usage_Handler;
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Discount\Condition\Conditions;
+use AIO_DiscountRules\Discount\BogoBuyProduct\BogoBuy_Field;
+use AIO_DiscountRules\Discount\BogoBuyProduct\BogoBuyProduct;
+use AIO_DiscountRules\Discount\Manager\Discount_Helper;
+use AIO_DiscountRules\Discount\UsageTrack\Bogo_Usage_Handler;
+use AIO_DiscountRules\Traits\SingletonTrait;
 
 /**
  * Class Bogo_Discount

@@ -32,7 +32,7 @@ watch(localCouponName, (newValue) => {
 <template>
   <div class="w-full max-w-md mb-6">
     <h4 class="text-gray-950 pb-2 text-sm">
-      {{ __("Coupon Name", "all-in-one-woodiscount") }}
+      {{ __("Coupon Name", "all-in-one-discount-rules") }}
     </h4>
     <label
       for="aio_coupon"
@@ -42,10 +42,10 @@ watch(localCouponName, (newValue) => {
         id="aio_coupon"
         v-model="localCouponName"
         class="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-        :placeholder="__('Coupon Name', 'all-in-one-woodiscount')" />
+        :placeholder="__('Coupon Name', 'all-in-one-discount-rules')" />
       <span
         class="pointer-events-none absolute left-2.5 top-0 -translate-y-1/2 bg-white px-1 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
-        {{ __("Coupon Name", "all-in-one-woodiscount") }}
+        {{ __("Coupon Name", "all-in-one-discount-rules") }}
       </span>
     </label>
   </div>

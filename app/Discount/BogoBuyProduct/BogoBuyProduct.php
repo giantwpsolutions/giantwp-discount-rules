@@ -2,15 +2,15 @@
 /**
  * BOGO/BXGY Buy Product Condition Dispatcher.
  *
- * @package AIO_WooDiscount
+ * @package AIO_DiscountRules
  */
 
-namespace AIO_WooDiscount\Discount\BogoBuyProduct;
+namespace AIO_DiscountRules\Discount\BogoBuyProduct;
 
 defined( 'ABSPATH' ) || exit;
 
 
-use AIO_WooDiscount\Discount\BogoBuyProduct\BogoBuy_Field;
+use AIO_DiscountRules\Discount\BogoBuyProduct\BogoBuy_Field;
 use WC_Cart;
 
 /**

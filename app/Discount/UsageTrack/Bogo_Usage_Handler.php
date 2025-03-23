@@ -4,14 +4,14 @@
  *
  * Tracks usage count of BOGO discount rules after order completion.
  *
- * @package AIO_WooDiscount\Discount\UsageTrack
+ * @package AIO_DiscountRules\Discount\UsageTrack
  */
 
-namespace AIO_WooDiscount\Discount\UsageTrack;
+namespace AIO_DiscountRules\Discount\UsageTrack;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_WooDiscount\Traits\SingletonTrait;
+use AIO_DiscountRules\Traits\SingletonTrait;
 use WC_Order;
 use WC;
 
@@ -20,7 +20,7 @@ use WC;
  *
  * Handles tracking of Buy One Get One (Bogo) discount usage count.
  *
- * @package AIO_WooDiscount\Discount\UsageTrack
+ * @package AIO_DiscountRules\Discount\UsageTrack
  */
 class Bogo_Usage_Handler {
 
