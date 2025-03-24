@@ -2,7 +2,7 @@
 <template>
   <div>
     <h2 class="text-2xl text-red-500 font-bold">
-      {{ __("404 - Page Not Found", "all-in-one-discount-rules") }}
+      {{ __("404 - Page Not Found", "dealbuilder-discount-rules") }}
     </h2>
   </div>
 </template>

@@ -201,12 +201,12 @@ watch(
   <div class="space-y-4 max-w-full mt-2 mb-6 border-b py-6">
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
-        <span>{{ __("Get Y Product", "all-in-one-discount-rules") }}</span>
+        <span>{{ __("Get Y Product", "dealbuilder-discount-rules") }}</span>
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
-            __('Which product will get the rule?', 'all-in-one-discount-rules')
+            __('Which product will get the rule?', 'dealbuilder-discount-rules')
           "
           placement="top"
           popper-class="custom-tooltip">
@@ -221,17 +221,17 @@ watch(
         v-model="isrepeat"
         @change="updateIsrepeat"
         inline-prompt
-        :active-text="__('On', 'all-in-one-discount-rules')"
-        :inactive-text="__('Off', 'all-in-one-discount-rules')" />
+        :active-text="__('On', 'dealbuilder-discount-rules')"
+        :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Is Repeat?", "all-in-one-discount-rules") }}
+        {{ __("Is Repeat?", "dealbuilder-discount-rules") }}
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Discount will apply once or repeat after each quantities matching',
-              'all-in-one-discount-rules'
+              'dealbuilder-discount-rules'
             )
           "
           placement="top"
@@ -245,14 +245,14 @@ watch(
     <!-- Get Item: Free or Discount -->
     <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Get Item", "all-in-one-discount-rules") }}
+        {{ __("Get Item", "dealbuilder-discount-rules") }}
       </label>
       <el-radio-group v-model="freeorDiscount" @change="updateFreeorDiscount">
         <el-radio-button
-          :label="__('Free', 'all-in-one-discount-rules')"
+          :label="__('Free', 'dealbuilder-discount-rules')"
           value="free_product" />
         <el-radio-button
-          :label="__('Discount', 'all-in-one-discount-rules')"
+          :label="__('Discount', 'dealbuilder-discount-rules')"
           value="discount_product" />
       </el-radio-group>
     </div>
@@ -263,7 +263,7 @@ watch(
         <!-- Pricing Type -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "all-in-one-discount-rules") }}
+            {{ __("Pricing Type", "dealbuilder-discount-rules") }}
           </label>
           <el-select
             v-model="discountTypeBxgy"
@@ -272,17 +272,17 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'all-in-one-discount-rules')" />
+              :label="__('Fixed Discount', 'dealbuilder-discount-rules')" />
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'all-in-one-discount-rules')" />
+              :label="__('Percentage Discount', 'dealbuilder-discount-rules')" />
           </el-select>
         </div>
 
         <!-- Pricing Value -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "all-in-one-discount-rules") }}
+            {{ __("Pricing Value", "dealbuilder-discount-rules") }}
           </label>
           <el-input v-model.number="discountValue" placeholder="Please input">
             <template #append>
@@ -300,13 +300,13 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{ __("Maximum Value", "all-in-one-discount-rules") }}</span>
+              <span>{{ __("Maximum Value", "dealbuilder-discount-rules") }}</span>
               <el-tooltip
                 effect="dark"
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'all-in-one-discount-rules'
+                    'dealbuilder-discount-rules'
                   )
                 "
                 placement="top"
@@ -331,14 +331,14 @@ watch(
     <!-- Match condition type -->
     <div class="flex items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Rules apply to products if matches", "all-in-one-discount-rules") }}
+        {{ __("Rules apply to products if matches", "dealbuilder-discount-rules") }}
       </label>
       <el-radio-group v-model="getYApplies" @change="updateGetYApplies">
         <el-radio-button
-          :label="__('Any', 'all-in-one-discount-rules')"
+          :label="__('Any', 'dealbuilder-discount-rules')"
           value="any" />
         <el-radio-button
-          :label="__('All', 'all-in-one-discount-rules')"
+          :label="__('All', 'dealbuilder-discount-rules')"
           value="all" />
       </el-radio-group>
     </div>
@@ -352,8 +352,8 @@ watch(
         <span class="text-black italic text-sm">
           {{
             getYApplies === "any"
-              ? __("Or", "all-in-one-discount-rules")
-              : __("And", "all-in-one-discount-rules")
+              ? __("Or", "dealbuilder-discount-rules")
+              : __("And", "dealbuilder-discount-rules")
           }}
         </span>
       </div>
@@ -438,7 +438,7 @@ watch(
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Get Product", "all-in-one-discount-rules") }}
+      {{ __("Assign Get Product", "dealbuilder-discount-rules") }}
     </button>
   </div>
 </template>

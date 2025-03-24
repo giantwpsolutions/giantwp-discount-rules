@@ -2,12 +2,12 @@
 /**
  * Cart Discount Trigger AJAX Handler.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Ajax;
+namespace DealBuilder_Discount_Rules\Ajax;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,8 +24,8 @@ class TriggerCart{
      * Constructor to register AJAX actions.
      */
     public function __construct() {
-        add_action( 'wp_ajax_aio_check_cart_discounts', [ $this, 'aio_check_cart_discounts' ] );
-        add_action( 'wp_ajax_nopriv_aio_check_cart_discounts', [ $this, 'aio_check_cart_discounts' ] );
+        add_action( 'wp_ajax_db_check_cart_discounts', [ $this, 'db_check_cart_discounts' ] );
+        add_action( 'wp_ajax_nopriv_db_check_cart_discounts', [ $this, 'db_check_cart_discounts' ] );
     }
 
     /**
@@ -33,11 +33,11 @@ class TriggerCart{
      *
      * @return void
      */
-    public function aio_check_cart_discounts() {
+    public function db_check_cart_discounts() {
 
         $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
-        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'aio_trigger_nonce' ) ) {
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'db_trigger_nonce' ) ) {
             wp_send_json_error( [ 'message' => 'Invalid nonce' ] );
         }
         
@@ -47,7 +47,7 @@ class TriggerCart{
         }
 
         // Apply discount logic
-        (new \AIO_WooDiscount\Discount\FlatPercentage_Discount())->maybe_apply_discount(true);
+        (new \DealBuilder_Discount_Rules\Discount\FlatPercentage_Discount())->maybe_apply_discount(true);
 
         wp_send_json_success( ['message' => 'Discount checked'] );
     }

@@ -207,11 +207,11 @@ watch(
           v-model="enableConditions"
           @change="updateEnableConditions"
           inline-prompt
-          :active-text="__('On', 'all-in-one-discount-rules')"
-          :inactive-text="__('Off', 'all-in-one-discount-rules')" />
+          :active-text="__('On', 'dealbuilder-discount-rules')"
+          :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
       </div>
       <label class="text-sm font-medium text-gray-900">
-        {{ __("Enable Conditions?", "all-in-one-discount-rules") }}
+        {{ __("Enable Conditions?", "dealbuilder-discount-rules") }}
       </label>
     </div>
 
@@ -221,23 +221,23 @@ watch(
       <div
         class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-6 mb-1">
         <label class="text-sm font-medium text-gray-900">
-          {{ __("Apply conditions if matches", "all-in-one-discount-rules") }}
+          {{ __("Apply conditions if matches", "dealbuilder-discount-rules") }}
         </label>
         <el-radio-group
           v-model="conditionsApplies"
           @change="updateConditionsApplies">
           <el-radio-button
-            :label="__('Any', 'all-in-one-discount-rules')"
+            :label="__('Any', 'dealbuilder-discount-rules')"
             value="any" />
           <el-radio-button
-            :label="__('All', 'all-in-one-discount-rules')"
+            :label="__('All', 'dealbuilder-discount-rules')"
             value="all" />
         </el-radio-group>
       </div>
 
       <!-- Add Conditions Label -->
       <label class="block text-sm font-medium text-gray-900">
-        {{ __("Add Conditions", "all-in-one-discount-rules") }}
+        {{ __("Add Conditions", "dealbuilder-discount-rules") }}
       </label>
 
       <!-- Loop Through Conditions -->
@@ -250,8 +250,8 @@ watch(
           <span class="text-black italic text-sm">
             {{
               conditionsApplies === "any"
-                ? __("Or", "all-in-one-discount-rules")
-                : __("And", "all-in-one-discount-rules")
+                ? __("Or", "dealbuilder-discount-rules")
+                : __("And", "dealbuilder-discount-rules")
             }}
           </span>
         </div>
@@ -265,7 +265,7 @@ watch(
               class="w-full h-8 border rounded p-2 text-sm sm:text-sm"
               @change="updateConditions">
               <option value="">
-                {{ __("Please select", "all-in-one-discount-rules") }}
+                {{ __("Please select", "dealbuilder-discount-rules") }}
               </option>
               <template v-for="group in conditionOptions" :key="group.label">
                 <optgroup
@@ -344,7 +344,7 @@ watch(
       <button
         @click="addCondition"
         class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-        {{ __("Add Condition", "all-in-one-discount-rules") }}
+        {{ __("Add Condition", "dealbuilder-discount-rules") }}
       </button>
     </div>
   </div>

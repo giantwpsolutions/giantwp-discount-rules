@@ -2,12 +2,12 @@
   /**
  * Display applied discount rules in WooCommerce Orders list.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Manager;
+namespace DealBuilder_Discount_Rules\Discount\Manager;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * Only displays if the "orderPageLabel" setting is enabled.
  *
- * @package AIO_DiscountRules\Discount\Manager
  */
 class DiscountLabel {
 
@@ -32,7 +31,7 @@ class DiscountLabel {
      */
     public function __construct() {
         // Only load if the setting is enabled
-        $settings = maybe_unserialize( get_option( 'aio_woodiscount_settings', [] ) );
+        $settings = maybe_unserialize( get_option( 'db_woodiscount_settings', [] ) );
         if ( empty( $settings['orderPageLabel'] ) ) {
             return;
         }
@@ -58,12 +57,12 @@ class DiscountLabel {
         foreach ( $columns as $key => $label ) {
             $new_columns[$key] = $label;
             if ( 'order_status' === $key ) {
-                $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-discount-rules' );
+                $new_columns['db_discount_label'] = __( 'Discount Rules', 'dealbuilder-discount-rules' );
             }
         }
 
-        if ( ! isset( $new_columns['aio_discount_label'] ) ) {
-            $new_columns['aio_discount_label'] = __( 'Discount Rules', 'all-in-one-discount-rules' );
+        if ( ! isset( $new_columns['db_discount_label'] ) ) {
+            $new_columns['db_discount_label'] = __( 'Discount Rules', 'dealbuilder-discount-rules' );
         }
 
         return $new_columns;
@@ -76,17 +75,17 @@ class DiscountLabel {
      * @param int    $post_id  Order ID.
      */
     public function render_discount_column( $column, $post_id ) {
-        if ( $column !== 'aio_discount_label' ) {
+        if ( $column !== 'db_discount_label' ) {
             return;
         }
 
         $labels = [];
 
         $meta_keys = [
-            '_aio_bogo_applied_rules'     => __( 'BOGO', 'all-in-one-discount-rules' ),
-            '_aio_bxgy_applied_rules'     => __( 'Buy X Get Y', 'all-in-one-discount-rules' ),
-            '_aio_bulk_applied_rules'     => __( 'Bulk', 'all-in-one-discount-rules' ),
-            '_aio_shipping_applied_rules' => __( 'Shipping', 'all-in-one-discount-rules' ),
+            '_db_bogo_applied_rules'     => __( 'BOGO', 'dealbuilder-discount-rules' ),
+            '_db_bxgy_applied_rules'     => __( 'Buy X Get Y', 'dealbuilder-discount-rules' ),
+            '_db_bulk_applied_rules'     => __( 'Bulk', 'dealbuilder-discount-rules' ),
+            '_db_shipping_applied_rules' => __( 'Shipping', 'dealbuilder-discount-rules' ),
         ];
 
         $order = wc_get_order( $post_id );
@@ -100,7 +99,7 @@ class DiscountLabel {
             }
         }
 
-        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'all-in-one-discount-rules' ) . '</em>';
+        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'dealbuilder-discount-rules' ) . '</em>';
 
     }
 }

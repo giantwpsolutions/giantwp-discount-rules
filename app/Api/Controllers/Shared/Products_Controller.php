@@ -2,10 +2,10 @@
   /**
  * Product List REST API Controller.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Api\Controllers\Shared;
+namespace DealBuilder_Discount_Rules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,7 +21,7 @@ use WP_REST_Server;
 class Products_Controller extends WP_REST_Controller {
 
     public function __construct() {
-        $this->namespace = 'aio-discountrules/v2';
+        $this->namespace = 'db-discountrules/v2';
         $this->rest_base = 'products';
     }
 

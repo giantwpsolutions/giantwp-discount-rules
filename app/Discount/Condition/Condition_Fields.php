@@ -2,10 +2,10 @@
   /**
  * Condition Field Dispatcher.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Condition;
+namespace DealBuilder_Discount_Rules\Discount\Condition;
 
 defined('ABSPATH') || exit;
 
@@ -39,7 +39,7 @@ class Condition_Fields {
             $subtotal += $item['line_subtotal'] ?? 0;
         }
 
-        return aio_compare_numaric_value( $subtotal, $comparation, $value );
+        return db_compare_numaric_value( $subtotal, $comparation, $value );
     }
 
 
@@ -64,7 +64,7 @@ class Condition_Fields {
             $quantity += $item['quantity'];
         }
 
-        return aio_compare_numaric_value( $quantity, $condition['operator'], $condition['value'] );
+        return db_compare_numaric_value( $quantity, $condition['operator'], $condition['value'] );
     }
 
 
@@ -105,7 +105,7 @@ class Condition_Fields {
             }
         }
 
-        return aio_compare_numaric_value( $total_weight, $comparation, $value );
+        return db_compare_numaric_value( $total_weight, $comparation, $value );
     }
 
 
@@ -139,7 +139,7 @@ class Condition_Fields {
             $regular_price = floatval( $product->get_regular_price() );
 
 
-            if ( aio_compare_numaric_value( $regular_price, $operator, $value ) ) {
+            if ( db_compare_numaric_value( $regular_price, $operator, $value ) ) {
                 return true;
             }
         }
@@ -189,7 +189,7 @@ class Condition_Fields {
         $operator            = $condition['operator'];
 
 
-        return aio_compare_cart_items( $product_ids_in_cart, $operator, $condition_ids );
+        return db_compare_cart_items( $product_ids_in_cart, $operator, $condition_ids );
     }
 
 
@@ -227,7 +227,7 @@ class Condition_Fields {
         $condition_ids         = array_map( 'intval', $condition['value'] );
         $operator              = $condition['operator'];
 
-        return aio_compare_cart_items( $variation_ids_in_cart, $operator, $condition_ids );
+        return db_compare_cart_items( $variation_ids_in_cart, $operator, $condition_ids );
     }
 
     /**
@@ -266,7 +266,7 @@ class Condition_Fields {
         $operator          = $condition['operator'];
 
 
-        return aio_compare_cart_items( $cart_category_ids, $operator, $condition_ids );
+        return db_compare_cart_items( $cart_category_ids, $operator, $condition_ids );
     }
 
     /**
@@ -304,7 +304,7 @@ class Condition_Fields {
         $condition_ids   = array_map( 'intval', $condition['value'] );
         $operator        = $condition['operator'];
 
-        return aio_compare_cart_items( $tag_ids_in_cart, $operator, $condition_ids );
+        return db_compare_cart_items( $tag_ids_in_cart, $operator, $condition_ids );
     }
 
 
@@ -337,7 +337,7 @@ class Condition_Fields {
         $orders      = wc_get_orders( $args );
         $order_count = count( $orders );
 
-        return aio_compare_numaric_value( $order_count, $operator, $value );
+        return db_compare_numaric_value( $order_count, $operator, $value );
     }
 
 
@@ -402,7 +402,7 @@ class Condition_Fields {
 
         $purchased_product_ids = array_unique( $purchased_product_ids );
 
-        return aio_compare_cart_items( $purchased_product_ids, $operator, $condition_ids );
+        return db_compare_cart_items( $purchased_product_ids, $operator, $condition_ids );
     }
 
 
@@ -453,7 +453,7 @@ class Condition_Fields {
 
         $ordered_cat_ids = array_unique( $ordered_cat_ids );
 
-        return aio_compare_cart_items( $ordered_cat_ids, $operator, $condition_ids );
+        return db_compare_cart_items( $ordered_cat_ids, $operator, $condition_ids );
     }
 
 
@@ -476,13 +476,13 @@ class Condition_Fields {
         $expected_methods = array_map( 'sanitize_text_field', $condition['value'] );
 
         // Try both Woo default and plugin-specific session
-        $chosen_method = WC()->session->get( 'chosen_payment_method' ) ?: WC()->session->get( 'aio_selected_payment_method' );
+        $chosen_method = WC()->session->get( 'chosen_payment_method' ) ?: WC()->session->get( 'db_selected_payment_method' );
 
         if ( empty( $chosen_method ) ) {
             return false;
         }
 
-        return aio_compare_list( $chosen_method, $operator, $expected_methods );
+        return db_compare_list( $chosen_method, $operator, $expected_methods );
     }
 
     /**
@@ -527,7 +527,7 @@ class Condition_Fields {
         $current_user = wp_get_current_user();
         $user_roles   = (array) $current_user->roles;
 
-        return aio_compare_list( $user_roles, $condition['operator'], $condition['value'] );
+        return db_compare_list( $user_roles, $condition['operator'], $condition['value'] );
     }
 
     /**
@@ -547,6 +547,6 @@ class Condition_Fields {
 
         $current_user_id = get_current_user_id();
 
-        return aio_compare_list( $current_user_id, $condition['operator'], $condition['value'] );
+        return db_compare_list( $current_user_id, $condition['operator'], $condition['value'] );
     }
 }

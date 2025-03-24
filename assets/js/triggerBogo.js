@@ -1,17 +1,17 @@
 jQuery(function ($) {
-    console.log("[AIO BOGO]: JS Loaded ✅");
+    // console.log("[db BOGO]: JS Loaded ✅");
 
     function runBogoTrigger() {
         $.ajax({
-            url: aioDiscountBogo.ajax_url,
+            url: dbDiscountBogo.ajax_url,
             method: "POST",
             data: {
-                action: "aio_check_bogo_discounts",
-                nonce: aioDiscountBogo.nonce,
+                action: "db_check_bogo_discounts",
+                nonce: dbDiscountBogo.nonce,
             },
             success: function (response) {
                 if (response.success) {
-                    console.log("[AIO BOGO]: Triggered via AJAX 🚀");
+                    // console.log("[db BOGO]: Triggered via AJAX 🚀");
                     $(document.body).trigger("update_checkout");
                 }
             },
@@ -35,7 +35,7 @@ jQuery(function ($) {
                 childList: true,
                 subtree: true,
             });
-            console.log("[AIO BOGO]: Observing Block Cart ✅");
+            // console.log("[db BOGO]: Observing Block Cart ✅");
             clearInterval(interval);
         }
     }, 500);
@@ -43,11 +43,11 @@ jQuery(function ($) {
 
 (function ($) {
     $(document.body).on('change', '.wc-block-cart .quantity input', function () {
-        console.log('[AIO BOGO] Quantity changed – forcing cart update');
+        // console.log('[db BOGO] Quantity changed – forcing cart update');
         $(document.body).trigger('wc-blocks_refresh_cart_totals');
     });
 
     $(document.body).on('updated_wc_div updated_cart_totals', function () {
-        console.log('[AIO BOGO] Cart updated');
+        // console.log('[db BOGO] Cart updated');
     });
 })(jQuery);

@@ -2,10 +2,10 @@
 /**
  * Condition Dispatcher.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Condition;
+namespace DealBuilder_Discount_Rules\Discount\Condition;
 
 defined('ABSPATH') || exit;
 
@@ -79,7 +79,7 @@ class Conditions {
                     $result = Condition_Fields::specific_customer( $cart_items, $condition );
                     break;
                 default:
-                    do_action( 'aio_woodiscount_unhandled_condition', $condition );
+                    do_action( 'dealbuilder_unhandled_condition', $condition );
                     break;
             }
 

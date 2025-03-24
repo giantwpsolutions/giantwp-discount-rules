@@ -132,14 +132,14 @@ watch(
   <div class="space-y-4 max-w-full mt-2 mb-6 border-b py-6">
     <h3 class="text-base text-gray-950">
       <div class="inline-flex items-center space-x-1">
-        <span>{{ __("Select Product", "all-in-one-discount-rules") }}</span>
+        <span>{{ __("Select Product", "dealbuilder-discount-rules") }}</span>
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Which product will get the bulk rule?',
-              'all-in-one-discount-rules'
+              'dealbuilder-discount-rules'
             )
           "
           placement="top"
@@ -154,15 +154,15 @@ watch(
     <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
         {{
-          __("Rules apply to products if matches", "all-in-one-discount-rules")
+          __("Rules apply to products if matches", "dealbuilder-discount-rules")
         }}
       </label>
       <el-radio-group v-model="getApplies" @change="updateGetApplies">
         <el-radio-button
-          :label="__('Any', 'all-in-one-discount-rules')"
+          :label="__('Any', 'dealbuilder-discount-rules')"
           value="any" />
         <el-radio-button
-          :label="__('All', 'all-in-one-discount-rules')"
+          :label="__('All', 'dealbuilder-discount-rules')"
           value="all" />
       </el-radio-group>
     </div>
@@ -177,8 +177,8 @@ watch(
         <span class="text-black italic text-sm">
           {{
             getApplies === "any"
-              ? __("Or", "all-in-one-discount-rules")
-              : __("And", "all-in-one-discount-rules")
+              ? __("Or", "dealbuilder-discount-rules")
+              : __("And", "dealbuilder-discount-rules")
           }}
         </span>
       </div>
@@ -221,7 +221,7 @@ watch(
             v-model="buyProduct.value"
             @change="updateBuyProducts"
             :options="getProductDropdown(buyProduct.field)"
-            :placeholder="__('Select', 'all-in-one-discount-rules')"
+            :placeholder="__('Select', 'dealbuilder-discount-rules')"
             filterable
             multiple
             :loading="isLoadingProducts"
@@ -262,7 +262,7 @@ watch(
     <button
       @click="addProduct"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
-      {{ __("Assign Bulk Product", "all-in-one-discount-rules") }}
+      {{ __("Assign Bulk Product", "dealbuilder-discount-rules") }}
     </button>
   </div>
 </template>

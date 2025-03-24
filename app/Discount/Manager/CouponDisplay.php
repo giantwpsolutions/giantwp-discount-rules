@@ -2,14 +2,14 @@
 /**
  * Handles hiding of auto-generated coupons from the WooCommerce admin list.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Manager;
+namespace DealBuilder_Discount_Rules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class CouponDisplay
@@ -39,7 +39,7 @@ class CouponDisplay {
         $meta_query = $query->get( 'meta_query' ) ?: [];
 
         $meta_query[] = [
-            'key'     => 'aio_is_hidden_coupon',
+            'key'     => 'db_is_hidden_coupon',
             'compare' => 'NOT EXISTS',
         ];
 

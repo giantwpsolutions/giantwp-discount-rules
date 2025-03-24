@@ -2,10 +2,10 @@
   /**
  * Flat/Percentage Discount REST API Controller.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Api\Controllers\Discounts;
+namespace DealBuilder_Discount_Rules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use AIO_DiscountRules\Helper\Sanitization\FlatPercentage_Sanitization_Helper;
+use DealBuilder_Discount_Rules\Helper\Sanitization\FlatPercentage_Sanitization_Helper;
 
 
 /**
@@ -28,7 +28,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
      */
     public function __construct() {
 
-        $this->namespace = 'aio-discountrules/v2';
+        $this->namespace = 'db-discountrules/v2';
         $this->rest_base = 'save-flatpercentage-discount';
     }
 
@@ -113,13 +113,13 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         if ( empty( $params ) ) {
             return new WP_Error(
                 'missing_data',
-                __( 'No data received.', 'all-in-one-discount-rules' ),
+                __( 'No data received.', 'dealbuilder-discount-rules' ),
                 ['status' => 400]
             );
         }
 
         // Get existing discounts
-        $existing_data = get_option( 'aio_flatpercentage_discount', [] );
+        $existing_data = get_option( 'dealbuilder_flatpercentage_discount', [] );
 
         if ( ! is_array( $existing_data ) ) {
             $existing_data = maybe_unserialize( $existing_data );
@@ -140,18 +140,18 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         $existing_data[] = $sanitized_data;
 
         // Save to Database
-        $saved = update_option( 'aio_flatpercentage_discount', maybe_serialize( $existing_data ) );
+        $saved = update_option( 'dealbuilder_flatpercentage_discount', maybe_serialize( $existing_data ) );
 
         if ( ! $saved ) {
             return new WP_Error(
                 'save_failed',
-                __( 'Failed to save data.', 'all-in-one-discount-rules' ),
+                __( 'Failed to save data.', 'dealbuilder-discount-rules' ),
                 ['status' => 500]
             );
         }
 
         return new WP_REST_Response(
-            ['success' => true, 'message' => __( 'Data saved successfully.', 'all-in-one-discount-rules' ) ],
+            ['success' => true, 'message' => __( 'Data saved successfully.', 'dealbuilder-discount-rules' ) ],
             200
         );
     }
@@ -171,11 +171,11 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         // Get JSON Data
         $params = $request->get_json_params();
         if ( empty( $params ) ) {
-            return new WP_Error( 'missing_data', __( 'No data received.', 'all-in-one-discount-rules' ), ['status' => 400] );
+            return new WP_Error( 'missing_data', __( 'No data received.', 'dealbuilder-discount-rules' ), ['status' => 400] );
         }
 
         // Retrieve Existing BOGO Discounts
-        $existing_data = get_option( 'aio_flatpercentage_discount', [] );
+        $existing_data = get_option( 'dealbuilder_flatpercentage_discount', [] );
         if ( ! is_array( $existing_data ) ) {
             $existing_data = maybe_unserialize( $existing_data );
         }
@@ -208,11 +208,11 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         }
 
         if ( $updated ) {
-            update_option( 'aio_flatpercentage_discount', maybe_serialize( $existing_data ) );
-            return new WP_REST_Response( ['success' => true, 'message' => __( 'Data updated successfully.', 'all-in-one-discount-rules' ) ], 200 );
+            update_option( 'dealbuilder_flatpercentage_discount', maybe_serialize( $existing_data ) );
+            return new WP_REST_Response( ['success' => true, 'message' => __( 'Data updated successfully.', 'dealbuilder-discount-rules' ) ], 200 );
         }
 
-        return new WP_Error( 'not_found', __( 'Discount rule not found.', 'all-in-one-discount-rules' ), ['status' => 404] );
+        return new WP_Error( 'not_found', __( 'Discount rule not found.', 'dealbuilder-discount-rules' ), ['status' => 404] );
     }
 
 
@@ -228,13 +228,13 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         $id = $request->get_param( 'id' );
 
         // Ensure existing data is an array
-        $existing_data = get_option( 'aio_flatpercentage_discount', [] );
+        $existing_data = get_option( 'dealbuilder_flatpercentage_discount', [] );
         if ( ! is_array( $existing_data ) ) {
             $existing_data = maybe_unserialize( $existing_data );
         }
 
         if ( ! is_array( $existing_data ) ) {
-            return new WP_Error( 'invalid_data', __( 'Stored discount data is corrupted.', 'all-in-one-discount-rules' ), ['status' => 500] );
+            return new WP_Error( 'invalid_data', __( 'Stored discount data is corrupted.', 'dealbuilder-discount-rules' ), ['status' => 500] );
         }
 
         $deleted_coupon_code = null;
@@ -258,11 +258,11 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
         }
 
         // Save updated data
-        update_option( 'aio_flatpercentage_discount', maybe_serialize( array_values( $filtered_data ) ) );
+        update_option( 'dealbuilder_flatpercentage_discount', maybe_serialize( array_values( $filtered_data ) ) );
 
         return new \WP_REST_Response([
             'success' => true,
-            'message' => __( 'Discount and coupon deleted successfully.', 'all-in-one-discount-rules' ),
+            'message' => __( 'Discount and coupon deleted successfully.', 'dealbuilder-discount-rules' ),
         ], 200 );
     }
 
@@ -276,7 +276,7 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
      */
 
     public function get_discounts( WP_REST_Request $request ) {
-        $discounts = get_option( 'aio_flatpercentage_discount', [] );
+        $discounts = get_option( 'dealbuilder_flatpercentage_discount', [] );
 
         if ( maybe_serialize( $discounts ) ) {
             $discounts = maybe_unserialize( $discounts );

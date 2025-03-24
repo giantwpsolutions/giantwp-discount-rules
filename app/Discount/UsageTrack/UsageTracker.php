@@ -4,10 +4,10 @@
  *
  * Handles saving and incrementing usage count for various discount types.
  *
- * @package AIO_DiscountRules\Discount\UsageTrack
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\UsageTrack;
+namespace DealBuilder_Discount_Rules\Discount\UsageTrack;
 
 defined( 'ABSPATH' ) || exit;
 

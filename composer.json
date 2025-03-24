@@ -1,6 +1,6 @@
 {
-  "name": "habib/all-in-one-discount-rules",
-  "description": "All in one Discount Rules is a one-stop discount solutions for Woocommerce. With this plugin you can create any kind of discount rules.",
+  "name": "habib/dealbuilder-discount-rules",
+  "description": "DealBuilder Discount Rules is a one-stop discount solutions for Woocommerce. With this plugin you can create any kind of discount rules.",
   "type": "wordpress-plugin",
   "license": "GPLv2",
   "authors": [
@@ -13,7 +13,7 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "AIO_DiscountRules\\": "app/"
+      "DealBuilder_Discount_Rules\\": "app/"
     },
     "files": [
       "app/functions.php"

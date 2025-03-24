@@ -4,14 +4,14 @@
  *
  * Tracks usage count of BOGO discount rules after order completion.
  *
- * @package AIO_DiscountRules\Discount\UsageTrack
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\UsageTrack;
+namespace DealBuilder_Discount_Rules\Discount\UsageTrack;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 use WC_Order;
 use WC;
 
@@ -20,7 +20,7 @@ use WC;
  *
  * Handles tracking of Buy One Get One (Bogo) discount usage count.
  *
- * @package AIO_DiscountRules\Discount\UsageTrack
+ * @package DealBuilder_Discount_Rules\Discount\UsageTrack
  */
 class Bogo_Usage_Handler {
 
@@ -48,17 +48,17 @@ class Bogo_Usage_Handler {
      * @param int $order_id WooCommerce order ID.
      */
     public function store_applied_rules_to_order( $order_id ) {
-        $session_rules = WC()->session->get( '_aio_bogo_applied_rules' );
+        $session_rules = WC()->session->get( '_db_bogo_applied_rules' );
 
         if (! empty( $session_rules ) && is_array( $session_rules ) ) {
-            if ( function_exists( 'aio_check_woocommerce_hpos' ) && aio_check_woocommerce_hpos() ) {
+            if ( function_exists( 'db_check_woocommerce_hpos' ) && db_check_woocommerce_hpos() ) {
                 $order = wc_get_order( $order_id );
                 if ( $order instanceof WC_Order ) {
-                    $order->update_meta_data( '_aio_bogo_applied_rules', $session_rules );
+                    $order->update_meta_data( '_db_bogo_applied_rules', $session_rules );
                     $order->save();
                 }
             } else {
-                update_post_meta( $order_id, '_aio_bogo_applied_rules', $session_rules );
+                update_post_meta( $order_id, '_db_bogo_applied_rules', $session_rules );
             }
         }
     }
@@ -75,13 +75,13 @@ class Bogo_Usage_Handler {
             return;
         }
 
-        $applied_rules = $order->get_meta( '_aio_bogo_applied_rules' );
+        $applied_rules = $order->get_meta( '_db_bogo_applied_rules' );
 
         if ( empty( $applied_rules ) || ! is_array( $applied_rules ) ) {
             return;
         }
 
-        $rules   = maybe_unserialize( get_option( 'aio_bogo_discount', [] ) );
+        $rules   = maybe_unserialize( get_option( 'dealbuilder_bogo_discount', [] ) );
         $updated = false;
 
         foreach ( $rules as &$rule ) {
@@ -92,12 +92,12 @@ class Bogo_Usage_Handler {
         }
 
         if ( $updated ) {
-            update_option( 'aio_bogo_discount', maybe_serialize( $rules ) );
+            update_option( 'dealbuilder_bogo_discount', maybe_serialize( $rules ) );
         }
 
         // Unset the session after processing
         if ( WC()->session ) {
-            WC()->session->__unset( '_aio_bogo_applied_rules' );
+            WC()->session->__unset( '_db_bogo_applied_rules' );
         }
     }
 

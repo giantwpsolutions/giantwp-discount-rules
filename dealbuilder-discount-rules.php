@@ -1,19 +1,19 @@
 <?php
 /**
-* Plugin Name: All In One Discount Rules
-* Plugin URI: https://giantwpsolutions.com/plugins/all-in-one-discount-rules
-* Description: All In One Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
+* Plugin Name: DealBuilder Discount Rules
+* Plugin URI: https://giantwpsolutions.com/plugins/dealbuilder-discount-rules
+* Description: DealBuilder Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
 * Version: 1.0.1
 * Author: Giant WP Solutions
 * Author URI: https://giantwpsolutions.com
 * License: GPLv2 or later
-* Text Domain: all-in-one-discount-rules
+* Text Domain: dealbuilder-discount-rules
 * WC requires at least: 3.0.0
 * WC tested up to: 9.7.1
 * Requires PHP: 7.4
 * WooCommerce HPOS support: yes
 * Domain Path: /languages
-*@package All-in-one Discount Rules
+*@package DealBuilder Discount Rules
 */
 
 
@@ -27,7 +27,7 @@ require_once __DIR__  . '/app/functions.php';
 /**
  * The main plugin class
  */
-final class All_in_one_Discount_Rules
+final class DealBuilder_Discount_Rules
 {
 
     /**
@@ -43,7 +43,7 @@ final class All_in_one_Discount_Rules
         register_activation_hook( __FILE__ , [ $this, 'activate' ] );
         add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded'] );
         add_action( 'admin_notices', [ $this, 'check_woocommerce_active' ] );
-        add_filter( 'plugin_action_links_all-in-one-discount-rules/all-in-one-discount-rules.php', [ $this, 'aio_discount_settings_link' ] );
+        add_filter( 'plugin_action_links_dealbuilder-discount-rules/dealbuilder-discount-rules.php', [ $this, 'db_discount_settings_link' ] );
         $this->declare_hpos_compatibility();
         $this->define_constants();
     }
@@ -51,7 +51,7 @@ final class All_in_one_Discount_Rules
     /**
      * Initializes a singleton instance
      * 
-     * @return All_in_one_Discount_Rules
+     * @return DealBuilder_Discount_Rules
      */
     public static function init()
     {
@@ -70,10 +70,10 @@ final class All_in_one_Discount_Rules
      */
     public function define_constants()
     {
-        define( 'AIOWD_VERSION', self::version );
-        define( 'AIOWD_FILE', __FILE__ );
-        define( 'AIOWD_PATH', plugin_dir_path(__FILE__) );
-        define( 'AIOWD_LANG_DIR', plugin_basename( dirname(__FILE__) ) . '/languages' );
+        define( 'DBDR_VERSION', self::version );
+        define( 'DBDR_FILE', __FILE__ );
+        define( 'DBDR_PATH', plugin_dir_path(__FILE__) );
+        define( 'DBDR_LANG_DIR', plugin_basename( dirname(__FILE__) ) . '/languages' );
     }
 
     /**
@@ -82,12 +82,12 @@ final class All_in_one_Discount_Rules
      */
     public function on_plugins_loaded()
     {
-        load_plugin_textdomain( 'all-in-one-discount-rules', false, AIOWD_LANG_DIR );
+        load_plugin_textdomain( 'dealbuilder-discount-rules', false, DBDR_LANG_DIR );
 
         if ( class_exists( 'WooCommerce' ) ) {
 
-            new AIO_DiscountRules\Api\Api();
-            new AIO_DiscountRules\Installer();
+            new DealBuilder_Discount_Rules\Api\Api();
+            new DealBuilder_Discount_Rules\Installer();
 
         } else {
             add_action( 'admin_notices', [ $this, 'woocommerce_missing_notice' ] );
@@ -100,7 +100,7 @@ final class All_in_one_Discount_Rules
     public function check_woocommerce_active()
     {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            aio_WoocommerceDeactivationAlert();
+            db_WoocommerceDeactivationAlert();
         }
     }
 
@@ -114,29 +114,29 @@ final class All_in_one_Discount_Rules
             deactivate_plugins( plugin_basename( __FILE__ ) );
         
             wp_die(
-                esc_html__( 'All-in-One Discount Rules requires WooCommerce to be installed and active.', 'all-in-one-discount-rules' ),
-                esc_html__( 'Plugin dependency check', 'all-in-one-discount-rules' ),
+                esc_html__( 'All-in-One Discount Rules requires WooCommerce to be installed and active.', 'dealbuilder-discount-rules' ),
+                esc_html__( 'Plugin dependency check', 'dealbuilder-discount-rules' ),
                 [ 'back_link' => true ]
             );
         }
 
-        $install_time = get_option( 'AIOWD_installation_time' );
+        $install_time = get_option( 'DBDR_installation_time' );
 
         if ( ! $install_time ) {
-            update_option( 'AIOWD_installation_time', time() );
+            update_option( 'DBDR_installation_time', time() );
         }
 
-        update_option( 'AIOWD_version', self::version );
+        update_option( 'dealbuilder_version', self::version );
     }
 
-    /**
+    /*
      * Woocommerce Missing Notice
      *
      * @return void
      */
     public function woocommerce_missing_notice()
     {
-        aio_WoocommerceMissingAlert();
+        db_WoocommerceMissingAlert();
     }
 
      /**
@@ -147,8 +147,8 @@ final class All_in_one_Discount_Rules
      * @param array $links An array of existing action links.
      * @return array Modified array of action links with the added "Settings" link.
      */
-    public function aio_discount_settings_link( $links ) {
-        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=aio-discount-rules#' ) ) . '">' . esc_html__( 'Settings', 'all-in-one-discount-rules' ) . '</a>';
+    public function db_discount_settings_link( $links ) {
+        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=dealbuilder-discount-rules#' ) ) . '">' . esc_html__( 'Settings', 'dealbuilder-discount-rules' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }
@@ -174,14 +174,14 @@ final class All_in_one_Discount_Rules
 
 /**
  * Initializes the main plugin
- * @return \All_in_one_Discount_Rules
+ * @return \DealBuilder_Discount_Rules
  */
-function all_in_one_discount_rules()
+function dealbuilder_discount_rules()
 {
-    return All_in_one_Discount_Rules::init();
+    return DealBuilder_Discount_Rules::init();
 }
 
 /**
  * Kick-off the plugin
  */
-all_in_one_discount_rules();
+dealbuilder_discount_rules();

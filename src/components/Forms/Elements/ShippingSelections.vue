@@ -57,17 +57,17 @@ watch(
     <!-- Discount Type Selection -->
     <div class="w-full max-w-md mb-6">
       <label for="discountType" class="block text-sm font-medium text-gray-900">
-        {{ __("Discount Type", "all-in-one-discount-rules") }}
+        {{ __("Discount Type", "dealbuilder-discount-rules") }}
       </label>
       <select
         v-model="localState.shippingDiscountType"
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
         <option value="reduceFee">
-          {{ __("Shipping Fee Discount", "all-in-one-discount-rules") }}
+          {{ __("Shipping Fee Discount", "dealbuilder-discount-rules") }}
         </option>
         <option value="customFee">
-          {{ __("Add Custom Fee", "all-in-one-discount-rules") }}
+          {{ __("Add Custom Fee", "dealbuilder-discount-rules") }}
         </option>
       </select>
     </div>
@@ -80,7 +80,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "all-in-one-discount-rules") }}
+            {{ __("Pricing Type", "dealbuilder-discount-rules") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -88,13 +88,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'all-in-one-discount-rules')">
-              {{ __("Fixed Discount", "all-in-one-discount-rules") }}
+              :label="__('Fixed Discount', 'dealbuilder-discount-rules')">
+              {{ __("Fixed Discount", "dealbuilder-discount-rules") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'all-in-one-discount-rules')">
-              {{ __("Percentage Discount", "all-in-one-discount-rules") }}
+              :label="__('Percentage Discount', 'dealbuilder-discount-rules')">
+              {{ __("Percentage Discount", "dealbuilder-discount-rules") }}
             </el-option>
           </el-select>
         </div>
@@ -102,7 +102,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "all-in-one-discount-rules") }}
+            {{ __("Pricing Value", "dealbuilder-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -125,7 +125,7 @@ watch(
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{
-                __("Maximum Value", "all-in-one-discount-rules")
+                __("Maximum Value", "dealbuilder-discount-rules")
               }}</span>
               <el-tooltip
                 class="box-item"
@@ -133,7 +133,7 @@ watch(
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'all-in-one-discount-rules'
+                    'dealbuilder-discount-rules'
                   )
                 "
                 placement="top"
@@ -164,7 +164,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Type", "all-in-one-discount-rules") }}
+            {{ __("Fee Type", "dealbuilder-discount-rules") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -172,13 +172,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Fee', 'all-in-one-discount-rules')">
-              {{ __("Fixed Fee", "all-in-one-discount-rules") }}
+              :label="__('Fixed Fee', 'dealbuilder-discount-rules')">
+              {{ __("Fixed Fee", "dealbuilder-discount-rules") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Fee', 'all-in-one-discount-rules')">
-              {{ __("Percentage Fee", "all-in-one-discount-rules") }}
+              :label="__('Percentage Fee', 'dealbuilder-discount-rules')">
+              {{ __("Percentage Fee", "dealbuilder-discount-rules") }}
             </el-option>
           </el-select>
         </div>
@@ -186,7 +186,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Value", "all-in-one-discount-rules") }}
+            {{ __("Fee Value", "dealbuilder-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -208,7 +208,7 @@ watch(
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{
-                __("Maximum Fee Value", "all-in-one-discount-rules")
+                __("Maximum Fee Value", "dealbuilder-discount-rules")
               }}</span>
               <el-tooltip
                 class="box-item"
@@ -216,7 +216,7 @@ watch(
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'all-in-one-discount-rules'
+                    'dealbuilder-discount-rules'
                   )
                 "
                 placement="top"

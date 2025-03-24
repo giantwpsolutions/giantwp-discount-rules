@@ -2,10 +2,10 @@
 /**
  * Shipping Zones REST API Controller.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
- namespace AIO_DiscountRules\Api\Controllers\Shared;
+ namespace DealBuilder_Discount_Rules\Api\Controllers\Shared;
 
  defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ class Shipping_Zone_Controller extends WP_REST_Controller {
      * Constructor.
      */
     public function __construct() {
-        $this->namespace = 'aio-discountrules/v2';
+        $this->namespace = 'db-discountrules/v2';
         $this->rest_base = 'shipping-zones';
     }
 

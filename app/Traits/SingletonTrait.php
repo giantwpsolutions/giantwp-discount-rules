@@ -1,6 +1,6 @@
 <?php 
 
-namespace AIO_DiscountRules\Traits;
+namespace DealBuilder_Discount_Rules\Traits;
 
 /**
  * Singleton Instance Trait

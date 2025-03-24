@@ -5,15 +5,15 @@
  * Validates auto-generated coupons for flat/percentage discounts based on
  * schedule, usage limits, and conditional logic.
  *
- * @package AIO_DiscountRules\Discount\Manager
+ * @package DealBuilder_Discount_Rules\Discount\Manager
  */
 
-namespace AIO_DiscountRules\Discount\Manager;
+namespace DealBuilder_Discount_Rules\Discount\Manager;
 
 defined('ABSPATH') || exit;
 
-use AIO_DiscountRules\Discount\Condition\Conditions;
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Discount\Condition\Conditions;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class FlatPercentage_Validator
@@ -41,12 +41,12 @@ class FlatPercentage_Validator {
         if ( ! $coupon instanceof \WC_Coupon ) return $valid;
 
         // Only process hidden plugin-generated coupons
-        if ( ! $coupon->get_meta( 'aio_is_hidden_coupon' )) return $valid;
+        if ( ! $coupon->get_meta( 'db_is_hidden_coupon' )) return $valid;
 
-        $rule_id = $coupon->get_meta( 'aio_rule_id' );
+        $rule_id = $coupon->get_meta( 'db_rule_id' );
         if ( ! $rule_id ) return false;
 
-        $rules = maybe_unserialize( get_option( 'aio_flatpercentage_discount', [] ) ) ?: [];
+        $rules = maybe_unserialize( get_option( 'dealbuilder_flatpercentage_discount', [] ) ) ?: [];
 
         foreach ( $rules as $rule ) {
             if ($rule['id'] !== $rule_id) continue;

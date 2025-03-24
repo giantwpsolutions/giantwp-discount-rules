@@ -2,26 +2,26 @@
   /**
  * Installer class for initializing plugin components.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules;
+namespace DealBuilder_Discount_Rules;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
-use AIO_DiscountRules\Admin\Menu;
-use AIO_DiscountRules\Assets;
-use AIO_DiscountRules\Ajax\Checkout_Ajax_Handler;
-use AIO_DiscountRules\Ajax\TriggerCart;
-use AIO_DiscountRules\Ajax\TriggerBogo;
-use AIO_DiscountRules\Discount\Bogo_Discount;
-use AIO_DiscountRules\Discount\FlatPercentage_Discount;
-use AIO_DiscountRules\Discount\Manager\CouponDisplay;
-use AIO_DiscountRules\Discount\Manager\Bogo_Free_Item_Handler;
-use AIO_DiscountRules\Discount\Manager\DiscountLabel;
-use AIO_DiscountRules\Discount\Manager\FlatPercentage_Validator;
-use AIO_DiscountRules\Discount\UsageTrack\FlatPercentageUsage;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Admin\Menu;
+use DealBuilder_Discount_Rules\Assets;
+use DealBuilder_Discount_Rules\Ajax\Checkout_Ajax_Handler;
+use DealBuilder_Discount_Rules\Ajax\TriggerCart;
+use DealBuilder_Discount_Rules\Ajax\TriggerBogo;
+use DealBuilder_Discount_Rules\Discount\Bogo_Discount;
+use DealBuilder_Discount_Rules\Discount\FlatPercentage_Discount;
+use DealBuilder_Discount_Rules\Discount\Manager\CouponDisplay;
+use DealBuilder_Discount_Rules\Discount\Manager\Bogo_Free_Item_Handler;
+use DealBuilder_Discount_Rules\Discount\Manager\DiscountLabel;
+use DealBuilder_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
+use DealBuilder_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 
 /**
  * Plugin Functions Installer Class

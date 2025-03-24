@@ -40,7 +40,7 @@ const formatUsage = (rule) => {
 
   return enabled
     ? `${used} / ${total}`
-    : __("Unlimited", "all-in-one-discount-rules");
+    : __("Unlimited", "dealbuilder-discount-rules");
 };
 
 // Track clicked state for confirmation
@@ -60,25 +60,25 @@ const handleCancel = () => {
             <input type="checkbox" class="h-5 w-5" />
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Discount Name", "all-in-one-discount-rules") }}
+            {{ __("Discount Name", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Type", "all-in-one-discount-rules") }}
+            {{ __("Type", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Start Date", "all-in-one-discount-rules") }}
+            {{ __("Start Date", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("End Date", "all-in-one-discount-rules") }}
+            {{ __("End Date", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Usage Limits", "all-in-one-discount-rules") }}
+            {{ __("Usage Limits", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Status", "all-in-one-discount-rules") }}
+            {{ __("Status", "dealbuilder-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Actions", "all-in-one-discount-rules") }}
+            {{ __("Actions", "dealbuilder-discount-rules") }}
           </th>
         </tr>
       </thead>
@@ -86,7 +86,7 @@ const handleCancel = () => {
         <!-- No Data Row -->
         <tr v-if="discountRules.length === 0">
           <td colspan="7" class="text-center px-4 py-6 text-gray-500">
-            {{ __("No discount rules created", "all-in-one-discount-rules") }}
+            {{ __("No discount rules created", "dealbuilder-discount-rules") }}
           </td>
         </tr>
 
@@ -123,7 +123,7 @@ const handleCancel = () => {
             <el-tooltip
               class="box-item"
               effect="dark"
-              :content="__('Edit Rule', 'all-in-one-discount-rules')"
+              :content="__('Edit Rule', 'dealbuilder-discount-rules')"
               placement="top">
               <el-icon
                 @click="onEdit(rule)"
@@ -141,7 +141,7 @@ const handleCancel = () => {
               :title="
                 __(
                   'Are you sure you want to delete this discount?',
-                  'all-in-one-discount-rules'
+                  'dealbuilder-discount-rules'
                 )
               "
               @confirm="onDelete(rule)">
@@ -149,7 +149,7 @@ const handleCancel = () => {
                 <span>
                   <el-tooltip
                     effect="dark"
-                    :content="__('Delete Rule', 'all-in-one-discount-rules')"
+                    :content="__('Delete Rule', 'dealbuilder-discount-rules')"
                     placement="top">
                     <el-icon
                       class="text-red-600 hover:text-red-800 hover:cursor-pointer"

@@ -2,10 +2,10 @@
   /**
  * Coupon Validation Helper.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Helper;
+namespace DealBuilder_Discount_Rules\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

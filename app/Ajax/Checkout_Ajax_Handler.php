@@ -1,15 +1,15 @@
 <?php
   /**
- * Checkout AJAX Handler for AIO WooDiscount.
+ * Checkout AJAX Handler for DealBuilder Discount Rules.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
- namespace AIO_DiscountRules\Ajax;
+ namespace DealBuilder_Discount_Rules\Ajax;
 
  defined( 'ABSPATH' ) || exit;
  
- use AIO_DiscountRules\Traits\SingletonTrait;
+ use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class Checkout_Ajax_Handler
@@ -21,11 +21,11 @@ class Checkout_Ajax_Handler {
     use SingletonTrait;
 
     /**
-     * Constructor to register AJAX handlers.
+     * Constructor to register AJAX handlers
      */
     public function __construct() {
-        add_action( 'wp_ajax_aio_set_payment_method', [ $this, 'aio_set_payment_method' ] );
-        add_action( 'wp_ajax_nopriv_aio_set_payment_method', [ $this, 'aio_set_payment_method' ] );
+        add_action( 'wp_ajax_db_set_payment_method', [ $this, 'db_set_payment_method' ] );
+        add_action( 'wp_ajax_nopriv_db_set_payment_method', [ $this, 'db_set_payment_method' ] );
     }
 
     /**
@@ -33,8 +33,8 @@ class Checkout_Ajax_Handler {
      *
      * @return void
      */
-    public function aio_set_payment_method() {
-        check_ajax_referer( 'aio_nonce', 'security' );
+    public function db_set_payment_method() {
+        check_ajax_referer( 'db_nonce', 'security' );
 
         // Ensure WC session is initialized in AJAX context
         if ( null === WC()->session || ! WC()->session->has_session() ) {
@@ -48,7 +48,7 @@ class Checkout_Ajax_Handler {
             wp_send_json_error( ['message' => 'No method provided'] );
         }
 
-        WC()->session->set( 'aio_selected_payment_method', $method );
+        WC()->session->set( 'db_selected_payment_method', $method );
         wp_send_json_success( ['message' => 'Payment method stored'] );
     }
 }

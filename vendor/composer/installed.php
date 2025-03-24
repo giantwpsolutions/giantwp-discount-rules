@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'habib/all-in-one-discount-rules',
+        'name' => 'habib/dealbuilder-discount-rules',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'cb7fbc9d291bb595990624514c0b600fce0385bd',
+        'reference' => '47ae5f52712d0fa710c0aa20481060b2216d8359',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'habib/all-in-one-discount-rules' => array(
+        'habib/dealbuilder-discount-rules' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cb7fbc9d291bb595990624514c0b600fce0385bd',
+            'reference' => '47ae5f52712d0fa710c0aa20481060b2216d8359',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

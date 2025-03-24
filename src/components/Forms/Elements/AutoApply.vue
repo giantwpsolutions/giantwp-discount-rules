@@ -38,10 +38,10 @@ watch(enableAutoApply, (newVal) => {
       <el-switch
         v-model="enableAutoApply"
         inline-prompt
-        :active-text="__('On', 'all-in-one-discount-rules')"
-        :inactive-text="__('Off', 'all-in-one-discount-rules')" />
+        :active-text="__('On', 'dealbuilder-discount-rules')"
+        :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Enable Auto Apply?", "all-in-one-discount-rules") }}
+        {{ __("Enable Auto Apply?", "dealbuilder-discount-rules") }}
 
         <div class="group relative">
           <el-tooltip
@@ -50,7 +50,7 @@ watch(enableAutoApply, (newVal) => {
             :content="
               __(
                 'If all conditions are met, the coupon will be applied automatically.',
-                'all-in-one-discount-rules'
+                'dealbuilder-discount-rules'
               )
             "
             placement="top"

@@ -87,7 +87,7 @@ watch(
     <div class="flex flex-wrap gap-2 mt-6 mb-1 w-full sm:w-[30%]">
       <label
         class="text-sm font-medium text-gray-900 flex items-center gap-1 w-full sm:w-[25%]">
-        {{ __("Get Item", "all-in-one-discount-rules") }}
+        {{ __("Get Item", "dealbuilder-discount-rules") }}
       </label>
       <div class="w-full sm:w-[75%]">
         <el-select
@@ -98,11 +98,11 @@ watch(
           class="w-full">
           <el-option
             :value="'alltogether'"
-            :label="__('All together', 'all-in-one-discount-rules')" />
+            :label="__('All together', 'dealbuilder-discount-rules')" />
           <el-option
             :value="'iq_each'"
             :label="
-              __('Item quantity each cart line', 'all-in-one-discount-rules')
+              __('Item quantity each cart line', 'dealbuilder-discount-rules')
             " />
         </el-select>
       </div>
@@ -117,7 +117,7 @@ watch(
         <!-- From -->
         <div class="w-full sm:w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("From", "all-in-one-discount-rules") }}
+            {{ __("From", "dealbuilder-discount-rules") }}
           </label>
           <el-input-number
             v-model="bulkDiscount.fromcount"
@@ -130,7 +130,7 @@ watch(
         <!-- To -->
         <div class="w-full sm:w-[12%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("To", "all-in-one-discount-rules") }}
+            {{ __("To", "dealbuilder-discount-rules") }}
           </label>
           <el-input-number
             v-model="bulkDiscount.toCount"
@@ -143,7 +143,7 @@ watch(
         <!-- Discount Type -->
         <div class="w-full sm:w-[22%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Discount Type", "all-in-one-discount-rules") }}
+            {{ __("Discount Type", "dealbuilder-discount-rules") }}
           </label>
           <el-select
             v-model="bulkDiscount.discountTypeBulk"
@@ -153,20 +153,20 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed', 'all-in-one-discount-rules')" />
+              :label="__('Fixed', 'dealbuilder-discount-rules')" />
             <el-option
               :value="'percentage'"
-              :label="__('Percentage', 'all-in-one-discount-rules')" />
+              :label="__('Percentage', 'dealbuilder-discount-rules')" />
             <el-option
               :value="'flat_price'"
-              :label="__('Flat Price', 'all-in-one-discount-rules')" />
+              :label="__('Flat Price', 'dealbuilder-discount-rules')" />
           </el-select>
         </div>
 
         <!-- Discount Value -->
         <div class="w-full sm:w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Discount Value", "all-in-one-discount-rules") }}
+            {{ __("Discount Value", "dealbuilder-discount-rules") }}
           </label>
           <el-input
             v-model.number="bulkDiscount.discountValue"
@@ -186,7 +186,7 @@ watch(
         <!-- Max Value -->
         <div class="w-full sm:w-[20%]">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Maximum Value", "all-in-one-discount-rules") }}
+            {{ __("Maximum Value", "dealbuilder-discount-rules") }}
           </label>
           <el-input
             v-model.number="bulkDiscount.maxValue"
@@ -218,7 +218,7 @@ watch(
     <button
       @click="addBulkDiscount"
       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-4">
-      {{ __("Assign Bulk Discount", "all-in-one-discount-rules") }}
+      {{ __("Assign Bulk Discount", "dealbuilder-discount-rules") }}
     </button>
   </div>
 </template>

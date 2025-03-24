@@ -2,15 +2,15 @@
 /**
  * BOGO/BXGY Buy Product Condition Dispatcher.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\BogoBuyProduct;
+namespace DealBuilder_Discount_Rules\Discount\BogoBuyProduct;
 
 defined( 'ABSPATH' ) || exit;
 
 
-use AIO_DiscountRules\Discount\BogoBuyProduct\BogoBuy_Field;
+use DealBuilder_Discount_Rules\Discount\BogoBuyProduct\BogoBuy_Field;
 use WC_Cart;
 
 /**
@@ -63,7 +63,7 @@ class BogoBuyProduct {
                     $result = BogoBuy_Field::all_products( $cart_items, $condition );
                     break;
                 default:
-                    do_action( 'aio_woodiscount_unhandled_bogo_condition', $condition );
+                    do_action( 'dealbuilder_unhandled_bogo_condition', $condition );
                     break;
             }
 

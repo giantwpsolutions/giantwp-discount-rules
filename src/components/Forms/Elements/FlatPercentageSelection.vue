@@ -46,7 +46,7 @@ onMounted(() => {
     <!-- Discount Type Selection -->
     <div class="w-full max-w-md mb-6">
       <label for="discountType" class="block text-sm font-medium text-gray-900">
-        {{ __("Discount Type", "all-in-one-discount-rules") }}
+        {{ __("Discount Type", "dealbuilder-discount-rules") }}
       </label>
       <select
         v-model="selectedFPDiscountType"
@@ -54,10 +54,10 @@ onMounted(() => {
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
         <option value="fixed">
-          {{ __("Fixed", "all-in-one-discount-rules") }}
+          {{ __("Fixed", "dealbuilder-discount-rules") }}
         </option>
         <option value="percentage">
-          {{ __("Percentage", "all-in-one-discount-rules") }}
+          {{ __("Percentage", "dealbuilder-discount-rules") }}
         </option>
       </select>
     </div>
@@ -69,7 +69,7 @@ onMounted(() => {
         <label
           for="discountValue"
           class="block text-sm font-medium text-gray-900 my-1">
-          {{ __("Discount Value", "all-in-one-discount-rules") }}
+          {{ __("Discount Value", "dealbuilder-discount-rules") }}
         </label>
         <div class="flex items-center">
           <input
@@ -78,7 +78,7 @@ onMounted(() => {
             type="number"
             id="discountValue"
             :placeholder="
-              __('Enter discount value', 'all-in-one-discount-rules')
+              __('Enter discount value', 'dealbuilder-discount-rules')
             "
             class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />
           <span
@@ -97,13 +97,13 @@ onMounted(() => {
         <label
           for="maxValue"
           class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
-          {{ __("Maximum Value", "all-in-one-discount-rules") }}
+          {{ __("Maximum Value", "dealbuilder-discount-rules") }}
           <el-tooltip
             effect="dark"
             :content="
               __(
                 'The maximum value that can be applied',
-                'all-in-one-discount-rules'
+                'dealbuilder-discount-rules'
               )
             "
             placement="top"
@@ -119,7 +119,7 @@ onMounted(() => {
             type="number"
             id="maxValue"
             :placeholder="
-              __('Enter maximum value', 'all-in-one-discount-rules')
+              __('Enter maximum value', 'dealbuilder-discount-rules')
             "
             :disabled="selectedFPDiscountType === 'fixed'"
             class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />

@@ -25,7 +25,7 @@ const route = useRoute();
         <span
           v-if="item.isPro"
           class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
-          {{ __("Pro", "all-in-one-discount-rules") }}
+          {{ __("Pro", "dealbuilder-discount-rules") }}
         </span>
       </router-link>
 
@@ -39,7 +39,7 @@ const route = useRoute();
         <span
           v-if="item.isPro"
           class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
-          {{ __("Pro", "all-in-one-discount-rules") }}
+          {{ __("Pro", "dealbuilder-discount-rules") }}
         </span>
       </a>
     </template>

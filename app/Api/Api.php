@@ -1,25 +1,25 @@
 <?php
     /**
- * Checkout AJAX Handler for AIO WooDiscount.
+ * API Handler for DealBuilder Discount Rules.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Api;
+namespace DealBuilder_Discount_Rules\Api;
 
 defined( 'ABSPATH' ) || exit;
 
-use AIO_DiscountRules\Api\Controllers\Discounts\All_Discount_Controller;
-use AIO_DiscountRules\Api\Controllers\Discounts\Bogo_Discount_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\General_Data;
-use AIO_DiscountRules\Api\Controllers\Shared\Payment_Gateways_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\Products_Category_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\Products_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\Products_Tag_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\Shipping_Zone_Controller;
-use AIO_DiscountRules\Api\Controllers\Shared\Users_Controller;
-use AIO_DiscountRules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
-use AIO_DiscountRules\Api\Controllers\Discounts\Settings_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Discounts\All_Discount_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Discounts\Bogo_Discount_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\General_Data;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Payment_Gateways_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Category_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Tag_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Shipping_Zone_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Shared\Users_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
+use DealBuilder_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
 
 
 /**
@@ -32,7 +32,7 @@ class Api {
      * Class constructor.
      */
     public function __construct() {
-        add_action( 'rest_api_init', [ $this, 'aio_register_api' ] );
+        add_action( 'rest_api_init', [ $this, 'db_register_api' ] );
     }
 
     /**
@@ -40,7 +40,7 @@ class Api {
      *
      * @return void
      */
-    public function aio_register_api() {
+    public function db_register_api() {
 
         $product_controller = new Products_Controller();
         $product_controller->register_routes();

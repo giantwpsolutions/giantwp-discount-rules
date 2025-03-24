@@ -25,5 +25,5 @@ app.config.globalProperties._nx = _nx;
 
 app.use(router);
 app.use(ElementPlus);
-app.mount('#aio-discount-rules-dashboard');
+app.mount('#dealbuilder-discount-rules-dashboard');
 

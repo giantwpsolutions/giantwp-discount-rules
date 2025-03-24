@@ -2,12 +2,12 @@
   /**
  * BOGO Discount Trigger AJAX Handler.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Ajax;
+namespace DealBuilder_Discount_Rules\Ajax;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,8 +24,8 @@ class TriggerBogo {
      * Constructor to register AJAX actions.
      */
     public function __construct() {
-        add_action( 'wp_ajax_aio_check_bogo_discounts', [ $this, 'aio_check_bogo_discounts' ] );
-        add_action( 'wp_ajax_nopriv_aio_check_bogo_discounts', [ $this, 'aio_check_bogo_discounts'] );
+        add_action( 'wp_ajax_db_check_bogo_discounts', [ $this, 'db_check_bogo_discounts' ] );
+        add_action( 'wp_ajax_nopriv_db_check_bogo_discounts', [ $this, 'db_check_bogo_discounts'] );
     }
 
     /**
@@ -33,13 +33,13 @@ class TriggerBogo {
      *
      * @return void
      */
-    public function aio_check_bogo_discounts() {
-        check_ajax_referer( 'aio_triggerBogo_nonce', 'nonce' );
+    public function db_check_bogo_discounts() {
+        check_ajax_referer( 'db_triggerBogo_nonce', 'nonce' );
 
         // 🔥 Safe trigger
-        do_action( 'aio_run_bogo_discount', WC()->cart );
+        do_action( 'db_run_bogo_discount', WC()->cart );
         WC()->cart->calculate_totals();
 
-        wp_send_json_success( ['message' => '[AIO BOGO] Applied!'] );
+        wp_send_json_success( ['message' => '[DB BOGO] Applied!'] );
     }
 }

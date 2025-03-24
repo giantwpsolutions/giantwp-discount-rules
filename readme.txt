@@ -1,4 +1,4 @@
-===  All In One Discount Rules === 
+ ===   All In One Discount Rules === 
 Contributors: developerhabib
 Tags: woocommerce discounts, dynamic pricing, cart discount, bogo, bulk discount 
 Requires at least: 5.8  

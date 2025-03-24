@@ -2,10 +2,10 @@
   /**
  * Discount helper utilities for validating schedule and usage limits.
  *
- * @package AIO_DiscountRules\Discount\Manager
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Manager;
+namespace DealBuilder_Discount_Rules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 

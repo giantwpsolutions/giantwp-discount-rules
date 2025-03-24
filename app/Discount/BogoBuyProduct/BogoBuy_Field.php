@@ -4,10 +4,10 @@
  *
  * Handles condition-based checks for BOGO discount applicability.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\BogoBuyProduct;
+namespace DealBuilder_Discount_Rules\Discount\BogoBuyProduct;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,7 +50,7 @@ class BogoBuy_Field {
 
         $condition_ids = array_map( 'intval', $condition['value'] );
 
-        return aio_compare_list( $product_ids, $condition['operator'], $condition_ids );
+        return db_compare_list( $product_ids, $condition['operator'], $condition_ids );
     }
 
     /**
@@ -69,7 +69,7 @@ class BogoBuy_Field {
         }
 
         $condition_ids = array_map( 'intval', $condition['value'] );
-        return aio_compare_list( $variation_ids, $condition['operator'], $condition_ids );
+        return db_compare_list( $variation_ids, $condition['operator'], $condition_ids );
     }
 
     /**
@@ -92,7 +92,7 @@ class BogoBuy_Field {
             $tags_in_cart = array_merge( $tags_in_cart, $tag_ids );
         }
 
-        return aio_compare_list( array_unique( $tags_in_cart ), $condition['operator'], $condition['value'] );
+        return db_compare_list( array_unique( $tags_in_cart ), $condition['operator'], $condition['value'] );
     }
 
     /**
@@ -114,7 +114,7 @@ class BogoBuy_Field {
             $cat_ids    = array_merge( $cat_ids, wc_get_product_term_ids( $product_id, 'product_cat' ) );
         }
 
-        return aio_compare_list( array_unique( $cat_ids ), $condition['operator'], $condition['value'] );
+        return db_compare_list( array_unique( $cat_ids ), $condition['operator'], $condition['value'] );
     }
 
     /**
@@ -136,7 +136,7 @@ class BogoBuy_Field {
             $product = $item['data'] ?? null;
             if ($product instanceof \WC_Product) {
                 $price = $product->get_price();
-                if ( aio_compare_numaric_value( $price, $operator, $value ) ) {
+                if ( db_compare_numaric_value( $price, $operator, $value ) ) {
                     return true;
                 }
             }
@@ -164,7 +164,7 @@ class BogoBuy_Field {
             $product = $item['data'] ?? null;
             if ( $product instanceof \WC_Product ) {
                 $stock = $product->get_stock_quantity();
-                if ( $stock !== null && aio_compare_numaric_value( $stock, $operator, $value ) ) {
+                if ( $stock !== null && db_compare_numaric_value( $stock, $operator, $value ) ) {
                     return true;
                 }
             }

@@ -2,12 +2,12 @@
 /**
  * Handles BOGO Free Item display and price override in cart.
  *
- * @package AIO_DiscountRules
+ * @package DealBuilder_Discount_Rules
  */
 
-namespace AIO_DiscountRules\Discount\Manager;
+namespace DealBuilder_Discount_Rules\Discount\Manager;
 
-use AIO_DiscountRules\Traits\SingletonTrait;
+use DealBuilder_Discount_Rules\Traits\SingletonTrait;
 
 defined('ABSPATH') || exit;
 
@@ -28,7 +28,7 @@ class Bogo_Free_Item_Handler {
 
         // Prevent free items from being updated manually
         add_filter( 'woocommerce_update_cart_validation', function ( $check, $cart_item_key, $values ) {
-            if ( empty( $values['aio_bogo_free_item'] ) ) {
+            if ( empty( $values['db_bogo_free_item'] ) ) {
                 return $check;
             }
             $cart = WC()->cart;
@@ -48,7 +48,7 @@ class Bogo_Free_Item_Handler {
         if ( is_admin() && ! defined('DOING_AJAX') ) return;
 
         foreach ( $cart->get_cart() as $item ) {
-            if ( ! empty( $item['aio_bogo_free_item'] ) && isset( $item['override_price'] ) ) {
+            if ( ! empty( $item['db_bogo_free_item'] ) && isset( $item['override_price'] ) ) {
                 $item['data']->set_price( floatval( $item['override_price'] ) );
             }
         }
@@ -64,9 +64,9 @@ class Bogo_Free_Item_Handler {
      * @return string
      */
     public function filter_cart_price( $price_html, $cart_item, $cart_item_key ) {
-        if ( ! empty( $cart_item['aio_bogo_free_item'] ) ) {
+        if ( ! empty( $cart_item['db_bogo_free_item'] ) ) {
             if ( floatval( $cart_item['override_price'] ) === 0.0 ) {
-                return '<span class="aio-free-price">' . esc_html__('Free', 'all-in-one-discount-rules') . '</span>';
+                return '<span class="db-free-price">' . esc_html__('Free', 'dealbuilder-discount-rules') . '</span>';
             }
             return wc_price( floatval( $cart_item['override_price'] ) );
         }
@@ -84,10 +84,10 @@ class Bogo_Free_Item_Handler {
      * @return string
      */
     public function filter_cart_subtotal( $subtotal_html, $cart_item, $cart_item_key ) {
-        if ( ! empty( $cart_item['aio_bogo_free_item'] ) ) {
+        if ( ! empty( $cart_item['db_bogo_free_item'] ) ) {
             $price = floatval( $cart_item['override_price'] ?? 0.0 );
             if ( $price === 0.0 ) {
-                return '<span class="aio-free-subtotal">' . esc_html__('Free', 'all-in-one-discount-rules') . '</span>';
+                return '<span class="db-free-subtotal">' . esc_html__('Free', 'dealbuilder-discount-rules') . '</span>';
             }
             return wc_price( $price * $cart_item['quantity'] );
         }
