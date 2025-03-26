@@ -5,15 +5,15 @@
  * Validates auto-generated coupons for flat/percentage discounts based on
  * schedule, usage limits, and conditional logic.
  *
- * @package DealBuilder_Discount_Rules\Discount\Manager
+ * @package GiantWP_Discount_Rules\Discount\Manager
  */
 
-namespace DealBuilder_Discount_Rules\Discount\Manager;
+namespace GiantWP_Discount_Rules\Discount\Manager;
 
 defined('ABSPATH') || exit;
 
-use DealBuilder_Discount_Rules\Discount\Condition\Conditions;
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Discount\Condition\Conditions;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class FlatPercentage_Validator
@@ -41,12 +41,12 @@ class FlatPercentage_Validator {
         if ( ! $coupon instanceof \WC_Coupon ) return $valid;
 
         // Only process hidden plugin-generated coupons
-        if ( ! $coupon->get_meta( 'db_is_hidden_coupon' )) return $valid;
+        if ( ! $coupon->get_meta( 'gwp_is_hidden_coupon' )) return $valid;
 
-        $rule_id = $coupon->get_meta( 'db_rule_id' );
+        $rule_id = $coupon->get_meta( 'gwp_rule_id' );
         if ( ! $rule_id ) return false;
 
-        $rules = maybe_unserialize( get_option( 'dealbuilder_flatpercentage_discount', [] ) ) ?: [];
+        $rules = maybe_unserialize( get_option( 'giantwp_flatpercentage_discount', [] ) ) ?: [];
 
         foreach ( $rules as $rule ) {
             if ($rule['id'] !== $rule_id) continue;

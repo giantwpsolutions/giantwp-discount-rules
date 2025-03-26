@@ -2,10 +2,10 @@
   /**
  * All Discount REST API Controller
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Api\Controllers\Discounts;
+namespace GiantWP_Discount_Rules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,7 +21,7 @@ class All_Discount_Controller extends WP_REST_Controller {
      * Constructor to set namespace and rest base.
      */
     public function __construct() {
-        $this->namespace = 'db-discountrules/v2';
+        $this->namespace = 'gwp-discountrules/v2';
         $this->rest_base = 'get-all-discounts';
     }
 
@@ -43,11 +43,11 @@ class All_Discount_Controller extends WP_REST_Controller {
      */
     public function get_all_discounts() {
         // Fetch discount data from all three sources
-        $flatpercentage_discounts = maybe_unserialize( get_option( 'dealbuilder_flatpercentage_discount', [] ) );
-        $bogo_discounts           = maybe_unserialize( get_option( 'dealbuilder_bogo_discount', [] ) );
-        $shipping_discounts       = maybe_unserialize( get_option( 'dealbuilder_shipping_discount', [] ) );
-        $bxgy_discounts           = maybe_unserialize( get_option( 'dealbuilder_bxgy_discount', [] ) );
-        $bulk_discounts           = maybe_unserialize( get_option( 'dealbuilder_bulk_discount', [] ) );
+        $flatpercentage_discounts = maybe_unserialize( get_option( 'giantwp_flatpercentage_discount', [] ) );
+        $bogo_discounts           = maybe_unserialize( get_option( 'giantwp_bogo_discount', [] ) );
+        $shipping_discounts       = maybe_unserialize( get_option( 'giantwp_shipping_discount', [] ) );
+        $bxgy_discounts           = maybe_unserialize( get_option( 'giantwp_bxgy_discount', [] ) );
+        $bulk_discounts           = maybe_unserialize( get_option( 'giantwp_bulk_discount', [] ) );
 
         // Ensure they are arrays
         $flatpercentage_discounts = is_array( $flatpercentage_discounts ) ? $flatpercentage_discounts : [];

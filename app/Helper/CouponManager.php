@@ -2,10 +2,10 @@
   /**
  * Coupon Validation Helper.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Helper;
+namespace GiantWP_Discount_Rules\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

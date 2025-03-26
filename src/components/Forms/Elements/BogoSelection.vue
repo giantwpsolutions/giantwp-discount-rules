@@ -89,7 +89,7 @@ watch(
           <label
             for="buyProductCount"
             class="text-gray-950 text-sm whitespace-nowrap">
-            {{ __("Buy:", "dealbuilder-discount-rules") }}
+            {{ __("Buy:", "giantwp-discount-rules") }}
           </label>
           <el-input-number
             id="buyProductCount"
@@ -104,7 +104,7 @@ watch(
           <label
             for="getProductCount"
             class="text-gray-950 text-sm whitespace-nowrap">
-            {{ __("Get:", "dealbuilder-discount-rules") }}
+            {{ __("Get:", "giantwp-discount-rules") }}
           </label>
           <el-input-number
             id="getProductCount"
@@ -118,10 +118,10 @@ watch(
         <div class="w-full md:w-auto">
           <el-radio-group v-model="localState.freeOrDiscount">
             <el-radio-button
-              :label="__('Free', 'dealbuilder-discount-rules')"
+              :label="__('Free', 'giantwp-discount-rules')"
               value="freeproduct" />
             <el-radio-button
-              :label="__('Discount', 'dealbuilder-discount-rules')"
+              :label="__('Discount', 'giantwp-discount-rules')"
               value="discount_product" />
           </el-radio-group>
         </div>
@@ -137,7 +137,7 @@ watch(
         <!-- Column 1: Pricing Type -->
         <div class="w-full md:w-1/3">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "dealbuilder-discount-rules") }}
+            {{ __("Pricing Type", "giantwp-discount-rules") }}
           </label>
           <el-select
             v-model="localState.discounttypeBogo"
@@ -146,13 +146,13 @@ watch(
             class="w-full">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'dealbuilder-discount-rules')">
-              {{ __("Fixed Discount", "dealbuilder-discount-rules") }}
+              :label="__('Fixed Discount', 'giantwp-discount-rules')">
+              {{ __("Fixed Discount", "giantwp-discount-rules") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'dealbuilder-discount-rules')">
-              {{ __("Percentage Discount", "dealbuilder-discount-rules") }}
+              :label="__('Percentage Discount', 'giantwp-discount-rules')">
+              {{ __("Percentage Discount", "giantwp-discount-rules") }}
             </el-option>
           </el-select>
         </div>
@@ -160,7 +160,7 @@ watch(
         <!-- Column 2: Discount Value -->
         <div class="w-full md:w-1/3">
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "dealbuilder-discount-rules") }}
+            {{ __("Pricing Value", "giantwp-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -182,7 +182,7 @@ watch(
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{
-                __("Maximum Value", "dealbuilder-discount-rules")
+                __("Maximum Value", "giantwp-discount-rules")
               }}</span>
               <el-tooltip
                 class="box-item"
@@ -190,7 +190,7 @@ watch(
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'dealbuilder-discount-rules'
+                    'giantwp-discount-rules'
                   )
                 "
                 placement="top"
@@ -218,17 +218,17 @@ watch(
       <el-switch
         v-model="localState.isRepeat"
         inline-prompt
-        :active-text="__('On', 'dealbuilder-discount-rules')"
-        :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
+        :active-text="__('On', 'giantwp-discount-rules')"
+        :inactive-text="__('Off', 'giantwp-discount-rules')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Is Repeat?", "dealbuilder-discount-rules") }}
+        {{ __("Is Repeat?", "giantwp-discount-rules") }}
         <el-tooltip
           class="box-item"
           effect="dark"
           :content="
             __(
               'Discount will apply once or repeat after each quantities matching',
-              'dealbuilder-discount-rules'
+              'giantwp-discount-rules'
             )
           "
           placement="top"

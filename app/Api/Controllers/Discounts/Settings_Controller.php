@@ -2,10 +2,10 @@
   /**
  * Plugin Settings REST API Controller.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Api\Controllers\Discounts;
+namespace GiantWP_Discount_Rules\Api\Controllers\Discounts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ use WP_REST_Controller;
  *
  * Route: /db-discountrules/v2/settings
  *
- * @package DealBuilder_Discount_Rules\Api\Controllers\Discounts
+ * @package GiantWP_Discount_Rules\Api\Controllers\Discounts
  */
 class Settings_Controller extends WP_REST_Controller
 {
@@ -33,7 +33,7 @@ class Settings_Controller extends WP_REST_Controller
      */
     public function register_routes() {
         // Save settings (POST/PUT)
-        register_rest_route( 'db-discountrules/v2', '/settings', [
+        register_rest_route( 'gwp-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [ $this, 'save_settings' ],
             'permission_callback' => function () {
@@ -42,7 +42,7 @@ class Settings_Controller extends WP_REST_Controller
         ] );
 
         // Get settings (GET)
-        register_rest_route( 'db-discountrules/v2', '/settings', [
+        register_rest_route( 'gwp-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [ $this, 'get_settings' ],
             'permission_callback' => function () {
@@ -64,7 +64,7 @@ class Settings_Controller extends WP_REST_Controller
             'discountBasedOn' => in_array( $data['discountBasedOn'] ?? '', ['regular_price', 'sale_price'] ) ? sanitize_text_field( $data['discountBasedOn'] ) : 'regular_price', 'orderPageLabel'  => ! empty( $data['orderPageLabel']) ? true : false,
         ];
 
-        update_option( 'dealbuilder_discountrules_settings', $sanitized );
+        update_option( 'giantwp_discountrules_settings', $sanitized );
 
         return rest_ensure_response([
             'success' => true,
@@ -83,7 +83,7 @@ class Settings_Controller extends WP_REST_Controller
             'orderPageLabel'   => true,
         ];
 
-        $settings = get_option('dealbuilder_discountrules_settings', []);
+        $settings = get_option('giantwp_discountrules_settings', []);
         $settings = wp_parse_args( $settings, $defaults );
 
         return rest_ensure_response( $settings );

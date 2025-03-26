@@ -2,14 +2,14 @@
 /**
  * Handles hiding of auto-generated coupons from the WooCommerce admin list.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\Manager;
+namespace GiantWP_Discount_Rules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class CouponDisplay

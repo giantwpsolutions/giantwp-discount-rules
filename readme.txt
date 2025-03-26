@@ -1,10 +1,10 @@
- ===   All In One Discount Rules === 
+ === GiantWP Discount Rules === 
 Contributors: developerhabib
 Tags: woocommerce discounts, dynamic pricing, cart discount, bogo, bulk discount 
 Requires at least: 5.8  
 Tested up to: 6.7.2
 Requires PHP: 7.4  
-Stable tag: 1.0.1  
+Stable tag: 1.0.3  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -12,7 +12,7 @@ Smart WooCommerce discount plugin with flat/percentage pricing, condition builde
 
 == Description ==
 
-**AIO Discount Rules** lets you create powerful and flexible WooCommerce discounts — without touching code. Whether you're running a seasonal sale or offering custom pricing logic, this plugin makes it easy.
+** GiantWP Discount Rules** lets you create powerful and flexible WooCommerce discounts — without touching code. Whether you're running a seasonal sale or offering custom pricing logic, this plugin makes it easy.
 
 Built with Vue.js and WordPress best practices, it integrates directly with WooCommerce and applies coupon-based discounts.
 
@@ -45,7 +45,7 @@ Built with Vue.js and WordPress best practices, it integrates directly with WooC
 
 1. Upload the plugin folder to `/wp-content/plugins/` or install via Plugins → Add New.
 2. Activate the plugin through the 'Plugins' menu.
-3. Navigate to **WooCommerce → AIO Discount Rules** to create your discount rules.
+3. Navigate to **WooCommerce → GiantWP Discount Rules** to create your discount rules.
 4. Start creating discount types like "Flat/Percentage" or explore Pro features.
 
 == Screenshots ==
@@ -65,14 +65,14 @@ Yes, we create WooCommerce coupons dynamically so it works with other plugins an
 Yes, that’s available in the Pro version under the Buy X Get Y module.
 
 = Will it work with Elementor, Divi, or other builders? =
-Yes. As long as you use WooCommerce, AIO Discount Rules will work with any theme or builder.
+Yes. As long as you use WooCommerce, GiantWP Discount Rules will work with any theme or builder.
 
 = Is the free version enough for basic discount needs? =
 Absolutely. The free version is production-ready and supports flat/percentage-based discounts with powerful conditions and scheduling.
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.3 =
 * Initial stable release
 * Flat/Percentage discount support
 * Condition builder (products, cart total, payment, shipping, etc.)
@@ -81,8 +81,8 @@ Absolutely. The free version is production-ready and supports flat/percentage-ba
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-First stable release of AIO Discount Rules.
+= 1.0.3 =
+First stable release of GiantWP Discount Rules.
 
 == Credits ==
 

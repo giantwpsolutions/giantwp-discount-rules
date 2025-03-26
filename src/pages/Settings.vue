@@ -54,22 +54,20 @@ const handleSaveSettings = async () => {
   <div
     class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6 flex flex-col">
     <h4 class="text-xl font-bold mb-6">
-      {{ __("Settings", "dealbuilder-discount-rules") }}
+      {{ __("Settings", "giantwp-discount-rules") }}
     </h4>
 
     <!-- License -->
     <div v-if="isProActive">
       <div class="w-full max-w-2xl flex items-center mb-2 gap-3">
         <label class="text-base font-medium text-dark w-32">
-          {{ __("License Key", "dealbuilder-discount-rules") }}
+          {{ __("License Key", "giantwp-discount-rules") }}
         </label>
 
         <el-input
           v-model="licenseKey"
           style="width: 300px"
-          :placeholder="
-            __('Enter License Key', 'dealbuilder-discount-rules')
-          " />
+          :placeholder="__('Enter License Key', 'giantwp-discount-rules')" />
 
         <el-button
           :type="licenseStatus === 'valid' ? 'danger' : 'primary'"
@@ -77,8 +75,8 @@ const handleSaveSettings = async () => {
           @click="handleAction">
           {{
             licenseStatus === "valid"
-              ? __("Deactivate", "dealbuilder-discount-rules")
-              : __("Activate", "dealbuilder-discount-rules")
+              ? __("Deactivate", "giantwp-discount-rules")
+              : __("Activate", "giantwp-discount-rules")
           }}
         </el-button>
       </div>
@@ -87,13 +85,11 @@ const handleSaveSettings = async () => {
         v-if="licenseStatus !== 'unknown'"
         class="pl-32 text-sm mt-1 text-gray-700">
         <template v-if="licenseStatus === 'valid'">
-          ✅ {{ __("Your license is active", "dealbuilder-discount-rules") }}
+          ✅ {{ __("Your license is active", "giantwp-discount-rules") }}
         </template>
         <template v-else>
           ❌
-          {{
-            __("License is invalid or expired", "dealbuilder-discount-rules")
-          }}
+          {{ __("License is invalid or expired", "giantwp-discount-rules") }}
         </template>
       </div>
     </div>
@@ -103,7 +99,7 @@ const handleSaveSettings = async () => {
       <!-- Discount Based On -->
       <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
         <label class="text-base font-medium text-dark w-32">
-          {{ __("Rule Apply on", "dealbuilder-discount-rules") }}
+          {{ __("Rule Apply on", "giantwp-discount-rules") }}
         </label>
 
         <el-select
@@ -113,10 +109,10 @@ const handleSaveSettings = async () => {
           popper-class="custom-dropdown">
           <el-option
             :value="'regular_price'"
-            :label="__('Regular Price', 'dealbuilder-discount-rules')" />
+            :label="__('Regular Price', 'giantwp-discount-rules')" />
           <el-option
             :value="'sale_price'"
-            :label="__('Sale Price', 'dealbuilder-discount-rules')" />
+            :label="__('Sale Price', 'giantwp-discount-rules')" />
         </el-select>
       </div>
 
@@ -124,7 +120,7 @@ const handleSaveSettings = async () => {
       <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
         <label
           class="text-base font-medium text-dark w-32 flex items-center gap-2">
-          {{ __("Order Label", "dealbuilder-discount-rules") }}
+          {{ __("Order Label", "giantwp-discount-rules") }}
           <div class="group relative">
             <el-tooltip
               class="box-item"
@@ -132,7 +128,7 @@ const handleSaveSettings = async () => {
               :content="
                 __(
                   'Show a label on admin order page if discount applied',
-                  'dealbuilder-discount-rules'
+                  'giantwp-discount-rules'
                 )
               "
               placement="top"
@@ -146,8 +142,8 @@ const handleSaveSettings = async () => {
         <el-switch
           v-model="saveSettingsData.orderPageLabel"
           inline-prompt
-          :active-text="__('On', 'dealbuilder-discount-rules')"
-          :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
+          :active-text="__('On', 'giantwp-discount-rules')"
+          :inactive-text="__('Off', 'giantwp-discount-rules')" />
       </div>
 
       <!-- Save Settings Button -->
@@ -156,7 +152,7 @@ const handleSaveSettings = async () => {
           type="primary"
           :loading="isLoadingSettings"
           @click="handleSaveSettings">
-          {{ __("Save Settings", "dealbuilder-discount-rules") }}
+          {{ __("Save Settings", "giantwp-discount-rules") }}
         </el-button>
       </div>
     </div>

@@ -4,10 +4,10 @@
  *
  * Handles saving and incrementing usage count for various discount types.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\UsageTrack;
+namespace GiantWP_Discount_Rules\Discount\UsageTrack;
 
 defined( 'ABSPATH' ) || exit;
 

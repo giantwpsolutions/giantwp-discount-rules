@@ -2,12 +2,12 @@
   /**
  * Display applied discount rules in WooCommerce Orders list.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\Manager;
+namespace GiantWP_Discount_Rules\Discount\Manager;
 
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,7 +31,7 @@ class DiscountLabel {
      */
     public function __construct() {
         // Only load if the setting is enabled
-        $settings = maybe_unserialize( get_option( 'db_woodiscount_settings', [] ) );
+        $settings = maybe_unserialize( get_option( 'giantwp_discountrules_settings', [] ) );
         if ( empty( $settings['orderPageLabel'] ) ) {
             return;
         }
@@ -57,12 +57,12 @@ class DiscountLabel {
         foreach ( $columns as $key => $label ) {
             $new_columns[$key] = $label;
             if ( 'order_status' === $key ) {
-                $new_columns['db_discount_label'] = __( 'Discount Rules', 'dealbuilder-discount-rules' );
+                $new_columns['gwp_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
             }
         }
 
-        if ( ! isset( $new_columns['db_discount_label'] ) ) {
-            $new_columns['db_discount_label'] = __( 'Discount Rules', 'dealbuilder-discount-rules' );
+        if ( ! isset( $new_columns['gwp_discount_label'] ) ) {
+            $new_columns['gwp_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
         }
 
         return $new_columns;
@@ -75,17 +75,17 @@ class DiscountLabel {
      * @param int    $post_id  Order ID.
      */
     public function render_discount_column( $column, $post_id ) {
-        if ( $column !== 'db_discount_label' ) {
+        if ( $column !== 'gwp_discount_label' ) {
             return;
         }
 
         $labels = [];
 
         $meta_keys = [
-            '_db_bogo_applied_rules'     => __( 'BOGO', 'dealbuilder-discount-rules' ),
-            '_db_bxgy_applied_rules'     => __( 'Buy X Get Y', 'dealbuilder-discount-rules' ),
-            '_db_bulk_applied_rules'     => __( 'Bulk', 'dealbuilder-discount-rules' ),
-            '_db_shipping_applied_rules' => __( 'Shipping', 'dealbuilder-discount-rules' ),
+            '_gwp_bogo_applied_rules'     => __( 'BOGO', 'giantwp-discount-rules' ),
+            '_gwp_bxgy_applied_rules'     => __( 'Buy X Get Y', 'giantwp-discount-rules' ),
+            '_gwp_bulk_applied_rules'     => __( 'Bulk', 'giantwp-discount-rules' ),
+            '_gwp_shipping_applied_rules' => __( 'Shipping', 'giantwp-discount-rules' ),
         ];
 
         $order = wc_get_order( $post_id );
@@ -99,7 +99,7 @@ class DiscountLabel {
             }
         }
 
-        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'dealbuilder-discount-rules' ) . '</em>';
+        echo ! empty( $labels ) ? wp_kses_post( implode( '<br>', array_map( 'esc_html', array_unique( $labels ) ) ) ) : '<em>' . esc_html__( 'None', 'giantwp-discount-rules' ) . '</em>';
 
     }
 }

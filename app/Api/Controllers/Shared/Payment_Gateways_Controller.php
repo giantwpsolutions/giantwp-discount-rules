@@ -2,10 +2,10 @@
 /**
  * Payment Gateways REST API Controller.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Api\Controllers\Shared;
+namespace GiantWP_Discount_Rules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ use WP_REST_Server;
 class Payment_Gateways_Controller extends WP_REST_Controller {
 
     public function __construct() {
-        $this->namespace = 'db-discountrules/v2';
+        $this->namespace = 'gwp-discountrules/v2';
         $this->rest_base = 'payment-gateways';
     }
 
@@ -61,7 +61,7 @@ class Payment_Gateways_Controller extends WP_REST_Controller {
         if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
             return new \WP_Error(
                 'woocommerce_inactive',
-                __( 'WooCommerce is not active.', 'dealbuilder-discount-rules' ),
+                __( 'WooCommerce is not active.', 'giantwp-discount-rules' ),
                 ['status' => 500]
             );
         }

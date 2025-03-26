@@ -40,7 +40,7 @@ const formatUsage = (rule) => {
 
   return enabled
     ? `${used} / ${total}`
-    : __("Unlimited", "dealbuilder-discount-rules");
+    : __("Unlimited", "giantwp-discount-rules");
 };
 
 // Track clicked state for confirmation
@@ -60,25 +60,25 @@ const handleCancel = () => {
             <input type="checkbox" class="h-5 w-5" />
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Discount Name", "dealbuilder-discount-rules") }}
+            {{ __("Discount Name", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Type", "dealbuilder-discount-rules") }}
+            {{ __("Type", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Start Date", "dealbuilder-discount-rules") }}
+            {{ __("Start Date", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("End Date", "dealbuilder-discount-rules") }}
+            {{ __("End Date", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Usage Limits", "dealbuilder-discount-rules") }}
+            {{ __("Usage Limits", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Status", "dealbuilder-discount-rules") }}
+            {{ __("Status", "giantwp-discount-rules") }}
           </th>
           <th class="px-4 py-2 border-b">
-            {{ __("Actions", "dealbuilder-discount-rules") }}
+            {{ __("Actions", "giantwp-discount-rules") }}
           </th>
         </tr>
       </thead>
@@ -86,7 +86,7 @@ const handleCancel = () => {
         <!-- No Data Row -->
         <tr v-if="discountRules.length === 0">
           <td colspan="7" class="text-center px-4 py-6 text-gray-500">
-            {{ __("No discount rules created", "dealbuilder-discount-rules") }}
+            {{ __("No discount rules created", "giantwp-discount-rules") }}
           </td>
         </tr>
 
@@ -123,7 +123,7 @@ const handleCancel = () => {
             <el-tooltip
               class="box-item"
               effect="dark"
-              :content="__('Edit Rule', 'dealbuilder-discount-rules')"
+              :content="__('Edit Rule', 'giantwp-discount-rules')"
               placement="top">
               <el-icon
                 @click="onEdit(rule)"
@@ -141,7 +141,7 @@ const handleCancel = () => {
               :title="
                 __(
                   'Are you sure you want to delete this discount?',
-                  'dealbuilder-discount-rules'
+                  'giantwp-discount-rules'
                 )
               "
               @confirm="onDelete(rule)">
@@ -149,7 +149,7 @@ const handleCancel = () => {
                 <span>
                   <el-tooltip
                     effect="dark"
-                    :content="__('Delete Rule', 'dealbuilder-discount-rules')"
+                    :content="__('Delete Rule', 'giantwp-discount-rules')"
                     placement="top">
                     <el-icon
                       class="text-red-600 hover:text-red-800 hover:cursor-pointer"

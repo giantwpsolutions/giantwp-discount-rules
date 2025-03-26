@@ -1,25 +1,25 @@
 <?php
     /**
- * API Handler for DealBuilder Discount Rules.
+ * API Handler for GiantWP Discount Rules.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Api;
+namespace GiantWP_Discount_Rules\Api;
 
 defined( 'ABSPATH' ) || exit;
 
-use DealBuilder_Discount_Rules\Api\Controllers\Discounts\All_Discount_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Discounts\Bogo_Discount_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\General_Data;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Payment_Gateways_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Category_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Products_Tag_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Shipping_Zone_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Shared\Users_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
-use DealBuilder_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\All_Discount_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\Bogo_Discount_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\General_Data;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Payment_Gateways_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Products_Category_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Products_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Products_Tag_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Shipping_Zone_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Shared\Users_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
 
 
 /**

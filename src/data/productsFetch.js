@@ -47,7 +47,7 @@ export const loadProducts = async () => {
 
     } catch (error) {
         console.error("Error loading products:", error);
-        productError.value = __("Failed to load products.", "dealbuilder-discount-rules");
+        productError.value = __("Failed to load products.", "giantwp-discount-rules");
     } finally {
         isLoadingProducts.value = false;
     }

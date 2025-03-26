@@ -4,12 +4,12 @@
  *
  * Syncs WooCommerce coupon usage with internal rule usage count.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\UsageTrack;
+namespace GiantWP_Discount_Rules\Discount\UsageTrack;
 
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,7 +20,7 @@ class FlatPercentageUsage {
 
     use SingletonTrait;
     
-    const OPTION_KEY = 'dealbuilder_flatpercentage_discount';
+    const OPTION_KEY = 'giantwp_flatpercentage_discount';
 
     public function __construct() {
         add_action( 'woocommerce_order_status_completed', [ $this, 'sync_usage_from_coupon' ], 20, 1 );

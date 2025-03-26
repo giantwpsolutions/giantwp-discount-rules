@@ -1,6 +1,6 @@
 <?php 
 
-namespace DealBuilder_Discount_Rules\Traits;
+namespace GiantWP_Discount_Rules\Traits;
 
 /**
  * Singleton Instance Trait

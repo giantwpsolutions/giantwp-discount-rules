@@ -50,17 +50,14 @@ watch(
       <el-switch
         v-model="usageData.enableUsage"
         inline-prompt
-        :active-text="__('On', 'dealbuilder-discount-rules')"
-        :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
+        :active-text="__('On', 'giantwp-discount-rules')"
+        :inactive-text="__('Off', 'giantwp-discount-rules')" />
       <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
-        {{ __("Enable Usage?", "dealbuilder-discount-rules") }}
+        {{ __("Enable Usage?", "giantwp-discount-rules") }}
         <el-tooltip
           effect="dark"
           :content="
-            __(
-              'The maximum usage of this coupon.',
-              'dealbuilder-discount-rules'
-            )
+            __('The maximum usage of this coupon.', 'giantwp-discount-rules')
           "
           placement="top">
           <QuestionMarkCircleIcon
@@ -75,12 +72,12 @@ watch(
         <label
           for="usageLimit"
           class="block text-sm font-medium text-gray-900 my-1">
-          {{ __("Usage Limits", "dealbuilder-discount-rules") }}
+          {{ __("Usage Limits", "giantwp-discount-rules") }}
         </label>
         <div class="flex items-center">
           <span
             class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-left text-gray-700 bg-gray-100">
-            {{ __("Limits", "dealbuilder-discount-rules") }}
+            {{ __("Limits", "giantwp-discount-rules") }}
           </span>
           <input
             v-model.number="usageData.usageLimitsCount"

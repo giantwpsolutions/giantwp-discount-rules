@@ -1,9 +1,9 @@
 jQuery(function ($) {
     function triggerDiscountRecalc(method) {
-        $.post(db_checkout_ajax.ajax_url, {
-            action: 'db_set_payment_method',
+        $.post(gwp_checkout_ajax.ajax_url, {
+            action: 'gwp_set_payment_method',
             payment_method: method,
-            security: db_checkout_ajax.nonce,
+            security: gwp_checkout_ajax.nonce,
         }, function (response) {
             if (response.success) {
                 // console.log("✅ Payment method saved in session:", method);

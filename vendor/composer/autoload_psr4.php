@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'DealBuilder_Discount_Rules\\' => array($baseDir . '/app'),
+    'GiantWP_Discount_Rules\\' => array($baseDir . '/app'),
 );

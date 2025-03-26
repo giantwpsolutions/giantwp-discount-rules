@@ -1,11 +1,11 @@
 jQuery(function ($) {
     $(document.body).on('updated_cart_totals updated_checkout', function () {
         $.ajax({
-            url: dbDiscountAjax.ajax_url,
+            url: gwpDiscountAjax.ajax_url,
             method: 'POST',
             data: {
-                action: 'db_check_cart_discounts',
-                nonce: dbDiscountAjax.nonce
+                action: 'gwp_check_cart_discounts',
+                nonce: gwpDiscountAjax.nonce
             },
             success: function (response) {
                 if (response.success) {

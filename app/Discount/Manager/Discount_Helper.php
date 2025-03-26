@@ -2,10 +2,10 @@
   /**
  * Discount helper utilities for validating schedule and usage limits.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\Manager;
+namespace GiantWP_Discount_Rules\Discount\Manager;
 
 defined( 'ABSPATH' ) || exit;
 

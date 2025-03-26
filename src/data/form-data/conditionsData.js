@@ -17,45 +17,45 @@ export const conditions = reactive([
 // Dynamic condition options with i18n
 export const conditionOptions = [
     {
-        label: __('Cart', 'dealbuilder-discount-rules'),
+        label: __('Cart', 'giantwp-discount-rules'),
         options: [
-            { label: __('Cart Subtotal Price', 'dealbuilder-discount-rules'), value: 'cart_subtotal_price' },
-            { label: __('Cart Quantity', 'dealbuilder-discount-rules'), value: 'cart_quantity' },
-            { label: __('Cart Total Weight', 'dealbuilder-discount-rules'), value: 'cart_total_weight' },
+            { label: __('Cart Subtotal Price', 'giantwp-discount-rules'), value: 'cart_subtotal_price' },
+            { label: __('Cart Quantity', 'giantwp-discount-rules'), value: 'cart_quantity' },
+            { label: __('Cart Total Weight', 'giantwp-discount-rules'), value: 'cart_total_weight' },
         ],
     },
     {
-        label: __('Cart Items', 'dealbuilder-discount-rules'),
+        label: __('Cart Items', 'giantwp-discount-rules'),
         options: [
-            { label: __('Cart Item - Product', 'dealbuilder-discount-rules'), value: 'cart_item_product' },
-            { label: __('Cart Item - Variation', 'dealbuilder-discount-rules'), value: 'cart_item_variation' },
-            { label: __('Cart Item - Category', 'dealbuilder-discount-rules'), value: 'cart_item_category' },
-            { label: __('Cart Item - Tag', 'dealbuilder-discount-rules'), value: 'cart_item_tag' },
-            { label: __('Cart Item - Regular Price', 'dealbuilder-discount-rules'), value: 'cart_item_regular_price' },
+            { label: __('Cart Item - Product', 'giantwp-discount-rules'), value: 'cart_item_product' },
+            { label: __('Cart Item - Variation', 'giantwp-discount-rules'), value: 'cart_item_variation' },
+            { label: __('Cart Item - Category', 'giantwp-discount-rules'), value: 'cart_item_category' },
+            { label: __('Cart Item - Tag', 'giantwp-discount-rules'), value: 'cart_item_tag' },
+            { label: __('Cart Item - Regular Price', 'giantwp-discount-rules'), value: 'cart_item_regular_price' },
         ],
     },
     {
-        label: __('Customer', 'dealbuilder-discount-rules'),
+        label: __('Customer', 'giantwp-discount-rules'),
         options: [
-            { label: __('Customer Is Logged In', 'dealbuilder-discount-rules'), value: 'customer_is_logged_in' },
-            { label: __('Customer Role', 'dealbuilder-discount-rules'), value: 'customer_role' },
-            { label: __('Specific Customer', 'dealbuilder-discount-rules'), value: 'specific_customer' },
+            { label: __('Customer Is Logged In', 'giantwp-discount-rules'), value: 'customer_is_logged_in' },
+            { label: __('Customer Role', 'giantwp-discount-rules'), value: 'customer_role' },
+            { label: __('Specific Customer', 'giantwp-discount-rules'), value: 'specific_customer' },
         ],
     },
     {
-        label: __('Purchase History', 'dealbuilder-discount-rules'),
+        label: __('Purchase History', 'giantwp-discount-rules'),
         options: [
-            { label: __('Customer Order Count', 'dealbuilder-discount-rules'), value: 'customer_order_count' },
-            { label: __('Order History Product', 'dealbuilder-discount-rules'), value: 'customer_order_history_product' },
-            { label: __('Order History Category', 'dealbuilder-discount-rules'), value: 'customer_order_history_category' },
-            // { label: __('Shipping Region', 'dealbuilder-discount-rules'), value: 'customer_shipping_region' },
+            { label: __('Customer Order Count', 'giantwp-discount-rules'), value: 'customer_order_count' },
+            { label: __('Order History Product', 'giantwp-discount-rules'), value: 'customer_order_history_product' },
+            { label: __('Order History Category', 'giantwp-discount-rules'), value: 'customer_order_history_category' },
+            // { label: __('Shipping Region', 'giantwp-discount-rules'), value: 'customer_shipping_region' },
         ],
     },
     {
-        label: __('Others', 'dealbuilder-discount-rules'),
+        label: __('Others', 'giantwp-discount-rules'),
         options: [
-            { label: __('Payment Method', 'dealbuilder-discount-rules'), value: 'payment_method' },
-            // { label: __('Applied Coupons', 'dealbuilder-discount-rules'), value: 'applied_coupons' },
+            { label: __('Payment Method', 'giantwp-discount-rules'), value: 'payment_method' },
+            // { label: __('Applied Coupons', 'giantwp-discount-rules'), value: 'applied_coupons' },
         ],
     },
 ];
@@ -64,48 +64,48 @@ export const conditionOptions = [
 // Operator Options
 export const operatorOptions = {
     default: [
-        { label: __('Greater Than', 'dealbuilder-discount-rules'), value: 'greater_than' },
-        { label: __('Less Than', 'dealbuilder-discount-rules'), value: 'less_than' },
+        { label: __('Greater Than', 'giantwp-discount-rules'), value: 'greater_than' },
+        { label: __('Less Than', 'giantwp-discount-rules'), value: 'less_than' },
         {
-            label: __('Equal or Greater Than', 'dealbuilder-discount-rules'),
+            label: __('Equal or Greater Than', 'giantwp-discount-rules'),
             value: 'equal_greater_than',
         },
         {
-            label: __('Equal or Less Than', 'dealbuilder-discount-rules'),
+            label: __('Equal or Less Than', 'giantwp-discount-rules'),
             value: 'equal_less_than',
         },
     ],
 
     contain: [
-        { label: __('Contains All', 'dealbuilder-discount-rules'), value: 'contain_all' },
+        { label: __('Contains All', 'giantwp-discount-rules'), value: 'contain_all' },
         {
-            label: __('Contains in List', 'dealbuilder-discount-rules'),
+            label: __('Contains in List', 'giantwp-discount-rules'),
             value: 'contain_in_list',
         },
         {
-            label: __('Not Contain in List', 'dealbuilder-discount-rules'),
+            label: __('Not Contain in List', 'giantwp-discount-rules'),
             value: 'not_contain_inlist',
         },
     ],
 
     isLoggedIn: [
         {
-            label: __('Logged In', 'dealbuilder-discount-rules'),
+            label: __('Logged In', 'giantwp-discount-rules'),
             value: 'logged_in',
         },
         {
-            label: __('Not Logged In', 'dealbuilder-discount-rules'),
+            label: __('Not Logged In', 'giantwp-discount-rules'),
             value: 'not_logged_in',
         },
     ],
 
     inList: [
         {
-            label: __('In List', 'dealbuilder-discount-rules'),
+            label: __('In List', 'giantwp-discount-rules'),
             value: 'in_list',
         },
         {
-            label: __('Not in List', 'dealbuilder-discount-rules'),
+            label: __('Not in List', 'giantwp-discount-rules'),
             value: 'not_in_list',
         },
     ],

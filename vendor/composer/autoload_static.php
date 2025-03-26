@@ -7,18 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInit59058e8f9c97e12f7316df60fd37ba3a
 {
     public static $files = array (
-        '687006578453529cb45f1b30f6d7f879' => __DIR__ . '/../..' . '/app/functions.php',
+        '025a14c99198deb49b741570ad446095' => __DIR__ . '/../..' . '/app/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'D' => 
+        'G' => 
         array (
-            'DealBuilder_Discount_Rules\\' => 27,
+            'GiantWP_Discount_Rules\\' => 23,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'DealBuilder_Discount_Rules\\' => 
+        'GiantWP_Discount_Rules\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),

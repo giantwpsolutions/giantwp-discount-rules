@@ -5,20 +5,20 @@
  *
  * Handles Bogo Discount
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount;
+namespace GiantWP_Discount_Rules\Discount;
 
 defined( 'ABSPATH' ) || exit;
 
 
-use DealBuilder_Discount_Rules\Discount\Condition\Conditions;
-use DealBuilder_Discount_Rules\Discount\BogoBuyProduct\BogoBuy_Field;
-use DealBuilder_Discount_Rules\Discount\BogoBuyProduct\BogoBuyProduct;
-use DealBuilder_Discount_Rules\Discount\Manager\Discount_Helper;
-use DealBuilder_Discount_Rules\Discount\UsageTrack\Bogo_Usage_Handler;
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Discount\Condition\Conditions;
+use GiantWP_Discount_Rules\Discount\BogoBuyProduct\BogoBuy_Field;
+use GiantWP_Discount_Rules\Discount\BogoBuyProduct\BogoBuyProduct;
+use GiantWP_Discount_Rules\Discount\Manager\Discount_Helper;
+use GiantWP_Discount_Rules\Discount\UsageTrack\Bogo_Usage_Handler;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
 /**
  * Class Bogo_Discount
@@ -48,18 +48,18 @@ class Bogo_Discount {
 
         if ( is_admin() && !defined( 'DOING_AJAX' ) ) return;
         if ( !$cart || $cart->is_empty() ) {
-            WC()->session->__unset( '_db_bogo_applied_rules' );
+            WC()->session->__unset( '_gwp_bogo_applied_rules' );
             return;
         }
 
 
         // Clear previous BOGO data
         foreach ( $cart->get_cart() as $key => $item ) {
-            if ( !empty( $item['dealbuilder_bogo_discount'] ) ) {
-                unset( $cart->cart_contents[$key]['dealbuilder_bogo_discount'] );
+            if ( !empty( $item['giantwp_bogo_discount'] ) ) {
+                unset( $cart->cart_contents[$key]['giantwp_bogo_discount'] );
             }
 
-            if ( !empty( $item['db_bogo_free_item'] ) ) {
+            if ( !empty( $item['gwp_bogo_free_item'] ) ) {
                 $cart->remove_cart_item( $key );
             }
         }
@@ -93,10 +93,10 @@ class Bogo_Discount {
             }
 
             if ( $applied ) {
-                WC()->session->set( '_db_bogo_applied_rules', [ $rule['id'] ] );
+                WC()->session->set( '_gwp_bogo_applied_rules', [ $rule['id'] ] );
                 Bogo_Usage_Handler::instance();
             } else {
-                WC()->session->__unset( '_db_bogo_applied_rules' );
+                WC()->session->__unset( '_gwp_bogo_applied_rules' );
             }
 
 
@@ -132,8 +132,8 @@ class Bogo_Discount {
                     $item['variation_id'] ?? 0,
                     [],
                     [
-                        'db_bogo_free_item' => true,
-                        'db_bogo_rule_id'   => $rule['id']
+                        'gwp_bogo_free_item' => true,
+                        'gwp_bogo_rule_id'   => $rule['id']
                     ]
                 );
 
@@ -154,7 +154,7 @@ class Bogo_Discount {
         $eligible   = [];
 
         foreach ( $cart_items as $key => $item ) {
-            if ( ! empty( $item['db_bogo_free_item'] ) ) continue;
+            if ( ! empty( $item['gwp_bogo_free_item'] ) ) continue;
 
             foreach ( $rule['buyProduct'] as $condition ) {
                 $field = $condition['field'] ?? '';
@@ -193,7 +193,7 @@ class Bogo_Discount {
             $qty_to_discount = min( $item['quantity'], $discount_qty - $discounted );
             if ($qty_to_discount <= 0) continue;
 
-            $item['dealbuilder_bogo_discount'] = [
+            $item['giantwp_bogo_discount'] = [
                 'rule_id' => $rule_id,
                 'qty'     => $qty_to_discount,
                 'type'    => $discount_type,
@@ -213,17 +213,17 @@ class Bogo_Discount {
      * @return void
      */
     public function adjust_discounted_items( $cart ) {
-        $settings          = maybe_unserialize( get_option( 'dealbuilder_discountrules_settings', [] ) );
+        $settings          = maybe_unserialize( get_option( 'giantwp_discountrules_settings', [] ) );
         $use_regular_price = isset( $settings['discountBasedOn'] ) && $settings['discountBasedOn'] === 'regular_price';
 
         foreach ( $cart->get_cart() as $key => $item ) {
-            if ( ! empty( $item['db_bogo_free_item'] ) ) {
+            if ( ! empty( $item['gwp_bogo_free_item'] ) ) {
                 $item['data']->set_price( 0 );
                 continue;
             }
 
-            if ( ! empty( $item['dealbuilder_bogo_discount'] ) ) {
-                $info            = $item['dealbuilder_bogo_discount'];
+            if ( ! empty( $item['giantwp_bogo_discount'] ) ) {
+                $info            = $item['giantwp_bogo_discount'];
                 $product         = $item['data'];
                 $original_price  = $use_regular_price && $product instanceof \WC_Product ? $product->get_regular_price() : $product->get_price();
                 $qty_to_discount = $info['qty'] ?? 0;
@@ -259,7 +259,7 @@ class Bogo_Discount {
     private function get_eligible_products( $cart_items, $buy_conditions ) {
         $eligible = [];
         foreach ( $cart_items as $item ) {
-            if ( ! empty( $item['db_bogo_free_item'] ) ) continue;
+            if ( ! empty( $item['gwp_bogo_free_item'] ) ) continue;
             foreach ( $buy_conditions as $condition ) {
                 $field = $condition['field'] ?? '';
                 if ( method_exists( BogoBuy_Field::class, $field) && BogoBuy_Field::$field([$item], $condition ) ) {
@@ -279,18 +279,18 @@ class Bogo_Discount {
      */
     private function remove_bogo_items( $rule_id ) {
         foreach ( WC()->cart->get_cart() as $key => $item ) {
-            if ( ! empty( $item['db_bogo_free_item'] ) && ( $item['db_bogo_rule_id'] ?? '' ) === $rule_id ) {
+            if ( ! empty( $item['gwp_bogo_free_item'] ) && ( $item['gwp_bogo_rule_id'] ?? '' ) === $rule_id ) {
                 WC()->cart->remove_cart_item( $key );
             }
         }
     }
 
     /**
-     * Get BOGO discount rules from DB.
+     * Get BOGO discount rules from gwp.
      *
      * @return array
      */
     private function get_discount_rules(): array {
-        return maybe_unserialize( get_option( 'dealbuilder_bogo_discount', [] ) ) ?: [];
+        return maybe_unserialize( get_option( 'giantwp_bogo_discount', [] ) ) ?: [];
     }
 }

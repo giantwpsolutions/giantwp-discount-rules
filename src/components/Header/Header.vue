@@ -9,17 +9,17 @@ const { __ } = wp.i18n;
 // Navigation links with the Upgrade link marked as external
 const navigation = [
   {
-    name: __("Discounts", "dealbuilder-discount-rules"),
+    name: __("Discounts", "giantwp-discount-rules"),
     href: "/",
     current: true,
   },
   {
-    name: __("Settings", "dealbuilder-discount-rules"),
+    name: __("Settings", "giantwp-discount-rules"),
     href: "/settings",
     current: false,
   },
   {
-    name: __("Upgrade", "dealbuilder-discount-rules"),
+    name: __("Upgrade", "giantwp-discount-rules"),
     href: pluginData.proUrl,
     current: false,
     isPro: true,
@@ -28,7 +28,7 @@ const navigation = [
 ];
 
 // Dynamically set the path to the logo
-const logoUrl = `${pluginData.pluginUrl}assets/images/DB_Discount_Logo.png`;
+const logoUrl = `${pluginData.pluginUrl}assets/images/giantwp_discount_rules.png`;
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const logoUrl = `${pluginData.pluginUrl}assets/images/DB_Discount_Logo.png`;
           <DisclosureButton
             class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span class="sr-only">{{
-              __("Open main menu", "dealbuilder-discount-rules")
+              __("Open main menu", "giantwp-discount-rules")
             }}</span>
             <Bars3Icon v-if="!open" class="block size-6" aria-hidden="true" />
             <XMarkIcon v-else class="block size-6" aria-hidden="true" />

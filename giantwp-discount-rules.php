@@ -1,19 +1,19 @@
 <?php
 /**
-* Plugin Name: DealBuilder Discount Rules
-* Plugin URI: https://giantwpsolutions.com/plugins/dealbuilder-discount-rules
-* Description: DealBuilder Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
+* Plugin Name: GiantWP Discount Rules
+* Plugin URI: https://giantwpsolutions.com/plugins/giantwp-discount-rules
+* Description: GiantWP Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
 * Version: 1.0.1
 * Author: Giant WP Solutions
 * Author URI: https://giantwpsolutions.com
 * License: GPLv2 or later
-* Text Domain: dealbuilder-discount-rules
+* Text Domain: giantwp-discount-rules
 * WC requires at least: 3.0.0
 * WC tested up to: 9.7.1
 * Requires PHP: 7.4
 * WooCommerce HPOS support: yes
 * Domain Path: /languages
-*@package DealBuilder Discount Rules
+*@package GiantWP Discount Rules
 */
 
 
@@ -27,7 +27,7 @@ require_once __DIR__  . '/app/functions.php';
 /**
  * The main plugin class
  */
-final class DealBuilder_Discount_Rules
+final class GiantWP_Discount_Rules
 {
 
     /**
@@ -43,7 +43,7 @@ final class DealBuilder_Discount_Rules
         register_activation_hook( __FILE__ , [ $this, 'activate' ] );
         add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded'] );
         add_action( 'admin_notices', [ $this, 'check_woocommerce_active' ] );
-        add_filter( 'plugin_action_links_dealbuilder-discount-rules/dealbuilder-discount-rules.php', [ $this, 'db_discount_settings_link' ] );
+        add_filter( 'plugin_action_links_giantwp-discount-rules/giantwp-discount-rules.php', [ $this, 'gwp_discount_settings_link' ] );
         $this->declare_hpos_compatibility();
         $this->define_constants();
     }
@@ -51,7 +51,7 @@ final class DealBuilder_Discount_Rules
     /**
      * Initializes a singleton instance
      * 
-     * @return DealBuilder_Discount_Rules
+     * @return GiantWP_Discount_Rules
      */
     public static function init()
     {
@@ -70,10 +70,10 @@ final class DealBuilder_Discount_Rules
      */
     public function define_constants()
     {
-        define( 'DBDR_VERSION', self::version );
-        define( 'DBDR_FILE', __FILE__ );
-        define( 'DBDR_PATH', plugin_dir_path(__FILE__) );
-        define( 'DBDR_LANG_DIR', plugin_basename( dirname(__FILE__) ) . '/languages' );
+        define( 'GWP_VERSION', self::version );
+        define( 'GWP_FILE', __FILE__ );
+        define( 'GWP_PATH', plugin_dir_path(__FILE__) );
+        define( 'GWP_LANG_DIR', plugin_basename( dirname(__FILE__) ) . '/languages' );
     }
 
     /**
@@ -82,12 +82,12 @@ final class DealBuilder_Discount_Rules
      */
     public function on_plugins_loaded()
     {
-        load_plugin_textdomain( 'dealbuilder-discount-rules', false, DBDR_LANG_DIR );
+        load_plugin_textdomain( 'giantwp-discount-rules', false, GWP_LANG_DIR );
 
         if ( class_exists( 'WooCommerce' ) ) {
 
-            new DealBuilder_Discount_Rules\Api\Api();
-            new DealBuilder_Discount_Rules\Installer();
+            new GiantWP_Discount_Rules\Api\Api();
+            new GiantWP_Discount_Rules\Installer();
 
         } else {
             add_action( 'admin_notices', [ $this, 'woocommerce_missing_notice' ] );
@@ -100,7 +100,7 @@ final class DealBuilder_Discount_Rules
     public function check_woocommerce_active()
     {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            db_WoocommerceDeactivationAlert();
+            gwp_WoocommerceDeactivationAlert();
         }
     }
 
@@ -114,19 +114,19 @@ final class DealBuilder_Discount_Rules
             deactivate_plugins( plugin_basename( __FILE__ ) );
         
             wp_die(
-                esc_html__( 'All-in-One Discount Rules requires WooCommerce to be installed and active.', 'dealbuilder-discount-rules' ),
-                esc_html__( 'Plugin dependency check', 'dealbuilder-discount-rules' ),
+                esc_html__( 'GiantWP Discount Rules requires WooCommerce to be installed and active.', 'giantwp-discount-rules' ),
+                esc_html__( 'Plugin dependency check', 'giantwp-discount-rules' ),
                 [ 'back_link' => true ]
             );
         }
 
-        $install_time = get_option( 'DBDR_installation_time' );
+        $install_time = get_option( 'GWP_installation_time' );
 
         if ( ! $install_time ) {
-            update_option( 'DBDR_installation_time', time() );
+            update_option( 'GWP_installation_time', time() );
         }
 
-        update_option( 'dealbuilder_version', self::version );
+        update_option( 'GWP_version', self::version );
     }
 
     /*
@@ -136,7 +136,7 @@ final class DealBuilder_Discount_Rules
      */
     public function woocommerce_missing_notice()
     {
-        db_WoocommerceMissingAlert();
+        gwp_WoocommerceMissingAlert();
     }
 
      /**
@@ -147,8 +147,8 @@ final class DealBuilder_Discount_Rules
      * @param array $links An array of existing action links.
      * @return array Modified array of action links with the added "Settings" link.
      */
-    public function db_discount_settings_link( $links ) {
-        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=dealbuilder-discount-rules#' ) ) . '">' . esc_html__( 'Settings', 'dealbuilder-discount-rules' ) . '</a>';
+    public function gwp_discount_settings_link( $links ) {
+        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=giantwp-discount-rules#' ) ) . '">' . esc_html__( 'Settings', 'giantwp-discount-rules' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }
@@ -174,14 +174,14 @@ final class DealBuilder_Discount_Rules
 
 /**
  * Initializes the main plugin
- * @return \DealBuilder_Discount_Rules
+ * @return \GiantWP_Discount_Rules
  */
-function dealbuilder_discount_rules()
+function giantWP_discount_rules()
 {
-    return DealBuilder_Discount_Rules::init();
+    return GiantWP_Discount_Rules::init();
 }
 
 /**
  * Kick-off the plugin
  */
-dealbuilder_discount_rules();
+giantWP_discount_rules();

@@ -2,26 +2,26 @@
   /**
  * Installer class for initializing plugin components.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules;
+namespace GiantWP_Discount_Rules;
 
 defined( 'ABSPATH' ) || exit;
 
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
-use DealBuilder_Discount_Rules\Admin\Menu;
-use DealBuilder_Discount_Rules\Assets;
-use DealBuilder_Discount_Rules\Ajax\Checkout_Ajax_Handler;
-use DealBuilder_Discount_Rules\Ajax\TriggerCart;
-use DealBuilder_Discount_Rules\Ajax\TriggerBogo;
-use DealBuilder_Discount_Rules\Discount\Bogo_Discount;
-use DealBuilder_Discount_Rules\Discount\FlatPercentage_Discount;
-use DealBuilder_Discount_Rules\Discount\Manager\CouponDisplay;
-use DealBuilder_Discount_Rules\Discount\Manager\Bogo_Free_Item_Handler;
-use DealBuilder_Discount_Rules\Discount\Manager\DiscountLabel;
-use DealBuilder_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
-use DealBuilder_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Admin\Menu;
+use GiantWP_Discount_Rules\Assets;
+use GiantWP_Discount_Rules\Ajax\Checkout_Ajax_Handler;
+use GiantWP_Discount_Rules\Ajax\TriggerCart;
+use GiantWP_Discount_Rules\Ajax\TriggerBogo;
+use GiantWP_Discount_Rules\Discount\Bogo_Discount;
+use GiantWP_Discount_Rules\Discount\FlatPercentage_Discount;
+use GiantWP_Discount_Rules\Discount\Manager\CouponDisplay;
+use GiantWP_Discount_Rules\Discount\Manager\Bogo_Free_Item_Handler;
+use GiantWP_Discount_Rules\Discount\Manager\DiscountLabel;
+use GiantWP_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
+use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 
 /**
  * Plugin Functions Installer Class

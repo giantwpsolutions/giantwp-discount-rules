@@ -2,10 +2,10 @@
   /**
  * Product Categories REST API Controller.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Api\Controllers\Shared;
+namespace GiantWP_Discount_Rules\Api\Controllers\Shared;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ class Products_Category_Controller extends WP_REST_Controller {
 
     public function __construct() {
 
-        $this->namespace = 'db-discountrules/v2';
+        $this->namespace = 'gwp-discountrules/v2';
         $this->rest_base = 'categories';
     }
 

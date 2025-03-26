@@ -57,17 +57,17 @@ watch(
     <!-- Discount Type Selection -->
     <div class="w-full max-w-md mb-6">
       <label for="discountType" class="block text-sm font-medium text-gray-900">
-        {{ __("Discount Type", "dealbuilder-discount-rules") }}
+        {{ __("Discount Type", "giantwp-discount-rules") }}
       </label>
       <select
         v-model="localState.shippingDiscountType"
         id="discountType"
         class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
         <option value="reduceFee">
-          {{ __("Shipping Fee Discount", "dealbuilder-discount-rules") }}
+          {{ __("Shipping Fee Discount", "giantwp-discount-rules") }}
         </option>
         <option value="customFee">
-          {{ __("Add Custom Fee", "dealbuilder-discount-rules") }}
+          {{ __("Add Custom Fee", "giantwp-discount-rules") }}
         </option>
       </select>
     </div>
@@ -80,7 +80,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Type", "dealbuilder-discount-rules") }}
+            {{ __("Pricing Type", "giantwp-discount-rules") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -88,13 +88,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Discount', 'dealbuilder-discount-rules')">
-              {{ __("Fixed Discount", "dealbuilder-discount-rules") }}
+              :label="__('Fixed Discount', 'giantwp-discount-rules')">
+              {{ __("Fixed Discount", "giantwp-discount-rules") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Discount', 'dealbuilder-discount-rules')">
-              {{ __("Percentage Discount", "dealbuilder-discount-rules") }}
+              :label="__('Percentage Discount', 'giantwp-discount-rules')">
+              {{ __("Percentage Discount", "giantwp-discount-rules") }}
             </el-option>
           </el-select>
         </div>
@@ -102,7 +102,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Pricing Value", "dealbuilder-discount-rules") }}
+            {{ __("Pricing Value", "giantwp-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -124,16 +124,14 @@ watch(
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
-              <span>{{
-                __("Maximum Value", "dealbuilder-discount-rules")
-              }}</span>
+              <span>{{ __("Maximum Value", "giantwp-discount-rules") }}</span>
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'dealbuilder-discount-rules'
+                    'giantwp-discount-rules'
                   )
                 "
                 placement="top"
@@ -164,7 +162,7 @@ watch(
         <!-- Column 1 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Type", "dealbuilder-discount-rules") }}
+            {{ __("Fee Type", "giantwp-discount-rules") }}
           </label>
           <el-select
             v-model="localState.pDiscountType"
@@ -172,13 +170,13 @@ watch(
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
-              :label="__('Fixed Fee', 'dealbuilder-discount-rules')">
-              {{ __("Fixed Fee", "dealbuilder-discount-rules") }}
+              :label="__('Fixed Fee', 'giantwp-discount-rules')">
+              {{ __("Fixed Fee", "giantwp-discount-rules") }}
             </el-option>
             <el-option
               :value="'percentage'"
-              :label="__('Percentage Fee', 'dealbuilder-discount-rules')">
-              {{ __("Percentage Fee", "dealbuilder-discount-rules") }}
+              :label="__('Percentage Fee', 'giantwp-discount-rules')">
+              {{ __("Percentage Fee", "giantwp-discount-rules") }}
             </el-option>
           </el-select>
         </div>
@@ -186,7 +184,7 @@ watch(
         <!-- Column 2 -->
         <div>
           <label class="block text-sm font-medium pb-2 text-gray-900">
-            {{ __("Fee Value", "dealbuilder-discount-rules") }}
+            {{ __("Fee Value", "giantwp-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
@@ -208,7 +206,7 @@ watch(
           <label class="block text-sm font-medium pb-2 text-gray-900">
             <div class="flex items-center space-x-1">
               <span>{{
-                __("Maximum Fee Value", "dealbuilder-discount-rules")
+                __("Maximum Fee Value", "giantwp-discount-rules")
               }}</span>
               <el-tooltip
                 class="box-item"
@@ -216,7 +214,7 @@ watch(
                 :content="
                   __(
                     'The maximum value that can be applied',
-                    'dealbuilder-discount-rules'
+                    'giantwp-discount-rules'
                   )
                 "
                 placement="top"

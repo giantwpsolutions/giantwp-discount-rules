@@ -2,15 +2,15 @@
 /**
  * BOGO/BXGY Buy Product Condition Dispatcher.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Discount\BogoBuyProduct;
+namespace GiantWP_Discount_Rules\Discount\BogoBuyProduct;
 
 defined( 'ABSPATH' ) || exit;
 
 
-use DealBuilder_Discount_Rules\Discount\BogoBuyProduct\BogoBuy_Field;
+use GiantWP_Discount_Rules\Discount\BogoBuyProduct\BogoBuy_Field;
 use WC_Cart;
 
 /**
@@ -63,7 +63,7 @@ class BogoBuyProduct {
                     $result = BogoBuy_Field::all_products( $cart_items, $condition );
                     break;
                 default:
-                    do_action( 'dealbuilder_unhandled_bogo_condition', $condition );
+                    do_action( 'giantwp_unhandled_bogo_condition', $condition );
                     break;
             }
 

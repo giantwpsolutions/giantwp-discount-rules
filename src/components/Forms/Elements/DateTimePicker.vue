@@ -53,25 +53,25 @@ onMounted(() => {
         <el-switch
           v-model="localEnableSchedule"
           inline-prompt
-          :active-text="__('On', 'dealbuilder-discount-rules')"
-          :inactive-text="__('Off', 'dealbuilder-discount-rules')" />
+          :active-text="__('On', 'giantwp-discount-rules')"
+          :inactive-text="__('Off', 'giantwp-discount-rules')" />
       </div>
 
       <label class="text-sm font-medium text-gray-900 whitespace-nowrap">
-        {{ __("Enable Schedule?", "dealbuilder-discount-rules") }}
+        {{ __("Enable Schedule?", "giantwp-discount-rules") }}
       </label>
     </div>
 
     <!-- Date-Time Picker -->
     <div v-if="localEnableSchedule" class="w-full my-6">
       <label class="block text-sm mb-3 font-medium text-gray-900">
-        {{ __("Start Date and End Date", "dealbuilder-discount-rules") }}
+        {{ __("Start Date and End Date", "giantwp-discount-rules") }}
       </label>
       <el-date-picker
         v-model="localScheduleRange"
         type="datetimerange"
-        :start-placeholder="__('Start date', 'dealbuilder-discount-rules')"
-        :end-placeholder="__('End date', 'dealbuilder-discount-rules')"
+        :start-placeholder="__('Start date', 'giantwp-discount-rules')"
+        :end-placeholder="__('End date', 'giantwp-discount-rules')"
         format="YYYY-MM-DD HH:mm:ss"
         date-format="YYYY/MM/DD ddd"
         time-format="A hh:mm:ss"

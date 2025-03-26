@@ -2,10 +2,10 @@
 /**
  * Flat/Percentage Discount Data Sanitization Helper.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules\Helper\Sanitization;
+namespace GiantWP_Discount_Rules\Helper\Sanitization;
 
 defined('ABSPATH') || exit;
 

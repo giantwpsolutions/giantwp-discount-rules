@@ -145,7 +145,7 @@ const closeModal = () => {
 <template>
   <div class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6">
     <h3 class="text-xl font-bold mb-6">
-      {{ __("Discount Rules", "dealbuilder-discount-rules") }}
+      {{ __("Discount Rules", "giantwp-discount-rules") }}
     </h3>
 
     <!-- Button to Add New Rule -->
@@ -153,7 +153,7 @@ const closeModal = () => {
       <button
         @click="addNewRule"
         class="inline-flex h-8 items-center justify-center rounded-md px-4 text-sm font-medium duration-200 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        {{ __("Add New Rule", "dealbuilder-discount-rules") }}
+        {{ __("Add New Rule", "giantwp-discount-rules") }}
       </button>
     </div>
 

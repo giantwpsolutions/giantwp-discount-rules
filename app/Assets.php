@@ -2,14 +2,14 @@
   /**
  * Assets Class For the plugin
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 
-namespace DealBuilder_Discount_Rules;
+namespace GiantWP_Discount_Rules;
 
 defined('ABSPATH') || exit; 
 
-use DealBuilder_Discount_Rules\Traits\SingletonTrait;
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
     /**
  * Class Assets
@@ -17,7 +17,7 @@ use DealBuilder_Discount_Rules\Traits\SingletonTrait;
  * Handles enqueueing of all plugin assets, including Vue frontend scripts and AJAX triggers
  * for both admin and frontend (checkout/cart) pages.
  *
- * @package DealBuilder_Discount_Rules
+ * @package GiantWP_Discount_Rules
  */
 class Assets
 {
@@ -38,13 +38,13 @@ class Assets
 
         /**
      * Enqueue admin panel plugin assets.
-     * Loads Vue build and related styles/scripts only on DealBuilder Discount Rules settings page.
+     * Loads Vue build and related styles/scripts only on GiantWP Discount Rules settings page.
      */
     public function register_plugin_assets() {
         if ( ! is_admin() ) return;
 
         $screen = get_current_screen();
-        if ( ! $screen || $screen->id !== 'woocommerce_page_dealbuilder-discount-rules' ) return;
+        if ( ! $screen || $screen->id !== 'woocommerce_page_giantwp-discount-rules' ) return;
 
         wp_enqueue_script( 'wp-i18n' );
         wp_enqueue_script( 'wp-api-fetch' );
@@ -54,20 +54,20 @@ class Assets
         $prod_css      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
         if ( $is_dev ) {
-            wp_enqueue_script( 'db-discountrule-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
+            wp_enqueue_script( 'gwp-discountrule-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
         }else{
-            wp_enqueue_script( 'db-discountrule-vjs', $prod_js, ['wp-i18n'], '1.0', true );
-            wp_enqueue_style( 'db-discountrule-styles', $prod_css, [], '1.0' );
+            wp_enqueue_script( 'gwp-discountrule-vjs', $prod_js, ['wp-i18n'], '1.0', true );
+            wp_enqueue_style( 'gwp-discountrule-styles', $prod_css, [], '1.0' );
         }
 
            
 
-        wp_localize_script( 'db-discountrule-vjs', 'pluginData', [
+        wp_localize_script( 'gwp-discountrule-vjs', 'pluginData', [
             'pluginUrl' => esc_url( plugin_dir_url(__DIR__) ),
-            'restUrl'   => esc_url_raw( rest_url( trailingslashit('db-discountrules/v2') ) ),
+            'restUrl'   => esc_url_raw( rest_url( trailingslashit('gwp-discountrules/v2') ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
-            'proActive' => defined( 'DEALBUILDER_DISCOUNT_RULES_PRO_ACTIVE' ) && DEALBUILDER_DISCOUNT_RULES_PRO_ACTIVE,
+            'proActive' => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
         ] );
     }
 
@@ -77,43 +77,43 @@ class Assets
      */
     public function register_frontend_plugin_assets() {
         wp_enqueue_script(
-            'db-checkout',
-            plugin_dir_url(__DIR__) . 'assets/js/db_checkout_ajax.js',
+            'gwp-checkout',
+            plugin_dir_url(__DIR__) . 'assets/js/gwp_checkout_ajax.js',
             ['jquery'],
             time(),
             true
         );
 
         wp_enqueue_script(
-            'db-trigger',
+            'gwp-trigger',
             plugin_dir_url(__DIR__) . 'assets/js/trigger.js',
             ['jquery'],
             time(),
             true
         );
 
-        wp_localize_script('db-checkout', 'db_checkout_ajax', [
+        wp_localize_script('gwp-checkout', 'gwp_checkout_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('db_nonce'),
+            'nonce'    => wp_create_nonce('gwp_nonce'),
         ]);
 
-        wp_localize_script('db-trigger', 'dbDiscountAjax', [
+        wp_localize_script('gwp-trigger', 'gwpDiscountAjax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('db_trigger_nonce'),
+            'nonce'    => wp_create_nonce('gwp_trigger_nonce'),
         ]);
 
         if (is_cart() || is_checkout()) {
             wp_enqueue_script(
-                'db-trigger-bogo',
+                'gwp-trigger-bogo',
                 plugin_dir_url(__DIR__) . 'assets/js/triggerBogo.js',
                 ['jquery', 'wc-cart'],
                 filemtime(plugin_dir_path(__DIR__) . 'assets/js/triggerBogo.js'),
                 true
             );
 
-            wp_localize_script('db-trigger-bogo', 'dbDiscountBogo', [
+            wp_localize_script('gwp-trigger-bogo', 'gwpDiscountBogo', [
                 'ajax_url'    => admin_url('admin-ajax.php'),
-                'nonce'       => wp_create_nonce('db_triggerBogo_nonce'),
+                'nonce'       => wp_create_nonce('gwp_triggerBogo_nonce'),
                 'is_cart'     => is_cart(),
                 'is_checkout' => is_checkout(),
             ]);
@@ -130,7 +130,7 @@ class Assets
      * @return string
      */
     public function add_attribute_type( $tag, $handle, $src ) {
-        if ( 'db-discountrule-vjs' === $handle ) {
+        if ( 'gwp-discountrule-vjs' === $handle ) {
             // Use regex to add type="module" to the existing <script> tag
             return str_replace(
                 '<script ',
@@ -146,11 +146,11 @@ class Assets
     /**
      * Removes all admin notices from plugin settings page.
      * 
-     * Ensures a clean experience inside DealBuilder Discount Rules's admin interface.
+     * Ensures a clean experience inside GiantWP Discount Rules's admin interface.
      */
     public function disable_core_update_notifications() {
         $screen = get_current_screen();
-        if ( $screen && $screen->id === 'woocommerce_page_dealbuilder-discount-rules' ) {
+        if ( $screen && $screen->id === 'woocommerce_page_giantwp-discount-rules' ) {
             remove_all_actions( 'admin_notices' );
             remove_all_actions( 'network_admin_notices' );
         }
