@@ -24,8 +24,8 @@ class TriggerCart{
      * Constructor to register AJAX actions.
      */
     public function __construct() {
-        add_action( 'wp_ajax_gwp_check_cart_discounts', [ $this, 'gwp_check_cart_discounts' ] );
-        add_action( 'wp_ajax_nopriv_gwp_check_cart_discounts', [ $this, 'gwp_check_cart_discounts' ] );
+        add_action( 'wp_ajax_gwpdr_check_cart_discounts', [ $this, 'gwpdr_check_cart_discounts' ] );
+        add_action( 'wp_ajax_nopriv_gwpdr_check_cart_discounts', [ $this, 'gwpdr_check_cart_discounts' ] );
     }
 
     /**
@@ -33,11 +33,11 @@ class TriggerCart{
      *
      * @return void
      */
-    public function gwp_check_cart_discounts() {
+    public function gwpdr_check_cart_discounts() {
 
         $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
-        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'gwp_trigger_nonce' ) ) {
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'gwpdr_trigger_nonce' ) ) {
             wp_send_json_error( [ 'message' => 'Invalid nonce' ] );
         }
         

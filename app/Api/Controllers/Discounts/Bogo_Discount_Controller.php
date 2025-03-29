@@ -24,7 +24,7 @@ use GiantWP_Discount_Rules\Helper\Sanitization\Bogo_Sanitization_Helper;
 class Bogo_Discount_Controller extends WP_REST_Controller {
 
     public function __construct() {
-        $this->namespace = 'gwp-discountrules/v2';
+        $this->namespace = 'gwpdr-discountrules/v2';
         $this->rest_base = 'save-bogo-discount';
     }
 

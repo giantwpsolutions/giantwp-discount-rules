@@ -11,7 +11,7 @@
  *
  * @return bool True if the comparison passes, false otherwise.
  */
-function gwp_compare_numaric_value($left, $operator, $right)
+function gwpdr_compare_numaric_value($left, $operator, $right)
 {
     switch ($operator) {
         case 'greater_than':
@@ -38,7 +38,7 @@ function gwp_compare_numaric_value($left, $operator, $right)
  *
  * @return bool True if the condition is satisfied, false otherwise.
  */
-function gwp_compare_cart_items($cart_ids, $operator, $condition_ids)
+function gwpdr_compare_cart_items($cart_ids, $operator, $condition_ids)
 {
     switch ($operator) {
         case 'contain_in_list':
@@ -67,7 +67,7 @@ function gwp_compare_cart_items($cart_ids, $operator, $condition_ids)
  *
  * @return bool True if the comparison passes, false otherwise.
  */
-function gwp_compare_list($current, $operator, $expected)
+function gwpdr_compare_list($current, $operator, $expected)
 {
     if (!is_array($expected)) {
         return false;
@@ -93,7 +93,7 @@ function gwp_compare_list($current, $operator, $expected)
 }
 
 
-function gwp_check_woocommerce_hpos()
+function gwpdr_check_woocommerce_hpos()
 {
     if (class_exists(\Automattic\WooCommerce\Utilities\OrderUtil::class)) {
         if (\Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled()) {
@@ -103,7 +103,7 @@ function gwp_check_woocommerce_hpos()
     return false;
 }
 
-function gwp_WoocommerceDeactivationAlert()
+function gwpdr_WoocommerceDeactivationAlert()
 {
 ?>
     <div class="notice notice-error is-dismissible">
@@ -118,7 +118,7 @@ function gwp_WoocommerceDeactivationAlert()
 }
 
 
-function gwp_WoocommerceMissingAlert()
+function gwpdr_WoocommerceMissingAlert()
 {
 ?>
     <div class="notice notice-error is-dismissible">

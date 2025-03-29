@@ -24,8 +24,8 @@ class Checkout_Ajax_Handler {
      * Constructor to register AJAX handlers
      */
     public function __construct() {
-        add_action( 'wp_ajax_gwp_set_payment_method', [ $this, 'gwp_set_payment_method' ] );
-        add_action( 'wp_ajax_nopriv_gwp_set_payment_method', [ $this, 'gwp_set_payment_method' ] );
+        add_action( 'wp_ajax_gwpdr_set_payment_method', [ $this, 'gwpdr_set_payment_method' ] );
+        add_action( 'wp_ajax_nopriv_gwpdr_set_payment_method', [ $this, 'gwpdr_set_payment_method' ] );
     }
 
     /**
@@ -33,8 +33,8 @@ class Checkout_Ajax_Handler {
      *
      * @return void
      */
-    public function gwp_set_payment_method() {
-        check_ajax_referer( 'gwp_nonce', 'security' );
+    public function gwpdr_set_payment_method() {
+        check_ajax_referer( 'gwpdr_nonce', 'security' );
 
         // Ensure WC session is initialized in AJAX context
         if ( null === WC()->session || ! WC()->session->has_session() ) {
@@ -48,7 +48,7 @@ class Checkout_Ajax_Handler {
             wp_send_json_error( ['message' => 'No method provided'] );
         }
 
-        WC()->session->set( 'gwp_selected_payment_method', $method );
+        WC()->session->set( 'gwpdr_selected_payment_method', $method );
         wp_send_json_success( ['message' => 'Payment method stored'] );
     }
 }

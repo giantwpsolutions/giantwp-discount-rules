@@ -54,17 +54,17 @@ class Assets
         $prod_css      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
         if ( $is_dev ) {
-            wp_enqueue_script( 'gwp-discountrule-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
+            wp_enqueue_script( 'gwpdr-discountrule-vjs', $dev_server_js, ['wp-i18n'], '1.0', true );
         }else{
-            wp_enqueue_script( 'gwp-discountrule-vjs', $prod_js, ['wp-i18n'], '1.0', true );
-            wp_enqueue_style( 'gwp-discountrule-styles', $prod_css, [], '1.0' );
+            wp_enqueue_script( 'gwpdr-discountrule-vjs', $prod_js, ['wp-i18n'], '1.0', true );
+            wp_enqueue_style( 'gwpdr-discountrule-styles', $prod_css, [], '1.0' );
         }
 
            
 
-        wp_localize_script( 'gwp-discountrule-vjs', 'pluginData', [
+        wp_localize_script( 'gwpdr-discountrule-vjs', 'pluginData', [
             'pluginUrl' => esc_url( plugin_dir_url(__DIR__) ),
-            'restUrl'   => esc_url_raw( rest_url( trailingslashit('gwp-discountrules/v2') ) ),
+            'restUrl'   => esc_url_raw( rest_url( trailingslashit('gwpdr-discountrules/v2') ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
             'proActive' => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
@@ -77,43 +77,43 @@ class Assets
      */
     public function register_frontend_plugin_assets() {
         wp_enqueue_script(
-            'gwp-checkout',
-            plugin_dir_url(__DIR__) . 'assets/js/gwp_checkout_ajax.js',
+            'gwpdr-checkout',
+            plugin_dir_url(__DIR__) . 'assets/js/gwpdr_checkout_ajax.js',
             ['jquery'],
             time(),
             true
         );
 
         wp_enqueue_script(
-            'gwp-trigger',
+            'gwpdr-trigger',
             plugin_dir_url(__DIR__) . 'assets/js/trigger.js',
             ['jquery'],
             time(),
             true
         );
 
-        wp_localize_script('gwp-checkout', 'gwp_checkout_ajax', [
+        wp_localize_script('gwpdr-checkout', 'gwpdr_checkout_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('gwp_nonce'),
+            'nonce'    => wp_create_nonce('gwpdr_nonce'),
         ]);
 
-        wp_localize_script('gwp-trigger', 'gwpDiscountAjax', [
+        wp_localize_script('gwpdr-trigger', 'gwpdrDiscountAjax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('gwp_trigger_nonce'),
+            'nonce'    => wp_create_nonce('gwpdr_trigger_nonce'),
         ]);
 
         if (is_cart() || is_checkout()) {
             wp_enqueue_script(
-                'gwp-trigger-bogo',
+                'gwpdr-trigger-bogo',
                 plugin_dir_url(__DIR__) . 'assets/js/triggerBogo.js',
                 ['jquery', 'wc-cart'],
                 filemtime(plugin_dir_path(__DIR__) . 'assets/js/triggerBogo.js'),
                 true
             );
 
-            wp_localize_script('gwp-trigger-bogo', 'gwpDiscountBogo', [
+            wp_localize_script('gwpdr-trigger-bogo', 'gwpdrDiscountBogo', [
                 'ajax_url'    => admin_url('admin-ajax.php'),
-                'nonce'       => wp_create_nonce('gwp_triggerBogo_nonce'),
+                'nonce'       => wp_create_nonce('gwpdr_triggerBogo_nonce'),
                 'is_cart'     => is_cart(),
                 'is_checkout' => is_checkout(),
             ]);
@@ -130,7 +130,7 @@ class Assets
      * @return string
      */
     public function add_attribute_type( $tag, $handle, $src ) {
-        if ( 'gwp-discountrule-vjs' === $handle ) {
+        if ( 'gwpdr-discountrule-vjs' === $handle ) {
             // Use regex to add type="module" to the existing <script> tag
             return str_replace(
                 '<script ',

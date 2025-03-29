@@ -23,7 +23,7 @@ class Products_Tag_Controller extends WP_REST_Controller {
      * Constructor.
      */
     public function __construct() {
-        $this->namespace = 'gwp-discountrules/v2';
+        $this->namespace = 'gwpdr-discountrules/v2';
         $this->rest_base = 'tags';
     }
 

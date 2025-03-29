@@ -57,12 +57,12 @@ class DiscountLabel {
         foreach ( $columns as $key => $label ) {
             $new_columns[$key] = $label;
             if ( 'order_status' === $key ) {
-                $new_columns['gwp_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
+                $new_columns['gwpdr_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
             }
         }
 
-        if ( ! isset( $new_columns['gwp_discount_label'] ) ) {
-            $new_columns['gwp_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
+        if ( ! isset( $new_columns['gwpdr_discount_label'] ) ) {
+            $new_columns['gwpdr_discount_label'] = __( 'Discount Rules', 'giantwp-discount-rules' );
         }
 
         return $new_columns;
@@ -75,17 +75,17 @@ class DiscountLabel {
      * @param int    $post_id  Order ID.
      */
     public function render_discount_column( $column, $post_id ) {
-        if ( $column !== 'gwp_discount_label' ) {
+        if ( $column !== 'gwpdr_discount_label' ) {
             return;
         }
 
         $labels = [];
 
         $meta_keys = [
-            '_gwp_bogo_applied_rules'     => __( 'BOGO', 'giantwp-discount-rules' ),
-            '_gwp_bxgy_applied_rules'     => __( 'Buy X Get Y', 'giantwp-discount-rules' ),
-            '_gwp_bulk_applied_rules'     => __( 'Bulk', 'giantwp-discount-rules' ),
-            '_gwp_shipping_applied_rules' => __( 'Shipping', 'giantwp-discount-rules' ),
+            '_gwpdr_bogo_applied_rules'     => __( 'BOGO', 'giantwp-discount-rules' ),
+            '_gwpdr_bxgy_applied_rules'     => __( 'Buy X Get Y', 'giantwp-discount-rules' ),
+            '_gwpdr_bulk_applied_rules'     => __( 'Bulk', 'giantwp-discount-rules' ),
+            '_gwpdr_shipping_applied_rules' => __( 'Shipping', 'giantwp-discount-rules' ),
         ];
 
         $order = wc_get_order( $post_id );

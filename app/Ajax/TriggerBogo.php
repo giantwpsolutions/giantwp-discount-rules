@@ -24,8 +24,8 @@ class TriggerBogo {
      * Constructor to register AJAX actions.
      */
     public function __construct() {
-        add_action( 'wp_ajax_gwp_check_bogo_discounts', [ $this, 'gwp_check_bogo_discounts' ] );
-        add_action( 'wp_ajax_nopriv_gwp_check_bogo_discounts', [ $this, 'gwp_check_bogo_discounts'] );
+        add_action( 'wp_ajax_gwpdr_check_bogo_discounts', [ $this, 'gwpdr_check_bogo_discounts' ] );
+        add_action( 'wp_ajax_nopriv_gwpdr_check_bogo_discounts', [ $this, 'gwpdr_check_bogo_discounts'] );
     }
 
     /**
@@ -33,13 +33,13 @@ class TriggerBogo {
      *
      * @return void
      */
-    public function gwp_check_bogo_discounts() {
-        check_ajax_referer( 'gwp_triggerBogo_nonce', 'nonce' );
+    public function gwpdr_check_bogo_discounts() {
+        check_ajax_referer( 'gwpdr_triggerBogo_nonce', 'nonce' );
 
         // 🔥 Safe trigger
-        do_action( 'gwp_run_bogo_discount', WC()->cart );
+        do_action( 'gwpdr_run_bogo_discount', WC()->cart );
         WC()->cart->calculate_totals();
 
-        wp_send_json_success( ['message' => '[gwp BOGO] Applied!'] );
+        wp_send_json_success( ['message' => '[gwpdr BOGO] Applied!'] );
     }
 }

@@ -48,17 +48,17 @@ class Bogo_Usage_Handler {
      * @param int $order_id WooCommerce order ID.
      */
     public function store_applied_rules_to_order( $order_id ) {
-        $session_rules = WC()->session->get( '_gwp_bogo_applied_rules' );
+        $session_rules = WC()->session->get( '_gwpdr_bogo_applied_rules' );
 
         if (! empty( $session_rules ) && is_array( $session_rules ) ) {
-            if ( function_exists( 'gwp_check_woocommerce_hpos' ) && gwp_check_woocommerce_hpos() ) {
+            if ( function_exists( 'gwpdr_check_woocommerce_hpos' ) && gwpdr_check_woocommerce_hpos() ) {
                 $order = wc_get_order( $order_id );
                 if ( $order instanceof WC_Order ) {
-                    $order->update_meta_data( '_gwp_bogo_applied_rules', $session_rules );
+                    $order->update_meta_data( '_gwpdr_bogo_applied_rules', $session_rules );
                     $order->save();
                 }
             } else {
-                update_post_meta( $order_id, '_gwp_bogo_applied_rules', $session_rules );
+                update_post_meta( $order_id, '_gwpdr_bogo_applied_rules', $session_rules );
             }
         }
     }
@@ -75,7 +75,7 @@ class Bogo_Usage_Handler {
             return;
         }
 
-        $applied_rules = $order->get_meta( '_gwp_bogo_applied_rules' );
+        $applied_rules = $order->get_meta( '_gwpdr_bogo_applied_rules' );
 
         if ( empty( $applied_rules ) || ! is_array( $applied_rules ) ) {
             return;
@@ -97,7 +97,7 @@ class Bogo_Usage_Handler {
 
         // Unset the session after processing
         if ( WC()->session ) {
-            WC()->session->__unset( '_gwp_bogo_applied_rules' );
+            WC()->session->__unset( '_gwpdr_bogo_applied_rules' );
         }
     }
 

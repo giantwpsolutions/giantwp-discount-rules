@@ -33,7 +33,7 @@ class Settings_Controller extends WP_REST_Controller
      */
     public function register_routes() {
         // Save settings (POST/PUT)
-        register_rest_route( 'gwp-discountrules/v2', '/settings', [
+        register_rest_route( 'gwpdr-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [ $this, 'save_settings' ],
             'permission_callback' => function () {
@@ -42,7 +42,7 @@ class Settings_Controller extends WP_REST_Controller
         ] );
 
         // Get settings (GET)
-        register_rest_route( 'gwp-discountrules/v2', '/settings', [
+        register_rest_route( 'gwpdr-discountrules/v2', '/settings', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [ $this, 'get_settings' ],
             'permission_callback' => function () {

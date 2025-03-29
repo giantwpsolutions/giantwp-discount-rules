@@ -48,7 +48,7 @@ class Bogo_Discount {
 
         if ( is_admin() && !defined( 'DOING_AJAX' ) ) return;
         if ( !$cart || $cart->is_empty() ) {
-            WC()->session->__unset( '_gwp_bogo_applied_rules' );
+            WC()->session->__unset( '_gwpdr_bogo_applied_rules' );
             return;
         }
 
@@ -59,7 +59,7 @@ class Bogo_Discount {
                 unset( $cart->cart_contents[$key]['giantwp_bogo_discount'] );
             }
 
-            if ( !empty( $item['gwp_bogo_free_item'] ) ) {
+            if ( !empty( $item['gwpdr_bogo_free_item'] ) ) {
                 $cart->remove_cart_item( $key );
             }
         }
@@ -93,10 +93,10 @@ class Bogo_Discount {
             }
 
             if ( $applied ) {
-                WC()->session->set( '_gwp_bogo_applied_rules', [ $rule['id'] ] );
+                WC()->session->set( '_gwpdr_bogo_applied_rules', [ $rule['id'] ] );
                 Bogo_Usage_Handler::instance();
             } else {
-                WC()->session->__unset( '_gwp_bogo_applied_rules' );
+                WC()->session->__unset( '_gwpdr_bogo_applied_rules' );
             }
 
 
@@ -132,8 +132,8 @@ class Bogo_Discount {
                     $item['variation_id'] ?? 0,
                     [],
                     [
-                        'gwp_bogo_free_item' => true,
-                        'gwp_bogo_rule_id'   => $rule['id']
+                        'gwpdr_bogo_free_item' => true,
+                        'gwpdr_bogo_rule_id'   => $rule['id']
                     ]
                 );
 
@@ -154,7 +154,7 @@ class Bogo_Discount {
         $eligible   = [];
 
         foreach ( $cart_items as $key => $item ) {
-            if ( ! empty( $item['gwp_bogo_free_item'] ) ) continue;
+            if ( ! empty( $item['gwpdr_bogo_free_item'] ) ) continue;
 
             foreach ( $rule['buyProduct'] as $condition ) {
                 $field = $condition['field'] ?? '';
@@ -217,7 +217,7 @@ class Bogo_Discount {
         $use_regular_price = isset( $settings['discountBasedOn'] ) && $settings['discountBasedOn'] === 'regular_price';
 
         foreach ( $cart->get_cart() as $key => $item ) {
-            if ( ! empty( $item['gwp_bogo_free_item'] ) ) {
+            if ( ! empty( $item['gwpdr_bogo_free_item'] ) ) {
                 $item['data']->set_price( 0 );
                 continue;
             }
@@ -259,7 +259,7 @@ class Bogo_Discount {
     private function get_eligible_products( $cart_items, $buy_conditions ) {
         $eligible = [];
         foreach ( $cart_items as $item ) {
-            if ( ! empty( $item['gwp_bogo_free_item'] ) ) continue;
+            if ( ! empty( $item['gwpdr_bogo_free_item'] ) ) continue;
             foreach ( $buy_conditions as $condition ) {
                 $field = $condition['field'] ?? '';
                 if ( method_exists( BogoBuy_Field::class, $field) && BogoBuy_Field::$field([$item], $condition ) ) {
@@ -279,14 +279,14 @@ class Bogo_Discount {
      */
     private function remove_bogo_items( $rule_id ) {
         foreach ( WC()->cart->get_cart() as $key => $item ) {
-            if ( ! empty( $item['gwp_bogo_free_item'] ) && ( $item['gwp_bogo_rule_id'] ?? '' ) === $rule_id ) {
+            if ( ! empty( $item['gwpdr_bogo_free_item'] ) && ( $item['gwpdr_bogo_rule_id'] ?? '' ) === $rule_id ) {
                 WC()->cart->remove_cart_item( $key );
             }
         }
     }
 
     /**
-     * Get BOGO discount rules from gwp.
+     * Get BOGO discount rules from gwpdr.
      *
      * @return array
      */

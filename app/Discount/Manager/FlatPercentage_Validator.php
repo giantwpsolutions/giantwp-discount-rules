@@ -41,9 +41,9 @@ class FlatPercentage_Validator {
         if ( ! $coupon instanceof \WC_Coupon ) return $valid;
 
         // Only process hidden plugin-generated coupons
-        if ( ! $coupon->get_meta( 'gwp_is_hidden_coupon' )) return $valid;
+        if ( ! $coupon->get_meta( 'gwpdr_is_hidden_coupon' )) return $valid;
 
-        $rule_id = $coupon->get_meta( 'gwp_rule_id' );
+        $rule_id = $coupon->get_meta( 'gwpdr_rule_id' );
         if ( ! $rule_id ) return false;
 
         $rules = maybe_unserialize( get_option( 'giantwp_flatpercentage_discount', [] ) ) ?: [];
