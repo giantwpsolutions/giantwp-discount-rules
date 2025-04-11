@@ -1,6 +1,6 @@
 <?php
 
-  /**
+    /**
  * Bogo Class.
  *
  * Handles Bogo Discount
@@ -20,70 +20,70 @@ use GiantWP_Discount_Rules\Discount\Manager\Discount_Helper;
 use GiantWP_Discount_Rules\Discount\UsageTrack\Bogo_Usage_Handler;
 use GiantWP_Discount_Rules\Traits\SingletonTrait;
 
-/**
+  /**
  * Class Bogo_Discount
  * Handles Buy One Get One discount logic, including free items and discounted items.
  */
 class Bogo_Discount {
 
     use SingletonTrait;
-    /**
+    
+    private $already_applied = false;
+      /**
      * Register WooCommerce hooks.
      */
     public function __construct() {
-        add_action( 'woocommerce_cart_loaded_from_session', [ $this, 'maybe_apply_discount' ], 20 );
+        add_action( 'woocommerce_before_calculate_totals', [ $this, 'maybe_apply_discount' ], 20 );
         add_action( 'woocommerce_before_calculate_totals', [ $this, 'adjust_discounted_items' ], PHP_INT_MAX );
     }
 
-    /**
-     * Evaluate BOGO rules and apply free or discounted items to the cart.
+      /**
+     *  BOGO rules and apply free or discounted items to the cart.
      *
      * @param \WC_Cart|null $cart
      * @return void
      */
-    public function maybe_apply_discount( $cart = null ) {
-        if ( is_null( $cart ) ) {
-            $cart = WC()->cart;
-        }
-
+    public function maybe_apply_discount( $cart ) {
         if ( is_admin() && !defined( 'DOING_AJAX' ) ) return;
         if ( !$cart || $cart->is_empty() ) {
             WC()->session->__unset( '_gwpdr_bogo_applied_rules' );
             return;
         }
-
-
-        // Clear previous BOGO data
+    
+        if ( $this->already_applied ) return; // 🔥 Prevent infinite loops
+        $this->already_applied = true; // 🔥 Set the flag
+    
+        // Remove previously added BOGO items and discounts
         foreach ( $cart->get_cart() as $key => $item ) {
             if ( !empty( $item['giantwp_bogo_discount'] ) ) {
                 unset( $cart->cart_contents[$key]['giantwp_bogo_discount'] );
             }
-
+    
             if ( !empty( $item['gwpdr_bogo_free_item'] ) ) {
                 $cart->remove_cart_item( $key );
             }
         }
-
+    
         $rules = $this->get_discount_rules();
         if ( empty( $rules ) ) return;
-
+    
         foreach ( $rules as $rule ) {
             if ( ! isset( $rule['discountType'] ) || strtolower( $rule['discountType'] ) !== 'bogo' ) continue;
             if ( ( $rule['status'] ?? '' ) !== 'on' ) continue;
             if ( !Discount_Helper::is_schedule_active( $rule ) ) continue;
             if ( !Discount_Helper::check_usage_limit( $rule ) ) continue;
-
+    
             if (
                 isset( $rule['enableConditions'] ) && $rule['enableConditions'] &&
                 !Conditions::check_all( $cart, $rule['conditions'], $rule['conditionsApplies'] ?? 'all' )
             ) continue;
-
+    
             if ( !BogoBuyProduct::check_all( $cart, $rule['buyProduct'] ?? [], $rule['bogoApplies'] ?? 'all' ) ) continue;
-
+    
             $free_or_discount = $rule['freeOrDiscount'] ?? 'freeproduct';
-
+    
             $applied = false;
-
+    
             if ( $free_or_discount === 'freeproduct' ) {
                 $this->apply_free_item( $rule );
                 $applied = true;
@@ -91,58 +91,78 @@ class Bogo_Discount {
                 $this->mark_discounted_items( $rule );
                 $applied = true;
             }
-
+    
             if ( $applied ) {
                 WC()->session->set( '_gwpdr_bogo_applied_rules', [ $rule['id'] ] );
                 Bogo_Usage_Handler::instance();
             } else {
                 WC()->session->__unset( '_gwpdr_bogo_applied_rules' );
             }
-
-
-            break;
+    
+            break; 
         }
+    
+        $this->already_applied = false; 
     }
+    
  
-    /**
+      /**
      * Apply free items to the cart based on matched rule.
      *
      * @param array $rule
      * @return void
      */
-    private function apply_free_item( $rule ) {
-        $cart_items = WC()->cart->get_cart();
-        $eligible   = $this->get_eligible_products( $cart_items, $rule['buyProduct'] );
-        $buy_count  = intval( $rule['buyProductCount'] ?? 1 );
-        $get_count  = intval( $rule['getProductCount'] ?? 1 );
-        $repeat     = $rule['isRepeat'] ?? false;
+private function apply_free_item( $rule ) {
+    $cart_items = WC()->cart->get_cart();
+    $eligible   = $this->get_eligible_products( $cart_items, $rule['buyProduct'] );
+    $buy_count  = intval( $rule['buyProductCount'] ?? 1 );
+    $get_count  = intval( $rule['getProductCount'] ?? 1 );
+    $repeat     = $rule['isRepeat'] ?? false;
 
-        $total_quantity = array_sum( array_column( $eligible, 'quantity' ) );
-        $repeat_times   = $repeat ? floor( $total_quantity / $buy_count ) : ( $total_quantity >= $buy_count ? 1 : 0 );
-        $add_count      = $repeat_times * $get_count;
+    $total_quantity = array_sum( array_column( $eligible, 'quantity' ) );
+    $repeat_times   = $repeat ? floor( $total_quantity / $buy_count ) : ( $total_quantity >= $buy_count ? 1 : 0 );
+    $add_count      = $repeat_times * $get_count;
 
-        $added = 0;
-        while ( $added < $add_count ) {
-            foreach ( $eligible as $item ) {
-                if ( $added >= $add_count ) break;
-
-                WC()->cart->add_to_cart(
-                    $item['product_id'],
-                    1,
-                    $item['variation_id'] ?? 0,
-                    [],
-                    [
-                        'gwpdr_bogo_free_item' => true,
-                        'gwpdr_bogo_rule_id'   => $rule['id']
-                    ]
-                );
-
-                $added++;
-            }
+      // 🧼 Remove old free items for this rule
+    foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+        if (
+            isset($cart_item['gwpdr_bogo_free_item']) &&
+            isset($cart_item['gwpdr_bogo_rule_id']) &&
+            $cart_item['gwpdr_bogo_rule_id'] == $rule['id']
+        ) {
+            WC()->cart->remove_cart_item($cart_item_key);
         }
     }
 
-    /**
+      // ➕ Add new free items
+    $added = 0;
+    while ( $added < $add_count ) {
+        foreach ( $eligible as $item ) {
+            if ( $added >= $add_count ) break;
+
+            WC()->cart->add_to_cart(
+                $item['product_id'],
+                1,
+                $item['variation_id'] ?? 0,
+                [],
+                [
+                    'gwpdr_bogo_free_item' => true,
+                    'gwpdr_bogo_rule_id'   => $rule['id']
+                ]
+            );
+
+            $added++;
+        }
+    }
+
+    if ($added > 0) {
+        WC()->cart->calculate_totals();
+        WC()->cart->set_session();
+    }
+}
+
+
+      /**
      * Mark cart items with discount metadata for BOGO rules.
      *
      * @param array $rule
@@ -206,7 +226,7 @@ class Bogo_Discount {
         }
     }
 
-    /**
+      /**
      * Apply price adjustments for discounted items or set free item price to zero.
      *
      * @param \WC_Cart $cart
@@ -230,7 +250,7 @@ class Bogo_Discount {
 
                 $discount = $info['type'] === 'percentage'
                     ? ( $original_price * $info['value'] / 100 )
-                    :  $info['value'];
+                    :   $info['value'];
 
                 if ( $info['max'] > 0 ) {
                     $discount = min( $discount, $info['max'] );
@@ -249,7 +269,7 @@ class Bogo_Discount {
         }
     }
 
-    /**
+      /**
      * Get products from cart matching the rule's buy conditions.
      *
      * @param array $cart_items
@@ -271,7 +291,7 @@ class Bogo_Discount {
         return $eligible;
     }
 
-    /**
+      /**
      * Remove free items from cart by rule ID.
      *
      * @param string|int $rule_id
@@ -285,12 +305,12 @@ class Bogo_Discount {
         }
     }
 
-    /**
+      /**
      * Get BOGO discount rules from gwpdr.
      *
      * @return array
      */
     private function get_discount_rules(): array {
-        return maybe_unserialize( get_option( 'giantwp_bogo_discount', [] ) ) ?: [];
+        return maybe_unserialize( get_option( 'giantwp_bogo_discount', [] ) )?: [];
     }
 }

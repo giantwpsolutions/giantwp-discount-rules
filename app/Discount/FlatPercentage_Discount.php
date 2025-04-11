@@ -101,7 +101,9 @@ class FlatPercentage_Discount {
             } else {
                 $calculated_discount = $discount_value;
             }
-    
+            
+            $calculated_discounts = $calculated_discount;
+
             // Always treat max_value as amount (not percent)
             if ( $max_value > 0 ) {
                 $calculated_discounts = min( $calculated_discount, $max_value );

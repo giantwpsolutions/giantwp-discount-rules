@@ -110,7 +110,7 @@ function gwpdr_WoocommerceDeactivationAlert()
         <p>
             <?php esc_html_e(
                 'WooCommerce is deactivated! The "All-in-One Discount Rules" plugin requires WooCommerce to function properly. Please reactivate WooCommerce.',
-                'dealbuilder-discount-rules'
+                'giantwp-discount-rules'
             ); ?>
         </p>
     </div>
@@ -125,7 +125,7 @@ function gwpdr_WoocommerceMissingAlert()
         <p>
             <?php esc_html_e(
                 'All-in-One Discount Rules requires WooCommerce to be installed and active.',
-                'dealbuilder-discount-rules'
+                'giantwp-discount-rules'
             ); ?>
         </p>
     </div>

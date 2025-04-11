@@ -1,10 +1,10 @@
-=== GiantWP Discount Rules === 
+=== GiantWP Discount Rules – Powerful WooCommerce Discount Plugin === 
 Contributors: giantwpsolutions, developerhabib
 Tags: woocommerce discounts, dynamic pricing, cart discount, bogo, bulk discount
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -72,6 +72,10 @@ Absolutely. The free version is production-ready and supports flat/percentage-ba
 
 == Changelog ==
 
+= 1.0.5 =
+* bug fixes and code improvements
+
+
 = 1.0.4 =
 * Initial stable release
 * Flat/Percentage discount support
@@ -79,9 +83,11 @@ Absolutely. The free version is production-ready and supports flat/percentage-ba
 * Schedule + usage limits
 * Vue.js-based admin UI
 
+
+
 == Upgrade Notice ==
 
-= 1.0. =
+= 1.0 =
 First stable release of GiantWP Discount Rules.
 
  == Source Code == 

@@ -46,7 +46,6 @@ class Installer
         CouponDisplay::instance();
         Checkout_Ajax_Handler::instance();
         TriggerCart::instance();
-        TriggerBogo::instance();
         Bogo_Free_Item_Handler::instance();
         DiscountLabel::instance();
         FlatPercentage_Discount::instance();
