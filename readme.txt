@@ -4,7 +4,7 @@ Tags: woocommerce discounts, dynamic pricing, cart discount, bogo, bulk discount
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -15,6 +15,11 @@ Smart WooCommerce discount plugin with flat/percentage pricing, condition builde
 ** GiantWP Discount Rules** lets you create powerful and flexible WooCommerce discounts — without touching code. Whether you're running a seasonal sale or offering custom pricing logic, this plugin makes it easy.
 
 Built with Vue.js and WordPress best practices, it integrates directly with WooCommerce and applies coupon-based discounts.
+
+ ==  Docs == 
+
+Full usage documentation: https://www.docs.giantwpsolutions.com/
+
 
 ### 🆓 Free Features
 
@@ -70,7 +75,10 @@ Yes. As long as you use WooCommerce, GiantWP Discount Rules will work with any t
 = Is the free version enough for basic discount needs? =
 Absolutely. The free version is production-ready and supports flat/percentage-based discounts with powerful conditions and scheduling.
 
-== Changelog ==
+ ==  Changelog == 
+
+ =  1.0.5 - April 11, 2025 = 
+* bug fixes and improvements
 
 = 1.0.5 =
 * bug fixes and code improvements

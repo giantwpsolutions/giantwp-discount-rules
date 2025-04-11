@@ -3,7 +3,7 @@
 * Plugin Name: GiantWP Discount Rules
 * Plugin URI: https://giantwpsolutions.com/plugins/giantwp-discount-rules
 * Description: GiantWP Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
-* Version: 1.0.4
+* Version: 1.1.0
 * Author: Giant WP Solutions
 * Author URI: https://giantwpsolutions.com
 * License: GPLv2 or later
@@ -33,7 +33,7 @@ final class GiantWP_Discount_Rules
     /**
      * The plugin version
      */
-    const version = '1.0.4';
+    const version = '1.1.0';
 
     /**
      * Class Constructor
