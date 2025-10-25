@@ -82,20 +82,20 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 max-w-full my-4 border-t border-b py-4">
+  <div class="tw-space-y-4 tw-max-w-full tw-my-4 tw-border-t tw-border-b tw-py-4">
     <!-- Get Item Selector -->
-    <div class="flex flex-wrap gap-2 mt-6 mb-1 w-full sm:w-[30%]">
+    <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-6 tw-mb-1 tw-w-full sm:tw-w-[30%]">
       <label
-        class="text-sm font-medium text-gray-900 flex items-center gap-1 w-full sm:w-[25%]">
+        class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1 tw-w-full sm:tw-w-[25%]">
         {{ __("Get Item", "giantwp-discount-rules") }}
       </label>
-      <div class="w-full sm:w-[75%]">
+      <div class="tw-w-full tw-sm:w-[75%]">
         <el-select
           v-model="getItem"
           @change="updateGetItem"
           size="default"
           popper-class="custom-dropdown"
-          class="w-full">
+          class="tw-w-full">
           <el-option
             :value="'alltogether'"
             :label="__('All together', 'giantwp-discount-rules')" />
@@ -112,11 +112,11 @@ watch(
     <div
       v-for="(bulkDiscount, index) in bulkDiscounts"
       :key="bulkDiscount.id"
-      class="max-w-full pt-4">
-      <div class="flex flex-wrap gap-2">
+      class="tw-max-w-full tw-pt-4">
+      <div class="tw-flex tw-flex-wrap tw-gap-2">
         <!-- From -->
-        <div class="w-full sm:w-[12%]">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full sm:tw-w-[12%]">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("From", "giantwp-discount-rules") }}
           </label>
           <el-input-number
@@ -124,12 +124,12 @@ watch(
             @change="updateBulkDiscount"
             :min="1"
             controls-position="right"
-            class="w-full" />
+            class="tw-w-full" />
         </div>
 
         <!-- To -->
-        <div class="w-full sm:w-[12%]">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full sm:tw-w-[12%]">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("To", "giantwp-discount-rules") }}
           </label>
           <el-input-number
@@ -137,19 +137,19 @@ watch(
             @change="updateBulkDiscount"
             :min="1"
             controls-position="right"
-            class="w-full" />
+            class="tw-w-full" />
         </div>
 
         <!-- Discount Type -->
-        <div class="w-full sm:w-[22%]">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full sm:tw-w-[22%]">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Discount Type", "giantwp-discount-rules") }}
           </label>
           <el-select
             v-model="bulkDiscount.discountTypeBulk"
             @change="updateBulkDiscount"
             size="default"
-            class="w-full"
+            class="tw-w-full"
             popper-class="custom-dropdown">
             <el-option
               :value="'fixed'"
@@ -164,8 +164,8 @@ watch(
         </div>
 
         <!-- Discount Value -->
-        <div class="w-full sm:w-[20%]">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full sm:tw-w-[20%]">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Discount Value", "giantwp-discount-rules") }}
           </label>
           <el-input
@@ -184,8 +184,8 @@ watch(
         </div>
 
         <!-- Max Value -->
-        <div class="w-full sm:w-[20%]">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full sm:tw-w-[20%]">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Maximum Value", "giantwp-discount-rules") }}
           </label>
           <el-input
@@ -203,11 +203,11 @@ watch(
         </div>
 
         <!-- Delete Icon -->
-        <div class="w-full sm:w-[10%] flex items-center pt-6">
+        <div class="tw-w-full sm:tw-w-[10%] tw-flex tw-items-center tw-pt-6">
           <el-icon
             @click="removeDiscount(bulkDiscount.id)"
             size="20px"
-            class="cursor-pointer text-red-500">
+            class="tw-cursor-pointer tw-text-red-500">
             <Delete />
           </el-icon>
         </div>
@@ -217,7 +217,7 @@ watch(
     <!-- Add Button -->
     <button
       @click="addBulkDiscount"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-4">
+      class="tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600 tw-mt-4">
       {{ __("Assign Bulk Discount", "giantwp-discount-rules") }}
     </button>
   </div>

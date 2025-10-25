@@ -37,46 +37,43 @@ watch(
   usageData,
   (newVal) => {
     emit("update:modelValue", { ...newVal });
-    // console.log("🟢 Emitting Usage Limits:", newVal);
   },
   { deep: true }
 );
 </script>
 
 <template>
-  <div class="space-y-4 max-w-64 mb-5">
+  <div class="tw-space-y-4 tw-max-w-64 tw-mb-5">
     <!-- Enable Usage Toggle -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
       <el-switch
         v-model="usageData.enableUsage"
         inline-prompt
         :active-text="__('On', 'giantwp-discount-rules')"
         :inactive-text="__('Off', 'giantwp-discount-rules')" />
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Enable Usage?", "giantwp-discount-rules") }}
         <el-tooltip
           effect="dark"
-          :content="
-            __('The maximum usage of this coupon.', 'giantwp-discount-rules')
-          "
+          :content="__('The maximum usage of this coupon.', 'giantwp-discount-rules')"
           placement="top">
           <QuestionMarkCircleIcon
-            class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
         </el-tooltip>
       </label>
     </div>
 
     <!-- Usage Limit -->
-    <div v-if="usageData.enableUsage" class="flex gap-4 items-start">
-      <div class="relative flex-1">
+    <div v-if="usageData.enableUsage" class="tw-flex tw-gap-4 tw-items-start">
+      <div class="tw-relative tw-flex-1">
         <label
           for="usageLimit"
-          class="block text-sm font-medium text-gray-900 my-1">
+          class="tw-block tw-text-sm tw-font-medium tw-text-gray-900 tw-my-1">
           {{ __("Usage Limits", "giantwp-discount-rules") }}
         </label>
-        <div class="flex items-center">
+        <div class="tw-flex tw-items-center">
           <span
-            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-left text-gray-700 bg-gray-100">
+            class="tw-ml-0 tw-h-8 tw-px-2 tw-py-2 tw-border tw-rounded-custom-aio-left tw-text-gray-700 tw-bg-gray-100">
             {{ __("Limits", "giantwp-discount-rules") }}
           </span>
           <input
@@ -85,7 +82,7 @@ watch(
             id="usageLimit"
             min="0"
             step="1"
-            class="w-full h-8 rounded-custom-aio-right border-gray-300 shadow-sm sm:text-sm pr-4" />
+            class="tw-w-full tw-h-8 tw-rounded-custom-aio-right tw-border-gray-300 tw-shadow-sm tw-sm:tw-text-sm tw-pr-4" />
         </div>
       </div>
     </div>

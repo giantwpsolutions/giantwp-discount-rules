@@ -48,8 +48,8 @@ onMounted(() => {
 <template>
   <div>
     <!-- Toggle Switch -->
-    <div class="flex flex-wrap items-center gap-2 my-6">
-      <div class="shrink-0">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-my-6">
+      <div class="tw-shrink-0">
         <el-switch
           v-model="localEnableSchedule"
           inline-prompt
@@ -57,14 +57,14 @@ onMounted(() => {
           :inactive-text="__('Off', 'giantwp-discount-rules')" />
       </div>
 
-      <label class="text-sm font-medium text-gray-900 whitespace-nowrap">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-whitespace-nowrap">
         {{ __("Enable Schedule?", "giantwp-discount-rules") }}
       </label>
     </div>
 
     <!-- Date-Time Picker -->
-    <div v-if="localEnableSchedule" class="w-full my-6">
-      <label class="block text-sm mb-3 font-medium text-gray-900">
+    <div v-if="localEnableSchedule" class="tw-w-full tw-my-6">
+      <label class="tw-block tw-text-sm tw-mb-3 tw-font-medium tw-text-gray-900">
         {{ __("Start Date and End Date", "giantwp-discount-rules") }}
       </label>
       <el-date-picker
@@ -75,8 +75,11 @@ onMounted(() => {
         format="YYYY-MM-DD HH:mm:ss"
         date-format="YYYY/MM/DD ddd"
         time-format="A hh:mm:ss"
-        class="w-full my-custom-popper"
-        size="large" />
+        class="tw-w-full my-custom-popper"
+        size="large" 
+
+  />
+        
     </div>
   </div>
 </template>

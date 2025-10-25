@@ -124,15 +124,23 @@ defineExpose({
     v-model:pDiscountType="formData.pDiscountType"
     v-model:discountValue="formData.discountValue"
     v-model:maxValue="formData.maxValue"></ShippingSelections>
+  <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm tw-mt-4">
   <DateTimePicker
     v-model:enableSchedule="formData.schedule.enableSchedule"
     v-model:scheduleRange="scheduleRange">
   </DateTimePicker>
+  </div>
+  <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm tw-mt-4">
   <UsageLimits v-model="formData.usageLimits"></UsageLimits>
+  </div>
+  <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm tw-mt-4">
   <AutoApply v-model="formData.autoApply"> </AutoApply>
+  </div>
+  <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm tw-mt-4">
   <Conditions
     v-model:value="formData.conditions"
     v-model:toggle="formData.enableConditions"
     v-model:conditionsApplies="formData.conditionsApplies">
   </Conditions>
+  </div>
 </template>

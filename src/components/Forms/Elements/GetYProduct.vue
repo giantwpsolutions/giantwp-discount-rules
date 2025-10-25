@@ -198,9 +198,9 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 max-w-full mt-2 mb-6 border-b py-6">
-    <h3 class="text-base text-gray-950">
-      <div class="inline-flex items-center space-x-1">
+  <div class="tw-space-y-4 tw-max-w-full tw-mt-2 tw-mb-6 tw-border-b tw-py-6">
+    <h3 class="tw-text-base tw-text-gray-950">
+      <div class="tw-inline-flex tw-items-center tw-space-x-1">
         <span>{{ __("Get Y Product", "giantwp-discount-rules") }}</span>
         <el-tooltip
           class="box-item"
@@ -211,19 +211,19 @@ watch(
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
-            class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
         </el-tooltip>
       </div>
     </h3>
 
-    <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
       <el-switch
         v-model="isrepeat"
         @change="updateIsrepeat"
         inline-prompt
         :active-text="__('On', 'giantwp-discount-rules')"
         :inactive-text="__('Off', 'giantwp-discount-rules')" />
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Is Repeat?", "giantwp-discount-rules") }}
         <el-tooltip
           class="box-item"
@@ -237,14 +237,14 @@ watch(
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
-            class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
         </el-tooltip>
       </label>
     </div>
 
     <!-- Get Item: Free or Discount -->
-    <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Get Item", "giantwp-discount-rules") }}
       </label>
       <el-radio-group v-model="freeorDiscount" @change="updateFreeorDiscount">
@@ -258,11 +258,11 @@ watch(
     </div>
 
     <!-- Discount Config -->
-    <div v-if="freeorDiscount === 'discount_product'" class="w-full mt-5">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div v-if="freeorDiscount === 'discount_product'" class="tw-w-full tw-mt-5">
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4">
         <!-- Pricing Type -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Type", "giantwp-discount-rules") }}
           </label>
           <el-select
@@ -281,7 +281,7 @@ watch(
 
         <!-- Pricing Value -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Value", "giantwp-discount-rules") }}
           </label>
           <el-input v-model.number="discountValue" placeholder="Please input">
@@ -298,8 +298,8 @@ watch(
 
         <!-- Max Value -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
+            <div class="tw-flex tw-items-center tw-space-x-1">
               <span>{{ __("Maximum Value", "giantwp-discount-rules") }}</span>
               <el-tooltip
                 effect="dark"
@@ -312,7 +312,7 @@ watch(
                 placement="top"
                 popper-class="custom-tooltip">
                 <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                  class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
               </el-tooltip>
             </div>
           </label>
@@ -329,8 +329,8 @@ watch(
     </div>
 
     <!-- Match condition type -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Rules apply to products if matches", "giantwp-discount-rules") }}
       </label>
       <el-radio-group v-model="getYApplies" @change="updateGetYApplies">
@@ -349,7 +349,7 @@ watch(
       :key="getYProduct.id"
       class="w-full">
       <div v-if="index > 0" class="mb-2">
-        <span class="text-black italic text-sm">
+        <span class="tw-text-black tw-italic tw-text-sm">
           {{
             getYApplies === "any"
               ? __("Or", "giantwp-discount-rules")
@@ -357,9 +357,9 @@ watch(
           }}
         </span>
       </div>
-      <div class="flex flex-wrap gap-2">
+      <div class="tw-flex tw-flex-wrap tw-gap-2">
         <!-- Quantity -->
-        <div class="w-full sm:w-[12%]">
+        <div class="tw-w-full sm:tw-w-[12%]">
           <el-input-number
             v-model="getYProduct.getProductCount"
             placeholder="Qty"
@@ -369,7 +369,7 @@ watch(
         </div>
 
         <!-- Field -->
-        <div class="w-full sm:w-[20%]">
+        <div class="tw-w-full sm:tw-w-[20%]">
           <el-select
             v-model="getYProduct.field"
             clearable
@@ -383,7 +383,7 @@ watch(
         </div>
 
         <!-- Operator -->
-        <div class="w-full sm:w-[20%]">
+        <div class="tw-w-full sm:tw-w-[20%]">
           <el-select
             v-if="getProductOperator(getYProduct.field)?.length"
             v-model="getYProduct.operator"
@@ -397,7 +397,7 @@ watch(
         </div>
 
         <!-- Value -->
-        <div class="w-full sm:w-[30%]">
+        <div class="tw-w-full sm:tw-w-[30%]">
           <el-select-v2
             v-if="ProductIsDropdown(getYProduct.field)"
             v-model="getYProduct.value"
@@ -419,15 +419,15 @@ watch(
             v-else-if="productisNumberField(getYProduct.field)"
             v-model="getYProduct.value"
             controls-position="right"
-            class="w-full" />
+            class="tw-w-full" />
         </div>
 
         <!-- Delete -->
-        <div class="w-full sm:w-[10%] flex items-center">
+        <div class="tw-w-full sm:tw-w-[10%] tw-flex tw-items-center">
           <el-icon
             @click="removeProduct(getYProduct.id)"
             size="20px"
-            class="cursor-pointer text-red-500">
+            class="tw-cursor-pointer tw-text-red-500">
             <Delete />
           </el-icon>
         </div>
@@ -437,7 +437,7 @@ watch(
     <!-- Add Button -->
     <button
       @click="addProduct"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      class="tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 hover:tw-bg-blue-600">
       {{ __("Assign Get Product", "giantwp-discount-rules") }}
     </button>
   </div>

@@ -32,18 +32,18 @@ watch(enableAutoApply, (newVal) => {
 </script>
 
 <template>
-  <div class="space-y-4 w-5/6">
+  <div class="tw-space-y-4 tw-w-5/6">
     <!-- Enable Auto Apply -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
       <el-switch
         v-model="enableAutoApply"
         inline-prompt
         :active-text="__('On', 'giantwp-discount-rules')"
         :inactive-text="__('Off', 'giantwp-discount-rules')" />
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Enable Auto Apply?", "giantwp-discount-rules") }}
 
-        <div class="group relative">
+        <div class="tw-group tw-relative">
           <el-tooltip
             class="box-item"
             effect="dark"
@@ -56,7 +56,7 @@ watch(enableAutoApply, (newVal) => {
             placement="top"
             popper-class="custom-tooltip">
             <QuestionMarkCircleIcon
-              class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+              class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer" />
           </el-tooltip>
         </div>
       </label>

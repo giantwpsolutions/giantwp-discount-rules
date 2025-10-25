@@ -30,21 +30,22 @@ watch(localCouponName, (newValue) => {
 </script>
 
 <template>
-  <div class="w-full max-w-md mb-6">
-    <h4 class="text-gray-950 pb-2 text-sm">
+  <div class="tw-w-full tw-max-w-md tw-mb-6">
+    <h4 class="tw-text-gray-950 tw-pb-2 tw-text-sm">
       {{ __("Coupon Name", "giantwp-discount-rules") }}
     </h4>
     <label
       for="aio_coupon"
-      class="relative block rounded-md border border-gray-200 focus-within:border-blue-600 focus-within:ring-blue-600">
+      class="tw-relative tw-block tw-rounded-md tw-border tw-border-gray-200 tw-focus-within:border-blue-600 tw-focus-within:ring-blue-600">
       <input
+        required
         type="text"
         id="aio_coupon"
         v-model="localCouponName"
-        class="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+        class="tw-peer tw-w-full tw-border-none tw-bg-transparent tw-placeholder-transparent tw-focus:border-transparent focus:tw-outline-none focus:tw-ring-0"
         :placeholder="__('Coupon Name', 'giantwp-discount-rules')" />
       <span
-        class="pointer-events-none absolute left-2.5 top-0 -translate-y-1/2 bg-white px-1 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+       class="tw-pointer-events-none tw-absolute tw-left-2.5 tw-top-0 tw--translate-y-1/2 tw-bg-white tw-px-1 tw-text-xs tw-text-gray-700 tw-transition-all tw-peer-placeholder-shown:tw-top-1/2 tw-peer-placeholder-shown:tw-text-sm tw-peer-focus:tw-top-0 tw-peer-focus:tw-text-xs">
         {{ __("Coupon Name", "giantwp-discount-rules") }}
       </span>
     </label>

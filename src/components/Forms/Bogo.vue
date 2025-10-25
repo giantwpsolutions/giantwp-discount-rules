@@ -45,10 +45,9 @@ const formData = reactive({
   conditions: [],
 });
 
-// Formating Scheduling Range Properly
+// ✅ Format scheduling range properly
 const scheduleRange = computed({
   get: () => {
-    // Return dates in proper format for the picker
     return [
       formData.schedule.startDate
         ? new Date(formData.schedule.startDate)
@@ -57,34 +56,28 @@ const scheduleRange = computed({
     ];
   },
   set: (value) => {
-    // Store dates in ISO string format
     formData.schedule.startDate = value?.[0]?.toISOString() || null;
     formData.schedule.endDate = value?.[1]?.toISOString() || null;
     formData.schedule.scheduleRange = value;
   },
 });
 
-// Watch for edit mode data updates
+// ✅ Watch for edit mode data updates
 watch(
   () => props.initialData,
   (newVal) => {
     if (newVal && Object.keys(newVal).length > 0) {
-      // console.log("🟢 Receiving Initial Data:", newVal);
-
-      // Clone all top-level properties
       Object.keys(formData).forEach((key) => {
         if (key in newVal && key !== "schedule") {
           formData[key] = newVal[key];
         }
       });
 
-      // Handle schedule data conversion
       if (newVal.schedule) {
         formData.schedule = {
           enableSchedule: newVal.schedule.enableSchedule || false,
           startDate: newVal.schedule.startDate || null,
           endDate: newVal.schedule.endDate || null,
-          // Initialize scheduleRange from stored dates
           scheduleRange: [
             newVal.schedule.startDate
               ? new Date(newVal.schedule.startDate)
@@ -94,7 +87,6 @@ watch(
         };
       }
 
-      // Handle other nested objects
       if (newVal.usageLimits) {
         formData.usageLimits = { ...newVal.usageLimits };
       }
@@ -106,27 +98,26 @@ watch(
 watch(
   () => formData,
   (newVal) => {
-    // console.log("Full Form Datas:", JSON.parse(JSON.stringify(newVal)));
+    // console.log("Full Form Data:", JSON.parse(JSON.stringify(newVal)));
   },
   { deep: true }
 );
 
 defineExpose({
-  getFormData: () => JSON.parse(JSON.stringify(formData)), // Clone reactive object
-  validate: () => {
-    // console.log("🔍 Validate Check - Coupon Name:", formData.couponName);
-    return !!formData.couponName.trim();
-  },
+  getFormData: () => JSON.parse(JSON.stringify(formData)),
+  validate: () => !!formData.couponName.trim(),
   setFormData: (data) => {
-    // console.log("🟢 Setting Form Data in Edit Mode:", data);
     Object.assign(formData, JSON.parse(JSON.stringify(data)));
   },
 });
 </script>
 
 <template>
-  <form action="">
-    <CouponName v-model="formData.couponName"></CouponName>
+  <form action="" class="tw-space-y-6 tw-w-full tw-max-w-full">
+    <!-- Coupon Name -->
+    <CouponName v-model="formData.couponName" />
+
+    <!-- BOGO Selection -->
     <BogoSelection
       v-model:buyProductCount="formData.buyProductCount"
       v-model:getProductCount="formData.getProductCount"
@@ -134,21 +125,37 @@ defineExpose({
       v-model:isRepeat="formData.isRepeat"
       v-model:discounttypeBogo="formData.discounttypeBogo"
       v-model:discountValue="formData.discountValue"
-      v-model:maxValue="formData.maxValue" />
-    <BogoSameProductBuy
-      v-model:value="formData.buyProduct"
-      v-model:bogoApplies="formData.bogoApplies">
-    </BogoSameProductBuy>
+      v-model:maxValue="formData.maxValue"
+    />
 
-    <DateTimePicker
-      v-model:enableSchedule="formData.schedule.enableSchedule"
-      v-model:scheduleRange="scheduleRange">
-    </DateTimePicker>
-    <UsageLimits v-model="formData.usageLimits"></UsageLimits>
-    <Conditions
-      v-model:value="formData.conditions"
-      v-model:toggle="formData.enableConditions"
-      v-model:conditionsApplies="formData.conditionsApplies">
-    </Conditions>
+    <!-- Buy Product Section -->
+    <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm">
+      <BogoSameProductBuy
+        v-model:value="formData.buyProduct"
+        v-model:bogoApplies="formData.bogoApplies"
+      />
+    </div>
+
+    <!-- Schedule -->
+    <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm">
+      <DateTimePicker
+        v-model:enableSchedule="formData.schedule.enableSchedule"
+        v-model:scheduleRange="scheduleRange"
+      />
+    </div>
+
+    <!-- Usage Limits -->
+    <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm">
+      <UsageLimits v-model="formData.usageLimits" />
+    </div>
+
+    <!-- Conditions -->
+    <div class="tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-bg-white tw-shadow-sm">
+      <Conditions
+        v-model:value="formData.conditions"
+        v-model:toggle="formData.enableConditions"
+        v-model:conditionsApplies="formData.conditionsApplies"
+      />
+    </div>
   </form>
 </template>

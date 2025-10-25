@@ -13,45 +13,45 @@ const selectDiscountType = (type) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+  <div class="tw-grid tw-grid-cols-1 tw-sm:grid-cols-2 tw-md:grid-cols-3 tw-gap-6 tw-p-4">
     <!-- Flat/Percentage Discount -->
-    <div class="relative group">
+    <div class="tw-relative tw-group">
       <button
         @click="() => selectDiscountType('Flat/Percentage')"
         :class="[
-          'p-4 rounded-md text-center font-medium w-full',
+          'tw-p-4 tw-rounded-md tw-text-center tw-font-medium tw-w-full',
           selectedType === 'Flat/Percentage'
-            ? 'bg-blue-200'
-            : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
+            ? 'tw-bg-blue-200'
+            : 'tw-bg-gray-100 tw-hover:bg-blue-100 tw-active:scale-95',
         ]">
-        {{ __("Flat/Percentage", "all-in-one-discount-rules") }}
+        {{ __("Flat/Percentage", "giantwp-discount-rules") }}
       </button>
       <div
-        class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
+        class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center">
         {{
           __(
             "Apply a fixed amount or percentage discount",
-            "all-in-one-discount-rules"
+            "giantwp-discount-rules"
           )
         }}
       </div>
     </div>
 
     <!-- BOGO Discount -->
-    <div class="relative group">
+    <div class="tw-relative tw-group">
       <button
         @click="() => selectDiscountType('BOGO')"
         :class="[
-          'p-4 rounded-md text-center font-medium w-full',
+          'tw-p-4 tw-rounded-md tw-text-center tw-font-medium tw-w-full',
           selectedType === 'BOGO'
-            ? 'bg-blue-200'
-            : 'bg-gray-100 hover:bg-blue-100 active:scale-95',
+            ? 'tw-bg-blue-200'
+            : 'tw-bg-gray-100 tw-hover:bg-blue-100 tw-active:scale-95',
         ]">
-        {{ __("BOGO", "all-in-one-discount-rules") }}
+        {{ __("BOGO", "giantwp-discount-rules") }}
       </button>
       <div
-        class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-        {{ __("Buy One Get One free discount", "all-in-one-discount-rules") }}
+        class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center">
+        {{ __("Buy One Get One free discount", "giantwp-discount-rules") }}
       </div>
     </div>
 
@@ -65,13 +65,13 @@ const selectDiscountType = (type) => {
         'Category Based',
       ]"
       :key="proFeature"
-      class="relative group">
+      class="tw-relative tw-group">
       <button
         @click="() => showUpgradeMessage(proFeature)"
-        class="p-4 bg-gray-100 rounded-md text-center font-medium w-full cursor-not-allowed opacity-50">
-        {{ __(proFeature, "all-in-one-discount-rules") }}
+        class="tw-p-4 tw-bg-gray-100 tw-rounded-md tw-text-center tw-font-medium tw-w-full tw-cursor-not-allowed tw-opacity-50">
+        {{ __(proFeature, "giantwp-discount-rules") }}
         <span
-          class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+          class="tw-absolute tw-top-1 tw-right-1 tw-bg-red-500 tw-text-white tw-text-xs tw-px-2 tw-py-1 tw-rounded"
           >Pro</span
         >
       </button>

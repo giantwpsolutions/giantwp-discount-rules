@@ -143,16 +143,16 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6">
-    <h3 class="text-xl font-bold mb-6">
+  <div class="tw-bg-white tw-rounded-[10px] tw-min-h-[250px] tw-border tw-border-gray-300 tw-p-6 tw-m-4">
+    <h3 class="tw-text-xl tw-font-bold tw-mb-6">
       {{ __("Discount Rules", "giantwp-discount-rules") }}
     </h3>
 
     <!-- Button to Add New Rule -->
-    <div class="flex mb-8">
+    <div class="tw-flex tw-mb-8">
       <button
         @click="addNewRule"
-        class="inline-flex h-8 items-center justify-center rounded-md px-4 text-sm font-medium duration-200 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        class="tw-inline-flex tw-h-8 tw-items-center tw-justify-center tw-rounded-md tw-px-4 tw-text-sm tw-font-medium tw-duration-200 tw-bg-blue-600 tw-text-white tw-hover:bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500">
         {{ __("Add New Rule", "giantwp-discount-rules") }}
       </button>
     </div>

@@ -1,10 +1,9 @@
 <script setup>
-import { reactive, ref, defineProps, defineEmits, onMounted, watch } from "vue";
+import { ref, defineProps, defineEmits, onMounted, watch } from "vue";
 import { debounce } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import {
   conditionOptions,
-  operatorOptions,
   dropdownOptions,
   cascadeOptions,
   getOperators,
@@ -12,7 +11,6 @@ import {
 
 import {
   productOptions,
-  isLoadingProducts,
   loadProducts,
   variationOptions,
 } from "@/data/productsFetch.js";
@@ -20,36 +18,32 @@ import {
 import {
   userOptions,
   roleOptions,
-  isLoadingUsersAndRoles,
   loadUsersAndRoles,
 } from "@/data/usersFetch.js";
 
 import {
   categoryOptions,
   tagOptions,
-  isLoadingCategoriesTags,
   loadCategoriesAndTags,
 } from "@/data/categoriesAndTagsFetch.js";
 
 import {
   paymentGatewayOptions,
-  isLoadingPaymentGateways,
   loadPaymentGateways,
 } from "@/data/paymentGatewaysFetch.js";
 
 import {
   countriesOptions,
-  isLoadingCountries,
   loadCountriesAndStates,
 } from "@/data/shippingFetch.js";
 
 import { generalData, loadGeneralData } from "@/data/generalDataFetch";
 
-// **Props & Emits**
+// === Props & Emits ===
 const props = defineProps({
-  value: Array, // Parent-passed conditions
-  toggle: Boolean, // Enable/Disable conditions
-  conditionsApplies: String, // Enable/Disable conditions
+  value: Array,
+  toggle: Boolean,
+  conditionsApplies: String,
 });
 
 const emit = defineEmits([
@@ -58,12 +52,12 @@ const emit = defineEmits([
   "update:conditionsApplies",
 ]);
 
-// **Reactive State**
+// === Reactive State ===
 const enableConditions = ref(props.toggle);
 const localConditions = ref([...props.value]);
 const conditionsApplies = ref(props.conditionsApplies);
 
-// **Sync Props with Local State**
+// === Load Data Sources ===
 onMounted(async () => {
   try {
     await loadProducts();
@@ -85,66 +79,21 @@ onMounted(async () => {
 
     await loadCountriesAndStates();
     cascadeOptions.customer_shipping_region = countriesOptions.value;
-    localConditions.value = props.value.map((c) => {
-      if (
-        c.field === "customer_shipping_region" &&
-        Array.isArray(c.value) &&
-        c.value.every((v) => typeof v === "string")
-      ) {
-        c.value = convertFlatRegionToPaths(c.value, countriesOptions.value);
-      }
-      return c;
-    });
 
     await loadGeneralData();
-  } catch (error) {
-    console.error("Error loading dropdown options:", error);
+  } catch (err) {
+    console.error("Error loading dropdown data:", err);
   }
 });
 
-// **Add a New Condition**
-const addCondition = (event) => {
-  event.preventDefault();
-  localConditions.value.push({
-    id: Date.now(),
-    field: "cart_subtotal_price",
-    operator: "greater_than",
-    value: "100",
-  });
-};
+// === Helpers ===
+const isNumberField = (f) =>
+  ["cart_quantity", "cart_total_weight", "customer_order_count"].includes(f);
 
-// **Remove a Condition**
-const removeCondition = (id) => {
-  const index = (localConditions.value = localConditions.value.filter(
-    (cond) => cond.id !== id
-  ));
-  if (index > -1) localConditions.splice(index, 1);
-};
+const isPricingField = (f) =>
+  ["cart_subtotal_price", "cart_item_regular_price"].includes(f);
 
-// **Emit Updated Conditions**
-const updateConditions = () => {
-  emit("update:value", [...localConditions.value]);
-};
-
-// **Emit Toggle Change**
-const updateEnableConditions = () => {
-  emit("update:toggle", enableConditions.value);
-};
-
-// **Emit conditionsApplies Change**
-const updateConditionsApplies = () => {
-  emit("update:conditionsApplies", conditionsApplies.value);
-};
-// **Check Field Type**
-const isNumberField = (field) =>
-  ["cart_quantity", "cart_total_weight", "customer_order_count"].includes(
-    field
-  );
-
-const isPricingField = (field) =>
-  ["cart_subtotal_price", "cart_item_regular_price"].includes(field);
-
-const isDropdownField = (field) =>
+const isDropdownField = (f) =>
   [
     "cart_item_product",
     "cart_item_variation",
@@ -155,88 +104,80 @@ const isDropdownField = (field) =>
     "payment_method",
     "customer_order_history_category",
     "customer_order_history_product",
-  ].includes(field);
+  ].includes(f);
 
-const isCascadeField = (field) => ["customer_shipping_region"].includes(field);
+// === CRUD ===
+const addCondition = (e) => {
+  e.preventDefault();
+  localConditions.value.push({
+    id: Date.now(),
+    field: "cart_subtotal_price",
+    operator: "greater_than",
+    value: "100",
+  });
+};
 
-// **Dropdown & Cascader Options**
-const getDropdownOptions = (field) => dropdownOptions[field] || [];
-const getCascadeOptions = (field) => cascadeOptions[field] || [];
+const removeCondition = (id) => {
+  localConditions.value = localConditions.value.filter((c) => c.id !== id);
+};
 
+// === Emit Updates ===
 watch(
   localConditions,
-  (newVal) => {
-    // console.log("Child Conditions Updated:", newVal);
-    emit("update:value", [...newVal]);
-  },
-  { deep: true } // Single watcher handles all changes
+  (val) => emit("update:value", [...val]),
+  { deep: true }
 );
 
-watch(enableConditions, () => {
-  updateEnableConditions();
-});
+watch(enableConditions, () => emit("update:toggle", enableConditions.value));
+watch(conditionsApplies, () => emit("update:conditionsApplies", conditionsApplies.value));
 
-watch(conditionsApplies, () => {
-  updateConditionsApplies();
-});
-
-// Single debounced watcher for all changes
 const emitUpdates = debounce(() => {
-  // console.log(
-  //   "Child Conditions (Debounced):",
-  //   JSON.parse(JSON.stringify(localConditions.value))
-  // );
   emit("update:value", [...localConditions.value]);
 }, 300);
 
-watch(
-  [localConditions, enableConditions, conditionsApplies],
-  () => {
-    emitUpdates();
-  },
-  { deep: true }
-);
+watch([localConditions, enableConditions, conditionsApplies], emitUpdates, {
+  deep: true,
+});
 </script>
 
 <template>
-  <div class="space-y-4 w-full md:w-5/6">
+  <div class="tw-space-y-4 tw-w-full md:tw-w-5/6">
     <!-- Enable Conditions -->
-    <div class="flex flex-wrap items-center gap-2 my-6">
-      <div class="shrink-0">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-my-6">
+      <div class="tw-shrink-0">
         <el-switch
           v-model="enableConditions"
-          @change="updateEnableConditions"
           inline-prompt
           :active-text="__('On', 'giantwp-discount-rules')"
-          :inactive-text="__('Off', 'giantwp-discount-rules')" />
+          :inactive-text="__('Off', 'giantwp-discount-rules')"
+        />
       </div>
-      <label class="text-sm font-medium text-gray-900">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900">
         {{ __("Enable Conditions?", "giantwp-discount-rules") }}
       </label>
     </div>
 
     <!-- Conditions Section -->
-    <div class="space-y-4 w-full" v-if="enableConditions">
-      <!-- Apply Conditions Mode (Any/All) -->
+    <div v-if="enableConditions" class="tw-space-y-4 tw-w-full">
+      <!-- Apply Conditions Mode -->
       <div
-        class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-6 mb-1">
-        <label class="text-sm font-medium text-gray-900">
+        class="tw-flex tw-flex-col sm:tw-flex-row tw-items-start sm:tw-items-center tw-gap-2 tw-mt-6 tw-mb-1"
+      >
+        <label class="tw-text-sm tw-font-medium tw-text-gray-900">
           {{ __("Apply conditions if matches", "giantwp-discount-rules") }}
         </label>
-        <el-radio-group
-          v-model="conditionsApplies"
-          @change="updateConditionsApplies">
-          <el-radio-button
-            :label="__('Any', 'giantwp-discount-rules')"
-            value="any" />
-          <el-radio-button
-            :label="__('All', 'giantwp-discount-rules')"
-            value="all" />
+        <el-radio-group v-model="conditionsApplies">
+          <el-radio-button label="any">
+            {{ __("Any", "giantwp-discount-rules") }}
+          </el-radio-button>
+          <el-radio-button label="all">
+            {{ __("All", "giantwp-discount-rules") }}
+          </el-radio-button>
         </el-radio-group>
       </div>
 
-      <!-- Add Conditions Label -->
-      <label class="block text-sm font-medium text-gray-900">
+      <!-- Add Conditions -->
+      <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-900">
         {{ __("Add Conditions", "giantwp-discount-rules") }}
       </label>
 
@@ -244,10 +185,11 @@ watch(
       <div
         v-for="(condition, index) in localConditions"
         :key="condition.id"
-        class="mt-1">
-        <!-- OR/AND Separator -->
-        <div v-if="index > 0" class="mb-2">
-          <span class="text-black italic text-sm">
+        class="tw-mt-1"
+      >
+        <!-- OR / AND -->
+        <div v-if="index > 0" class="tw-mb-2">
+          <span class="tw-text-black tw-italic tw-text-sm">
             {{
               conditionsApplies === "any"
                 ? __("Or", "giantwp-discount-rules")
@@ -256,25 +198,29 @@ watch(
           </span>
         </div>
 
-        <!-- Condition Row -->
-        <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-          <!-- Field Selector -->
-          <div class="w-full md:w-[30%]">
+        <!-- Single Row -->
+        <div
+          class="tw-flex tw-items-center tw-gap-2 tw-mb-2 tw-flex-wrap"
+        >
+          <!-- Field -->
+          <div class="tw-w-[25%]">
             <select
               v-model="condition.field"
-              class="w-full h-8 border rounded p-2 text-sm sm:text-sm"
-              @change="updateConditions">
+              class="tw-w-full tw-h-8 tw-border tw-rounded tw-p-2 tw-text-sm"
+            >
               <option value="">
                 {{ __("Please select", "giantwp-discount-rules") }}
               </option>
               <template v-for="group in conditionOptions" :key="group.label">
                 <optgroup
                   :label="group.label"
-                  class="font-semibold text-gray-800">
+                  class="tw-font-semibold tw-text-gray-800"
+                >
                   <option
                     v-for="option in group.options"
                     :key="option.value"
-                    :value="option.value">
+                    :value="option.value"
+                  >
                     {{ option.label }}
                   </option>
                 </optgroup>
@@ -282,37 +228,39 @@ watch(
             </select>
           </div>
 
-          <!-- Operator Selector -->
-          <div class="w-full md:w-[20%]">
+          <!-- Operator -->
+          <div class="tw-w-[20%]">
             <select
               v-model="condition.operator"
-              class="w-full h-8 border rounded p-2 text-sm"
-              @change="updateConditions">
+              class="tw-w-full tw-h-8 tw-border tw-rounded tw-p-2 tw-text-sm"
+            >
               <option
                 v-for="op in getOperators(condition.field)"
                 :key="op.value"
-                :value="op.value">
+                :value="op.value"
+              >
                 {{ op.label }}
               </option>
             </select>
           </div>
 
-          <!-- Value Field -->
-          <div class="w-full md:w-[45%]">
+          <!-- Value -->
+          <div class="tw-w-[45%]">
             <el-select-v2
               v-if="isDropdownField(condition.field)"
               v-model="condition.value"
-              :options="getDropdownOptions(condition.field)"
+              :options="dropdownOptions[condition.field]"
               filterable
               multiple
-              class="custom-select-v2 w-full"
-              @change="updateConditions" />
+              class="custom-select-v2 tw-w-full"
+            />
 
             <el-input
               v-else-if="isPricingField(condition.field)"
               v-model.number="condition.value"
               placeholder="Please input"
-              class="w-full">
+              class="tw-w-full"
+            >
               <template #append>
                 <span v-html="generalData.currency_symbol || '$'"></span>
               </template>
@@ -321,19 +269,19 @@ watch(
             <input
               v-else-if="isNumberField(condition.field)"
               v-model="condition.value"
-              @change="updateConditions"
               type="number"
               placeholder="Enter a number"
-              class="w-full h-8 border rounded p-2 text-sm text-gray-700 bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+              class="tw-w-full tw-h-8 tw-border tw-rounded tw-p-2 tw-text-sm tw-text-gray-700 tw-bg-white tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
+            />
           </div>
 
           <!-- Delete -->
-          <div
-            class="w-full md:w-[5%] flex justify-start md:justify-center items-center">
+          <div class="tw-w-[5%] tw-flex tw-justify-center tw-items-center">
             <el-icon
               @click="removeCondition(condition.id)"
               size="20px"
-              class="cursor-pointer text-red-500">
+              class="tw-cursor-pointer tw-text-red-500"
+            >
               <Delete />
             </el-icon>
           </div>
@@ -343,30 +291,16 @@ watch(
       <!-- Add Button -->
       <button
         @click="addCondition"
-        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+        class="tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 hover:tw-bg-blue-600"
+      >
         {{ __("Add Condition", "giantwp-discount-rules") }}
       </button>
     </div>
   </div>
 </template>
 
-<style>
-.delete_icon {
-  margin-left: 10px;
-}
-.rounded-custom-aio-right {
-  border-radius: 0px 5px 5px 0px;
-}
-.rounded-custom-aio-left {
-  border-radius: 5px 0px 0px 5px;
-}
-.el-select__input {
-  border: none;
-}
-.el-select__wrapper {
-  padding: 0px 12px !important;
-}
-.el-select__input:focus-visible {
-  border: none;
+<style scoped>
+.custom-select-v2 .el-select__wrapper {
+  padding: 0 !important;
 }
 </style>

@@ -7,17 +7,17 @@ const route = useRoute();
 </script>
 
 <template>
-  <DisclosurePanel class="md:hidden">
-    <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+  <DisclosurePanel class="tw-md:hidden">
+    <div class="tw-space-y-1 tw-px-2 tw-pt-2 tw-pb-3 tw-sm:px-3">
       <template v-for="item in navigation" :key="item.name">
         <router-link
           v-if="!item.isExternal"
           :to="item.href"
           :class="[
             route.path === item.href
-              ? 'bg-gray-900 text-white'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-            'block rounded-md px-3 py-2 text-base font-medium',
+              ? 'tw-bg-gray-900 tw-text-white'
+              : 'tw-text-gray-300 tw-hover:bg-gray-700 tw-hover:text-white',
+            'tw-block tw-rounded-md tw-px-3 tw-py-2 tw-text-base tw-font-medium',
           ]"
           :aria-current="item.current ? 'page' : undefined">
           {{ item.name }}
@@ -28,7 +28,7 @@ const route = useRoute();
           :href="item.href"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">
+          class="tw-text-gray-300 tw-hover:bg-gray-700 tw-hover:text-white tw-block tw-rounded-md tw-px-3 tw-py-2 text-base font-medium">
           {{ item.name }}
         </a>
       </template>

@@ -52,15 +52,15 @@ const handleSaveSettings = async () => {
 
 <template>
   <div
-    class="bg-white rounded-[10px] min-h-[250px] border border-gray-300 p-6 flex flex-col">
-    <h4 class="text-xl font-bold mb-6">
+    class="tw-bg-white tw-rounded-[10px] tw-min-h-[250px] tw-border tw-border-gray-300 tw-p-6 tw-flex tw-flex-col">
+    <h4 class="tw-text-xl tw-font-bold tw-mb-6">
       {{ __("Settings", "giantwp-discount-rules") }}
     </h4>
 
     <!-- License -->
     <div v-if="isProActive">
-      <div class="w-full max-w-2xl flex items-center mb-2 gap-3">
-        <label class="text-base font-medium text-dark w-32">
+      <div class="tw-w-full tw-max-w-2xl tw-flex tw-items-center tw-mb-2 tw-gap-3">
+        <label class="tw-text-base tw-font-medium tw-text-dark tw-w-32">
           {{ __("License Key", "giantwp-discount-rules") }}
         </label>
 
@@ -83,7 +83,7 @@ const handleSaveSettings = async () => {
 
       <div
         v-if="licenseStatus !== 'unknown'"
-        class="pl-32 text-sm mt-1 text-gray-700">
+        class="tw-pl-32 tw-text-sm tw-mt-1 tw-text-gray-700">
         <template v-if="licenseStatus === 'valid'">
           ✅ {{ __("Your license is active", "giantwp-discount-rules") }}
         </template>
@@ -95,10 +95,10 @@ const handleSaveSettings = async () => {
     </div>
 
     <!-- General Settings -->
-    <div class="mt-6">
+    <div class="tw-mt-6">
       <!-- Discount Based On -->
-      <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
-        <label class="text-base font-medium text-dark w-32">
+      <div class="tw-w-full tw-max-w-2xl tw-flex tw-items-center tw-mb-6 tw-gap-3">
+        <label class="tw-text-base tw-font-medium tw-text-dark tw-w-32">
           {{ __("Rule Apply on", "giantwp-discount-rules") }}
         </label>
 
@@ -117,11 +117,11 @@ const handleSaveSettings = async () => {
       </div>
 
       <!-- Order Page Label -->
-      <div class="w-full max-w-2xl flex items-center mb-6 gap-3">
+      <div class="tw-w-full tw-max-w-2xl tw-flex tw-items-center tw-mb-6 tw-gap-3">
         <label
-          class="text-base font-medium text-dark w-32 flex items-center gap-2">
+          class="tw-text-base tw-font-medium tw-text-dark tw-w-32 tw-flex tw-items-center tw-gap-2">
           {{ __("Order Label", "giantwp-discount-rules") }}
-          <div class="group relative">
+          <div class="tw-group tw-relative">
             <el-tooltip
               class="box-item"
               effect="dark"
@@ -134,7 +134,7 @@ const handleSaveSettings = async () => {
               placement="top"
               popper-class="custom-tooltip">
               <QuestionMarkCircleIcon
-                class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer" />
             </el-tooltip>
           </div>
         </label>
@@ -147,7 +147,7 @@ const handleSaveSettings = async () => {
       </div>
 
       <!-- Save Settings Button -->
-      <div class="mt-4">
+      <div class="tw-mt-4">
         <el-button
           type="primary"
           :loading="isLoadingSettings"

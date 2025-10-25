@@ -53,16 +53,16 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 max-w-full">
+  <div class="tw-space-y-4 tw-max-w-full">
     <!-- Discount Type Selection -->
-    <div class="w-full max-w-md mb-6">
-      <label for="discountType" class="block text-sm font-medium text-gray-900">
+    <div class="tw-w-full tw-max-w-md tw-mb-6">
+      <label for="discountType" class="tw-block tw-text-sm tw-font-medium tw-text-gray-900">
         {{ __("Discount Type", "giantwp-discount-rules") }}
       </label>
       <select
         v-model="localState.shippingDiscountType"
         id="discountType"
-        class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
+        class="tw-mt-1.5 tw-h-8 tw-w-full tw-rounded-md tw-border-gray-300 tw-text-gray-700 sm:tw-text-sm">
         <option value="reduceFee">
           {{ __("Shipping Fee Discount", "giantwp-discount-rules") }}
         </option>
@@ -75,11 +75,11 @@ watch(
     <!-- Shipping Fee Reduce -->
     <div
       v-if="localState.shippingDiscountType === 'reduceFee'"
-      class="w-3/4 mt-5">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      class="tw-w-3/4 tw-mt-5">
+      <div class="tw-grid tw-grid-cols-1 tw-gap-4 md:tw-grid-cols-3">
         <!-- Column 1 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Type", "giantwp-discount-rules") }}
           </label>
           <el-select
@@ -101,14 +101,14 @@ watch(
 
         <!-- Column 2 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Value", "giantwp-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
             style="max-width: 600px"
             placeholder="Please input"
-            class="w-full">
+            class="tw-w-full">
             <template #append>
               <span
                 v-html="
@@ -122,8 +122,8 @@ watch(
 
         <!-- Column 3 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
+            <div class="tw-flex tw-items-center tw-space-x-1">
               <span>{{ __("Maximum Value", "giantwp-discount-rules") }}</span>
               <el-tooltip
                 class="box-item"
@@ -135,9 +135,9 @@ watch(
                   )
                 "
                 placement="top"
-                popper-class="custom-tooltip w-full">
+                popper-class="custom-tooltip tw-w-full">
                 <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                  class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
               </el-tooltip>
             </div>
           </label>
@@ -157,11 +157,11 @@ watch(
     <!-- Custom Fee -->
     <div
       v-if="localState.shippingDiscountType === 'customFee'"
-      class="w-3/4 mt-5">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      class="tw-w-3/4 tw-mt-5">
+      <div class="tw-grid tw-grid-cols-1 tw-gap-4 md:tw-grid-cols-3">
         <!-- Column 1 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Fee Type", "giantwp-discount-rules") }}
           </label>
           <el-select
@@ -183,7 +183,7 @@ watch(
 
         <!-- Column 2 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Fee Value", "giantwp-discount-rules") }}
           </label>
           <el-input
@@ -203,8 +203,8 @@ watch(
 
         <!-- Column 3 -->
         <div>
-          <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
+            <div class="tw-flex tw-items-center tw-space-x-1">
               <span>{{
                 __("Maximum Fee Value", "giantwp-discount-rules")
               }}</span>
@@ -220,7 +220,7 @@ watch(
                 placement="top"
                 popper-class="custom-tooltip">
                 <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                  class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
               </el-tooltip>
             </div>
           </label>

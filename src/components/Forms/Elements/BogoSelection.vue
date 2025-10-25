@@ -45,7 +45,7 @@ watch(
   () => localState.freeOrDiscount,
   (newVal, oldVal) => {
     if (newVal === "freeproduct" && oldVal === "discount_product") {
-      //Reset discount-related fields
+      // Reset discount-related fields
       localState.discounttypeBogo = "fixed";
       localState.discountValue = null;
       localState.maxValue = null;
@@ -79,71 +79,72 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 max-w-full">
+  <div class="tw-space-y-4 tw-max-w-full">
     <!-- Pricing or product set -->
-    <div class="md:w-3/4 sm:w-full">
-      <div
-        class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
-        <!-- Column 1 -->
-        <div class="flex items-center space-x-2 w-full md:w-auto">
-          <label
-            for="buyProductCount"
-            class="text-gray-950 text-sm whitespace-nowrap">
-            {{ __("Buy:", "giantwp-discount-rules") }}
-          </label>
-          <el-input-number
-            id="buyProductCount"
-            v-model="localState.buyProductCount"
-            :min="1"
-            controls-position="right"
-            class="w-full sm:w-60 md:w-80" />
-        </div>
-
-        <!-- Column 2 -->
-        <div class="flex items-center space-x-2 w-full md:w-auto">
-          <label
-            for="getProductCount"
-            class="text-gray-950 text-sm whitespace-nowrap">
-            {{ __("Get:", "giantwp-discount-rules") }}
-          </label>
-          <el-input-number
-            id="getProductCount"
-            v-model="localState.getProductCount"
-            :min="1"
-            controls-position="right"
-            class="w-full max-w-xs" />
-        </div>
-
-        <!-- Column 3 -->
-        <div class="w-full md:w-auto">
-          <el-radio-group v-model="localState.freeOrDiscount">
-            <el-radio-button
-              :label="__('Free', 'giantwp-discount-rules')"
-              value="freeproduct" />
-            <el-radio-button
-              :label="__('Discount', 'giantwp-discount-rules')"
-              value="discount_product" />
-          </el-radio-group>
-        </div>
-      </div>
+<div class="md:tw-w-3/4 sm:tw-w-full">
+  <div
+    class="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center md:tw-space-x-6 tw-space-y-4 md:tw-space-y-0">
+    <!-- Column 1 -->
+    <div class="tw-flex tw-items-center tw-space-x-2 tw-w-full md:tw-w-auto">
+      <label
+        for="buyProductCount"
+        class="tw-text-gray-950 tw-text-sm tw-whitespace-nowrap">
+        {{ __("Buy:", "giantwp-discount-rules") }}
+      </label>
+      <el-input-number
+        id="buyProductCount"
+        v-model="localState.buyProductCount"
+        :min="1"
+        controls-position="right"
+        class="tw-w-full sm:tw-w-60 md:tw-w-80" />
     </div>
+
+    <!-- Column 2 -->
+    <div class="tw-flex tw-items-center tw-space-x-2 tw-w-full md:tw-w-auto">
+      <label
+        for="getProductCount"
+        class="tw-text-gray-950 tw-text-sm tw-whitespace-nowrap">
+        {{ __("Get:", "giantwp-discount-rules") }}
+      </label>
+      <el-input-number
+        id="getProductCount"
+        v-model="localState.getProductCount"
+        :min="1"
+        controls-position="right"
+        class="tw-w-full tw-max-w-xs" />
+    </div>
+
+    <!-- Column 3 -->
+    <div class="tw-w-full md:tw-w-auto">
+      <el-radio-group v-model="localState.freeOrDiscount">
+        <el-radio-button
+          :label="__('Free', 'giantwp-discount-rules')"
+          value="freeproduct" />
+        <el-radio-button
+          :label="__('Discount', 'giantwp-discount-rules')"
+          value="discount_product" />
+      </el-radio-group>
+    </div>
+  </div>
+</div>
+
 
     <!-- Fixed or percentage discount for BOGO -->
     <div
       v-if="localState.freeOrDiscount === 'discount_product'"
-      class="md:w-3/4 mt-5">
+      class="md:tw-w-3/4 tw-mt-5">
       <div
-        class="flex flex-col md:flex-row md:items-end md:space-x-6 space-y-4 md:space-y-0">
+        class="tw-grid tw-gap-6 md:tw-grid-cols-3 tw-grid-cols-1 tw-items-end">
         <!-- Column 1: Pricing Type -->
-        <div class="w-full md:w-1/3">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Type", "giantwp-discount-rules") }}
           </label>
           <el-select
             v-model="localState.discounttypeBogo"
             size="default"
             popper-class="custom-dropdown"
-            class="w-full">
+            class="tw-w-full">
             <el-option
               :value="'fixed'"
               :label="__('Fixed Discount', 'giantwp-discount-rules')">
@@ -158,14 +159,14 @@ watch(
         </div>
 
         <!-- Column 2: Discount Value -->
-        <div class="w-full md:w-1/3">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
+        <div class="tw-w-full">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
             {{ __("Pricing Value", "giantwp-discount-rules") }}
           </label>
           <el-input
             v-model.number="localState.discountValue"
             placeholder="Please input"
-            class="w-full">
+            class="tw-w-full">
             <template #append>
               <span
                 v-html="
@@ -178,9 +179,9 @@ watch(
         </div>
 
         <!-- Column 3: Max Value -->
-        <div class="w-full md:w-1/3">
-          <label class="block text-sm font-medium pb-2 text-gray-900">
-            <div class="flex items-center space-x-1">
+        <div class="tw-w-full">
+          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
+            <div class="tw-flex tw-items-center tw-space-x-1">
               <span>{{
                 __("Maximum Value", "giantwp-discount-rules")
               }}</span>
@@ -196,7 +197,7 @@ watch(
                 placement="top"
                 popper-class="custom-tooltip">
                 <QuestionMarkCircleIcon
-                  class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                  class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
               </el-tooltip>
             </div>
           </label>
@@ -204,7 +205,7 @@ watch(
             v-model.number="localState.maxValue"
             placeholder="Please input"
             :disabled="localState.discounttypeBogo === 'fixed'"
-            class="w-full">
+            class="tw-w-full">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>
@@ -214,13 +215,13 @@ watch(
     </div>
 
     <!-- Is Repeat -->
-    <div class="flex items-center gap-2 mt-6 mb-1">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
       <el-switch
         v-model="localState.isRepeat"
         inline-prompt
         :active-text="__('On', 'giantwp-discount-rules')"
         :inactive-text="__('Off', 'giantwp-discount-rules')" />
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Is Repeat?", "giantwp-discount-rules") }}
         <el-tooltip
           class="box-item"
@@ -234,11 +235,12 @@ watch(
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
-            class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer" />
         </el-tooltip>
       </label>
     </div>
   </div>
 </template>
+
 
 <style scoped></style>

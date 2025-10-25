@@ -39,14 +39,8 @@ onMounted(() => {
 });
 
 const props = defineProps({
-  visible: {
-    type: Boolean,
-    required: true,
-  },
-  editingRule: {
-    type: Object,
-    default: () => ({}), // ✅ Ensure it is always an object
-  },
+  visible: { type: Boolean, required: true },
+  editingRule: { type: Object, default: () => ({}) },
 });
 
 const emit = defineEmits(["close", "discountUpdated"]);
@@ -56,7 +50,7 @@ const showForm = ref(false);
 const isSaving = ref(false);
 const isEditMode = ref(false);
 
-//Define Form ref
+// refs
 const flatPercentageFormRef = ref(null);
 const bogoFormRef = ref(null);
 const freeShippingRef = ref(null);
@@ -65,24 +59,18 @@ const bulkDiscountRef = ref(null);
 
 const proFeatures = [
   {
-    name: __("Buy X Get Y", "all-in-one-discount-rules"),
-    description: __(
-      "Apply discounts Buy X product Get Y Product",
-      "all-in-one-discount-rules"
-    ),
+    name: __("Buy X Get Y", "giantwp-discount-rules"),
+    description: __("Apply discounts Buy X product Get Y Product", "giantwp-discount-rules"),
     value: "Buy X Get Y",
   },
   {
-    name: __("Shipping Discount", "all-in-one-discount-rules"),
-    description: __("Discounts based on Shipping", "all-in-one-discount-rules"),
+    name: __("Shipping Discount", "giantwp-discount-rules"),
+    description: __("Discounts based on Shipping", "giantwp-discount-rules"),
     value: "Shipping Discount",
   },
   {
-    name: __("Bulk Discount", "all-in-one-discount-rules"),
-    description: __(
-      "Discounts based on bulk purchase",
-      "all-in-one-discount-rules"
-    ),
+    name: __("Bulk Discount", "giantwp-discount-rules"),
+    description: __("Discounts based on bulk purchase", "giantwp-discount-rules"),
     value: "Bulk Discount",
   },
 ];
@@ -91,24 +79,19 @@ const goBack = () => {
   showForm.value = false;
   selectedDiscountsType.value = "";
 };
-
 const selectDiscountType = (type) => {
   selectedDiscountsType.value = type;
   showForm.value = true;
 };
 
-watch(
-  () => props.visible, // 👀 Watch modal visibility
-  (isVisible) => {
-    if (isVisible === false) {
-      // Reset form when modal is closed
-      selectedDiscountsType.value = "";
-      showForm.value = false;
-    }
+watch(() => props.visible, (isVisible) => {
+  if (isVisible === false) {
+    selectedDiscountsType.value = "";
+    showForm.value = false;
   }
-);
+});
 
-// ** Watch Editing Rule to Load Data into Form **
+// load edit data
 watch(
   () => props.editingRule,
   async (newVal) => {
@@ -116,23 +99,20 @@ watch(
       isEditMode.value = true;
       selectedDiscountsType.value = newVal.discountType;
       showForm.value = true;
-
-      // Wait for the form component to be rendered
       await nextTick();
       await nextTick();
       await nextTick();
 
-      if (flatPercentageFormRef.value) {
+      if (flatPercentageFormRef.value)
         flatPercentageFormRef.value.setFormData(structuredClone(newVal));
-      } else if (bogoFormRef.value) {
+      else if (bogoFormRef.value)
         bogoFormRef.value.setFormData(structuredClone(newVal));
-      } else if (freeShippingRef.value) {
+      else if (freeShippingRef.value)
         freeShippingRef.value.setFormData(structuredClone(newVal));
-      } else if (buyXGetYRef.value) {
+      else if (buyXGetYRef.value)
         buyXGetYRef.value.setFormData(structuredClone(newVal));
-      } else if (bulkDiscountRef.value) {
+      else if (bulkDiscountRef.value)
         bulkDiscountRef.value.setFormData(structuredClone(newVal));
-      }
     }
   },
   { immediate: true, deep: true }
@@ -141,11 +121,8 @@ watch(
 const saveForm = async () => {
   if (isSaving.value) return;
   isSaving.value = true;
-
   try {
-    let formData = null;
     let activeForm = null;
-
     switch (selectedDiscountsType.value) {
       case "Flat/Percentage":
         activeForm = flatPercentageFormRef.value;
@@ -163,60 +140,54 @@ const saveForm = async () => {
         activeForm = bulkDiscountRef.value;
         break;
     }
-
     if (!activeForm || !activeForm.validate()) {
       warningMessage();
       return;
     }
 
-    formData = activeForm.getFormData();
+    const data = activeForm.getFormData();
 
-    if (isEditMode.value && formData.id) {
+    if (isEditMode.value && data.id) {
       const original = JSON.stringify(props.editingRule);
-      const current = JSON.stringify(formData);
-
+      const current = JSON.stringify(data);
       if (original === current) {
-        noChanges(); // ✅ <--- This is your message function
+        noChanges();
         isSaving.value = false;
         return;
       }
 
-      if (selectedDiscountsType.value === "Flat/Percentage") {
-        await saveFlatPercentageDiscount.updateDiscount(formData.id, formData);
-      } else if (selectedDiscountsType.value === "Bogo") {
-        await saveBogoData.updateDiscount(formData.id, formData);
-      } else if (selectedDiscountsType.value === "Shipping Discount") {
-        await saveShippingData.updateDiscount(formData.id, formData);
-      } else if (selectedDiscountsType.value === "Buy X Get Y") {
-        await saveBuyXGetYData.updateDiscount(formData.id, formData);
-      } else if (selectedDiscountsType.value === "Bulk Discount") {
-        await saveBulkDiscountData.updateDiscount(formData.id, formData);
-      }
+      if (selectedDiscountsType.value === "Flat/Percentage")
+        await saveFlatPercentageDiscount.updateDiscount(data.id, data);
+      else if (selectedDiscountsType.value === "Bogo")
+        await saveBogoData.updateDiscount(data.id, data);
+      else if (selectedDiscountsType.value === "Shipping Discount")
+        await saveShippingData.updateDiscount(data.id, data);
+      else if (selectedDiscountsType.value === "Buy X Get Y")
+        await saveBuyXGetYData.updateDiscount(data.id, data);
+      else if (selectedDiscountsType.value === "Bulk Discount")
+        await saveBulkDiscountData.updateDiscount(data.id, data);
 
       updatedDiscountMessage();
     } else {
-      // console.log("🟢 Creating New Discount:", formData);
-      if (selectedDiscountsType.value === "Flat/Percentage") {
-        await saveFlatPercentageDiscount.saveCoupon(formData);
-      } else if (selectedDiscountsType.value === "Bogo") {
-        await saveBogoData.saveCoupon(formData);
-      } else if (selectedDiscountsType.value === "Shipping Discount") {
-        await saveShippingData.saveCoupon(formData);
-      } else if (selectedDiscountsType.value === "Buy X Get Y") {
-        await saveBuyXGetYData.saveCoupon(formData);
-      } else if (selectedDiscountsType.value === "Bulk Discount") {
-        await saveBulkDiscountData.saveCoupon(formData);
-      }
+      if (selectedDiscountsType.value === "Flat/Percentage")
+        await saveFlatPercentageDiscount.saveCoupon(data);
+      else if (selectedDiscountsType.value === "Bogo")
+        await saveBogoData.saveCoupon(data);
+      else if (selectedDiscountsType.value === "Shipping Discount")
+        await saveShippingData.saveCoupon(data);
+      else if (selectedDiscountsType.value === "Buy X Get Y")
+        await saveBuyXGetYData.saveCoupon(data);
+      else if (selectedDiscountsType.value === "Bulk Discount")
+        await saveBulkDiscountData.saveCoupon(data);
 
       discountCreatedMessage();
     }
 
     emit("discountUpdated");
-
     isEditMode.value = false;
     emit("close");
-  } catch (error) {
-    console.error("Save failed:", error);
+  } catch (e) {
+    console.error("Save failed:", e);
     errorMessage();
   } finally {
     isSaving.value = false;
@@ -228,57 +199,66 @@ const saveForm = async () => {
   <transition name="modal-zoom-fade">
     <div
       v-if="visible"
-      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+      class="tw-fixed lg:tw-ml-16 tw-top-0 tw-left-0 tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center tw-bg-gray-900 tw-bg-opacity-50 tw-z-50"
+    >
       <div
-        class="bg-white rounded-lg shadow-lg h-[75vh] w-[80vw] md:w-[75vw] p-6 flex flex-col">
+        class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-h-[75vh] tw-w-[80vw] tw-md:w-[75vw] tw-p-6 tw-grid tw-grid-rows-[auto,1fr,auto]"
+      >
         <!-- Modal Header -->
-        <div class="border-b pb-4 mb-4 flex items-center space-x-4">
+        <div class="tw-border-b tw-pb-4 tw-mb-4 tw-flex tw-items-center tw-space-x-4">
           <button
             v-if="showForm"
             @click="goBack"
-            class="text-blue-600 hover:text-blue-800"
-            title="Back">
+            class="tw-text-blue-600 hover:tw-text-blue-800"
+            title="Back"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
+              class="tw-h-6 tw-w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M15 19l-7-7 7-7" />
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
-          <h3 class="text-lg font-bold">
+          <h3 class="tw-text-lg tw-font-bold">
             {{
               showForm
                 ? selectedDiscountsType
-                : __("Select Discount Type", "all-in-one-discount-rules")
+                : __("Select Discount Type", "giantwp-discount-rules")
             }}
           </h3>
         </div>
 
-        <!-- Modal Content -->
-        <div class="flex-1 border rounded p-6 overflow-auto">
+        <!-- Modal Content (scrolls) -->
+        <div class="tw-border tw-rounded tw-p-6 tw-overflow-auto">
           <template v-if="!showForm">
             <div
-              class="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              class="tw-grid tw-grid-cols-1 tw-mt-6 sm:tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-6"
+            >
               <!-- Flat/Percentage -->
               <div
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
+                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
+              >
                 <button
                   @click="() => selectDiscountType('Flat/Percentage')"
-                  class="w-full text-center font-medium">
-                  {{ __("Flat/Percentage", "all-in-one-discount-rules") }}
+                  class="tw-w-full tw-text-center tw-font-medium"
+                >
+                  {{ __("Flat/Percentage", "giantwp-discount-rules") }}
                 </button>
                 <div
-                  class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
+                >
                   {{
                     __(
                       "Apply a fixed amount or percentage discount",
-                      "all-in-one-discount-rules"
+                      "giantwp-discount-rules"
                     )
                   }}
                 </div>
@@ -286,102 +266,108 @@ const saveForm = async () => {
 
               <!-- BOGO -->
               <div
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
+                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
+              >
                 <button
                   @click="() => selectDiscountType('Bogo')"
-                  class="w-full text-center font-medium">
-                  {{ __("BOGO", "all-in-one-discount-rules") }}
+                  class="tw-w-full tw-text-center tw-font-medium"
+                >
+                  {{ __("BOGO", "giantwp-discount-rules") }}
                 </button>
                 <div
-                  class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
+                >
                   {{
-                    __(
-                      "Buy One Get One free discount",
-                      "all-in-one-discount-rules"
-                    )
+                    __("Buy One Get One free discount", "giantwp-discount-rules")
                   }}
                 </div>
               </div>
 
               <!-- Pro Features -->
-              <!-- Pro Features -->
               <div
                 v-for="(proFeature, index) in proFeatures"
                 :key="index"
-                class="relative group bg-gray-100 hover:bg-blue-100 rounded-md p-6 flex flex-col items-center">
+                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
+              >
                 <button
                   :disabled="!isLicenseActive"
                   :class="
-                    !isLicenseActive ? 'opacity-50 cursor-not-allowed' : ''
+                    !isLicenseActive
+                      ? 'tw-opacity-50 tw-cursor-not-allowed'
+                      : ''
                   "
                   @click="() => selectDiscountType(proFeature.value)"
-                  class="w-full text-center font-medium">
-                  {{ __(proFeature.name, "all-in-one-discount-rules") }}
+                  class="tw-w-full tw-text-center tw-font-medium"
+                >
+                  {{ __(proFeature.name, "giantwp-discount-rules") }}
                 </button>
-
-                <!-- 🔒 Show Pro badge only when license is not active -->
                 <span
                   v-if="!isLicenseActive"
-                  class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                  Pro
-                </span>
-
+                  class="tw-absolute tw-top-1 tw-right-1 tw-bg-red-500 tw-text-white tw-text-xs tw-px-2 tw-py-1 tw-rounded"
+                  >Pro</span
+                >
                 <div
-                  class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 w-48 text-center">
-                  {{ __(proFeature.description, "all-in-one-discount-rules") }}
+                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
+                >
+                  {{ __(proFeature.description, "giantwp-discount-rules") }}
                 </div>
               </div>
             </div>
           </template>
 
           <template v-else>
-            <!-- Dynamically Render the Form Based on Selected Discount Type -->
             <FlatPercentageForm
               v-if="selectedDiscountsType === 'Flat/Percentage' && showForm"
               ref="flatPercentageFormRef"
-              :initialData="props.editingRule" />
+              :initialData="props.editingRule"
+            />
             <Bogo
               v-else-if="selectedDiscountsType === 'Bogo'"
               ref="bogoFormRef"
-              :initialData="props.editingRule" />
-
+              :initialData="props.editingRule"
+            />
             <FreeshippingForm
               v-else-if="
                 selectedDiscountsType === 'Shipping Discount' && showForm
               "
               ref="freeShippingRef"
-              :initialData="props.editingRule" />
+              :initialData="props.editingRule"
+            />
             <BuyXGetY
               v-else-if="selectedDiscountsType === 'Buy X Get Y'"
               ref="buyXGetYRef"
-              :initialData="props.editingRule" />
+              :initialData="props.editingRule"
+            />
             <BulkDiscount
               v-else-if="selectedDiscountsType === 'Bulk Discount'"
               ref="bulkDiscountRef"
-              :initialData="props.editingRule" />
+              :initialData="props.editingRule"
+            />
             <p v-else>
-              {{ __("Form for", "all-in-one-discount-rules") }}
+              {{ __("Form for", "giantwp-discount-rules") }}
               {{ selectedDiscountsType }}
             </p>
           </template>
         </div>
 
         <!-- Modal Footer -->
-        <div class="mt-4 flex justify-end space-x-4">
+        <div class="tw-mt-4 tw-flex tw-justify-end tw-space-x-4">
           <button
             @click="emit('close')"
-            class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
-            {{ __("Close", "all-in-one-discount-rules") }}
+            class="tw-bg-gray-300 tw-text-gray-700 tw-px-4 tw-py-2 tw-rounded hover:tw-bg-gray-400"
+          >
+            {{ __("Close", "giantwp-discount-rules") }}
           </button>
           <button
             v-if="showForm"
             @click="saveForm"
             :disabled="isSaving"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            class="tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-blue-700"
+          >
             {{
               isSaving
-                ? __("Saving...", "all-in-one-discount-rules")
-                : __("Save", "all-in-one-discount-rules")
+                ? __("Saving...", "giantwp-discount-rules")
+                : __("Save", "giantwp-discount-rules")
             }}
           </button>
         </div>

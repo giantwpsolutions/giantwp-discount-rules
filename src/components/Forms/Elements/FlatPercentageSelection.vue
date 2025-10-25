@@ -42,17 +42,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-4 max-w-lg">
+  <div class="tw-space-y-4 tw-max-w-lg">
     <!-- Discount Type Selection -->
-    <div class="w-full max-w-md mb-6">
-      <label for="discountType" class="block text-sm font-medium text-gray-900">
+    <div class="tw-w-full tw-max-w-md tw-mb-6">
+      <label
+        for="discountType"
+        class="tw-block tw-text-sm tw-font-medium tw-text-gray-900"
+      >
         {{ __("Discount Type", "giantwp-discount-rules") }}
       </label>
       <select
         v-model="selectedFPDiscountType"
         @change="updateDiscountType"
         id="discountType"
-        class="mt-1.5 h-8 w-full rounded-md border-gray-300 text-gray-700 sm:text-sm">
+        class="tw-mt-1.5 tw-h-8 tw-w-full tw-rounded-md tw-border-gray-300 tw-text-gray-700 tw-sm:text-sm"
+      >
         <option value="fixed">
           {{ __("Fixed", "giantwp-discount-rules") }}
         </option>
@@ -63,38 +67,47 @@ onMounted(() => {
     </div>
 
     <!-- Discount Value & Max Value Fields -->
-    <div class="flex flex-col md:flex-row gap-4 items-start w-full">
+    <!-- CHANGED THIS WRAPPER -->
+    <div
+      class="tw-flex tw-flex-row tw-flex-wrap tw-gap-4 tw-items-start tw-w-full"
+    >
       <!-- Discount Value -->
-      <div class="relative w-full md:flex-1">
+      <div class="tw-relative tw-w-full sm:tw-w-auto tw-flex-1">
         <label
           for="discountValue"
-          class="block text-sm font-medium text-gray-900 my-1">
+          class="tw-block tw-text-sm tw-font-medium tw-text-gray-900 tw-my-1"
+        >
           {{ __("Discount Value", "giantwp-discount-rules") }}
         </label>
-        <div class="flex items-center">
+        <div class="tw-flex tw-items-center">
           <input
             v-model="discountValue"
             @input="updateDiscountValue"
             type="number"
             id="discountValue"
-            :placeholder="__('Enter discount value', 'giantwp-discount-rules')"
-            class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />
+            :placeholder="
+              __('Enter discount value', 'giantwp-discount-rules')
+            "
+            class="tw-w-full tw-h-8 rounded-custom-aio-left tw-border tw-border-gray-300 tw-shadow-sm tw-text-sm tw-pr-4"
+          />
           <span
-            class="ml-0 h-8 px-2 py-2 border rounded-custom-aio-right text-gray-700 bg-gray-100 text-sm"
+            class="tw-ml-0 tw-h-8 tw-px-2 tw-py-2 tw-border rounded-custom-aio-right tw-text-gray-700 tw-bg-gray-100 tw-text-sm"
             v-html="
               selectedFPDiscountType === 'percentage'
                 ? '%'
                 : generalData.currency_symbol || '$'
-            ">
+            "
+          >
           </span>
         </div>
       </div>
 
       <!-- Maximum Value -->
-      <div class="relative w-full md:flex-1">
+      <div class="tw-relative tw-w-full sm:tw-w-auto tw-flex-1">
         <label
           for="maxValue"
-          class="text-sm font-medium text-gray-900 flex items-center gap-2 my-1">
+          class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-2 tw-my-1"
+        >
           {{ __("Maximum Value", "giantwp-discount-rules") }}
           <el-tooltip
             effect="dark"
@@ -105,23 +118,29 @@ onMounted(() => {
               )
             "
             placement="top"
-            popper-class="custom-tooltip">
+            popper-class="custom-tooltip"
+          >
             <QuestionMarkCircleIcon
-              class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+              class="tw-w-4 tw-h-4 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer"
+            />
           </el-tooltip>
         </label>
-        <div class="flex items-center">
+        <div class="tw-flex tw-items-center">
           <input
             v-model="maxValue"
             @input="updateMaxValue"
             type="number"
             id="maxValue"
-            :placeholder="__('Enter maximum value', 'giantwp-discount-rules')"
+            :placeholder="
+              __('Enter maximum value', 'giantwp-discount-rules')
+            "
             :disabled="selectedFPDiscountType === 'fixed'"
-            class="w-full h-8 rounded-custom-aio-left border border-gray-300 shadow-sm text-sm pr-4" />
+            class="tw-w-full tw-h-8 rounded-custom-aio-left tw-border tw-border-gray-300 tw-shadow-sm tw-text-sm tw-pr-4"
+          />
           <span
-            class="ml-0 px-2 py-2 h-8 border rounded-custom-aio-right text-gray-700 bg-gray-100 text-sm"
-            v-html="generalData.currency_symbol || '$'">
+            class="tw-ml-0 tw-px-2 tw-py-2 tw-h-8 tw-border rounded-custom-aio-right tw-text-gray-700 tw-bg-gray-100 tw-text-sm"
+            v-html="generalData.currency_symbol || '$'"
+          >
           </span>
         </div>
       </div>

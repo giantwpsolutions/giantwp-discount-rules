@@ -52,32 +52,32 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <div class="overflow-x-auto">
-    <table class="min-w-full table-auto border-collapse border border-gray-200">
+  <div class="tw-overflow-x-auto">
+    <table class="tw-min-w-full tw-table-auto tw-border-collapse tw-border tw-border-gray-200">
       <thead>
-        <tr class="bg-gray-100 text-left">
-          <th class="px-4 py-2 border-b w-12">
+        <tr class="tw-bg-gray-100 tw-text-left">
+          <th class="tw-px-4 tw-py-2 tw-border-b tw-w-12">
             <input type="checkbox" class="h-5 w-5" />
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Discount Name", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Type", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Start Date", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("End Date", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Usage Limits", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Status", "giantwp-discount-rules") }}
           </th>
-          <th class="px-4 py-2 border-b">
+          <th class="tw-px-4 tw-py-2 tw-border-b">
             {{ __("Actions", "giantwp-discount-rules") }}
           </th>
         </tr>
@@ -85,30 +85,30 @@ const handleCancel = () => {
       <tbody>
         <!-- No Data Row -->
         <tr v-if="discountRules.length === 0">
-          <td colspan="7" class="text-center px-4 py-6 text-gray-500">
+          <td colspan="7" class="tw-text-center tw-px-4 tw-py-6 tw-text-gray-500">
             {{ __("No discount rules created", "giantwp-discount-rules") }}
           </td>
         </tr>
 
         <!-- Discount Rule Rows -->
         <tr v-for="rule in discountRules" :key="rule.id">
-          <td class="px-4 py-2 border-b">
-            <input type="checkbox" class="h-5 w-5" :value="rule.id" />
+          <td class="tw-px-4 tw-py-2 tw-border-b">
+            <input type="checkbox" class="tw-h-5 tw-w-5" :value="rule.id" />
           </td>
-          <td class="px-4 py-2 border-b">{{ rule.couponName }}</td>
-          <td class="px-4 py-2 border-b capitalize">{{ rule.discountType }}</td>
-          <td class="px-4 py-2 border-b">
+          <td class="tw-px-4 tw-py-2 tw-border-b">{{ rule.couponName }}</td>
+          <td class="tw-px-4 tw-py-2 tw-border-b tw-capitalize">{{ rule.discountType }}</td>
+          <td class="tw-px-4 tw-py-2 tw-border-b">
             {{ formatDate(rule.schedule?.startDate) || "--" }}
           </td>
-          <td class="px-4 py-2 border-b">
+          <td class="tw-px-4 tw-py-2 tw-border-b">
             {{ formatDate(rule.schedule?.endDate) || "--" }}
           </td>
 
-          <td class="px-4 py-2 border-b">
+          <td class="tw-px-4 tw-py-2 tw-border-b">
             {{ formatUsage(rule) }}
           </td>
-          <td class="px-4 py-2 border-b">
-            <label class="inline-flex relative items-center cursor-pointer">
+          <td class="tw-px-4 tw-py-2 tw-border-b">
+            <label class="tw-inline-flex tw-relative tw-items-center tw-cursor-pointer">
               <el-switch
                 v-model="rule.status"
                 :active-value="'on'"
@@ -118,7 +118,7 @@ const handleCancel = () => {
                 " />
             </label>
           </td>
-          <td class="px-4 py-2 border-b">
+          <td class="tw-px-4 tw-py-2 tw-border-b">
             <!-- Edit Button -->
             <el-tooltip
               class="box-item"
@@ -127,7 +127,7 @@ const handleCancel = () => {
               placement="top">
               <el-icon
                 @click="onEdit(rule)"
-                class="text-blue-600 hover:text-blue-800 mr-2 hover:cursor-pointer"
+                class="tw-text-blue-600 tw-hover:text-blue-800 tw-mr-2 tw-hover:cursor-pointer"
                 :size="20"
                 ><Edit
               /></el-icon>
@@ -152,7 +152,7 @@ const handleCancel = () => {
                     :content="__('Delete Rule', 'giantwp-discount-rules')"
                     placement="top">
                     <el-icon
-                      class="text-red-600 hover:text-red-800 hover:cursor-pointer"
+                      class="tw-text-red-600 tw-hover:text-red-800 tw-hover:cursor-pointer"
                       :size="20">
                       <Delete />
                     </el-icon>

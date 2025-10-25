@@ -9,7 +9,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="ml-10 flex items-baseline space-x-4">
+  <div class="tw-ml-10 tw-flex tw-items-baseline tw-space-x-4">
     <template v-for="item in navigation" :key="item.name">
       <!-- Use router-link for internal links -->
       <router-link
@@ -17,14 +17,14 @@ const route = useRoute();
         :to="item.href"
         :class="[
           route.path === item.href
-            ? 'bg-gray-900 text-white'
-            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-          'rounded-md px-3 py-2 text-sm font-medium flex items-center',
+            ? 'tw-bg-gray-900 tw-text-white'
+            : 'tw-text-gray-300 tw-hover:bg-gray-700 tw-hover:text-white',
+          'tw-rounded-md tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-flex tw-items-center',
         ]">
         <span>{{ item.name }}</span>
         <span
           v-if="item.isPro"
-          class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+          class="tw-ml-2 tw-bg-red-500 tw-text-white tw-text-xs tw-font-bold tw-px-2 tw-py-0.5 tw-rounded">
           {{ __("Pro", "giantwp-discount-rules") }}
         </span>
       </router-link>
@@ -34,11 +34,11 @@ const route = useRoute();
         :href="item.href"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium flex items-center">
+        class="tw-text-gray-300 tw-hover:bg-gray-700 tw-hover:text-white tw-rounded-md tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-flex tw-items-center">
         <span>{{ item.name }}</span>
         <span
           v-if="item.isPro"
-          class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
+          class="tw-ml-2 tw-bg-red-500 tw-text-white tw-text-xs tw-font-bold tw-px-2 tw-py-0.5 tw-rounded">
           {{ __("Pro", "giantwp-discount-rules") }}
         </span>
       </a>

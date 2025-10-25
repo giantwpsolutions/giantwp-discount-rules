@@ -129,9 +129,9 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4 max-w-full mt-2 mb-6 border-b py-6">
-    <h3 class="text-base text-gray-950">
-      <div class="inline-flex items-center space-x-1">
+  <div class="tw-space-y-4 tw-max-w-full tw-mt-2 tw-mb-6 tw-border-b tw-py-6">
+    <h3 class="tw-text-base tw-text-gray-950">
+      <div class="tw-inline-flex tw-items-center tw-space-x-1">
         <span>{{ __("Select Product", "giantwp-discount-rules") }}</span>
         <el-tooltip
           class="box-item"
@@ -145,14 +145,14 @@ watch(
           placement="top"
           popper-class="custom-tooltip">
           <QuestionMarkCircleIcon
-            class="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+            class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer" />
         </el-tooltip>
       </div>
     </h3>
 
     <!-- Match Condition -->
-    <div class="flex flex-wrap items-center gap-2 mt-6 mb-1">
-      <label class="text-sm font-medium text-gray-900 flex items-center gap-1">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
         {{ __("Rules apply to products if matches", "giantwp-discount-rules") }}
       </label>
       <el-radio-group v-model="getApplies" @change="updateGetApplies">
@@ -169,10 +169,10 @@ watch(
     <div
       v-for="(buyProduct, index) in buyProducts"
       :key="buyProduct.id"
-      class="max-w-full">
+      class="tw-max-w-full">
       <!-- Or/And Label -->
       <div v-if="index > 0" class="mb-2">
-        <span class="text-black italic text-sm">
+        <span class="tw-text-black tw-italic tw-text-sm">
           {{
             getApplies === "any"
               ? __("Or", "giantwp-discount-rules")
@@ -181,14 +181,14 @@ watch(
         </span>
       </div>
 
-      <div class="flex flex-wrap gap-2">
+      <div class="tw-flex tw-flex-wrap tw-gap-2">
         <!-- Field 1: Field -->
-        <div class="w-full sm:w-[25%]">
+        <div class="tw-w-full sm:tw-w-[25%]">
           <el-select
             v-model="buyProduct.field"
             clearable
             @change="updateBuyProducts"
-            class="w-full">
+            class="tw-w-full">
             <el-option
               v-for="item in productOption"
               :key="item.value"
@@ -198,12 +198,12 @@ watch(
         </div>
 
         <!-- Field 2: Operator -->
-        <div class="w-full sm:w-[20%]">
+        <div class="tw-w-full sm:tw-w-[20%]">
           <el-select
             v-if="getProductOperator(buyProduct.field)?.length"
             v-model="buyProduct.operator"
             @change="updateBuyProducts"
-            class="w-full">
+            class="tw-w-full">
             <el-option
               v-for="item in getProductOperator(buyProduct.field)"
               :key="item.value"
@@ -213,7 +213,7 @@ watch(
         </div>
 
         <!-- Field 3: Value -->
-        <div class="w-full sm:w-[35%]">
+        <div class="tw-w-full sm:tw-w-[35%]">
           <el-select-v2
             v-if="ProductIsDropdown(buyProduct.field)"
             v-model="buyProduct.value"
@@ -223,13 +223,13 @@ watch(
             filterable
             multiple
             :loading="isLoadingProducts"
-            class="custom-select-v2 w-full" />
+            class="custom-select-v2 tw-w-full" />
 
           <el-input
             v-else-if="productisPricingField(buyProduct.field)"
             v-model="buyProduct.value"
             @change="updateBuyProducts"
-            class="w-full">
+            class="tw-w-full">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>
@@ -239,17 +239,17 @@ watch(
             v-else-if="productisNumberField(buyProduct.field)"
             v-model="buyProduct.value"
             @change="updateBuyProducts"
-            class="w-full"
+            class="tw-w-full"
             controls-position="right" />
         </div>
 
         <!-- Field 4: Delete Icon -->
-        <div class="w-full sm:w-[10%] flex items-center gap-4">
+        <div class="tw-w-full sm:tw-w-[10%] tw-flex tw-items-center tw-gap-4">
           <el-icon
             @click="removeProduct(buyProduct.id)"
             size="20px"
             color="red"
-            class="cursor-pointer text-red-500">
+            class="tw-cursor-pointer tw-text-red-500">
             <Delete />
           </el-icon>
         </div>
@@ -259,7 +259,7 @@ watch(
     <!-- Add Product -->
     <button
       @click="addProduct"
-      class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      class="tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600">
       {{ __("Assign Bulk Product", "giantwp-discount-rules") }}
     </button>
   </div>
