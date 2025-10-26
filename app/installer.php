@@ -22,6 +22,8 @@ use GiantWP_Discount_Rules\Discount\Manager\Bogo_Free_Item_Handler;
 use GiantWP_Discount_Rules\Discount\Manager\DiscountLabel;
 use GiantWP_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
 use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
+use GiantWP_Discount_Rules\Helper\PromoMessage;
+
 
 /**
  * Plugin Functions Installer Class
@@ -51,8 +53,12 @@ class Installer
         FlatPercentage_Discount::instance();
         FlatPercentageUsage::instance();
         Bogo_Discount::instance();
+        PromoMessage::instance();
+
 
         
+// Make sure the namespace matches where you placed the files.
+
 
     }
 }

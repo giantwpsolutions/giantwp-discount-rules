@@ -4,6 +4,7 @@ import { ref } from "vue";
 export const saveSettingsData = ref({
     discountBasedOn: "regular_price",
     orderPageLabel: true,
+    upsellNotificationWidget: false,
 });
 
 export const isLoadingSettings = ref(false);
@@ -24,6 +25,7 @@ export const loadSettings = async () => {
         saveSettingsData.value = {
             discountBasedOn: response.discountBasedOn || "sale_price",
             orderPageLabel: response.orderPageLabel ?? true,
+            upsellNotificationWidget: response.upsellNotificationWidget ?? false,
         };
     } catch (err) {
         console.error("❌ Failed to load settings:", err);

@@ -145,6 +145,38 @@ const handleSaveSettings = async () => {
           :active-text="__('On', 'giantwp-discount-rules')"
           :inactive-text="__('Off', 'giantwp-discount-rules')" />
       </div>
+          <!-- Upsell Notification Widget -->
+        <div class="tw-w-full tw-max-w-2xl tw-flex tw-items-center tw-mb-6 tw-gap-3">
+        <label
+          class="tw-text-base tw-font-medium tw-text-dark tw-w-32 tw-flex tw-items-center tw-gap-2">
+          {{ __("Upsell Notification", "giantwp-discount-rules") }}
+          <div class="tw-group tw-relative">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="
+                __(
+                  'Show a small notification at the bottom for upsell',
+                  'giantwp-discount-rules'
+                )
+              "
+              placement="top"
+              popper-class="custom-tooltip">
+              <QuestionMarkCircleIcon
+                class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer" />
+            </el-tooltip>
+          </div>
+        </label>
+
+        <el-switch
+          v-model="saveSettingsData.upsellNotificationWidget"
+          inline-prompt
+          :active-text="__('On', 'giantwp-discount-rules')"
+          :inactive-text="__('Off', 'giantwp-discount-rules')" />
+      </div>
+
+
+      
 
       <!-- Save Settings Button -->
       <div class="tw-mt-4">
