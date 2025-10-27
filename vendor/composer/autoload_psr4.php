@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'GiantWP_Discount_Rules\\' => array($baseDir . '/app'),
+    'Appsero\\' => array($vendorDir . '/appsero/client/src'),
 );

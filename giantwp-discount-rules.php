@@ -46,6 +46,8 @@ final class GiantWP_Discount_Rules
         add_filter( 'plugin_action_links_giantwp-discount-rules/giantwp-discount-rules.php', [ $this, 'gwpdr_discount_settings_link' ] );
         $this->declare_hpos_compatibility();
         $this->define_constants();
+        $this->declare_hpos_block_compatibility();
+
     }
 
     /**
@@ -167,6 +169,24 @@ final class GiantWP_Discount_Rules
                 );
             }
         } );
+    }
+
+
+    /**
+     * Declare HPOS Block compatibility for WooCommerce.
+     *
+     * @return void
+     */
+    public function declare_hpos_block_compatibility() {
+        add_action( 'before_woocommerce_init', function() {
+            if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+                \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+                    'cart_checkout_blocks',
+                    __FILE__,
+                    true
+                );
+            }
+        });
     }
 
 }

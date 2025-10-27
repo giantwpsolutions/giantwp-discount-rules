@@ -54,6 +54,7 @@ class Installer
         FlatPercentageUsage::instance();
         Bogo_Discount::instance();
         PromoMessage::instance();
+        appsero_init_tracker_giantwp_discount_rules();
 
 
         

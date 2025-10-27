@@ -33,6 +33,10 @@ class PromoMessage {
             15,
             2 // <-- we need cart item + cart item key
         );
+
+        add_filter( 'admin_footer_text', [$this, 'gwpdr_admin_footer_text' ] );
+
+
     }
 
     /**
@@ -163,4 +167,18 @@ class PromoMessage {
         echo wp_kses_post( $message );
         echo '</div>';
     }
+
+
+   public function gwpdr_admin_footer_text( $text ) {
+    $screen = get_current_screen();
+
+    // Only show on your plugin admin pages
+    if ( strpos( $screen->id, 'giantwp-discount-rules' ) === false ) {
+        return $text; // keep default footer elsewhere
+    }
+
+    return sprintf(
+        '<i>If you like the plugin please rate us <span style="color:#1A7EFB;">★★★★★</span> on <a href="https://wordpress.org/support/plugin/giantwp-discount-rules/reviews/?filter=5" target="_blank" style="text-decoration:none;color:#2271b1;">WordPress.org</a> to help us spread the word ♥ from the Giant WP Solutions team.</i>'
+    );
+}
 }

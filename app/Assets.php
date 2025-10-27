@@ -75,7 +75,9 @@ class Assets {
                 'restUrl'   => esc_url_raw( rest_url( trailingslashit('gwpdr-discountrules/v2') ) ),
                 'nonce'     => wp_create_nonce( 'wp_rest' ),
                 'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
+                'docsUrl'    => esc_url( 'https://www.docs.giantwpsolutions.com/' ),
                 'proActive' => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
+                'primekit_search_url' => esc_url(admin_url( 'plugin-install.php?s=PrimeKit%20Addons&tab=search&type=term' )),
             ]
         );
     }

@@ -25,6 +25,13 @@ const navigation = [
     isPro: true,
     isExternal: true,
   },
+
+    {
+    name: __("Documentation", "giantwp-discount-rules"),
+    href: pluginData.docsUrl,
+    current: false,
+    isExternal: true,
+  },
 ];
 
 // Dynamically set the path to the logo
@@ -38,14 +45,14 @@ const logoUrl = `${pluginData.pluginUrl}assets/images/giantwp_discount_rules.png
         <!-- Logo & Desktop Navigation -->
         <div class="tw-flex tw-items-center">
           <img :src="logoUrl" alt="Logo" class="tw-h-10 tw-w-auto tw-mr-4 tw-pl-10" />
-          <!-- ✅ FIXED: corrected breakpoint prefix -->
+          <!-- FIXED: corrected breakpoint prefix -->
           <div class="tw-hidden md:tw-block">
             <Navigation :navigation="navigation" />
           </div>
         </div>
 
         <!-- Mobile Menu Button -->
-        <!-- ✅ FIXED: corrected breakpoint prefix -->
+        <!--  FIXED: corrected breakpoint prefix -->
         <div class="tw--mr-2 tw-flex md:tw-hidden">
           <DisclosureButton
             class="tw-relative tw-inline-flex tw-items-center tw-justify-center tw-rounded-md tw-bg-gray-800 tw-p-2 tw-text-gray-400 tw-hover:tw-bg-gray-700 tw-hover:tw-text-white tw-focus:tw-outline-none tw-focus:tw-ring-2 tw-focus:tw-ring-white tw-focus:tw-ring-offset-2 tw-focus:tw-ring-offset-gray-800">

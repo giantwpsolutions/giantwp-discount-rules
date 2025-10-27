@@ -15,12 +15,20 @@ class ComposerStaticInit59058e8f9c97e12f7316df60fd37ba3a
         array (
             'GiantWP_Discount_Rules\\' => 23,
         ),
+        'A' => 
+        array (
+            'Appsero\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'GiantWP_Discount_Rules\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+        ),
+        'Appsero\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/appsero/client/src',
         ),
     );
 
