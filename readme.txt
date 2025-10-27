@@ -159,6 +159,17 @@ Yes. After installing the plugin, simply create a new rule and set a percentage 
 = If I have multiple rules for the same product, which one will apply? =
 When multiple rules match the same product, the rule with the higher priority will be applied.
 
+== Screenshots ==
+
+1. Discount Dashboard
+2. Plugin Settings Page
+3. Discount Rules Creating Popup
+4. Flat/Percentage Discount Setup and Conditions Building
+5. Discount Upsell Text at Single Product Page with Product link
+6. Buy On Get One Free on Cart page
+7. Shipping Discount for cart total based
+8. Buy X Get Y free at cart page
+
 
  ==  Changelog == 
 
