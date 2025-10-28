@@ -1,11 +1,11 @@
-=== WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP === 
+=== GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce === 
 Contributors: giantwpsolutions, developerhabib
 Donate link: https://giantwpsolutions.com/
 Tags: woocommerce, discount rules, dynamic pricing, bogo, bulk discount, coupon, category discount, cart discounts, shipping discount, advanced coupons
 Requires at least: 4.6.1
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ WooCommerce discount plugin for dynamic pricing, BOGO offers, smart coupons, cat
 
 == Description ==
 
-[WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP](https://www.giantwpsolutions.com/#giantwp_pricing) **is a world-class, user-friendly dynamic pricing and discount plugin that helps you create almost any kind of discount that exists in the world, such as bulk discounts, quantity discounts, dynamic pricing, complex condition-based discounts, tiered discounts, and what’s not?**
+[GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce](https://www.giantwpsolutions.com/#giantwp_pricing) **is a world-class, user-friendly dynamic pricing and discount plugin that helps you create almost any kind of discount that exists in the world, such as bulk discounts, quantity discounts, dynamic pricing, complex condition-based discounts, tiered discounts, and what’s not?**
 
 This plugin has a modern minimal UI, no loading, and offers tons of types of discounts to the store owner to boost their store.
 
@@ -173,7 +173,7 @@ When multiple rules match the same product, the rule with the higher priority wi
 
  ==  Changelog == 
 
-=1.2.0 - October 2025= 
+=1.2.0 - October  27 2025= 
 * Feature included - Upsell Notification 
 * UI Updated
 * compatibility improvements
@@ -212,16 +212,18 @@ When multiple rules match the same product, the rule with the higher priority wi
 = 1.0 =
 First stable release of GiantWP Discount Rules.
 
-
+== Development ==
+Full unminified source code and build instructions are available publicly:
+[View Source on GitHub](https://github.com/giantwpsolutions/giantwp-discount-rules)
 
 
 == Credits ==
 
-Created by [Giant WP Solutions](https://giantwpsolutions.com/)
+Created and maintained by [Giant WP Solutions](https://giantwpsolutions.com/)
 
 
 ## Privacy Policy
-WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP uses [Appsero](https://appsero.com) SDK to collect some telemetry data upon user's confirmation. This helps us to troubleshoot problems faster & make product improvements.
+GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce  uses [Appsero](https://appsero.com) SDK to collect some telemetry data upon user's confirmation. This helps us to troubleshoot problems faster & make product improvements.
 
 Appsero SDK **does not gather any data by default.** The SDK only starts gathering basic telemetry data **when a user allows it via the admin notice**. We collect the data to ensure a great user experience for all our users.
 

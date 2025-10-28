@@ -1,20 +1,23 @@
 <?php
 /**
-* Plugin Name: GiantWP Discount Rules
-* Plugin URI: https://www.giantwpsolutions.com/#giantwp_pricing
-* Description: GiantWP Discount Rules is a powerful one-stop discount solution for WooCommerce. With this plugin, you can create any kind of discount rules.
-* Version: 1.2.0
-* Author: Giant WP Solutions
-* Author URI: https://giantwpsolutions.com
-* License: GPLv2 or later
-* Text Domain: giantwp-discount-rules
-* WC requires at least: 3.0
-* WC tested up to: 10.2
-* Requires PHP: 7.4
-* WooCommerce HPOS support: yes
-* Domain Path: /languages
-*@package GiantWP Discount Rules
-*/
+ * Plugin Name: GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce
+ * Plugin URI: https://giantwpsolutions.com/plugins/giantwp-discount-rules
+ * Description: Create dynamic discounts, bulk pricing, and BOGO offers for WooCommerce with an easy rule builder. A powerful one-stop discount solution by GiantWP.
+ * Version: 1.2.3
+ * Author: Giant WP Solutions
+ * Author URI: https://giantwpsolutions.com
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: giantwp-discount-rules
+ * Domain Path: /languages
+ * Requires at least: 6.2
+ * Tested up to: 6.8
+ * Requires PHP: 7.4
+ * WC requires at least: 3.0
+ * WC tested up to: 10.2
+ * WooCommerce HPOS support: yes
+ * @package GiantWP_Discount_Rules
+ */
 
 
 if (! defined('ABSPATH')) {
