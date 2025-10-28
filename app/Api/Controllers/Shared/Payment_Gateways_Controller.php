@@ -70,9 +70,9 @@ class Payment_Gateways_Controller extends WP_REST_Controller {
         $payment_gateways = WC()->payment_gateways->payment_gateways();
 
         if ( empty( $payment_gateways ) ) {
-            return [
-                'message' => 'No payment gateways available.',
-            ];
+          return [
+         'message' => __( 'No payment gateways available.', 'giantwp-discount-rules' ),
+        ];
         }
 
         $data = [];

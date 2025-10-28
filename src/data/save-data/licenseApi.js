@@ -12,10 +12,10 @@ export const fetchLicenseStatus = async () => {
     isLoadingLicense.value = true;
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}license/status`,
+            path: `${gwpdrPluginData.restUrl}license/status`,
             method: "GET",
             headers: {
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
             },
         });
 
@@ -33,11 +33,11 @@ export const fetchLicenseStatus = async () => {
 export const activateLicense = async (key) => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}license/activate`,
+            path: `${gwpdrPluginData.restUrl}license/activate`,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
             },
             data: {
                 license_key: key,
@@ -58,10 +58,10 @@ export const activateLicense = async (key) => {
 export const deactivateLicense = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}license/deactivate`,
+            path: `${gwpdrPluginData.restUrl}license/deactivate`,
             method: "POST",
             headers: {
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
             },
         });
 

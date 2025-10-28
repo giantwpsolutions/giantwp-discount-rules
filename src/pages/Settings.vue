@@ -24,7 +24,7 @@ const { __ } = wp.i18n;
 const isProActive = ref(false);
 
 onMounted(() => {
-  isProActive.value = !!pluginData?.proActive;
+  isProActive.value = !!gwpdrPluginData?.proActive;
 
   if (isProActive.value) {
     fetchLicenseStatus();
@@ -49,9 +49,9 @@ const handleSaveSettings = async () => {
   }
 };
 
-const primeKitUrl = `${pluginData.pluginUrl}assets/images/primekit.png`;
-const quickCartLogo = `${pluginData.pluginUrl}assets/images/quickcartshopping.png`;
-const primeKitSearch = pluginData.primekit_search_url
+const primeKitUrl = `${gwpdrPluginData.pluginUrl}assets/images/primekit.png`;
+const quickCartLogo = `${gwpdrPluginData.pluginUrl}assets/images/quickcartshopping.png`;
+const primeKitSearch = gwpdrPluginData.primekit_search_url
 </script>
 <template>
   <!-- Outer wrapper: adds spacing and light background -->

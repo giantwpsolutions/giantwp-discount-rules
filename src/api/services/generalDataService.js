@@ -4,7 +4,7 @@ import apiFetch from "@wordpress/api-fetch";
 export const fetchGeneralData = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}general`,
+            path: `${gwpdrPluginData.restUrl}general`,
             method: "GET",
         });
         return response; // Return the general data (currency code, symbol, etc.)

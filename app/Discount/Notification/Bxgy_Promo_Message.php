@@ -16,7 +16,7 @@ use GiantWP_Discount_Rules\Traits\SingletonTrait;
 use GiantWP_Discount_Rules\Discount\Manager\Discount_Helper;
 use GiantWP_Discount_Rules\Discount\Condition\Conditions;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 class Bxgy_Promo_Message {
     use SingletonTrait;
@@ -30,14 +30,14 @@ class Bxgy_Promo_Message {
     public function get_offer_for_product_page( $product_id ) {
         $product_id = intval( $product_id );
         if ( ! $product_id ) {
-            return [ 'active' => false ];
+            return array( 'active' => false );
         }
 
         $cart  = function_exists( 'WC' ) ? WC()->cart : null;
         $rules = $this->get_bxgy_rules();
 
         if ( empty( $rules ) ) {
-            return [ 'active' => false ];
+            return array( 'active' => false );
         }
 
         foreach ( $rules as $rule ) {
@@ -51,22 +51,26 @@ class Bxgy_Promo_Message {
 
             $msg = $this->build_bxgy_message_line( $rule );
             if ( $msg ) {
-                return [
+                return array(
                     'active'        => true,
                     'message_offer' => $msg,
-                ];
+                );
             }
         }
 
-        return [ 'active' => false ];
+        return array( 'active' => false );
     }
 
     /**
      * Check if BXGY rule is valid for display.
+     *
+     * @param array     $rule Discount rule data.
+     * @param \WC_Cart  $cart Cart object or null.
+     * @return bool
      */
     private function is_rule_valid( $rule, $cart ) {
         $type = strtolower( $rule['discountType'] ?? '' );
-        if ( ! in_array( $type, [ 'buy x get y', 'buy_x_get_y', 'bxgy' ], true ) ) {
+        if ( ! in_array( $type, array( 'buy x get y', 'buy_x_get_y', 'bxgy' ), true ) ) {
             return false;
         }
 
@@ -82,11 +86,14 @@ class Bxgy_Promo_Message {
             return false;
         }
 
-        if ( ! empty( $rule['enableConditions'] ) && ! Conditions::check_all(
-            $cart,
-            $rule['conditions'] ?? [],
-            $rule['conditionsApplies'] ?? 'all'
-        ) ) {
+        if (
+            ! empty( $rule['enableConditions'] )
+            && ! Conditions::check_all(
+                $cart,
+                $rule['conditions'] ?? array(),
+                $rule['conditionsApplies'] ?? 'all'
+            )
+        ) {
             return false;
         }
 
@@ -95,6 +102,10 @@ class Bxgy_Promo_Message {
 
     /**
      * Determine if the rule targets this product as a BUY product.
+     *
+     * @param array $rule        Discount rule data.
+     * @param int   $product_id  Product ID being viewed.
+     * @return bool
      */
     private function rule_targets_buy_product( $rule, $product_id ) {
         if ( empty( $rule['buyProduct'] ) ) {
@@ -104,11 +115,11 @@ class Bxgy_Promo_Message {
         foreach ( $rule['buyProduct'] as $cond ) {
             $field    = strtolower( $cond['field'] ?? '' );
             $operator = strtolower( $cond['operator'] ?? '' );
-            $values   = array_map( 'intval', (array) ( $cond['value'] ?? [] ) );
+            $values   = array_map( 'intval', (array) ( $cond['value'] ?? array() ) );
 
             if (
-                in_array( $field, [ 'product', 'product_id' ], true ) &&
-                in_array( $operator, [ 'in', 'in_list' ], true ) &&
+                in_array( $field, array( 'product', 'product_id' ), true ) &&
+                in_array( $operator, array( 'in', 'in_list' ), true ) &&
                 in_array( $product_id, $values, true )
             ) {
                 return true;
@@ -120,14 +131,24 @@ class Bxgy_Promo_Message {
 
     /**
      * Build the readable message line for PDP display.
+     *
+     * Returns something like:
+     * - "🎉 Buy 2 and get 1 <a>Product B</a> FREE!"
+     * - "🎉 Buy 2 and get 1 <a>Product B</a> with 20% off ✨"
+     *
+     * @param array $rule Discount rule data.
+     * @return string
      */
     private function build_bxgy_message_line( $rule ) {
-        $buy_block = $rule['buyProduct'][0] ?? [];
-        $get_block = $rule['getProduct'][0] ?? [];
+
+        // We assume each rule has arrays `buyProduct` and `getProduct`,
+        // and each of those entries may carry quantities like buyProductCount / getProductCount.
+        $buy_block = $rule['buyProduct'][0] ?? array();
+        $get_block = $rule['getProduct'][0] ?? array();
 
         $x_qty = max( 1, intval( $buy_block['buyProductCount'] ?? 1 ) );
         $y_qty = max( 1, intval( $get_block['getProductCount'] ?? 1 ) );
-        $y_ids = array_map( 'intval', (array) ( $get_block['value'] ?? [] ) );
+        $y_ids = array_map( 'intval', (array) ( $get_block['value'] ?? array() ) );
 
         if ( empty( $y_ids ) ) {
             return '';
@@ -144,44 +165,80 @@ class Bxgy_Promo_Message {
             esc_html( $y_product->get_name() )
         );
 
-        $mode       = $rule['freeOrDiscount'] ?? 'free_product';
-        $disc_type  = $rule['discountTypeBxgy'] ?? 'percentage';
+        $mode       = $rule['freeOrDiscount'] ?? 'free_product'; // 'free_product' or 'discount_product'
+        $disc_type  = $rule['discountTypeBxgy'] ?? 'percentage'; // 'percentage' or 'fixed'
         $disc_value = floatval( $rule['discountValue'] ?? 0 );
 
-        if ( $mode === 'free_product' ) {
+        /**
+         * Build the reward phrase (right side of "and get ...").
+         *
+         * Examples of $reward_phrase:
+         * - "1 Product B FREE!"
+         * - "1 Product B with 20% off ✨"
+         * - "1 Product B with ৳150.00 off 💸"
+         */
+        if ( 'free_product' === $mode ) {
+
+            /* translators: 1: number of free items (Y quantity), 2: linked product title HTML. */
+            $reward_text = __( '%1$d %2$s FREE!', 'giantwp-discount-rules' );
+
             $reward_phrase = sprintf(
-                __( '%1$d %2$s FREE!', 'giantwp-discount-rules' ),
+                $reward_text,
                 $y_qty,
                 $y_anchor
             );
-        } elseif ( $disc_type === 'percentage' ) {
+
+        } elseif ( 'percentage' === $disc_type ) {
+
+            /* translators: 1: number of discounted items (Y quantity), 2: linked product title HTML, 3: discount percentage (for example "20%"). */
+            $reward_text = __( '%1$d %2$s with %3$s off ✨', 'giantwp-discount-rules' );
+
             $reward_phrase = sprintf(
-                __( '%1$d %2$s with %3$s off ✨', 'giantwp-discount-rules' ),
+                $reward_text,
                 $y_qty,
                 $y_anchor,
                 sprintf( '%s%%', $disc_value )
             );
+
         } else {
+
+            /* translators: 1: number of discounted items (Y quantity), 2: linked product title HTML, 3: discount amount formatted as price. */
+            $reward_text = __( '%1$d %2$s with %3$s off 💸', 'giantwp-discount-rules' );
+
             $reward_phrase = sprintf(
-                __( '%1$d %2$s with %3$s off 💸', 'giantwp-discount-rules' ),
+                $reward_text,
                 $y_qty,
                 $y_anchor,
                 wc_price( $disc_value )
             );
         }
 
-        return sprintf(
-            __( '🎉 Buy %1$d and get %2$s', 'giantwp-discount-rules' ),
+        /**
+         * Now build the full sentence prefix:
+         * "🎉 Buy X and get {reward_phrase}"
+         *
+         * Example:
+         * - "🎉 Buy 2 and get 1 Product B FREE!"
+         */
+        /* translators: 1: required buy quantity (X), 2: reward phrase built from the rule (already safe HTML). */
+        $wrapper_text = __( '🎉 Buy %1$d and get %2$s', 'giantwp-discount-rules' );
+
+        $final_line = sprintf(
+            $wrapper_text,
             $x_qty,
             $reward_phrase
         );
+
+        return $final_line;
     }
 
     /**
      * Retrieve BXGY rules from the database.
+     *
+     * @return array
      */
     private function get_bxgy_rules() {
-        $rules = maybe_unserialize( get_option( 'giantwp_bxgy_discount', [] ) );
-        return is_array( $rules ) ? $rules : [];
+        $rules = maybe_unserialize( get_option( 'giantwp_bxgy_discount', array() ) );
+        return is_array( $rules ) ? $rules : array();
     }
 }

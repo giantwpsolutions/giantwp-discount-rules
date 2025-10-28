@@ -4,7 +4,7 @@ import apiFetch from "@wordpress/api-fetch";
 export const fetchCountriesAndStates = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}shipping-zones`,
+            path: `${gwpdrPluginData.restUrl}shipping-zones`,
             method: "GET",
         });
 

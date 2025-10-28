@@ -3,7 +3,7 @@ import { apiFetch } from '@wordpress/api-fetch';
 const apiClient = {
     get: (path, options = {}) => {
         return apiFetch({
-            path: `${pluginData.restUrl}${path}`,
+            path: `${gwpdrPluginData.restUrl}${path}`,
             method: 'GET',
             ...options,
         });
@@ -11,7 +11,7 @@ const apiClient = {
 
     post: (path, data = {}, options = {}) => {
         return apiFetch({
-            path: `${pluginData.restUrl}${path}`,
+            path: `${gwpdrPluginData.restUrl}${path}`,
             method: 'POST',
             data,
             ...options,
@@ -20,7 +20,7 @@ const apiClient = {
 
     put: (path, data = {}, options = {}) => {
         return apiFetch({
-            path: `${pluginData.restUrl}${path}`,
+            path: `${gwpdrPluginData.restUrl}${path}`,
             method: 'PUT',
             data,
             ...options,
@@ -29,7 +29,7 @@ const apiClient = {
 
     delete: (path, options = {}) => {
         return apiFetch({
-            path: `${pluginData.restUrl}${path}`,
+            path: `${gwpdrPluginData.restUrl}${path}`,
             method: 'DELETE',
             ...options,
         });

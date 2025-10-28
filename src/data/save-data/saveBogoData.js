@@ -8,10 +8,10 @@ export const saveBogoData = {
         try {
             // Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-bogo-discount`,
+                path: `${gwpdrPluginData.restUrl}get-bogo-discount`,
                 method: "GET",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
             });
 
@@ -80,10 +80,10 @@ export const saveBogoData = {
 
             // ✅ Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-bogo-discount`,
+                path: `${gwpdrPluginData.restUrl}save-bogo-discount`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
                 data: newDiscount,   // ✅ Send only the new discount entry
             });
@@ -108,10 +108,10 @@ export const saveBogoData = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-bogo-discount/${id}`,
+                path: `${gwpdrPluginData.restUrl}update-bogo-discount/${id}`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -137,10 +137,10 @@ export const saveBogoData = {
     //         console.log(`📡 Sending API Request to update discount: ${id}`, updatedFields);
 
     //         const response = await apiFetch({
-    //             path: `${pluginData.restUrl}update-bogo-discount/${id}`,
+    //             path: `${gwpdrPluginData.restUrl}update-bogo-discount/${id}`,
     //             method: "POST",
     //             headers: {
-    //                 "X-WP-Nonce": pluginData.nonce,
+    //                 "X-WP-Nonce": gwpdrPluginData.nonce,
     //                 "Content-Type": "application/json",
     //             },
     //             body: JSON.stringify(updatedFields),
@@ -161,9 +161,9 @@ export const saveBogoData = {
 
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-bogo-discount/${id}`,
+            path: `${gwpdrPluginData.restUrl}delete-bogo-discount/${id}`,
             method: "DELETE",
-            headers: { "X-WP-Nonce": pluginData.nonce },
+            headers: { "X-WP-Nonce": gwpdrPluginData.nonce },
         });
     }
 

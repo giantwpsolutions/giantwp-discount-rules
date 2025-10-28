@@ -39,7 +39,7 @@ class CouponDisplay {
         $meta_query = $query->get( 'meta_query' ) ?: [];
 
         $meta_query[] = [
-            'key'     => 'db_is_hidden_coupon',
+            'key'     => 'gwpdr_is_hidden_coupon',
             'compare' => 'NOT EXISTS',
         ];
 

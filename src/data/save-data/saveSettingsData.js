@@ -15,10 +15,10 @@ export const loadSettings = async () => {
     isLoadingSettings.value = true;
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}settings`,
+            path: `${gwpdrPluginData.restUrl}settings`,
             method: "GET",
             headers: {
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
             },
         });
 
@@ -39,10 +39,10 @@ export const loadSettings = async () => {
 export const saveSettings = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}settings`,
+            path: `${gwpdrPluginData.restUrl}settings`,
             method: "POST",
             headers: {
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(saveSettingsData.value),

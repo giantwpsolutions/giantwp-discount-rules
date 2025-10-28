@@ -8,10 +8,10 @@ export const fetchAllDiscountRules = async () => {
         // console.log("📡 Fetching fresh discount rules...");
 
         const response = await apiFetch({
-            path: `${pluginData.restUrl}get-all-discounts`,  // ✅ Ensure API is correct
+            path: `${gwpdrPluginData.restUrl}get-all-discounts`,  // ✅ Ensure API is correct
             method: "GET",
             headers: {
-                "X-WP-Nonce": pluginData.nonce,
+                "X-WP-Nonce": gwpdrPluginData.nonce,
             },
         });
 

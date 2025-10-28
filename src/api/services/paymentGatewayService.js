@@ -5,7 +5,7 @@ import apiFetch from "@wordpress/api-fetch";
 export const fetchPaymentGateways = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}payment-gateways`,
+            path: `${gwpdrPluginData.restUrl}payment-gateways`,
             method: "GET",
         });
         return response;

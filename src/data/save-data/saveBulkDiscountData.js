@@ -8,10 +8,10 @@ export const saveBulkDiscountData = {
         try {
             // Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-bulk-discount`,
+                path: `${gwpdrPluginData.restUrl}get-bulk-discount`,
                 method: "GET",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
             });
 
@@ -88,10 +88,10 @@ export const saveBulkDiscountData = {
 
             // ✅ Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-bulk-discount`,
+                path: `${gwpdrPluginData.restUrl}save-bulk-discount`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
                 data: newDiscount,   // ✅ Send only the new discount entry
             });
@@ -116,10 +116,10 @@ export const saveBulkDiscountData = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-bulk-discount/${id}`,
+                path: `${gwpdrPluginData.restUrl}update-bulk-discount/${id}`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -143,9 +143,9 @@ export const saveBulkDiscountData = {
 
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-bulk-discount/${id}`,
+            path: `${gwpdrPluginData.restUrl}delete-bulk-discount/${id}`,
             method: "DELETE",
-            headers: { "X-WP-Nonce": pluginData.nonce },
+            headers: { "X-WP-Nonce": gwpdrPluginData.nonce },
         });
     }
 

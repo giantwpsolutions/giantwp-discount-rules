@@ -20,7 +20,7 @@ const navigation = [
   },
   {
     name: __("Upgrade", "giantwp-discount-rules"),
-    href: pluginData.proUrl,
+    href: gwpdrPluginData.proUrl,
     current: false,
     isPro: true,
     isExternal: true,
@@ -28,14 +28,14 @@ const navigation = [
 
     {
     name: __("Documentation", "giantwp-discount-rules"),
-    href: pluginData.docsUrl,
+    href: gwpdrPluginData.docsUrl,
     current: false,
     isExternal: true,
   },
 ];
 
 // Dynamically set the path to the logo
-const logoUrl = `${pluginData.pluginUrl}assets/images/giantwp_discount_rules.png`;
+const logoUrl = `${gwpdrPluginData.pluginUrl}assets/images/giantwp_discount_rules.png`;
 </script>
 
 <template>

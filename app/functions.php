@@ -141,15 +141,15 @@ function gwpdr_WoocommerceMissingAlert()
  *
  * @return void
  */
-function appsero_init_tracker_giantwp_discount_rules() {
+function gwpdr_appsero_init_tracker() {
 
+    $client = new Appsero\Client(
+        'bebad348-5e49-4169-971a-06b0825da653',
+        'WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP',
+        __FILE__
+    );
 
-
-    $client = new Appsero\Client( 'bebad348-5e49-4169-971a-06b0825da653', 'WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP', __FILE__ );
-
-    // Active insights
     $client->insights()->init();
-
 }
 
 

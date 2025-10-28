@@ -178,7 +178,7 @@ class PromoMessage {
     }
 
     return sprintf(
-        '<i>If you like the plugin please rate us <span style="color:#1A7EFB;">★★★★★</span> on <a href="https://wordpress.org/support/plugin/giantwp-discount-rules/reviews/?filter=5" target="_blank" style="text-decoration:none;color:#2271b1;">WordPress.org</a> to help us spread the word ♥ from the Giant WP Solutions team.</i>'
+        '<i>If you like the plugin please rate us <span style="color:#1A7EFB;">★★★★★</span> on <a href="https://wordpress.org/support/plugin/giantwp-discount-rules/reviews/" target="_blank" style="text-decoration:none;color:#2271b1;">WordPress.org</a> to help us spread the word ♥ from the Giant WP Solutions team.</i>'
     );
 }
 }

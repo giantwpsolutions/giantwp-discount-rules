@@ -1,15 +1,15 @@
 === GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce === 
 Contributors: giantwpsolutions, developerhabib
 Donate link: https://giantwpsolutions.com/
-Tags: woocommerce, discount rules, dynamic pricing, bogo, bulk discount, coupon, category discount, cart discounts, shipping discount, advanced coupons
-Requires at least: 4.6.1
+Tags: woocommerce discount rules, dynamic pricing, bogo, bulk discount,  category discount,
+Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.6
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 
-WooCommerce discount plugin for dynamic pricing, BOGO offers, smart coupons, category, quantity, bulk, and storewide discounts — any complex rule made easy.
+WooCommerce discount plugin for dynamic pricing, BOGO offers, category, quantity, bulk, and storewide discounts — complex rule made easy.
 
 == Description ==
 
@@ -126,11 +126,14 @@ This plugin has a modern minimal UI, no loading, and offers tons of types of dis
 
 == Screenshots ==
 
-1. Beautiful Vue.js-based rule builder
-2. Flat/Percentage discount rule creation
-3. Advanced condition builder (product, cart, user, etc.)
-4. BOGO and bulk rule management (Pro)
-5. Schedule and usage limit controls
+1. Discount Dashboard
+2. Plugin Settings Page
+3. Discount Rules Creating Popup
+4. Flat/Percentage Discount Setup and Conditions Building
+5. Discount Upsell Text at Single Product Page with Product link
+6. Buy On Get One Free on Cart page
+7. Shipping Discount for cart total based
+8. Buy X Get Y free at cart page
 
 == Frequently Asked Questions ==
 
@@ -159,19 +162,22 @@ Yes. After installing the plugin, simply create a new rule and set a percentage 
 = If I have multiple rules for the same product, which one will apply? =
 When multiple rules match the same product, the rule with the higher priority will be applied.
 
-== Screenshots ==
 
-1. Discount Dashboard
-2. Plugin Settings Page
-3. Discount Rules Creating Popup
-4. Flat/Percentage Discount Setup and Conditions Building
-5. Discount Upsell Text at Single Product Page with Product link
-6. Buy On Get One Free on Cart page
-7. Shipping Discount for cart total based
-8. Buy X Get Y free at cart page
 
 
  ==  Changelog == 
+
+ = 1.2.6 - October  28 2025 = 
+* Added: Full translation (.pot) generation for PHP and Vue.js.
+* Fixed: Missing translators comments to comply with WP standards.
+
+= 1.2.3 - October  28 2025 = 
+* Naming Change
+
+= 1.2.0 - October  27 2025 = 
+* Feature included - Upsell Notification 
+* UI Updated
+* compatibility improvements
 
 =1.2.0 - October  27 2025= 
 * Feature included - Upsell Notification 

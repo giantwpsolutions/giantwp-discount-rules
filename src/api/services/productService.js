@@ -5,7 +5,7 @@ export const fetchProducts = async () => {
     try {
         // Use `apiFetch` for WordPress API requests
         const response = await apiFetch({
-            path: `${pluginData.restUrl}products`,
+            path: `${gwpdrPluginData.restUrl}products`,
             method: "GET",
         });
 

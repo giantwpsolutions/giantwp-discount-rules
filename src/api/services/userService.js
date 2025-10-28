@@ -6,7 +6,7 @@ export const fetchUsers = async (roles = []) => {
         // Construct the query parameters for roles
         const queryParams = roles.length > 0 ? `?roles=${roles.join(",")}` : "";
         const response = await apiFetch({
-            path: `${pluginData.restUrl}users${queryParams}`,
+            path: `${gwpdrPluginData.restUrl}users${queryParams}`,
             method: "GET",
         });
 
@@ -22,7 +22,7 @@ export const fetchUsers = async (roles = []) => {
 export const fetchRoles = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}roles`,
+            path: `${gwpdrPluginData.restUrl}roles`,
             method: "GET",
         });
 

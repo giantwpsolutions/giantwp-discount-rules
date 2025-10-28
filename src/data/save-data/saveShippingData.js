@@ -10,10 +10,10 @@ export const saveShippingData = {
         try {
             // Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-shipping-discount`,
+                path: `${gwpdrPluginData.restUrl}get-shipping-discount`,
                 method: "GET",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
             });
 
@@ -65,10 +65,10 @@ export const saveShippingData = {
 
             //Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-shipping-discount`,
+                path: `${gwpdrPluginData.restUrl}save-shipping-discount`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
                 data: newDiscount,   //Send only the new discount entry
             });
@@ -94,10 +94,10 @@ export const saveShippingData = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-shipping-discount/${id}`,
+                path: `${gwpdrPluginData.restUrl}update-shipping-discount/${id}`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -120,9 +120,9 @@ export const saveShippingData = {
 
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-shipping-discount/${id}`,
+            path: `${gwpdrPluginData.restUrl}delete-shipping-discount/${id}`,
             method: "DELETE",
-            headers: { "X-WP-Nonce": pluginData.nonce },
+            headers: { "X-WP-Nonce": gwpdrPluginData.nonce },
         });
     }
 

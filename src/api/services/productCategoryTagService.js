@@ -4,7 +4,7 @@ import apiFetch from "@wordpress/api-fetch";
 export const fetchProductCategories = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}categories`,
+            path: `${gwpdrPluginData.restUrl}categories`,
             method: "GET",
         });
         return response; // Return raw categories data
@@ -18,7 +18,7 @@ export const fetchProductCategories = async () => {
 export const fetchProductTags = async () => {
     try {
         const response = await apiFetch({
-            path: `${pluginData.restUrl}tags`,
+            path: `${gwpdrPluginData.restUrl}tags`,
             method: "GET",
         });
         return response; // Return raw tags data

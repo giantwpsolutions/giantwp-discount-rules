@@ -82,25 +82,25 @@ class Bogo_Progress_Status {
             return false;
         }
 
-        if ( ($rule['status'] ?? '') !== 'on' ) {
+        if ( ( $rule['status'] ?? '' ) !== 'on' ) {
             return false;
         }
 
-        // Schedule: only enforced if enabled
+        // Schedule: only enforced if enabled.
         if ( ! empty( $rule['schedule']['enableSchedule'] ) ) {
             if ( ! Discount_Helper::is_schedule_active( $rule ) ) {
                 return false;
             }
         }
 
-        // Usage limit: only enforced if enabled
+        // Usage limit: only enforced if enabled.
         if ( ! empty( $rule['usageLimits']['enableUsage'] ) ) {
             if ( ! Discount_Helper::check_usage_limit( $rule ) ) {
                 return false;
             }
         }
 
-        // Conditions: only enforced if enabled
+        // Conditions: only enforced if enabled.
         if ( ! empty( $rule['enableConditions'] ) ) {
             $conditions_pass = Conditions::check_all(
                 $cart,
@@ -252,16 +252,22 @@ class Bogo_Progress_Status {
         $disc_value  = $rule['discountValue'] ?? 0;
 
         if ( $mode === 'freeproduct' ) {
+            /* translators: 1: number of items to buy, 2: number of items customer gets for free. */
+            $text = __( '🎉 Buy %1$d and get %2$d free!', 'giantwp-discount-rules' );
+
             return sprintf(
-                __( '🎉 Buy %1$d and get %2$d free!', 'giantwp-discount-rules' ),
+                $text,
                 $buy_count,
                 $get_count
             );
         }
 
         if ( $disc_type === 'percentage' ) {
+            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount percentage (e.g. "20%"). */
+            $text = __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
+
             return sprintf(
-                __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' ),
+                $text,
                 $buy_count,
                 $get_count,
                 sprintf( '%s%%', $disc_value )
@@ -269,8 +275,11 @@ class Bogo_Progress_Status {
         }
 
         // fixed $ off
+        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (formatted price). */
+        $text = __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
+
         return sprintf(
-            __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' ),
+            $text,
             $buy_count,
             $get_count,
             wc_price( $disc_value )
@@ -288,48 +297,75 @@ class Bogo_Progress_Status {
         $disc_value  = $rule['discountValue'] ?? 0;
 
         if ( $mode === 'freeproduct' ) {
+
+            /* translators: 1: remaining quantity needed to qualify, 2: linked product title HTML. */
+            $cart_text = __( 'Add %1$d more %2$s to unlock your free gift 🎁', 'giantwp-discount-rules' );
+
             $cart_msg = sprintf(
-                __( 'Add %1$d more %2$s to unlock your free gift 🎁', 'giantwp-discount-rules' ),
+                $cart_text,
                 $remaining_needed,
                 $product_link_html
             );
+
+            /* translators: 1: number of items to buy, 2: number of items customer gets for free. */
+            $single_text = __( 'Buy %1$d and get %2$d free 🚀', 'giantwp-discount-rules' );
+
             $single_msg = sprintf(
-                __( 'Buy %1$d and get %2$d free 🚀', 'giantwp-discount-rules' ),
+                $single_text,
                 $buy_count,
                 $get_count
             );
+
             return [ $cart_msg, $single_msg ];
         }
 
         if ( $disc_type === 'percentage' ) {
+
+            /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount percentage (e.g. "20%"). */
+            $cart_text = __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' );
+
             $cart_msg = sprintf(
-                __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' ),
+                $cart_text,
                 $remaining_needed,
                 $product_link_html,
                 sprintf( '%s%%', $disc_value )
             );
+
+            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount percentage (e.g. "20%"). */
+            $single_text = __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
+
             $single_msg = sprintf(
-                __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' ),
+                $single_text,
                 $buy_count,
                 $get_count,
                 sprintf( '%s%%', $disc_value )
             );
+
             return [ $cart_msg, $single_msg ];
         }
 
         // fixed discount value
+
+        /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount amount (formatted price). */
+        $cart_text = __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' );
+
         $cart_msg = sprintf(
-            __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' ),
+            $cart_text,
             $remaining_needed,
             $product_link_html,
             wc_price( $disc_value )
         );
+
+        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (formatted price). */
+        $single_text = __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
+
         $single_msg = sprintf(
-            __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' ),
+            $single_text,
             $buy_count,
             $get_count,
             wc_price( $disc_value )
         );
+
         return [ $cart_msg, $single_msg ];
     }
 
@@ -343,41 +379,66 @@ class Bogo_Progress_Status {
         $disc_value  = $rule['discountValue'] ?? 0;
 
         if ( $mode === 'freeproduct' ) {
+
+            /* translators: 1: number of free/discounted items, 2: linked product title HTML. */
+            $cart_text = __( 'Reward unlocked 🎁 You get %1$d %2$s FREE!', 'giantwp-discount-rules' );
+
             $cart_msg = sprintf(
-                __( 'Reward unlocked 🎁 You get %1$d %2$s FREE!', 'giantwp-discount-rules' ),
+                $cart_text,
                 $get_count,
                 $product_link_html
             );
+
+            /* translators: 1: number of free items unlocked. */
+            $single_text = __( 'Deal active: %1$d free item(s)! 🎉', 'giantwp-discount-rules' );
+
             $single_msg = sprintf(
-                __( 'Deal active: %d free item(s)! 🎉', 'giantwp-discount-rules' ),
+                $single_text,
                 $get_count
             );
+
             return [ $cart_msg, $single_msg ];
         }
 
         if ( $disc_type === 'percentage' ) {
+
+            /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount percentage (e.g. "20%"). */
+            $cart_text = __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' );
+
             $cart_msg = sprintf(
-                __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' ),
+                $cart_text,
                 $get_count,
                 $product_link_html,
                 sprintf( '%s%%', $disc_value )
             );
+
+            /* translators: 1: number of discounted items, 2: discount percentage (e.g. "20%"). */
+            $single_text = __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' );
+
             $single_msg = sprintf(
-                __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' ),
+                $single_text,
                 $get_count,
                 sprintf( '%s%%', $disc_value )
             );
+
             return [ $cart_msg, $single_msg ];
         }
 
+        /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount amount (formatted price). */
+        $cart_text = __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' );
+
         $cart_msg = sprintf(
-            __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' ),
+            $cart_text,
             $get_count,
             $product_link_html,
             wc_price( $disc_value )
         );
+
+        /* translators: 1: number of discounted items, 2: discount amount (formatted price). */
+        $single_text = __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' );
+
         $single_msg = sprintf(
-            __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' ),
+            $single_text,
             $get_count,
             wc_price( $disc_value )
         );

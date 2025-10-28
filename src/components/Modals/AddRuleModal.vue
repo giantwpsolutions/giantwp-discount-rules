@@ -29,11 +29,11 @@ import {
 const { __ } = wp.i18n;
 
 const isLicenseActive = computed(() => {
-  return pluginData.proActive && licenseStatus.value === "valid";
+  return gwpdrPluginData.proActive && licenseStatus.value === "valid";
 });
 
 onMounted(() => {
-  if (pluginData.proActive) {
+  if (gwpdrPluginData.proActive) {
     fetchLicenseStatus();
   }
 });

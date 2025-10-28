@@ -45,10 +45,11 @@ class Checkout_Ajax_Handler {
 
 
         if ( empty( $method ) ) {
-            wp_send_json_error( ['message' => 'No method provided'] );
+             wp_send_json_error( [ 'message' => __( 'No payment method provided.', 'giantwp-discount-rules' ) ] );
         }
 
         WC()->session->set( 'gwpdr_selected_payment_method', $method );
-        wp_send_json_success( ['message' => 'Payment method stored'] );
+         
+          wp_send_json_success( [ 'message' => __( 'Payment method saved successfully.', 'giantwp-discount-rules' ) ] );
     }
 }

@@ -10,10 +10,10 @@ export const saveFlatPercentageDiscount = {
         try {
             // Fetch existing data before appending
             const existingData = await apiFetch({
-                path: `${pluginData.restUrl}get-flatpercentage-discount`,
+                path: `${gwpdrPluginData.restUrl}get-flatpercentage-discount`,
                 method: "GET",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
             });
 
@@ -89,10 +89,10 @@ export const saveFlatPercentageDiscount = {
 
             //Save the updated data
             const response = await apiFetch({
-                path: `${pluginData.restUrl}save-flatpercentage-discount`,
+                path: `${gwpdrPluginData.restUrl}save-flatpercentage-discount`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                 },
                 data: newDiscount,   //Send only the new discount entry
             });
@@ -118,10 +118,10 @@ export const saveFlatPercentageDiscount = {
             };
 
             const response = await apiFetch({
-                path: `${pluginData.restUrl}update-flatpercentage-discount/${id}`,
+                path: `${gwpdrPluginData.restUrl}update-flatpercentage-discount/${id}`,
                 method: "POST",
                 headers: {
-                    "X-WP-Nonce": pluginData.nonce,
+                    "X-WP-Nonce": gwpdrPluginData.nonce,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -144,9 +144,9 @@ export const saveFlatPercentageDiscount = {
 
     async deleteCoupon(id) {
         return apiFetch({
-            path: `${pluginData.restUrl}delete-flatpercentage-discount/${id}`,
+            path: `${gwpdrPluginData.restUrl}delete-flatpercentage-discount/${id}`,
             method: "DELETE",
-            headers: { "X-WP-Nonce": pluginData.nonce },
+            headers: { "X-WP-Nonce": gwpdrPluginData.nonce },
         });
     }
 

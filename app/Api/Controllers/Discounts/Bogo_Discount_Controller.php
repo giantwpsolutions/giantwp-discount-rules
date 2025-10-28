@@ -255,7 +255,7 @@ class Bogo_Discount_Controller extends WP_REST_Controller {
      * @return \WP_Rest_Response|WP_Error
      */
 
-    public function get_discounts( WP_REST_Request $request )  {
+    public function  get_discounts( WP_REST_Request $request )  {
         $discounts = get_option( 'giantwp_bogo_discount', [] );
 
         if ( maybe_serialize( $discounts ) ) {
