@@ -276,12 +276,26 @@ class FlatPercentage_Discount_Controller extends WP_REST_Controller {
      */
 
     public function get_discounts( WP_REST_Request $request ) {
-        $discounts = get_option( 'giantwp_flatpercentage_discount', [] );
+        // Pull option as-is
+        $raw = get_option( 'giantwp_flatpercentage_discount', [] );
 
-        if ( maybe_serialize( $discounts ) ) {
-            $discounts = maybe_unserialize( $discounts );
+        // If it was stored serialized, unserialize it. Otherwise keep as-is.
+        if ( is_string( $raw ) ) {
+            $raw = maybe_unserialize( $raw );
         }
 
-        wp_send_json( $discounts );
+        // Guarantee an array for the response
+        if ( ! is_array( $raw ) ) {
+            $raw = [];
+        }
+
+        // Return a REST response (do NOT wp_send_json() here)
+        return new WP_REST_Response(
+            [
+                'success'   => true,
+                'discounts' => $raw,
+            ],
+            200
+        );
     }
 }

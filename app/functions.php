@@ -145,7 +145,7 @@ function gwpdr_appsero_init_tracker() {
 
     $client = new Appsero\Client(
         'bebad348-5e49-4169-971a-06b0825da653',
-        'WooCommerce Discount Rules, BOGO & Dynamic Pricing – by GiantWP',
+        'GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce',
         __FILE__
     );
 

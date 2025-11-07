@@ -7,6 +7,8 @@
 
 namespace GiantWP_Discount_Rules\Api;
 
+use GiantWP_Discount_Rules\Traits\SingletonTrait;
+
 defined( 'ABSPATH' ) || exit;
 
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\All_Discount_Controller;
@@ -27,7 +29,7 @@ use GiantWP_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
  */
 class Api {
 
-
+    use SingletonTrait;
     /**
      * Class constructor.
      */

@@ -5,7 +5,7 @@ Tags: woocommerce discount rules, dynamic pricing, bogo, bulk discount,  categor
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 
@@ -24,6 +24,8 @@ This plugin has a modern minimal UI, no loading, and offers tons of types of dis
 *🏷️ Usage limit and tracking
 *🏷️ Automatically applied — no coupon required
 *🏷️ Scheduled by time and date
+
+[youtube https://www.youtube.com/watch?v=9ZL8ADA4WvE]
 
 
 [Documentation](https://www.docs.giantwpsolutions.com/) | [Pro Version](https://www.giantwpsolutions.com/#giantwp_pricing) | [Asking Help](https://www.giantwpsolutions.com/contact-us/) | [Feature Request](https://www.giantwpsolutions.com/contact-us/)
@@ -166,6 +168,10 @@ When multiple rules match the same product, the rule with the higher priority wi
 
 
  ==  Changelog == 
+
+  = 1.2.7 - October  28 2025 = 
+* Fixed : minor bugs
+* Added: integration with themes and plugins 
 
  = 1.2.6 - October  28 2025 = 
 * Added: Full translation (.pot) generation for PHP and Vue.js.

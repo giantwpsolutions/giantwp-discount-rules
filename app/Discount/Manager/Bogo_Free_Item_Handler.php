@@ -17,6 +17,7 @@ defined('ABSPATH') || exit;
 class Bogo_Free_Item_Handler {
 
     use SingletonTrait;
+
     /**
      * Constructor.
      */
@@ -45,11 +46,20 @@ class Bogo_Free_Item_Handler {
      * @param \WC_Cart $cart WooCommerce cart object.
      */
     public function apply_custom_prices( $cart ) {
-        if ( is_admin() && ! defined('DOING_AJAX') ) return;
+        if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+            return;
+        }
 
-        foreach ( $cart->get_cart() as $item ) {
-            if ( ! empty( $item['gwpdr_bogo_free_item'] ) && isset( $item['override_price'] ) ) {
-                $item['data']->set_price( floatval( $item['override_price'] ) );
+        foreach ( $cart->get_cart() as $cart_item_key => $item ) {
+            // Harden: ensure this is a flagged free item, an override price exists, and the product object is valid
+            if (
+                ! empty( $item['gwpdr_bogo_free_item'] )
+                && isset( $item['override_price'] )
+                && isset( $item['data'] )
+                && is_object( $item['data'] )
+                && method_exists( $item['data'], 'set_price' )
+            ) {
+                $item['data']->set_price( (float) $item['override_price'] );
             }
         }
     }
@@ -65,10 +75,14 @@ class Bogo_Free_Item_Handler {
      */
     public function filter_cart_price( $price_html, $cart_item, $cart_item_key ) {
         if ( ! empty( $cart_item['gwpdr_bogo_free_item'] ) ) {
-            if ( floatval( $cart_item['override_price'] ) === 0.0 ) {
-                return '<span class="gwpdr-free-price">' . esc_html__('Free', 'giantwp-discount-rules') . '</span>';
+            // Guard: default to 0.0 if override_price is not set
+            $override = isset( $cart_item['override_price'] ) ? (float) $cart_item['override_price'] : 0.0;
+
+            if ( $override <= 0.0 ) {
+                return '<span class="gwpdr-free-price">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
-            return wc_price( floatval( $cart_item['override_price'] ) );
+
+            return wc_price( $override );
         }
 
         return $price_html;
@@ -85,11 +99,15 @@ class Bogo_Free_Item_Handler {
      */
     public function filter_cart_subtotal( $subtotal_html, $cart_item, $cart_item_key ) {
         if ( ! empty( $cart_item['gwpdr_bogo_free_item'] ) ) {
-            $price = floatval( $cart_item['override_price'] ?? 0.0 );
-            if ( $price === 0.0 ) {
-                return '<span class="gwpdr-free-subtotal">' . esc_html__('Free', 'giantwp-discount-rules') . '</span>';
+            // Guard: default to 0.0 if override_price is not set
+            $override = isset( $cart_item['override_price'] ) ? (float) $cart_item['override_price'] : 0.0;
+
+            if ( $override <= 0.0 ) {
+                return '<span class="gwpdr-free-subtotal">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
-            return wc_price( $price * $cart_item['quantity'] );
+
+            $qty = isset( $cart_item['quantity'] ) ? (int) $cart_item['quantity'] : 1;
+            return wc_price( $override * $qty );
         }
 
         return $subtotal_html;

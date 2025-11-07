@@ -11,38 +11,75 @@ use GiantWP_Discount_Rules\Discount\Notification\Shipping_Promo_Message;
 class PromoMessage {
     use SingletonTrait;
 
+    /** @var null|bool cache for upsell flag */
+    private $upsell_enabled_cache = null;
+
     public function __construct() {
-        // PDP under Add to Cart
-        add_action(
-            'woocommerce_single_product_summary',
-            [ $this, 'render_product_message' ],
-            25
-        );
 
-        // Cart totals box (right side)
-        add_action(
-            'woocommerce_cart_totals_before_shipping',
-            [ $this, 'render_cart_totals_message' ],
-            5
-        );
+        // Always add footer text in admin.
+        add_filter( 'admin_footer_text', [ $this, 'gwpdr_admin_footer_text' ] );
 
-        // Cart line-items area (left side, after each cart item name/details)
-        add_action(
-            'woocommerce_after_cart_item_name',
-            [ $this, 'render_cart_lineitem_message' ],
-            15,
-            2 // <-- we need cart item + cart item key
-        );
+        // ✅ Only register front-end promo hooks when upsell is enabled
+        if ( $this->is_upsell_enabled() ) {
 
-        add_filter( 'admin_footer_text', [$this, 'gwpdr_admin_footer_text' ] );
+            // PDP under Add to Cart
+            add_action(
+                'woocommerce_single_product_summary',
+                [ $this, 'render_product_message' ],
+                25
+            );
 
+            // Cart totals box (right side)
+            add_action(
+                'woocommerce_cart_totals_before_shipping',
+                [ $this, 'render_cart_totals_message' ],
+                5
+            );
 
+            // Cart line-items area (left side, after each cart item name/details)
+            add_action(
+                'woocommerce_after_cart_item_name',
+                [ $this, 'render_cart_lineitem_message' ],
+                15,
+                2 // <-- we need cart item + cart item key
+            );
+        }
+    }
+
+    /**
+     * Read settings and decide if upsell notifications are enabled.
+     * Source option: giantwp_discountrules_settings
+     * Keys seen: discountBasedOn, orderPageLabel, upsellNotificationWidget
+     *
+     * @return bool
+     */
+    private function is_upsell_enabled() {
+        if ( $this->upsell_enabled_cache !== null ) {
+            return $this->upsell_enabled_cache;
+        }
+
+        // Fetch and normalize settings
+        $settings = get_option( 'giantwp_discountrules_settings', [] );
+        if ( is_string( $settings ) ) {
+            $settings = maybe_unserialize( $settings );
+        }
+        if ( ! is_array( $settings ) ) {
+            $settings = [];
+        }
+
+        // Consider truthy values: true, '1', 1
+        $enabled = ! empty( $settings['upsellNotificationWidget'] );
+        // Cache it to avoid repeated lookups
+        $this->upsell_enabled_cache = (bool) $enabled;
+
+        return $this->upsell_enabled_cache;
     }
 
     /**
      * PDP message (Buy X Get Y / BOGO / Shipping-on-this-product)
      */
     public function render_product_message() {
+        if ( ! $this->is_upsell_enabled() ) return; // ✅ guard
         if ( ! function_exists( 'WC' ) ) return;
 
         global $product;
@@ -83,6 +120,7 @@ class PromoMessage {
      * Example: "🚚 Add $20 more to unlock FREE shipping"
      */
     public function render_cart_totals_message() {
+        if ( ! $this->is_upsell_enabled() ) return; // ✅ guard
         if ( ! function_exists( 'WC' ) ) return;
         if ( ! class_exists( Shipping_Promo_Message::class ) ) return;
 
@@ -115,10 +153,11 @@ class PromoMessage {
      *   (like "Buy this and get shipping for 10৳")
      *   we show it under that cart item.
      *
-     * @param array $cart_item
+     * @param array  $cart_item
      * @param string $cart_item_key
      */
     public function render_cart_lineitem_message( $cart_item, $cart_item_key ) {
+        if ( ! $this->is_upsell_enabled() ) return; // ✅ guard
         if ( ! function_exists( 'WC' ) ) return;
         if ( ! class_exists( Shipping_Promo_Message::class ) ) return;
 
@@ -168,17 +207,16 @@ class PromoMessage {
         echo '</div>';
     }
 
+    public function gwpdr_admin_footer_text( $text ) {
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
 
-   public function gwpdr_admin_footer_text( $text ) {
-    $screen = get_current_screen();
+        // Only show on your plugin admin pages
+        if ( ! $screen || strpos( $screen->id, 'giantwp-discount-rules' ) === false ) {
+            return $text; // keep default footer elsewhere
+        }
 
-    // Only show on your plugin admin pages
-    if ( strpos( $screen->id, 'giantwp-discount-rules' ) === false ) {
-        return $text; // keep default footer elsewhere
+        return sprintf(
+            '<i>If you like the plugin please rate us <span style="color:#1A7EFB;">★★★★★</span> on <a href="https://wordpress.org/support/plugin/giantwp-discount-rules/reviews/" target="_blank" style="text-decoration:none;color:#2271b1;">WordPress.org</a> to help us spread the word ♥ from the Giant WP Solutions team.</i>'
+        );
     }
-
-    return sprintf(
-        '<i>If you like the plugin please rate us <span style="color:#1A7EFB;">★★★★★</span> on <a href="https://wordpress.org/support/plugin/giantwp-discount-rules/reviews/" target="_blank" style="text-decoration:none;color:#2271b1;">WordPress.org</a> to help us spread the word ♥ from the Giant WP Solutions team.</i>'
-    );
-}
 }

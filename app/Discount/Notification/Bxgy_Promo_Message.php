@@ -3,9 +3,9 @@
  * Displays Buy X Get Y promotional message on product pages.
  *
  * Example outputs:
- *   🎉 Buy 1 of Product A and get <a href="...">Product B</a> FREE!
- *   🎉 Buy 2 of Product A and get <a href="...">Product B</a> with 20% off ✨
- *   🎉 Buy 3 of Product A and get <a href="...">Product B</a> with ৳150.00 off 💸
+ *   🎉 Buy 1 and get 1 <a href="...">Product B</a> FREE!
+ *   🎉 Buy 2 and get 1 <a href="...">Product B</a> with 20% off ✨
+ *   🎉 Buy 3 and get 1 <a href="...">Product B</a> with ৳150.00 off 💸
  *
  * @package GiantWP_Discount_Rules
  */
@@ -69,8 +69,9 @@ class Bxgy_Promo_Message {
      * @return bool
      */
     private function is_rule_valid( $rule, $cart ) {
-        $type = strtolower( $rule['discountType'] ?? '' );
-        if ( ! in_array( $type, array( 'buy x get y', 'buy_x_get_y', 'bxgy' ), true ) ) {
+        $type_raw = strtolower( $rule['discountType'] ?? '' );
+        $is_bxgy  = in_array( $type_raw, array( 'bxgy', 'buy_x_get_y', 'buy x get y' ), true );
+        if ( ! $is_bxgy ) {
             return false;
         }
 
@@ -103,20 +104,45 @@ class Bxgy_Promo_Message {
     /**
      * Determine if the rule targets this product as a BUY product.
      *
+     * Supports:
+     *  - Empty buyProduct  => all products
+     *  - field=all_products (operator may be empty)
+     *  - field=product|product_id with operator all|any|''
+     *  - Explicit IN list (product/product_id + in|in_list)
+     *
      * @param array $rule        Discount rule data.
      * @param int   $product_id  Product ID being viewed.
      * @return bool
      */
     private function rule_targets_buy_product( $rule, $product_id ) {
-        if ( empty( $rule['buyProduct'] ) ) {
-            return false;
+        $product_id = (int) $product_id;
+        $buy        = $rule['buyProduct'] ?? array();
+
+        // No constraints => all products
+        if ( empty( $buy ) ) {
+            return true;
         }
 
-        foreach ( $rule['buyProduct'] as $cond ) {
+        foreach ( (array) $buy as $cond ) {
             $field    = strtolower( $cond['field'] ?? '' );
             $operator = strtolower( $cond['operator'] ?? '' );
-            $values   = array_map( 'intval', (array) ( $cond['value'] ?? array() ) );
+            $values   = isset( $cond['value'] ) ? (array) $cond['value'] : array();
+            $values   = array_map( 'intval', $values );
 
+            // Your serialized shape: field = all_products, operator = "".
+            if ( $field === 'all_products' ) {
+                return true;
+            }
+
+            // product/product_id with "all"/"any" (or empty) operator => all products
+            if (
+                in_array( $field, array( 'product', 'product_id' ), true ) &&
+                ( $operator === '' || in_array( $operator, array( 'all', 'any' ), true ) )
+            ) {
+                return true;
+            }
+
+            // Explicit product IN list
             if (
                 in_array( $field, array( 'product', 'product_id' ), true ) &&
                 in_array( $operator, array( 'in', 'in_list' ), true ) &&
@@ -140,87 +166,86 @@ class Bxgy_Promo_Message {
      * @return string
      */
     private function build_bxgy_message_line( $rule ) {
-
-        // We assume each rule has arrays `buyProduct` and `getProduct`,
-        // and each of those entries may carry quantities like buyProductCount / getProductCount.
+        // Normalize counts (prefer top-level keys; fallback to nested blocks if present).
         $buy_block = $rule['buyProduct'][0] ?? array();
         $get_block = $rule['getProduct'][0] ?? array();
 
-        $x_qty = max( 1, intval( $buy_block['buyProductCount'] ?? 1 ) );
-        $y_qty = max( 1, intval( $get_block['getProductCount'] ?? 1 ) );
-        $y_ids = array_map( 'intval', (array) ( $get_block['value'] ?? array() ) );
-
-        if ( empty( $y_ids ) ) {
-            return '';
-        }
-
-        $y_product = wc_get_product( $y_ids[0] );
-        if ( ! $y_product ) {
-            return '';
-        }
-
-        $y_anchor = sprintf(
-            '<a href="%s">%s</a>',
-            esc_url( get_permalink( $y_product->get_id() ) ),
-            esc_html( $y_product->get_name() )
+        $x_qty = max(
+            1,
+            intval( $rule['buyProductCount'] ?? $buy_block['buyProductCount'] ?? $buy_block['count'] ?? 1 )
+        );
+        $y_qty = max(
+            1,
+            intval( $rule['getProductCount'] ?? $get_block['getProductCount'] ?? $get_block['count'] ?? 1 )
         );
 
-        $mode       = $rule['freeOrDiscount'] ?? 'free_product'; // 'free_product' or 'discount_product'
-        $disc_type  = $rule['discountTypeBxgy'] ?? 'percentage'; // 'percentage' or 'fixed'
-        $disc_value = floatval( $rule['discountValue'] ?? 0 );
+        // Determine GET (Y) target(s).
+        $get_is_all = $this->block_targets_all_products( $get_block );
+        $y_ids      = array();
+        if ( isset( $get_block['value'] ) ) {
+            $y_ids = array_map( 'intval', (array) $get_block['value'] );
+        }
 
-        /**
-         * Build the reward phrase (right side of "and get ...").
-         *
-         * Examples of $reward_phrase:
-         * - "1 Product B FREE!"
-         * - "1 Product B with 20% off ✨"
-         * - "1 Product B with ৳150.00 off 💸"
-         */
-        if ( 'free_product' === $mode ) {
+        // Mode & discount type normalization.
+        // freeOrDiscount can be 'freeproduct' or 'free_product'
+        $mode_raw = strtolower( $rule['freeOrDiscount'] ?? 'freeproduct' );
+        $mode     = ( $mode_raw === 'free_product' || $mode_raw === 'freeproduct' ) ? 'freeproduct' : 'discount_product';
 
-            /* translators: 1: number of free items (Y quantity), 2: linked product title HTML. */
-            $reward_text = __( '%1$d %2$s FREE!', 'giantwp-discount-rules' );
+        // Discount type may come as discountTypeBxgy or discounttypeBogo (we normalize both)
+        $disc_type_raw  = strtolower( $rule['discountTypeBxgy'] ?? $rule['discounttypeBogo'] ?? 'percentage' );
+        $disc_type      = in_array( $disc_type_raw, array( 'percentage', 'fixed' ), true ) ? $disc_type_raw : 'percentage';
+        $disc_value     = floatval( $rule['discountValue'] ?? 0 );
 
-            $reward_phrase = sprintf(
-                $reward_text,
-                $y_qty,
-                $y_anchor
+        // Build anchor (or generic label) for the GET product.
+        $y_label_html = '';
+        if ( $get_is_all ) {
+            // Generic wording when Y is "any item".
+            $y_label_html = sprintf(
+                /* translators: generic label when GET product is any item */
+                __( '%s item(s)', 'giantwp-discount-rules' ),
+                $y_qty
             );
+        } else {
+            // Use the first Y product ID for the link; if none, bail gracefully.
+            if ( empty( $y_ids ) ) {
+                return '';
+            }
+            $y_product = wc_get_product( $y_ids[0] );
+            if ( ! $y_product ) {
+                return '';
+            }
+
+            $y_anchor = sprintf(
+                '<a href="%s">%s</a>',
+                esc_url( get_permalink( $y_product->get_id() ) ),
+                esc_html( $y_product->get_name() )
+            );
+
+            /* translators: 1: quantity of Y, 2: linked product title HTML */
+            $y_label_html = sprintf( __( '%1$d %2$s', 'giantwp-discount-rules' ), $y_qty, $y_anchor );
+        }
+
+        // Build the reward phrase (right side of "and get ...").
+        if ( 'freeproduct' === $mode ) {
+            /* translators: 1: Y label (already contains qty/title/link). */
+            $reward_text  = __( '%1$s FREE!', 'giantwp-discount-rules' );
+            $reward_phrase = sprintf( $reward_text, $y_label_html );
 
         } elseif ( 'percentage' === $disc_type ) {
-
-            /* translators: 1: number of discounted items (Y quantity), 2: linked product title HTML, 3: discount percentage (for example "20%"). */
-            $reward_text = __( '%1$d %2$s with %3$s off ✨', 'giantwp-discount-rules' );
-
-            $reward_phrase = sprintf(
-                $reward_text,
-                $y_qty,
-                $y_anchor,
-                sprintf( '%s%%', $disc_value )
-            );
+            /* translators: 1: Y label, 2: discount percentage (e.g. "20%"). */
+            $reward_text  = __( '%1$s with %2$s off ✨', 'giantwp-discount-rules' );
+            $reward_phrase = sprintf( $reward_text, $y_label_html, sprintf( '%s%%', $disc_value ) );
 
         } else {
-
-            /* translators: 1: number of discounted items (Y quantity), 2: linked product title HTML, 3: discount amount formatted as price. */
-            $reward_text = __( '%1$d %2$s with %3$s off 💸', 'giantwp-discount-rules' );
-
-            $reward_phrase = sprintf(
-                $reward_text,
-                $y_qty,
-                $y_anchor,
-                wc_price( $disc_value )
-            );
+            /* translators: 1: Y label, 2: discount amount formatted as price. */
+            $reward_text  = __( '%1$s with %2$s off 💸', 'giantwp-discount-rules' );
+            $reward_phrase = sprintf( $reward_text, $y_label_html, wc_price( $disc_value ) );
         }
 
         /**
-         * Now build the full sentence prefix:
-         * "🎉 Buy X and get {reward_phrase}"
-         *
-         * Example:
-         * - "🎉 Buy 2 and get 1 Product B FREE!"
+         * Full sentence prefix: "🎉 Buy X and get {reward_phrase}"
          */
-        /* translators: 1: required buy quantity (X), 2: reward phrase built from the rule (already safe HTML). */
+        /* translators: 1: required buy quantity (X), 2: reward phrase (already-safe HTML). */
         $wrapper_text = __( '🎉 Buy %1$d and get %2$s', 'giantwp-discount-rules' );
 
         $final_line = sprintf(
@@ -233,12 +258,48 @@ class Bxgy_Promo_Message {
     }
 
     /**
+     * Helper: does a condition block target "all products"?
+     * Recognizes:
+     *  - field=all_products
+     *  - field=product|product_id with operator all|any|''
+     *
+     * @param array $block A single condition block (e.g., buyProduct[0] or getProduct[0]).
+     * @return bool
+     */
+    private function block_targets_all_products( $block ) {
+        $field    = strtolower( $block['field'] ?? '' );
+        $operator = strtolower( $block['operator'] ?? '' );
+
+        if ( $field === 'all_products' ) {
+            return true;
+        }
+
+        if ( in_array( $field, array( 'product', 'product_id' ), true ) ) {
+            if ( $operator === '' || in_array( $operator, array( 'all', 'any' ), true ) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve BXGY rules from the database.
      *
      * @return array
      */
     private function get_bxgy_rules() {
-        $rules = maybe_unserialize( get_option( 'giantwp_bxgy_discount', array() ) );
-        return is_array( $rules ) ? $rules : array();
+        // Support both new and legacy option keys.
+        $rules = maybe_unserialize( get_option( 'giantwp_bxgy_discount', get_option( 'aio_bxgy_discount', array() ) ) );
+        $rules = is_array( $rules ) ? $rules : array();
+
+        // Normalize discountType if omitted.
+        foreach ( $rules as &$r ) {
+            if ( empty( $r['discountType'] ) ) {
+                $r['discountType'] = 'bxgy';
+            }
+        }
+
+        return $rules;
     }
 }
