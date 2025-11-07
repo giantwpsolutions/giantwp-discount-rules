@@ -169,7 +169,7 @@ When multiple rules match the same product, the rule with the higher priority wi
 
  ==  Changelog == 
 
-  = 1.2.7 - October  28 2025 = 
+  = 1.2.7 - November 8 2025 = 
 * Fixed : minor bugs
 * Added: integration with themes and plugins 
 
