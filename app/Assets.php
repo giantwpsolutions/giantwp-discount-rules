@@ -47,7 +47,7 @@ class Assets {
                 'gwpdr-discountrule-vjs',
                 $dev_server_js,
                 [ 'wp-i18n' ],
-                '1.0',
+                GWPDR_VERSION,
                 true
             );
         } else {
@@ -55,7 +55,7 @@ class Assets {
                 'gwpdr-discountrule-vjs',
                 $prod_js,
                 [ 'wp-i18n' ],
-                '1.0',
+                GWPDR_VERSION,
                 true
             );
 
@@ -63,7 +63,7 @@ class Assets {
                 'gwpdr-discountrule-styles',
                 $prod_css,
                 [],
-                '1.0'
+                GWPDR_VERSION
             );
         }
 
@@ -94,16 +94,16 @@ class Assets {
             'gwpdr-checkout',
             plugin_dir_url(__DIR__) . 'assets/js/gwpdr_checkout_ajax.js',
             [ 'jquery' ],
-            time(),
+            GWPDR_VERSION,
             true
         );
 
         // Trigger script
         wp_enqueue_script(
             'gwpdr-trigger',
-            plugin_dir_url(__DIR__) . 'assets/js/trigger.js',
+            plugin_dir_url(__DIR__)  . 'assets/js/trigger.js',
             [ 'jquery' ],
-            time(),
+            GWPDR_VERSION,
             true
         );
 

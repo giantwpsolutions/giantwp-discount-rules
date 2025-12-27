@@ -3,24 +3,20 @@
  * Universal styles for Free and Save badges in all cart types
  */
 
-/* Free Badge */
-.gwpdr-free-badge {
-    display: inline-block !important;
-    background: #000 !important;
-    color: #fff !important;
-    padding: 2px 8px !important;
-    border-radius: 3px !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    margin-left: 5px !important;
-    line-height: 1.4 !important;
-    vertical-align: middle !important;
+/* FIRST: Hide ALL badges everywhere by default */
+.gwpdr-free-badge,
+.gwpdr-save-badge,
+.wc-item-meta .gwpdr-free-badge,
+.wc-block-components-product-metadata .gwpdr-free-badge,
+dd .gwpdr-free-badge,
+p .gwpdr-free-badge {
+    display: none !important;
+    visibility: hidden !important;
 }
 
-/* Save Badge */
+/* SECOND: Apply badge styling (won't show unless we override display below) */
+.gwpdr-free-badge,
 .gwpdr-save-badge {
-    display: inline-block !important;
     background: #000 !important;
     color: #fff !important;
     padding: 2px 8px !important;
@@ -31,50 +27,34 @@
     margin-left: 5px !important;
     line-height: 1.4 !important;
     vertical-align: middle !important;
-}
-
-/* Ensure badges appear inline in all contexts */
-.wc-block-components-product-price .gwpdr-free-badge,
-.wc-block-cart-item__total-price .gwpdr-free-badge,
-.product-price .gwpdr-free-badge,
-.product-subtotal .gwpdr-free-badge {
-    display: inline-block !important;
-    margin-left: 5px !important;
-}
-
-/* WooCommerce Blocks specific adjustments */
-.wc-block-cart-items .gwpdr-free-badge,
-.wc-block-cart-items .gwpdr-save-badge {
     white-space: nowrap !important;
 }
 
-/* Traditional cart specific adjustments */
-.woocommerce-cart-form .gwpdr-free-badge,
-.woocommerce-cart-form .gwpdr-save-badge {
-    white-space: nowrap !important;
-}
-
-/* Hide badge in metadata area (we only want it in the total column) */
-.wc-block-components-product-metadata .gwpdr-free-badge:not(.gwpdr-total-badge) {
-    display: none !important;
-}
-
-/* Also hide in traditional cart item meta */
-.wc-item-meta .gwpdr-free-badge:not(.gwpdr-total-badge),
-dl.variation .gwpdr-free-badge:not(.gwpdr-total-badge) {
-    display: none !important;
-}
-
-/* Make sure total badge is always visible */
-.gwpdr-total-badge {
+/* THIRD: ONLY show badges in total/subtotal columns - Traditional WooCommerce Cart */
+td.product-subtotal .gwpdr-free-badge,
+td.product-subtotal .gwpdr-save-badge,
+.product-subtotal .gwpdr-free-badge,
+.product-subtotal .gwpdr-save-badge {
     display: inline-block !important;
     visibility: visible !important;
-    opacity: 1 !important;
+}
+
+/* FOURTH: ONLY show badges in total columns - WooCommerce Blocks Cart */
+.wc-block-cart-item__total .gwpdr-free-badge,
+.wc-block-cart-item__total .gwpdr-save-badge {
+    display: inline-block !important;
+    visibility: visible !important;
 }
 
 /* Mini cart support */
 .woocommerce-mini-cart .gwpdr-free-badge,
 .woocommerce-mini-cart .gwpdr-save-badge {
     display: inline-block !important;
-    margin-left: 5px !important;
+    visibility: visible !important;
+}
+
+/* JavaScript-added badges in total column */
+.gwpdr-total-badge {
+    display: inline-block !important;
+    visibility: visible !important;
 }

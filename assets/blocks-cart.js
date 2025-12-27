@@ -10,42 +10,49 @@
      * Add Free badge to cart items - Universal approach
      */
     function addFreeBadgeUniversal() {
-        // Find all elements with 0.00 price in the TOTAL column
-        const totalColumns = document.querySelectorAll('.wc-block-cart-item__total, td.product-subtotal');
+        // Find all cart rows
+        const rows = document.querySelectorAll('.wc-block-cart-items__row, tr.cart_item, .wc-block-cart-item');
 
-        totalColumns.forEach(totalColumn => {
-            // Skip if already has badge
-            if (totalColumn.querySelector('.gwpdr-free-badge:not([style*="display: none"])')) {
+        rows.forEach(row => {
+            // Check if this row has a free item marker
+            const hasFreeItemData = row.innerHTML.includes('gwpdr-free-badge') ||
+                                   row.querySelector('[data-free="true"]') ||
+                                   row.textContent.includes('Free');
+
+            if (!hasFreeItemData) {
                 return;
             }
 
+            // Find the total column in this row
+            const totalColumn = row.querySelector('.wc-block-cart-item__total, td.product-subtotal, .wc-block-components-totals-item__value');
+
+            if (!totalColumn) {
+                return;
+            }
+
+            // Skip if already has visible badge in total column
+            if (totalColumn.querySelector('.gwpdr-total-badge')) {
+                return;
+            }
+
+            // Check if price is 0.00
             const priceText = totalColumn.textContent || '';
-            const hasZeroPrice = priceText.includes('0.00') || priceText.includes('0,00');
+            const hasZeroPrice = priceText.includes('0.00') || priceText.includes('0,00') || priceText.trim() === '৳0.00' || priceText.trim() === '0.00৳';
 
             if (hasZeroPrice) {
-                // Check if this row has a free item (look for the hidden badge in metadata)
-                const row = totalColumn.closest('.wc-block-cart-items__row, tr.cart_item');
-                if (!row) {
-                    return;
-                }
+                // Create the Free badge
+                const freeBadge = document.createElement('span');
+                freeBadge.className = 'gwpdr-free-badge gwpdr-total-badge';
+                freeBadge.style.cssText = 'display: inline-block !important; background: #000 !important; color: #fff !important; padding: 2px 8px !important; border-radius: 3px !important; font-size: 11px !important; font-weight: 600 !important; text-transform: uppercase !important; margin-left: 5px !important;';
+                freeBadge.textContent = 'Free';
 
-                const hasFreeItemData = row.innerHTML.includes('gwpdr-free-badge');
+                // Find the price value element
+                const priceValue = totalColumn.querySelector('.wc-block-components-product-price__value, .wc-block-formatted-money-amount, .amount, bdi');
 
-                if (hasFreeItemData) {
-                    // Create the Free badge
-                    const freeBadge = document.createElement('span');
-                    freeBadge.className = 'gwpdr-free-badge gwpdr-total-badge';
-                    freeBadge.style.cssText = 'display: inline-block !important; background: #000 !important; color: #fff !important; padding: 2px 8px !important; border-radius: 3px !important; font-size: 11px !important; font-weight: 600 !important; text-transform: uppercase !important; margin-left: 5px !important;';
-                    freeBadge.textContent = 'Free';
-
-                    // Find the price value element
-                    const priceValue = totalColumn.querySelector('.wc-block-components-product-price__value, .wc-block-formatted-money-amount, .amount');
-
-                    if (priceValue) {
-                        priceValue.appendChild(freeBadge);
-                    } else {
-                        totalColumn.appendChild(freeBadge);
-                    }
+                if (priceValue) {
+                    priceValue.appendChild(freeBadge);
+                } else {
+                    totalColumn.appendChild(freeBadge);
                 }
             }
         });

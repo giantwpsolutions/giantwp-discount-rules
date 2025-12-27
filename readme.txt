@@ -3,9 +3,9 @@ Contributors: giantwpsolutions, developerhabib
 Donate link: https://giantwpsolutions.com/
 Tags: woocommerce discount rules, dynamic pricing, bogo, bulk discount,  category discount,
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 
@@ -168,6 +168,10 @@ When multiple rules match the same product, the rule with the higher priority wi
 
 
  ==  Changelog == 
+
+   = 1.2.9 - December 27 2025 = 
+* Fixed : minor bugs
+* Added: Added Badge in the Cart for Bogo.
 
   = 1.2.7 - November 8 2025 = 
 * Fixed : minor bugs

@@ -1,7 +1,7 @@
 <!-- Discount.vue -->
 <script setup>
 // All Imports
-import { ref, onMounted } from "vue";
+import { ref, onMounted, toRaw } from "vue";
 import DiscountTable from "../components/DiscountTable.vue";
 import AddRuleModal from "../components/modals/AddRuleModal.vue";
 import {
@@ -115,7 +115,7 @@ const handleEdit = async (rule) => {
     .join("");
 
   selectedDiscount.value = structuredClone({
-    ...rule,
+    ...toRaw(rule),
     discountType: formattedSelectedDiscount,
   });
   showModal.value = true;

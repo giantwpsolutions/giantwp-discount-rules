@@ -56,7 +56,7 @@ class Bogo_Free_Item_Handler {
             $item_data[] = [
                 'name'    => '',
                 'key'     => '',
-                'value'   => '<span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>',
+                'value'   => '<span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>',
                 'display' => '',
             ];
         }
@@ -107,9 +107,9 @@ class Bogo_Free_Item_Handler {
 
             if ( $current_price <= 0 ) {
                 if ( $original_price > 0 ) {
-                    return '<del>' . wc_price( $original_price ) . '</del> <span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 5px;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                    return '<del>' . wc_price( $original_price ) . '</del> <span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
                 }
-                return '<span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                return '<span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
 
             return $price_html;
@@ -126,16 +126,16 @@ class Bogo_Free_Item_Handler {
 
             if ( $current_price <= 0 ) {
                 if ( $original_price > 0 ) {
-                    return '<del>' . wc_price( $original_price ) . '</del> <span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 5px;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                    return '<del>' . wc_price( $original_price ) . '</del> <span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
                 }
-                return '<span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                return '<span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
 
             // Calculate savings for discounted BOGO items
             if ( $original_price > $current_price ) {
                 $savings = $original_price - $current_price;
                 if ( $savings > 0 ) {
-                    return '<del>' . wc_price( $original_price ) . '</del> ' . wc_price( $current_price ) . ' <span class="gwpdr-save-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 5px;">' . sprintf( esc_html__( 'Save %s', 'giantwp-discount-rules' ), wc_price( $savings ) ) . '</span>';
+                    return '<del>' . wc_price( $original_price ) . '</del> ' . wc_price( $current_price ) . ' <span class="gwpdr-save-badge">' . sprintf( esc_html__( 'Save %s', 'giantwp-discount-rules' ), wc_price( $savings ) ) . '</span>';
                 }
             }
         }
@@ -165,9 +165,9 @@ class Bogo_Free_Item_Handler {
 
             if ( $current_total <= 0 ) {
                 if ( $original_total > 0 ) {
-                    return '<del>' . wc_price( $original_total ) . '</del> <span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 5px;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                    return '<del>' . wc_price( $original_total ) . '</del> <span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
                 }
-                return '<span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                return '<span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
 
             return $subtotal_html;
@@ -182,9 +182,9 @@ class Bogo_Free_Item_Handler {
 
             if ( $current_total <= 0 ) {
                 if ( $original_total > 0 ) {
-                    return '<del>' . wc_price( $original_total ) . '</del> <span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 5px;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                    return '<del>' . wc_price( $original_total ) . '</del> <span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
                 }
-                return '<span class="gwpdr-free-badge" style="display: inline-block; background: #000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase;">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
+                return '<span class="gwpdr-free-badge">' . esc_html__( 'Free', 'giantwp-discount-rules' ) . '</span>';
             }
 
             // Calculate savings

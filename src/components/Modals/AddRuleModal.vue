@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits, watch, nextTick, computed, onMounted } from "vue";
+import { ref, defineEmits, watch, nextTick, computed, onMounted, toRaw } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
 import FreeshippingForm from "../Forms/FreeshippingForm.vue";
@@ -104,15 +104,15 @@ watch(
       await nextTick();
 
       if (flatPercentageFormRef.value)
-        flatPercentageFormRef.value.setFormData(structuredClone(newVal));
+        flatPercentageFormRef.value.setFormData(structuredClone(toRaw(newVal)));
       else if (bogoFormRef.value)
-        bogoFormRef.value.setFormData(structuredClone(newVal));
+        bogoFormRef.value.setFormData(structuredClone(toRaw(newVal)));
       else if (freeShippingRef.value)
-        freeShippingRef.value.setFormData(structuredClone(newVal));
+        freeShippingRef.value.setFormData(structuredClone(toRaw(newVal)));
       else if (buyXGetYRef.value)
-        buyXGetYRef.value.setFormData(structuredClone(newVal));
+        buyXGetYRef.value.setFormData(structuredClone(toRaw(newVal)));
       else if (bulkDiscountRef.value)
-        bulkDiscountRef.value.setFormData(structuredClone(newVal));
+        bulkDiscountRef.value.setFormData(structuredClone(toRaw(newVal)));
     }
   },
   { immediate: true, deep: true }
