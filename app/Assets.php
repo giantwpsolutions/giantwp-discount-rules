@@ -126,6 +126,26 @@ class Assets {
             ]
         );
 
+        // Enqueue Universal Free Badge styles and script on frontend
+        if ( ! is_admin() ) {
+            // Badge CSS
+            wp_enqueue_style(
+                'gwpdr_cart_badges',
+                plugin_dir_url(__DIR__) . 'assets/cart-badges.css',
+                [],
+                GWPDR_VERSION
+            );
+
+            // Badge JavaScript
+            wp_enqueue_script(
+                'gwpdr_blocks_cart',
+                plugin_dir_url(__DIR__) . 'assets/blocks-cart.js',
+                [],
+                GWPDR_VERSION,
+                true
+            );
+        }
+
     }
 
     /**

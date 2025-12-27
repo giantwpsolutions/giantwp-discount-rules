@@ -31,6 +31,7 @@ export const fetchLicenseStatus = async () => {
 
 // Activate license
 export const activateLicense = async (key) => {
+    isLoadingLicense.value = true;
     try {
         const response = await apiFetch({
             path: `${gwpdrPluginData.restUrl}license/activate`,
@@ -51,11 +52,14 @@ export const activateLicense = async (key) => {
         console.error("License activation failed:", err);
         licenseStatus.value = "invalid";
         throw err;
+    } finally {
+        isLoadingLicense.value = false;
     }
 };
 
 // Deactivate license
 export const deactivateLicense = async () => {
+    isLoadingLicense.value = true;
     try {
         const response = await apiFetch({
             path: `${gwpdrPluginData.restUrl}license/deactivate`,
@@ -74,5 +78,7 @@ export const deactivateLicense = async () => {
     } catch (err) {
         console.error("License deactivation failed:", err);
         throw err;
+    } finally {
+        isLoadingLicense.value = false;
     }
 };

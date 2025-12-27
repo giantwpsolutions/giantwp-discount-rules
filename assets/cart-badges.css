@@ -1,0 +1,80 @@
+/**
+ * GiantWP Discount Rules - Cart Badge Styles
+ * Universal styles for Free and Save badges in all cart types
+ */
+
+/* Free Badge */
+.gwpdr-free-badge {
+    display: inline-block !important;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 2px 8px !important;
+    border-radius: 3px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    margin-left: 5px !important;
+    line-height: 1.4 !important;
+    vertical-align: middle !important;
+}
+
+/* Save Badge */
+.gwpdr-save-badge {
+    display: inline-block !important;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 2px 8px !important;
+    border-radius: 3px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    margin-left: 5px !important;
+    line-height: 1.4 !important;
+    vertical-align: middle !important;
+}
+
+/* Ensure badges appear inline in all contexts */
+.wc-block-components-product-price .gwpdr-free-badge,
+.wc-block-cart-item__total-price .gwpdr-free-badge,
+.product-price .gwpdr-free-badge,
+.product-subtotal .gwpdr-free-badge {
+    display: inline-block !important;
+    margin-left: 5px !important;
+}
+
+/* WooCommerce Blocks specific adjustments */
+.wc-block-cart-items .gwpdr-free-badge,
+.wc-block-cart-items .gwpdr-save-badge {
+    white-space: nowrap !important;
+}
+
+/* Traditional cart specific adjustments */
+.woocommerce-cart-form .gwpdr-free-badge,
+.woocommerce-cart-form .gwpdr-save-badge {
+    white-space: nowrap !important;
+}
+
+/* Hide badge in metadata area (we only want it in the total column) */
+.wc-block-components-product-metadata .gwpdr-free-badge:not(.gwpdr-total-badge) {
+    display: none !important;
+}
+
+/* Also hide in traditional cart item meta */
+.wc-item-meta .gwpdr-free-badge:not(.gwpdr-total-badge),
+dl.variation .gwpdr-free-badge:not(.gwpdr-total-badge) {
+    display: none !important;
+}
+
+/* Make sure total badge is always visible */
+.gwpdr-total-badge {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Mini cart support */
+.woocommerce-mini-cart .gwpdr-free-badge,
+.woocommerce-mini-cart .gwpdr-save-badge {
+    display: inline-block !important;
+    margin-left: 5px !important;
+}

@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
+import { CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue';
 import {
   licenseKey,
   licenseStatus,
@@ -55,7 +56,7 @@ const primeKitSearch = gwpdrPluginData.primekit_search_url
 </script>
 <template>
   <!-- Outer wrapper: adds spacing and light background -->
-  <div class="tw-px-8 tw-py-4 tw-bg-[#f9fafb]">
+  <div class="tw-px-8 tw-py-4">
     <!-- FLEX: now responsive (column on mobile, row on lg+) -->
     <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-6">
 
@@ -97,13 +98,14 @@ const primeKitSearch = gwpdrPluginData.primekit_search_url
 
             <div
               v-if="licenseStatus !== 'unknown'"
-              class="md:tw-pl-32 tw-text-sm tw-mt-1 tw-text-gray-700"
+              class="md:tw-pl-32 tw-text-sm tw-mt-1 tw-text-gray-700 tw-flex tw-items-center tw-gap-1"
             >
               <template v-if="licenseStatus === 'valid'">
-                ✅ {{ __("Your license is active", "giantwp-discount-rules") }}
+                <el-icon color="#22c55e"><CircleCheckFilled /></el-icon>
+                {{ __("Your license is active", "giantwp-discount-rules") }}
               </template>
               <template v-else>
-                ❌
+                <el-icon color="#ef4444"><CircleCloseFilled /></el-icon>
                 {{ __("License is invalid or expired", "giantwp-discount-rules") }}
               </template>
             </div>
