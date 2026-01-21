@@ -37,20 +37,11 @@ class Assets {
         wp_enqueue_script( 'wp-i18n' );
         wp_enqueue_script( 'wp-api-fetch' );
 
-        $is_dev        = defined( 'WP_DEBUG' ) && WP_DEBUG;
-        $dev_server_js = 'http://localhost:5173/src/main.js';
+
         $prod_js       = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
         $prod_css      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
 
-        if ( $is_dev ) {
-            wp_enqueue_script(
-                'gwpdr-discountrule-vjs',
-                $dev_server_js,
-                [ 'wp-i18n' ],
-                GWPDR_VERSION,
-                true
-            );
-        } else {
+
             wp_enqueue_script(
                 'gwpdr-discountrule-vjs',
                 $prod_js,
@@ -65,7 +56,7 @@ class Assets {
                 [],
                 GWPDR_VERSION
             );
-        }
+        
 
         wp_localize_script(
             'gwpdr-discountrule-vjs',
@@ -78,6 +69,7 @@ class Assets {
                 'docsUrl'   => esc_url( 'https://www.docs.giantwpsolutions.com/' ),
                 'proActive' => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
                 'primekit_search_url' => esc_url( admin_url( 'plugin-install.php?s=PrimeKit%20Addons&tab=search&type=term' ) ),
+                'quickcart_search_url' => esc_url( admin_url( 'plugin-install.php?s=quick-cart-shopping&tab=search&type=term' ) ),
             ]
         );
 

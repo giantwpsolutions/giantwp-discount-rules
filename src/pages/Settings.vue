@@ -52,7 +52,8 @@ const handleSaveSettings = async () => {
 
 const primeKitUrl = `${gwpdrPluginData.pluginUrl}assets/images/primekit.png`;
 const quickCartLogo = `${gwpdrPluginData.pluginUrl}assets/images/quickcartshopping.png`;
-const primeKitSearch = gwpdrPluginData.primekit_search_url
+const primeKitSearch = gwpdrPluginData.primekit_search_url;
+const quickCartSearch = gwpdrPluginData.quickcart_search_url;
 </script>
 <template>
   <!-- Outer wrapper: adds spacing and light background -->
@@ -268,22 +269,17 @@ const primeKitSearch = gwpdrPluginData.primekit_search_url
             <div class="tw-flex-1">
               <div class="tw-text-sm tw-font-semibold tw-text-gray-900">
                 Quick Cart Shopping
-                <span
-                  class="tw-ml-2 tw-inline-block tw-text-[10px] tw-px-2 tw-py-[2px] tw-rounded tw-bg-yellow-100 tw-text-yellow-700 tw-font-medium"
-                >
-                  {{ __('UpComing', 'giantwp-discount-rules') }}
-                </span>
               </div>
               <div class="tw-text-[12px] tw-leading-snug tw-text-gray-600">
-                {{ __('Woocommerce UI and Shopping Experience Booster', 'giantwp-discount-rules') }}
+                {{ __('Woocommerce UX and Shopping Experience Booster', 'giantwp-discount-rules') }}
               </div>
               <div class="tw-mt-2">
                 <a
-                  href="https://www.giantwpsolutions.com/"
+                  :href="quickCartSearch"
                   target="_blank"
-                  class="tw-text-[12px] tw-font-medium tw-text-grey-600"
+                  class="tw-text-[12px] tw-font-medium tw-text-blue-600 hover:tw-text-blue-700"
                 >
-                  {{ __('Coming Soon', 'giantwp-discount-rules') }}
+                  Install
                 </a>
               </div>
             </div>

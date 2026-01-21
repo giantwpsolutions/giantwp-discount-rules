@@ -1,0 +1,83 @@
+# GiantWP Discount Rules - Distribution Ignore File
+# Only these will be included: app, assets, dist, languages, vendor, giantwp-discount-rules.php, readme.txt
+
+# Git files
+.git
+.github
+.gitattributes
+.gitignore
+
+# Build configuration files
+.babelrc
+.editorconfig
+.eslintignore
+.eslintrc
+.eslintrc.js
+.prettierrc
+.browserslistrc
+
+# CI/CD configuration
+.travis.yml
+.gitlab-ci.yml
+.circleci
+bitbucket-pipelines.yml
+behat.yml
+dependencies.yml
+
+# Package manager files
+package.json
+package-lock.json
+composer.json
+composer.lock
+yarn.lock
+node_modules
+
+# Build tools configuration
+webpack.config.js
+vite.config.js
+tailwind.config.js
+postcss.config.js
+jsconfig.json
+tsconfig.json
+Gruntfile.js
+
+# Source files (not needed in production)
+/src
+/public
+
+# Test files
+tests
+phpunit.xml
+phpunit.xml.dist
+multisite.xml
+multisite.xml.dist
+.phpcs.xml
+phpcs.xml
+.phpcs.xml.dist
+phpcs.xml.dist
+
+# Documentation (README.md is different from readme.txt)
+README.md
+*.md
+!readme.txt
+DEVELOPER_GUIDE.md
+CHANGELOG.md
+Todo.txt
+
+# WordPress.org assets directory (handled separately)
+.wordpress-org
+
+# Misc files
+.DS_Store
+Thumbs.db
+*.sql
+*.tar.gz
+*.zip
+wp-cli.local.yml
+index.html
+test-popup.html
+.distignore
+.deployignore
+
+# Build output that shouldn't be in dist
+build
