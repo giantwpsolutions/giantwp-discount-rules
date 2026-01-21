@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.11
+Stable tag: 1.2.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -285,7 +285,7 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 == Changelog ==
 
 
-= 1.2.11 =
+= 1.2.12 =
 * Update plugin assets
 * minor frontend changes
 
