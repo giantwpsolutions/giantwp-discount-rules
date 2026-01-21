@@ -13,17 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Build assets
-        run: npm run build
-
-      - name: Install PHP dependencies
-        uses: ramsey/composer-install@57532f8be5bda426838819c5ee9afb8af389d51a
-        with:
-          composer-options: '--prefer-dist --no-dev'
-
       - name: WordPress Plugin Deploy
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
