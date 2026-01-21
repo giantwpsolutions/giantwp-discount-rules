@@ -339,6 +339,10 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 == Upgrade Notice ==
 
+= 1.2.10 =
+Update plugin assets
+minor frontend changes
+
 = 1.2.9 =
 Recommended update with bug fixes and new BOGO cart badge feature.
 
