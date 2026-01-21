@@ -3,7 +3,7 @@
 // All Imports
 import { ref, onMounted, toRaw } from "vue";
 import DiscountTable from "../components/DiscountTable.vue";
-import AddRuleModal from "../components/modals/AddRuleModal.vue";
+import AddRuleModal from "../components/Modals/AddRuleModal.vue";
 import {
   fetchAllDiscountRules,
   discountRules,
