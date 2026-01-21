@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.10
+Stable tag: 1.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -284,6 +284,11 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 == Changelog ==
 
+
+= 1.2.11 =
+* Update plugin assets
+* minor frontend changes
+
 = 1.2.9 - December 27, 2024 =
 * Fixed: Minor bug fixes and stability improvements
 * Added: BOGO badge now displays in cart to highlight free/discounted items
@@ -337,20 +342,7 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 * Added: Scheduling and usage limit features
 * Added: Modern Vue.js admin interface
 
-== Upgrade Notice ==
 
-= 1.2.10 =
-Update plugin assets
-minor frontend changes
-
-= 1.2.9 =
-Recommended update with bug fixes and new BOGO cart badge feature.
-
-= 1.2.0 =
-Major update with new upsell notifications and complete UI refresh. Update recommended for all users.
-
-= 1.0.4 =
-First stable release of GiantWP Discount Rules. Welcome aboard!
 
 == Development & Contributing ==
 
