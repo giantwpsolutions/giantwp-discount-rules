@@ -2,7 +2,7 @@
 import { defineProps, defineEmits, ref, onMounted } from "vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
 
-import { generalData, loadGeneralData } from "@/data/generalDataFetch";
+import { generalData, loadGeneralData } from "@/data/GeneralDataFetch.js";
 
 // Props & Emits
 const props = defineProps({

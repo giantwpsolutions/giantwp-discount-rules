@@ -8,7 +8,7 @@ import {
   isLoadingGeneralData,
   generalDataError,
   loadGeneralData,
-} from "@/data/generalDataFetch";
+} from "@/data/GeneralDataFetch.js";
 
 //Define Props and Emits
 const props = defineProps({

@@ -32,7 +32,7 @@ import {
   isLoadingGeneralData,
   generalDataError,
   loadGeneralData,
-} from "@/data/generalDataFetch";
+} from "@/data/GeneralDataFetch.js";
 
 // **Props & Emits**
 const props = defineProps({

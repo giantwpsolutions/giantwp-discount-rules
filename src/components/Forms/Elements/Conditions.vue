@@ -37,7 +37,7 @@ import {
   loadCountriesAndStates,
 } from "@/data/shippingFetch.js";
 
-import { generalData, loadGeneralData } from "@/data/generalDataFetch";
+import { generalData, loadGeneralData } from "@/data/GeneralDataFetch.js";
 
 // === Props & Emits ===
 const props = defineProps({
