@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
+import { QuestionMarkCircleIcon, Cog6ToothIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import { CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue';
+import Sidebar from "../components/Sidebar.vue";
 import {
   licenseKey,
   licenseStatus,
@@ -26,10 +27,9 @@ const isProActive = ref(false);
 
 onMounted(() => {
   isProActive.value = !!gwpdrPluginData?.proActive;
-
+  loadSettings();
   if (isProActive.value) {
     fetchLicenseStatus();
-    loadSettings();
   }
 });
 
@@ -49,245 +49,216 @@ const handleSaveSettings = async () => {
     errorMessage();
   }
 };
-
-const primeKitUrl = `${gwpdrPluginData.pluginUrl}assets/images/primekit.png`;
-const quickCartLogo = `${gwpdrPluginData.pluginUrl}assets/images/quickcartshopping.png`;
-const primeKitSearch = gwpdrPluginData.primekit_search_url;
-const quickCartSearch = gwpdrPluginData.quickcart_search_url;
 </script>
+
 <template>
-  <!-- Outer wrapper: adds spacing and light background -->
-  <div class="tw-px-8 tw-py-4">
-    <!-- FLEX: now responsive (column on mobile, row on lg+) -->
-    <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-6">
+  <div class="tw-flex tw-gap-4 tw-m-4 tw-items-start">
 
-      <!-- LEFT COLUMN: main settings -->
-      <div class="tw-flex-1">
-        <div
-          class="tw-bg-white tw-rounded-[10px] tw-min-h-[250px] tw-border tw-border-gray-300 tw-p-6 tw-flex tw-flex-col tw-shadow-sm"
-        >
-          <h4 class="tw-text-xl tw-font-bold tw-mb-6">
-            {{ __("Settings", "giantwp-discount-rules") }}
-          </h4>
+    <!-- Main Settings -->
+    <div class="tw-flex-1 tw-min-w-0">
 
-          <!-- License -->
-          <div v-if="isProActive">
-            <div class="tw-w-full tw-max-w-2xl tw-flex tw-flex-col md:tw-flex-row tw-items-start md:tw-items-center tw-mb-2 tw-gap-3">
-              <label class="tw-text-base tw-font-medium tw-text-dark tw-w-32">
-                {{ __("License Key", "giantwp-discount-rules") }}
-              </label>
+      <!-- License (Pro only) -->
+      <div v-if="isProActive" class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-mb-4 tw-overflow-hidden">
+        <!-- Section header -->
+        <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+          <div class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-lg tw-bg-blue-50">
+            <Cog6ToothIcon class="tw-h-5 tw-w-5 tw-text-blue-500" />
+          </div>
+          <div>
+            <p class="tw-text-sm tw-font-bold tw-text-gray-800 tw-leading-tight">{{ __("License", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400">{{ __("Manage your pro license key", "giantwp-discount-rules") }}</p>
+          </div>
+        </div>
 
-              <el-input
-                v-model="licenseKey"
-                class="tw-w-full md:tw-w-auto"
-                style="width: 300px"
-                :placeholder="__('Enter License Key', 'giantwp-discount-rules')"
-              />
-
-              <el-button
-                :type="licenseStatus === 'valid' ? 'danger' : 'primary'"
-                :loading="isLoadingLicense"
-                @click="handleAction"
-              >
-                {{
-                  licenseStatus === "valid"
-                    ? __("Deactivate", "giantwp-discount-rules")
-                    : __("Activate", "giantwp-discount-rules")
-                }}
-              </el-button>
-            </div>
-
-            <div
-              v-if="licenseStatus !== 'unknown'"
-              class="md:tw-pl-32 tw-text-sm tw-mt-1 tw-text-gray-700 tw-flex tw-items-center tw-gap-1"
-            >
+        <!-- License row -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4">
+          <div>
+            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("License Key", "giantwp-discount-rules") }}</p>
+            <div v-if="licenseStatus !== 'unknown'" class="tw-flex tw-items-center tw-gap-1 tw-mt-0.5">
               <template v-if="licenseStatus === 'valid'">
                 <el-icon color="#22c55e"><CircleCheckFilled /></el-icon>
-                {{ __("Your license is active", "giantwp-discount-rules") }}
+                <span class="tw-text-xs tw-text-green-600">{{ __("Your license is active", "giantwp-discount-rules") }}</span>
               </template>
               <template v-else>
                 <el-icon color="#ef4444"><CircleCloseFilled /></el-icon>
-                {{ __("License is invalid or expired", "giantwp-discount-rules") }}
+                <span class="tw-text-xs tw-text-red-500">{{ __("License is invalid or expired", "giantwp-discount-rules") }}</span>
               </template>
             </div>
           </div>
-
-          <!-- General Settings -->
-          <div class="tw-mt-6">
-
-            <!-- Discount Based On -->
-            <div class="tw-w-full tw-max-w-2xl tw-flex tw-flex-col md:tw-flex-row tw-items-start md:tw-items-center tw-mb-6 tw-gap-3">
-              <label class="tw-text-base tw-font-medium tw-text-dark tw-w-32">
-                {{ __("Rule Apply on", "giantwp-discount-rules") }}
-              </label>
-
-              <el-select
-                v-model="saveSettingsData.discountBasedOn"
-                size="default"
-                style="width: 240px"
-                popper-class="custom-dropdown"
-              >
-                <el-option
-                  :value="'regular_price'"
-                  :label="__('Regular Price', 'giantwp-discount-rules')"
-                />
-                <el-option
-                  :value="'sale_price'"
-                  :label="__('Sale Price', 'giantwp-discount-rules')"
-                />
-              </el-select>
-            </div>
-
-            <!-- Order Page Label -->
-            <div class="tw-w-full tw-max-w-2xl tw-flex tw-flex-col md:tw-flex-row tw-items-start md:tw-items-center tw-mb-6 tw-gap-3">
-              <label
-                class="tw-text-base tw-font-medium tw-text-dark tw-w-32 tw-flex tw-items-center tw-gap-2"
-              >
-                {{ __("Order Label", "giantwp-discount-rules") }}
-                <div class="tw-group tw-relative">
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    :content="
-                      __(
-                        'Show a label on admin order page if discount applied',
-                        'giantwp-discount-rules'
-                      )
-                    "
-                    placement="top"
-                    popper-class="custom-tooltip"
-                  >
-                    <QuestionMarkCircleIcon
-                      class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer"
-                    />
-                  </el-tooltip>
-                </div>
-              </label>
-
-              <el-switch
-                v-model="saveSettingsData.orderPageLabel"
-                inline-prompt
-                :active-text="__('On', 'giantwp-discount-rules')"
-                :inactive-text="__('Off', 'giantwp-discount-rules')"
-              />
-            </div>
-
-            <!-- Upsell Notification Widget -->
-            <div class="tw-w-full tw-max-w-2xl tw-flex tw-flex-col md:tw-flex-row tw-items-start md:tw-items-center tw-mb-6 tw-gap-3">
-              <label
-                class="tw-text-base tw-font-medium tw-text-dark tw-w-32 tw-flex tw-items-center tw-gap-2"
-              >
-                {{ __("Upsell Notification", "giantwp-discount-rules") }}
-                <div class="tw-group tw-relative">
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    :content="
-                      __(
-                        'Show a small notification at the bottom for upsell',
-                        'giantwp-discount-rules'
-                      )
-                    "
-                    placement="top"
-                    popper-class="custom-tooltip"
-                  >
-                    <QuestionMarkCircleIcon
-                      class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer"
-                    />
-                  </el-tooltip>
-                </div>
-              </label>
-
-              <el-switch
-                v-model="saveSettingsData.upsellNotificationWidget"
-                inline-prompt
-                :active-text="__('On', 'giantwp-discount-rules')"
-                :inactive-text="__('Off', 'giantwp-discount-rules')"
-              />
-            </div>
-
-            <!-- Save Settings Button -->
-            <div class="tw-mt-4">
-              <el-button
-                type="primary"
-                :loading="isLoadingSettings"
-                @click="handleSaveSettings"
-              >
-                {{ __("Save Settings", "giantwp-discount-rules") }}
-              </el-button>
-            </div>
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <el-input
+              v-model="licenseKey"
+              style="width: 240px"
+              :placeholder="__('Enter License Key', 'giantwp-discount-rules')"
+            />
+            <el-button
+              :type="licenseStatus === 'valid' ? 'danger' : 'primary'"
+              :loading="isLoadingLicense"
+              @click="handleAction"
+            >
+              {{ licenseStatus === "valid" ? __("Deactivate", "giantwp-discount-rules") : __("Activate", "giantwp-discount-rules") }}
+            </el-button>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Our Other Plugins -->
-      <!-- responsive width: full on mobile, fixed on desktop -->
-      <div class="tw-w-full lg:tw-w-[320px] tw-flex tw-flex-col tw-gap-6">
+      <!-- General Settings -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <!-- Section header -->
+        <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+          <div class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-lg tw-bg-amber-50">
+            <Cog6ToothIcon class="tw-h-5 tw-w-5 tw-text-amber-500" />
+          </div>
+          <div>
+            <p class="tw-text-sm tw-font-bold tw-text-gray-800 tw-leading-tight">{{ __("General Settings", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400">{{ __("Configure discount rule behaviour", "giantwp-discount-rules") }}</p>
+          </div>
+        </div>
 
-        <div
-          class="tw-bg-white tw-rounded-[10px] tw-border tw-border-gray-300 tw-p-4 tw-flex tw-flex-col tw-gap-4 tw-shadow-sm"
-        >
-          <div class="tw-text-md tw-font-semibold tw-text-gray-900">
-            {{ __("Our Other Plugins", "giantwp-discount-rules") }}
+        <!-- Rule Apply On -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+          <div>
+            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Rule Apply On", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Which price the discount applies to", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-select
+            v-model="saveSettingsData.discountBasedOn"
+            size="default"
+            style="width: 180px"
+            popper-class="custom-dropdown"
+          >
+            <el-option :value="'regular_price'" :label="__('Regular Price', 'giantwp-discount-rules')" />
+            <el-option :value="'sale_price'"    :label="__('Sale Price', 'giantwp-discount-rules')" />
+          </el-select>
+        </div>
+
+        <!-- Order Label -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+          <div>
+            <div class="tw-flex tw-items-center tw-gap-1.5">
+              <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Order Label", "giantwp-discount-rules") }}</p>
+              <el-tooltip
+                effect="dark"
+                :content="__('Show discount label on order details page', 'giantwp-discount-rules')"
+                placement="top"
+                popper-class="custom-tooltip"
+              >
+                <QuestionMarkCircleIcon class="tw-h-3.5 tw-w-3.5 tw-text-gray-400 tw-cursor-pointer" />
+              </el-tooltip>
+            </div>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Show discount label on order details page", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-switch
+            v-model="saveSettingsData.orderPageLabel"
+            inline-prompt
+            :active-text="__('On', 'giantwp-discount-rules')"
+            :inactive-text="__('Off', 'giantwp-discount-rules')"
+          />
+        </div>
+
+        <!-- Upsell Notification -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+          <div>
+            <div class="tw-flex tw-items-center tw-gap-1.5">
+              <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Upsell Notification", "giantwp-discount-rules") }}</p>
+              <el-tooltip
+                effect="dark"
+                :content="__('Nudge customers with upsell offers at checkout', 'giantwp-discount-rules')"
+                placement="top"
+                popper-class="custom-tooltip"
+              >
+                <QuestionMarkCircleIcon class="tw-h-3.5 tw-w-3.5 tw-text-gray-400 tw-cursor-pointer" />
+              </el-tooltip>
+            </div>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Nudge customers with upsell offers at checkout", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-switch
+            v-model="saveSettingsData.upsellNotificationWidget"
+            inline-prompt
+            :active-text="__('On', 'giantwp-discount-rules')"
+            :inactive-text="__('Off', 'giantwp-discount-rules')"
+          />
+        </div>
+
+        <!-- Product Badge -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4"
+             :class="saveSettingsData.showProductBadge ? 'tw-border-b tw-border-gray-100' : ''">
+          <div>
+            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Product Badge", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Show discount badge on product images in the shop", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-switch
+            v-model="saveSettingsData.showProductBadge"
+            inline-prompt
+            :active-text="__('On', 'giantwp-discount-rules')"
+            :inactive-text="__('Off', 'giantwp-discount-rules')"
+          />
+        </div>
+
+        <!-- Badge Color Options (visible when badge is on) -->
+        <div v-if="saveSettingsData.showProductBadge" class="tw-px-5 tw-py-4 tw-bg-gray-50 tw-flex tw-flex-wrap tw-gap-6 tw-border-b tw-border-gray-100">
+          <!-- Background Color -->
+          <div class="tw-flex tw-items-center tw-gap-3">
+            <div>
+              <p class="tw-text-xs tw-font-semibold tw-text-gray-700 tw-mb-1">{{ __("Background Color", "giantwp-discount-rules") }}</p>
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <input
+                  type="color"
+                  v-model="saveSettingsData.badgeBgColor"
+                  class="tw-h-8 tw-w-10 tw-cursor-pointer tw-rounded tw-border tw-border-gray-300 tw-p-0.5"
+                />
+                <span class="tw-text-xs tw-text-gray-500 tw-font-mono">{{ saveSettingsData.badgeBgColor }}</span>
+              </div>
+            </div>
           </div>
 
-          <!-- PrimeKit -->
-          <div class="tw-flex tw-items-start tw-gap-3">
-            <div
-              class="tw-w-10 tw-h-10 tw-rounded tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-text-[10px] tw-font-semibold tw-text-gray-700"
-            >
-              <img :src="primeKitUrl" />
-            </div>
-
-            <div class="tw-flex-1">
-              <div class="tw-text-sm tw-font-semibold tw-text-gray-900">
-                PrimeKit Addons
-              </div>
-              <div class="tw-text-[12px] tw-leading-snug tw-text-gray-600">
-                {{ __('UI addons / enhancements for Elementor Page builders.', 'giantwp-discount-rules') }}
-              </div>
-              <div class="tw-mt-2">
-                <a
-                  :href="primeKitSearch"
-                  target="_blank"
-                  class="tw-text-[12px] tw-font-medium tw-text-blue-600 hover:tw-text-blue-700"
-                >
-                  Install
-                </a>
+          <!-- Text Color -->
+          <div class="tw-flex tw-items-center tw-gap-3">
+            <div>
+              <p class="tw-text-xs tw-font-semibold tw-text-gray-700 tw-mb-1">{{ __("Text Color", "giantwp-discount-rules") }}</p>
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <input
+                  type="color"
+                  v-model="saveSettingsData.badgeTextColor"
+                  class="tw-h-8 tw-w-10 tw-cursor-pointer tw-rounded tw-border tw-border-gray-300 tw-p-0.5"
+                />
+                <span class="tw-text-xs tw-text-gray-500 tw-font-mono">{{ saveSettingsData.badgeTextColor }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Quick Cart Shopping -->
-          <div class="tw-flex tw-items-start tw-gap-3">
-            <div
-              class="tw-w-10 tw-h-10 tw-rounded tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-text-[10px] tw-font-semibold tw-text-gray-700"
-            >
-              <img :src="quickCartLogo">
-            </div>
-
-            <div class="tw-flex-1">
-              <div class="tw-text-sm tw-font-semibold tw-text-gray-900">
-                Quick Cart Shopping
-              </div>
-              <div class="tw-text-[12px] tw-leading-snug tw-text-gray-600">
-                {{ __('Woocommerce UX and Shopping Experience Booster', 'giantwp-discount-rules') }}
-              </div>
-              <div class="tw-mt-2">
-                <a
-                  :href="quickCartSearch"
-                  target="_blank"
-                  class="tw-text-[12px] tw-font-medium tw-text-blue-600 hover:tw-text-blue-700"
-                >
-                  Install
-                </a>
-              </div>
+          <!-- Preview -->
+          <div class="tw-flex tw-items-center tw-gap-3">
+            <div>
+              <p class="tw-text-xs tw-font-semibold tw-text-gray-700 tw-mb-1">{{ __("Preview", "giantwp-discount-rules") }}</p>
+              <span
+                :style="{ backgroundColor: saveSettingsData.badgeBgColor, color: saveSettingsData.badgeTextColor }"
+                class="tw-inline-block tw-rounded tw-px-2 tw-py-1 tw-text-xs tw-font-bold tw-uppercase tw-tracking-wide"
+              >
+                SALE
+              </span>
             </div>
           </div>
+        </div>
 
+        <!-- Save button -->
+        <div class="tw-px-5 tw-py-4">
+          <button
+            @click="handleSaveSettings"
+            :disabled="isLoadingSettings"
+            class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-transition hover:tw-bg-blue-700 disabled:tw-opacity-60 disabled:tw-cursor-wait"
+          >
+            <CheckIcon class="tw-h-4 tw-w-4" />
+            {{ isLoadingSettings ? __("Saving…", "giantwp-discount-rules") : __("Save Settings", "giantwp-discount-rules") }}
+          </button>
         </div>
       </div>
-
     </div>
+
+    <!-- Sidebar -->
+    <div class="tw-w-64 tw-shrink-0">
+      <Sidebar />
+    </div>
+
   </div>
 </template>

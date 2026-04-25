@@ -1,7 +1,9 @@
 <!-- Discount.vue -->
 <script setup>
 // All Imports
-import { ref, onMounted, toRaw } from "vue";
+import { ref, onMounted, toRaw, computed } from "vue";
+import { TagIcon, BoltIcon, SignalIcon, StarIcon } from "@heroicons/vue/24/outline";
+import Sidebar from "../components/Sidebar.vue";
 import DiscountTable from "../components/DiscountTable.vue";
 import AddRuleModal from "../components/Modals/AddRuleModal.vue";
 import {
@@ -19,6 +21,11 @@ import { saveBulkDiscountData } from "@/data/save-data/saveBulkDiscountData.js";
 
 const showModal = ref(false);
 const selectedDiscount = ref(null);
+
+const totalRules  = computed(() => discountRules.value.length);
+const activeCount = computed(() => discountRules.value.filter(r => r.status === 'on').length);
+const inactiveCount = computed(() => discountRules.value.filter(r => r.status === 'off').length);
+const totalUsed  = computed(() => discountRules.value.reduce((sum, r) => sum + (Number(r.usedCount) || 0), 0));
 const fetchDiscountRules = async () => {
   discountRules.value = await fetchAllDiscountRules();
   // console.log("🟢 Discount rules updated:", discountRules.value);
@@ -143,26 +150,68 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="tw-bg-white tw-rounded-[10px] tw-min-h-[250px] tw-border tw-border-gray-300 tw-p-6 tw-m-4">
+  <div class="tw-flex tw-gap-4 tw-m-4 tw-items-start">
+
+  <!-- Main Content -->
+  <div class="tw-flex-1 tw-min-w-0 tw-bg-white tw-rounded-[10px] tw-border tw-border-gray-300 tw-p-6">
     <h3 class="tw-text-xl tw-font-bold tw-mb-6">
       {{ __("Discount Rules", "giantwp-discount-rules") }}
     </h3>
 
-    <!-- Button to Add New Rule -->
-    <div class="tw-flex tw-mb-8">
-      <button
-        @click="addNewRule"
-        class="tw-inline-flex tw-h-8 tw-items-center tw-justify-center tw-rounded-md tw-px-4 tw-text-sm tw-font-medium tw-duration-200 tw-bg-blue-600 tw-text-white tw-hover:bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500">
-        {{ __("Add New Rule", "giantwp-discount-rules") }}
-      </button>
+    <!-- Stats Bar -->
+    <div class="tw-grid tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 tw-mb-6">
+      <!-- Total Rules -->
+      <div class="tw-flex tw-items-center tw-gap-4 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-4 tw-shadow-sm">
+        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-blue-50">
+          <TagIcon class="tw-h-6 tw-w-6 tw-text-blue-500" />
+        </div>
+        <div>
+          <p class="tw-text-2xl tw-font-bold tw-leading-tight tw-text-gray-800">{{ totalRules }}</p>
+          <p class="tw-text-sm tw-text-gray-500">{{ __("Total Rules", "giantwp-discount-rules") }}</p>
+        </div>
+      </div>
+
+      <!-- Active -->
+      <div class="tw-flex tw-items-center tw-gap-4 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-4 tw-shadow-sm">
+        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-green-50">
+          <BoltIcon class="tw-h-6 tw-w-6 tw-text-green-500" />
+        </div>
+        <div>
+          <p class="tw-text-2xl tw-font-bold tw-leading-tight tw-text-gray-800">{{ activeCount }}</p>
+          <p class="tw-text-sm tw-text-gray-500">{{ __("Active", "giantwp-discount-rules") }}</p>
+        </div>
+      </div>
+
+      <!-- Inactive -->
+      <div class="tw-flex tw-items-center tw-gap-4 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-4 tw-shadow-sm">
+        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-yellow-50">
+          <SignalIcon class="tw-h-6 tw-w-6 tw-text-yellow-500" />
+        </div>
+        <div>
+          <p class="tw-text-2xl tw-font-bold tw-leading-tight tw-text-gray-800">{{ inactiveCount }}</p>
+          <p class="tw-text-sm tw-text-gray-500">{{ __("Inactive", "giantwp-discount-rules") }}</p>
+        </div>
+      </div>
+
+      <!-- Total Used -->
+      <div class="tw-flex tw-items-center tw-gap-4 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-4 tw-shadow-sm">
+        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-purple-50">
+          <StarIcon class="tw-h-6 tw-w-6 tw-text-purple-500" />
+        </div>
+        <div>
+          <p class="tw-text-2xl tw-font-bold tw-leading-tight tw-text-gray-800">{{ totalUsed }}</p>
+          <p class="tw-text-sm tw-text-gray-500">{{ __("Total Used", "giantwp-discount-rules") }}</p>
+        </div>
+      </div>
     </div>
 
     <!-- Discount Table -->
     <DiscountTable
       :discountRules="discountRules"
-      @toggle-status="toggleStatus"
+      :onAdd="addNewRule"
       :onEdit="handleEdit"
-      :onDelete="deleteRule" />
+      :onDelete="deleteRule"
+      :onToggleStatus="toggleStatus" />
 
     <!-- Modal Component -->
     <AddRuleModal
@@ -170,5 +219,12 @@ const closeModal = () => {
       :editingRule="selectedDiscount"
       @close="closeModal"
       @discountUpdated="fetchDiscountRules" />
+  </div>
+
+  <!-- Sidebar -->
+  <div class="tw-w-64 tw-shrink-0">
+    <Sidebar />
+  </div>
+
   </div>
 </template>

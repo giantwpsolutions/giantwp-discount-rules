@@ -67,6 +67,10 @@ Todo.txt
 # WordPress.org assets directory (handled separately)
 .wordpress-org
 
+# IDE files
+.vscode
+.idea
+
 # Misc files
 .DS_Store
 Thumbs.db

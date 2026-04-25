@@ -5,6 +5,9 @@ export const saveSettingsData = ref({
     discountBasedOn: "regular_price",
     orderPageLabel: true,
     upsellNotificationWidget: false,
+    showProductBadge: false,
+    badgeBgColor: "#1c4a96",
+    badgeTextColor: "#ffffff",
 });
 
 export const isLoadingSettings = ref(false);
@@ -23,9 +26,12 @@ export const loadSettings = async () => {
         });
 
         saveSettingsData.value = {
-            discountBasedOn: response.discountBasedOn || "sale_price",
+            discountBasedOn: response.discountBasedOn || "regular_price",
             orderPageLabel: response.orderPageLabel ?? true,
             upsellNotificationWidget: response.upsellNotificationWidget ?? false,
+            showProductBadge: response.showProductBadge ?? false,
+            badgeBgColor: response.badgeBgColor ?? "#1c4a96",
+            badgeTextColor: response.badgeTextColor ?? "#ffffff",
         };
     } catch (err) {
         console.error("❌ Failed to load settings:", err);

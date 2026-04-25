@@ -80,10 +80,22 @@ class Settings_Controller extends WP_REST_Controller {
 
         $upsell_widget = ! empty( $data['upsellNotificationWidget'] ) ? true : false;
 
+        $show_badge = ! empty( $data['showProductBadge'] ) ? true : false;
+
+        $badge_bg    = isset( $data['badgeBgColor'] )
+            ? sanitize_hex_color( $data['badgeBgColor'] ) ?? '#1c4a96'
+            : '#1c4a96';
+        $badge_text  = isset( $data['badgeTextColor'] )
+            ? sanitize_hex_color( $data['badgeTextColor'] ) ?? '#ffffff'
+            : '#ffffff';
+
         $sanitized = [
             'discountBasedOn'          => $discount_based_on,
             'orderPageLabel'           => $order_page_label,
             'upsellNotificationWidget' => $upsell_widget,
+            'showProductBadge'         => $show_badge,
+            'badgeBgColor'             => $badge_bg,
+            'badgeTextColor'           => $badge_text,
         ];
 
         update_option( 'giantwp_discountrules_settings', $sanitized );

@@ -23,6 +23,15 @@ const emit = defineEmits(["update:getItem", "update:value"]);
 const getItem = ref(props.getItem);
 const bulkDiscounts = ref([...props.value]);
 
+// Sync when parent updates props (e.g. setFormData / template select)
+watch(() => props.getItem, (val) => {
+  if (val !== getItem.value) getItem.value = val;
+});
+watch(() => props.value, (val) => {
+  if (JSON.stringify(val) !== JSON.stringify(bulkDiscounts.value))
+    bulkDiscounts.value = [...val];
+}, { deep: true });
+
 // ** Add Bulk Discount Entry **
 const addBulkDiscount = (e) => {
   e.preventDefault();

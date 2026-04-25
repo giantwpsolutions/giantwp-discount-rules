@@ -57,6 +57,19 @@ const enableConditions = ref(props.toggle);
 const localConditions = ref([...props.value]);
 const conditionsApplies = ref(props.conditionsApplies);
 
+// Sync internal refs when parent updates props (e.g. setFormData / template select).
+// Guards prevent the emit→prop→emit loop.
+watch(() => props.toggle, (val) => {
+  if (val !== enableConditions.value) enableConditions.value = val;
+});
+watch(() => props.conditionsApplies, (val) => {
+  if (val !== conditionsApplies.value) conditionsApplies.value = val;
+});
+watch(() => props.value, (val) => {
+  if (JSON.stringify(val) !== JSON.stringify(localConditions.value))
+    localConditions.value = [...val];
+}, { deep: true });
+
 // === Load Data Sources ===
 onMounted(async () => {
   try {

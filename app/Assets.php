@@ -36,17 +36,23 @@ class Assets {
 
         wp_enqueue_script( 'wp-i18n' );
         wp_enqueue_script( 'wp-api-fetch' );
+        wp_enqueue_script( 'updates' );
 
 
         $prod_js       = plugin_dir_url(__DIR__) . 'dist/assets/main.js';
         $prod_css      = plugin_dir_url(__DIR__) . 'dist/assets/main.css';
-
+        $js_ver        = file_exists( plugin_dir_path(__DIR__) . 'dist/assets/main.js' )
+                            ? filemtime( plugin_dir_path(__DIR__) . 'dist/assets/main.js' )
+                            : GWPDR_VERSION;
+        $css_ver       = file_exists( plugin_dir_path(__DIR__) . 'dist/assets/main.css' )
+                            ? filemtime( plugin_dir_path(__DIR__) . 'dist/assets/main.css' )
+                            : GWPDR_VERSION;
 
             wp_enqueue_script(
                 'gwpdr-discountrule-vjs',
                 $prod_js,
                 [ 'wp-i18n' ],
-                GWPDR_VERSION,
+                $js_ver,
                 true
             );
 
@@ -54,22 +60,57 @@ class Assets {
                 'gwpdr-discountrule-styles',
                 $prod_css,
                 [],
-                GWPDR_VERSION
+                $css_ver
             );
         
+
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            include_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $plugin_files = [
+            'primekit'       => 'primekit-addons/primekit-addons.php',
+            'quickcart'      => 'quick-cart-shopping/quick-cart-shopping.php',
+            'smartorderbump' => 'smart-order-bump/smart-order-bump.php',
+        ];
+
+        $plugin_status = [];
+        $activate_urls = [];
+        foreach ( $plugin_files as $key => $file ) {
+            if ( is_plugin_active( $file ) ) {
+                $plugin_status[ $key ] = 'active';
+            } elseif ( file_exists( WP_PLUGIN_DIR . '/' . $file ) ) {
+                $plugin_status[ $key ] = 'installed';
+            } else {
+                $plugin_status[ $key ] = 'not_installed';
+            }
+            $activate_urls[ $key ] = wp_nonce_url(
+                admin_url( 'plugins.php?action=activate&plugin=' . urlencode( $file ) ),
+                'activate-plugin_' . $file
+            );
+        }
 
         wp_localize_script(
             'gwpdr-discountrule-vjs',
             'gwpdrPluginData',
             [
-                'pluginUrl' => esc_url( plugin_dir_url(__DIR__) ),
-                'restUrl'   => esc_url_raw( rest_url( trailingslashit('gwpdr-discountrules/v2') ) ),
-                'nonce'     => wp_create_nonce( 'wp_rest' ),
-                'proUrl'    => esc_url( 'https://giantwpsolutions.com/' ),
-                'docsUrl'   => esc_url( 'https://www.docs.giantwpsolutions.com/' ),
-                'proActive' => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
-                'primekit_search_url' => esc_url( admin_url( 'plugin-install.php?s=PrimeKit%20Addons&tab=search&type=term' ) ),
-                'quickcart_search_url' => esc_url( admin_url( 'plugin-install.php?s=quick-cart-shopping&tab=search&type=term' ) ),
+                'pluginUrl'    => esc_url( plugin_dir_url(__DIR__) ),
+                'restUrl'      => esc_url_raw( rest_url( trailingslashit('gwpdr-discountrules/v2') ) ),
+                'nonce'        => wp_create_nonce( 'wp_rest' ),
+                'proUrl'       => esc_url( 'https://www.giantwpsolutions.com/giantwp-discount-rules' ),
+                'supportUrl'   => esc_url( 'https://www.giantwpsolutions.com/support' ),
+                'communityUrl' => esc_url( 'https://www.facebook.com/groups/giantwpsolutions' ),
+                'docsUrl'      => esc_url( 'https://docs.giantwpsolutions.com/' ),
+                'proActive'    => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
+                'primekit_slug'             => 'primekit-addons',
+                'quickcart_slug'            => 'quick-cart-shopping',
+                'smartorderbump_slug'       => 'smart-order-bump',
+                'primekit_status'           => $plugin_status['primekit'],
+                'quickcart_status'          => $plugin_status['quickcart'],
+                'smartorderbump_status'     => $plugin_status['smartorderbump'],
+                'primekit_activate_url'     => esc_url( $activate_urls['primekit'] ),
+                'quickcart_activate_url'    => esc_url( $activate_urls['quickcart'] ),
+                'smartorderbump_activate_url' => esc_url( $activate_urls['smartorderbump'] ),
             ]
         );
 

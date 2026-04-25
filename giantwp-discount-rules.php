@@ -3,7 +3,7 @@
  * Plugin Name: GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce
  * Plugin URI: https://giantwpsolutions.com/plugins/giantwp-discount-rules
  * Description: Create dynamic discounts, bulk pricing, and BOGO offers for WooCommerce with an easy rule builder. A powerful one-stop discount solution by GiantWP.
- * Version: 1.2.12
+ * Version: 1.2.13
  * Author: Giant WP Solutions
  * Author URI: https://giantwpsolutions.com
  * License: GPLv2 or later
@@ -14,7 +14,7 @@
  * Tested up to: 6.9
  * Requires PHP: 7.4
  * WC requires at least: 3.0
- * WC tested up to: 10.4
+ * WC tested up to: 10.7
  * WooCommerce HPOS support: yes
  * @package GiantWP_Discount_Rules
  */
@@ -36,7 +36,7 @@ final class GiantWP_Discount_Rules
     /**
      * The plugin version
      */
-    const version = '1.2.12';
+    const version = '1.2.13';
 
     /**
      * Class Constructor
@@ -96,6 +96,12 @@ final class GiantWP_Discount_Rules
             \GiantWP_Discount_Rules\Installer::instance();
              \GiantWP_Discount_Rules\Integration\IntegrationInit::instance();
 
+            // One-time seed for existing installs
+            if ( ! get_option( 'GWPDR_default_rules_seeded' ) ) {
+                $this->seed_default_rules();
+                update_option( 'GWPDR_default_rules_seeded', true );
+            }
+
         } else {
             add_action( 'admin_notices', [ $this, 'woocommerce_missing_notice' ] );
         }
@@ -135,8 +141,85 @@ final class GiantWP_Discount_Rules
 
         update_option( 'GWPDR_version', self::version );
 
+        // Seed default demo rules (only if no rules exist yet)
+        $this->seed_default_rules();
+
         // Set transient to trigger redirect to settings page
         set_transient( 'gwpdr_activation_redirect', true, 30 );
+    }
+
+    /**
+     * Insert 2 sample rules on first activation if none exist.
+     */
+    private function seed_default_rules() {
+        $fp_rules   = get_option( 'giantwp_flatpercentage_discount', [] );
+        $bogo_rules = get_option( 'giantwp_bogo_discount', [] );
+
+        // Only seed when both stores are empty (fresh install)
+        if ( ! empty( $fp_rules ) || ! empty( $bogo_rules ) ) {
+            return;
+        }
+
+        $now = gmdate( 'Y-m-d\TH:i:s\Z' );
+
+        // Rule 1 — Flat/Percentage (inactive)
+        $flat_rule = [
+            'id'               => 'dsc-default-fp-001',
+            'createdAt'        => $now,
+            'discountType'     => 'flat/percentage',
+            'status'           => 'off',
+            'couponName'       => 'Summer Sale — 20% Off',
+            'fpDiscountType'   => 'percentage',
+            'discountValue'    => 20,
+            'maxValue'         => null,
+            'schedule'         => [
+                'enableSchedule' => false,
+                'startDate'      => null,
+                'endDate'        => null,
+            ],
+            'usageLimits'      => [
+                'enableUsage'      => false,
+                'usageLimitsCount' => 0,
+            ],
+            'usedCount'        => 0,
+            'enableConditions' => false,
+            'conditionsApplies'=> 'any',
+            'conditions'       => [],
+        ];
+
+        // Rule 2 — BOGO (inactive)
+        $bogo_rule = [
+            'id'               => 'dsc-default-bogo-001',
+            'createdAt'        => $now,
+            'discountType'     => 'bogo',
+            'status'           => 'off',
+            'couponName'       => 'Buy 1 Get 1 Free',
+            'buyProductCount'  => 1,
+            'getProductCount'  => 1,
+            'freeOrDiscount'   => 'freeproduct',
+            'isRepeat'         => true,
+            'discounttypeBogo' => null,
+            'discountValue'    => null,
+            'maxValue'         => null,
+            'bogoApplies'      => 'any',
+            'buyProduct'       => [],
+            'schedule'         => [
+                'enableSchedule' => false,
+                'startDate'      => null,
+                'endDate'        => null,
+            ],
+            'usageLimits'      => [
+                'enableUsage'      => false,
+                'usageLimitsCount' => 0,
+            ],
+            'usedCount'        => 0,
+            'enableConditions' => false,
+            'conditionsApplies'=> 'any',
+            'conditions'       => [],
+        ];
+
+        update_option( 'giantwp_flatpercentage_discount', [ $flat_rule ] );
+        update_option( 'giantwp_bogo_discount', [ $bogo_rule ] );
     }
 
     /*

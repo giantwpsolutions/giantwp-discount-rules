@@ -1,175 +1,275 @@
 <script setup>
-import { ref } from "vue";
-import { Edit, Delete, InfoFilled } from "@element-plus/icons-vue";
+import { ref, computed } from "vue";
 import { __ } from "@wordpress/i18n";
+import {
+  ReceiptPercentIcon,
+  GiftIcon,
+  CubeIcon,
+  TruckIcon,
+  RectangleStackIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+  PencilSquareIcon,
+  DocumentDuplicateIcon,
+  TrashIcon,
+} from "@heroicons/vue/24/outline";
 
-// Define props (No need to import defineProps)
-defineProps({
-  discountRules: {
-    type: Array,
-    required: true,
-  },
-  onEdit: {
-    type: Function,
-    required: true,
-  },
-  onDelete: {
-    type: Function,
-    required: true,
-  },
-  onToggleStatus: {
-    type: Function,
-    required: true,
-  },
+const props = defineProps({
+  discountRules: { type: Array, required: true },
+  onAdd:         { type: Function, required: true },
+  onEdit:        { type: Function, required: true },
+  onDelete:      { type: Function, required: true },
+  onToggleStatus:{ type: Function, required: true },
+  onDuplicate:   { type: Function, default: null },
 });
 
-// Function to format the date (YYYY-MM-DD)
+const searchQuery    = ref("");
+const confirmDeleteId = ref(null);
+
+const filteredRules = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase();
+  if (!q) return props.discountRules;
+  return props.discountRules.filter(
+    (r) =>
+      r.couponName?.toLowerCase().includes(q) ||
+      r.discountType?.toLowerCase().includes(q)
+  );
+});
+
 const formatDate = (dateString) => {
-  if (!dateString || dateString === "") return "-"; // Handle empty or null dates
-
+  if (!dateString || dateString === "") return "—";
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return "-"; // Handle invalid dates
-
-  return date.toISOString().split("T")[0]; // Extracts "YYYY-MM-DD"
+  if (isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 };
 
 const formatUsage = (rule) => {
   const enabled = rule.usageLimits?.enableUsage;
-  const total = Number(rule.usageLimits?.usageLimitsCount ?? 0);
-  const used = Number(rule.usedCount ?? 0);
-
-  return enabled
-    ? `${used} / ${total}`
-    : __("Unlimited", "giantwp-discount-rules");
+  const total   = Number(rule.usageLimits?.usageLimitsCount ?? 0);
+  const used    = Number(rule.usedCount ?? 0);
+  return enabled ? `${used} / ${total}` : `${used} / ∞`;
 };
 
-// Track clicked state for confirmation
-const clicked = ref(false);
+const typeConfig = {
+  "flat/percentage":  { label: "Flat / %",      icon: ReceiptPercentIcon, bg: "tw-bg-blue-50",   text: "tw-text-blue-600"   },
+  "bogo":             { label: "BOGO",           icon: GiftIcon,           bg: "tw-bg-orange-50", text: "tw-text-orange-600" },
+  "buy x get y":      { label: "Buy X Get Y",   icon: CubeIcon,           bg: "tw-bg-pink-50",   text: "tw-text-pink-600"   },
+  "shipping discount":{ label: "Shipping",       icon: TruckIcon,          bg: "tw-bg-purple-50", text: "tw-text-purple-600" },
+  "bulk discount":    { label: "Bulk Discount",  icon: RectangleStackIcon, bg: "tw-bg-green-50",  text: "tw-text-green-600"  },
+};
 
-const handleCancel = () => {
-  clicked.value = true;
+const getType = (discountType) =>
+  typeConfig[discountType?.toLowerCase()] ?? {
+    label: discountType,
+    icon: null,
+    bg: "tw-bg-gray-100",
+    text: "tw-text-gray-600",
+  };
+
+const requestDelete = (id) => { confirmDeleteId.value = id; };
+const cancelDelete  = ()  => { confirmDeleteId.value = null; };
+const confirmDelete = (rule) => {
+  confirmDeleteId.value = null;
+  props.onDelete(rule);
 };
 </script>
 
 <template>
-  <div class="tw-overflow-x-auto">
-    <table class="tw-min-w-full tw-table-auto tw-border-collapse tw-border tw-border-gray-200">
-      <thead>
-        <tr class="tw-bg-gray-100 tw-text-left">
-          <th class="tw-px-4 tw-py-2 tw-border-b tw-w-12">
-            <input type="checkbox" class="h-5 w-5" />
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Discount Name", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Type", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Start Date", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("End Date", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Usage Limits", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Status", "giantwp-discount-rules") }}
-          </th>
-          <th class="tw-px-4 tw-py-2 tw-border-b">
-            {{ __("Actions", "giantwp-discount-rules") }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- No Data Row -->
-        <tr v-if="discountRules.length === 0">
-          <td colspan="7" class="tw-text-center tw-px-4 tw-py-6 tw-text-gray-500">
-            {{ __("No discount rules created", "giantwp-discount-rules") }}
-          </td>
-        </tr>
+  <div>
+    <!-- Toolbar -->
+    <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+      <button
+        @click="onAdd"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-blue-700"
+      >
+        <PlusIcon class="tw-h-4 tw-w-4" />
+        {{ __("Add New Rule", "giantwp-discount-rules") }}
+      </button>
 
-        <!-- Discount Rule Rows -->
-        <tr v-for="rule in discountRules" :key="rule.id">
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            <input type="checkbox" class="tw-h-5 tw-w-5" :value="rule.id" />
-          </td>
-          <td class="tw-px-4 tw-py-2 tw-border-b">{{ rule.couponName }}</td>
-          <td class="tw-px-4 tw-py-2 tw-border-b tw-capitalize">{{ rule.discountType }}</td>
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            {{ formatDate(rule.schedule?.startDate) || "--" }}
-          </td>
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            {{ formatDate(rule.schedule?.endDate) || "--" }}
-          </td>
+      <div class="tw-relative">
+        <MagnifyingGlassIcon class="tw-absolute tw-left-3 tw-top-1/2 tw-h-4 tw-w-4 tw--translate-y-1/2 tw-text-gray-400" />
+        <input
+          v-model="searchQuery"
+          type="text"
+          :placeholder="__('Search rules...', 'giantwp-discount-rules')"
+          class="tw-rounded-lg tw-border tw-border-gray-200 tw-bg-white tw-py-2 tw-pl-9 tw-pr-4 tw-text-sm tw-text-gray-700 tw-shadow-sm tw-outline-none focus:tw-border-blue-400 focus:tw-ring-1 focus:tw-ring-blue-400"
+        />
+      </div>
+    </div>
 
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            {{ formatUsage(rule) }}
-          </td>
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            <label class="tw-inline-flex tw-relative tw-items-center tw-cursor-pointer">
-              <el-switch
-                v-model="rule.status"
-                :active-value="'on'"
-                :inactive-value="'off'"
-                @update:model-value="
-                  (val) => onToggleStatus({ ...rule, status: val })
-                " />
-            </label>
-          </td>
-          <td class="tw-px-4 tw-py-2 tw-border-b">
-            <!-- Edit Button -->
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              :content="__('Edit Rule', 'giantwp-discount-rules')"
-              placement="top">
-              <el-icon
-                @click="onEdit(rule)"
-                class="tw-text-blue-600 tw-hover:text-blue-800 tw-mr-2 tw-hover:cursor-pointer"
-                :size="20"
-                ><Edit
-              /></el-icon>
-            </el-tooltip>
+    <!-- Table -->
+    <div class="tw-rounded-xl tw-border tw-border-gray-200">
+      <table class="tw-min-w-full tw-table-auto tw-border-collapse">
+        <thead>
+          <tr class="tw-border-b tw-border-gray-200 tw-bg-gray-50">
+            <th class="tw-w-10 tw-px-4 tw-py-3">
+              <input type="checkbox" class="tw-h-4 tw-w-4 tw-rounded tw-border-gray-300" />
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Discount Name", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Type", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Start Date", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("End Date", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Usage", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Status", "giantwp-discount-rules") }}
+            </th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gray-500">
+              {{ __("Actions", "giantwp-discount-rules") }}
+            </th>
+          </tr>
+        </thead>
 
-            <!-- Delete Button with Confirmation -->
+        <tbody class="tw-divide-y tw-divide-gray-100 tw-bg-white">
+          <!-- Empty state -->
+          <tr v-if="filteredRules.length === 0">
+            <td colspan="8" class="tw-py-10 tw-text-center tw-text-sm tw-text-gray-400">
+              {{ __("No discount rules found", "giantwp-discount-rules") }}
+            </td>
+          </tr>
 
-            <el-popconfirm
-              width="220"
-              icon-color="#626AEF"
-              :title="
-                __(
-                  'Are you sure you want to delete this discount?',
-                  'giantwp-discount-rules'
-                )
-              "
-              @confirm="onDelete(rule)">
-              <template #reference>
-                <span>
-                  <el-tooltip
-                    effect="dark"
-                    :content="__('Delete Rule', 'giantwp-discount-rules')"
-                    placement="top">
-                    <el-icon
-                      class="tw-text-red-600 tw-hover:text-red-800 tw-hover:cursor-pointer"
-                      :size="20">
-                      <Delete />
-                    </el-icon>
-                  </el-tooltip>
-                </span>
-              </template>
+          <!-- Rows -->
+          <tr
+            v-for="rule in filteredRules"
+            :key="rule.id"
+            class="tw-transition hover:tw-bg-gray-50"
+          >
+            <!-- Checkbox -->
+            <td class="tw-px-4 tw-py-3">
+              <input type="checkbox" class="tw-h-4 tw-w-4 tw-rounded tw-border-gray-300" :value="rule.id" />
+            </td>
 
-              <template #actions="{ confirm, cancel }">
-                <el-button size="small" @click="cancel">No</el-button>
-                <el-button type="danger" size="small" @click="confirm"
-                  >Yes</el-button
+            <!-- Name -->
+            <td class="tw-px-4 tw-py-3 tw-text-sm tw-font-semibold tw-text-gray-800">
+              {{ rule.couponName }}
+            </td>
+
+            <!-- Type badge -->
+            <td class="tw-px-4 tw-py-3">
+              <span
+                :class="[
+                  'tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-full tw-px-2.5 tw-py-1 tw-text-xs tw-font-medium',
+                  getType(rule.discountType).bg,
+                  getType(rule.discountType).text,
+                ]"
+              >
+                <component
+                  :is="getType(rule.discountType).icon"
+                  v-if="getType(rule.discountType).icon"
+                  class="tw-h-3.5 tw-w-3.5"
+                />
+                {{ getType(rule.discountType).label }}
+              </span>
+            </td>
+
+            <!-- Start Date -->
+            <td class="tw-px-4 tw-py-3 tw-text-sm tw-text-gray-600">
+              {{ formatDate(rule.schedule?.startDate) }}
+            </td>
+
+            <!-- End Date -->
+            <td class="tw-px-4 tw-py-3 tw-text-sm tw-text-gray-600">
+              {{ formatDate(rule.schedule?.endDate) }}
+            </td>
+
+            <!-- Usage -->
+            <td class="tw-px-4 tw-py-3 tw-text-sm tw-text-gray-600">
+              {{ formatUsage(rule) }}
+            </td>
+
+            <!-- Status -->
+            <td class="tw-px-4 tw-py-3">
+              <button
+                @click="onToggleStatus({ ...rule, status: rule.status === 'on' ? 'off' : 'on' })"
+                :class="[
+                  'tw-inline-flex tw-items-center tw-gap-1.5 tw-text-sm tw-font-medium tw-transition',
+                  rule.status === 'on' ? 'tw-text-green-600' : 'tw-text-gray-400',
+                ]"
+              >
+                <span
+                  :class="[
+                    'tw-inline-block tw-h-2 tw-w-2 tw-rounded-full',
+                    rule.status === 'on' ? 'tw-bg-green-500' : 'tw-bg-gray-400',
+                  ]"
+                />
+                {{ rule.status === 'on' ? __('Active', 'giantwp-discount-rules') : __('Inactive', 'giantwp-discount-rules') }}
+              </button>
+            </td>
+
+            <!-- Actions -->
+            <td class="tw-px-4 tw-py-3">
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <!-- Edit -->
+                <button
+                  @click="onEdit(rule)"
+                  class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-gray-100 hover:tw-text-blue-600"
+                  :title="__('Edit', 'giantwp-discount-rules')"
                 >
-              </template>
-            </el-popconfirm>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                  <PencilSquareIcon class="tw-h-4 tw-w-4" />
+                </button>
+
+                <!-- Duplicate -->
+                <button
+                  v-if="onDuplicate"
+                  @click="onDuplicate(rule)"
+                  class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-gray-100 hover:tw-text-indigo-600"
+                  :title="__('Duplicate', 'giantwp-discount-rules')"
+                >
+                  <DocumentDuplicateIcon class="tw-h-4 tw-w-4" />
+                </button>
+
+                <!-- Delete -->
+                <div class="tw-relative">
+                  <button
+                    @click="requestDelete(rule.id)"
+                    class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-gray-100 hover:tw-text-red-600"
+                    :title="__('Delete', 'giantwp-discount-rules')"
+                  >
+                    <TrashIcon class="tw-h-4 tw-w-4" />
+                  </button>
+
+                  <!-- Inline confirm popover -->
+                  <div
+                    v-if="confirmDeleteId === rule.id"
+                    class="tw-absolute tw-right-0 tw-top-8 tw-z-10 tw-w-48 tw-rounded-lg tw-border tw-border-gray-200 tw-bg-white tw-p-3 tw-shadow-lg"
+                  >
+                    <p class="tw-mb-2 tw-text-xs tw-text-gray-700">
+                      {{ __("Delete this rule?", "giantwp-discount-rules") }}
+                    </p>
+                    <div class="tw-flex tw-justify-end tw-gap-2">
+                      <button
+                        @click="cancelDelete"
+                        class="tw-rounded tw-border tw-border-gray-200 tw-px-2 tw-py-1 tw-text-xs tw-text-gray-600 hover:tw-bg-gray-50"
+                      >
+                        {{ __("No", "giantwp-discount-rules") }}
+                      </button>
+                      <button
+                        @click="confirmDelete(rule)"
+                        class="tw-rounded tw-bg-red-600 tw-px-2 tw-py-1 tw-text-xs tw-text-white hover:tw-bg-red-700"
+                      >
+                        {{ __("Yes", "giantwp-discount-rules") }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>

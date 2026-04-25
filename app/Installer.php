@@ -21,6 +21,7 @@ use GiantWP_Discount_Rules\Discount\Manager\CouponDisplay;
 use GiantWP_Discount_Rules\Discount\Manager\Bogo_Free_Item_Handler;
 use GiantWP_Discount_Rules\Discount\Manager\DiscountLabel;
 use GiantWP_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
+use GiantWP_Discount_Rules\Discount\Manager\Product_Badge;
 use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 use GiantWP_Discount_Rules\Helper\PromoMessage;
 
@@ -49,6 +50,7 @@ class Installer
         Checkout_Ajax_Handler::instance();
         TriggerCart::instance();
         Bogo_Free_Item_Handler::instance();
+        Product_Badge::instance();
         DiscountLabel::instance();
         FlatPercentage_Discount::instance();
         FlatPercentageUsage::instance();

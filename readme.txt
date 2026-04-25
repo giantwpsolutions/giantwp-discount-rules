@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.12
+Stable tag: 1.2.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -284,6 +284,17 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 == Changelog ==
 
+= 1.2.13 - April 26, 2026 =
+* Added: Product Badge feature — show a discount badge on product images in the shop and on single product pages
+* Added: Badge background color and text color customization from Settings page with live preview
+* Added: WooCommerce default sale badge is hidden when our badge is enabled
+* Added: Smart Order Bump added to the sidebar recommended plugins list
+* Fixed: BOGO, Bulk Discount, and Buy X Get Y badges now correctly read product condition objects instead of treating them as flat ID arrays
+* Fixed: Category-targeted rules now correctly expand to product IDs for badge display
+* Improved: Settings page redesigned to a compact row-based layout
+* Improved: Inter font enforced consistently across all admin UI including Element Plus
+* Improved: First Purchase Discount, Free Shipping, and Bulk Buy quick-start templates pre-fill correct field values
+* Improved: Conditions component fixed to prevent infinite re-render loop on prop sync
 
 = 1.2.12 =
 * Update plugin assets

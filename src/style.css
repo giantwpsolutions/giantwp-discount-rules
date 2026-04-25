@@ -5,22 +5,33 @@
 #wpcontent {
   margin: 0;
   padding: 0;
-  margin-left: 160px; /* Default width of the WordPress admin menu */
-  width: calc(100% - 160px); /* Take full width minus the admin menu */
-  box-sizing: border-box; /* Include padding and border in width calculation */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  margin-left: 160px;
+  width: calc(100% - 160px);
+  box-sizing: border-box;
+  overflow: hidden;
+  height: calc(100vh - 32px); /* 32px = WP admin bar */
 }
 
-/* Remove upper margin or padding on #wpbody-content */
+#wpbody,
 #wpbody-content {
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* Remove top margin from .wrap class */
 #wpbody-content > .wrap {
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#giantwp-discount-rules-dashboard {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Ensure plugin-specific container takes full width */
@@ -36,6 +47,27 @@ html {
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
+}
+
+/* Force Inter on all plugin elements */
+#giantwp-discount-rules-dashboard,
+#giantwp-discount-rules-dashboard * {
+  font-family: "Inter", sans-serif;
+}
+
+/* Element Plus CSS variable — covers all El components incl. teleported ones */
+:root {
+  --el-font-family: "Inter", sans-serif;
+}
+
+/* Teleported El dropdowns / tooltips / popovers render outside our container */
+.el-popper,
+.el-select-dropdown,
+.el-dropdown-menu,
+.el-tooltip__popper,
+.el-date-picker,
+.el-picker-panel {
+  font-family: "Inter", sans-serif !important;
 }
 
 /* Fix for when the admin menu is collapsed */

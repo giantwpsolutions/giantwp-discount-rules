@@ -12,6 +12,16 @@ import BulkDiscount from "../Forms/BulkDiscount.vue";
 import { isEqual } from "lodash-es";
 import { saveBulkDiscountData } from "../../data/save-data/saveBulkDiscountData";
 import {
+  ReceiptPercentIcon,
+  GiftIcon,
+  CubeIcon,
+  TruckIcon,
+  RectangleStackIcon,
+  BoltIcon,
+  TagIcon,
+  Cog6ToothIcon,
+} from "@heroicons/vue/24/outline";
+import {
   licenseKey,
   licenseStatus,
   isLoadingLicense,
@@ -49,6 +59,7 @@ const selectedDiscountsType = ref("");
 const showForm = ref(false);
 const isSaving = ref(false);
 const isEditMode = ref(false);
+const activeTab = ref("templates");
 
 // refs
 const flatPercentageFormRef = ref(null);
@@ -84,10 +95,212 @@ const selectDiscountType = (type) => {
   showForm.value = true;
 };
 
+const quickTemplates = [
+  {
+    id: "bogo-1-1",
+    name: __("BOGO Deal", "giantwp-discount-rules"),
+    desc: __("Buy 1, Get 1 free. Perfect for fashion, shoes, accessories.", "giantwp-discount-rules"),
+    type: "Bogo",
+    icon: GiftIcon,
+    iconBg: "tw-bg-orange-50",
+    iconColor: "tw-text-orange-500",
+    badge: __("Popular", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-orange-100",
+    badgeText: "tw-text-orange-600",
+    tags: ["Buy 1 Get 1", "Free product"],
+    isPro: false,
+    data: {
+      couponName: "BOGO Deal",
+      discountType: "bogo",
+      buyProductCount: 1,
+      getProductCount: 1,
+      freeOrDiscount: "freeproduct",
+      isRepeat: true,
+      discounttypeBogo: null,
+      discountValue: null,
+      maxValue: null,
+      bogoApplies: "any",
+      buyProduct: [],
+      status: "on",
+      schedule: { enableSchedule: false, startDate: null, endDate: null },
+      usageLimits: { enableUsage: false, usageLimitsCount: 0 },
+      enableConditions: false,
+      conditionsApplies: "any",
+      conditions: [],
+    },
+  },
+  {
+    id: "first-purchase",
+    name: __("First Purchase Discount", "giantwp-discount-rules"),
+    desc: __("Give new customers a discount on their very first order.", "giantwp-discount-rules"),
+    type: "Flat/Percentage",
+    icon: TagIcon,
+    iconBg: "tw-bg-pink-50",
+    iconColor: "tw-text-pink-500",
+    badge: __("New Customers", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-green-100",
+    badgeText: "tw-text-green-600",
+    tags: ["% Discount", "New users", "Condition"],
+    isPro: false,
+    data: {
+      couponName: "First Purchase Discount",
+      discountType: "flat/percentage",
+      fpDiscountType: "percentage",
+      discountValue: 15,
+      maxValue: null,
+      status: "on",
+      schedule: { enableSchedule: false, startDate: null, endDate: null },
+      usageLimits: { enableUsage: true, usageLimitsCount: 1 },
+      enableConditions: true,
+      conditionsApplies: "any",
+      conditions: [
+        { id: 1, field: "customer_order_count", operator: "less_than", value: "1" },
+      ],
+    },
+  },
+  {
+    id: "flash-sale",
+    name: __("Flash Sale", "giantwp-discount-rules"),
+    desc: __("Limited-time percentage or fixed discount with a countdown.", "giantwp-discount-rules"),
+    type: "Flat/Percentage",
+    icon: BoltIcon,
+    iconBg: "tw-bg-yellow-50",
+    iconColor: "tw-text-yellow-500",
+    badge: __("Time-Limited", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-red-100",
+    badgeText: "tw-text-red-500",
+    tags: ["% or Fixed", "Schedule", "Limited uses"],
+    isPro: false,
+    data: {
+      couponName: "Flash Sale",
+      discountType: "flat/percentage",
+      fpDiscountType: "percentage",
+      discountValue: 30,
+      maxValue: null,
+      status: "on",
+      schedule: { enableSchedule: true, startDate: null, endDate: null },
+      usageLimits: { enableUsage: true, usageLimitsCount: 100 },
+      enableConditions: false,
+      conditionsApplies: "any",
+      conditions: [],
+    },
+  },
+  {
+    id: "bogo-2-1",
+    name: __("Buy 2 Get 1 Free", "giantwp-discount-rules"),
+    desc: __("Buy any 2 products and get the 3rd one completely free.", "giantwp-discount-rules"),
+    type: "Bogo",
+    icon: GiftIcon,
+    iconBg: "tw-bg-blue-50",
+    iconColor: "tw-text-blue-500",
+    badge: __("Popular", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-orange-100",
+    badgeText: "tw-text-orange-600",
+    tags: ["Buy 2 Get 1", "Free product", "Repeatable"],
+    isPro: false,
+    data: {
+      couponName: "Buy 2 Get 1 Free",
+      discountType: "bogo",
+      buyProductCount: 2,
+      getProductCount: 1,
+      freeOrDiscount: "freeproduct",
+      isRepeat: true,
+      discounttypeBogo: null,
+      discountValue: null,
+      maxValue: null,
+      bogoApplies: "any",
+      buyProduct: [],
+      status: "on",
+      schedule: { enableSchedule: false, startDate: null, endDate: null },
+      usageLimits: { enableUsage: false, usageLimitsCount: 0 },
+      enableConditions: false,
+      conditionsApplies: "any",
+      conditions: [],
+    },
+  },
+  {
+    id: "free-shipping",
+    name: __("Free Shipping", "giantwp-discount-rules"),
+    desc: __("Offer free shipping on all orders or above a minimum amount.", "giantwp-discount-rules"),
+    type: "Shipping Discount",
+    icon: TruckIcon,
+    iconBg: "tw-bg-purple-50",
+    iconColor: "tw-text-purple-500",
+    badge: __("Pro Only", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-gray-100",
+    badgeText: "tw-text-gray-500",
+    tags: ["Free shipping", "Min. order", "Condition"],
+    isPro: true,
+    data: {
+      couponName: "Free Shipping",
+      discountType: "shipping discount",
+      shippingDiscountType: "reduceFee",
+      pDiscountType: "percentage",
+      discountValue: 100,
+      maxValue: null,
+      status: "on",
+      schedule: { enableSchedule: false, startDate: null, endDate: null },
+      usageLimits: { enableUsage: false, usageLimitsCount: 0 },
+      enableConditions: true,
+      conditionsApplies: "any",
+      conditions: [],
+    },
+  },
+  {
+    id: "bulk-15",
+    name: __("Bulk Buy 15% Off", "giantwp-discount-rules"),
+    desc: __("Encourage larger orders with tiered quantity-based discounts.", "giantwp-discount-rules"),
+    type: "Bulk Discount",
+    icon: RectangleStackIcon,
+    iconBg: "tw-bg-teal-50",
+    iconColor: "tw-text-teal-500",
+    badge: __("Pro Only", "giantwp-discount-rules"),
+    badgeBg: "tw-bg-gray-100",
+    badgeText: "tw-text-gray-500",
+    tags: ["5+ items", "15% off", "Tiered"],
+    isPro: true,
+    data: {
+      couponName: "Bulk Buy 15% Off",
+      discountType: "bulk discount",
+      getItem: "alltogether",
+      bulkDiscounts: [
+        { fromcount: 5, toCount: 10, discountTypeBulk: "percentage", discountValue: 15, maxValue: null },
+      ],
+      getApplies: "any",
+      buyProducts: [],
+      status: "on",
+      schedule: { enableSchedule: false, startDate: null, endDate: null },
+      usageLimits: { enableUsage: false, usageLimitsCount: 0 },
+      enableConditions: false,
+      conditionsApplies: "any",
+      conditions: [],
+    },
+  },
+];
+
+const selectTemplate = async (template) => {
+  if (template.isPro && !isLicenseActive.value) return;
+  selectedDiscountsType.value = template.type;
+  showForm.value = true;
+  await nextTick();
+  await nextTick();
+  await nextTick();
+  const data = template.data;
+  if (template.type === "Flat/Percentage" && flatPercentageFormRef.value)
+    flatPercentageFormRef.value.setFormData(data);
+  else if (template.type === "Bogo" && bogoFormRef.value)
+    bogoFormRef.value.setFormData(data);
+  else if (template.type === "Shipping Discount" && freeShippingRef.value)
+    freeShippingRef.value.setFormData(data);
+  else if (template.type === "Bulk Discount" && bulkDiscountRef.value)
+    bulkDiscountRef.value.setFormData(data);
+};
+
 watch(() => props.visible, (isVisible) => {
   if (isVisible === false) {
     selectedDiscountsType.value = "";
     showForm.value = false;
+    activeTab.value = "templates";
   }
 });
 
@@ -239,79 +452,153 @@ const saveForm = async () => {
         <!-- Modal Content (scrolls) -->
         <div class="tw-border tw-rounded tw-p-6 tw-overflow-auto">
           <template v-if="!showForm">
-            <div
-              class="tw-grid tw-grid-cols-1 tw-mt-6 sm:tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-6"
-            >
-              <!-- Flat/Percentage -->
-              <div
-                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
-              >
+
+            <!-- Subtitle -->
+            <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
+              {{ __("Start from a ready-made template or build from scratch", "giantwp-discount-rules") }}
+            </p>
+
+            <!-- Tabs -->
+            <div class="tw-border-b tw-border-gray-200 tw-mb-6">
+              <div class="tw-flex tw-gap-6">
                 <button
-                  @click="() => selectDiscountType('Flat/Percentage')"
-                  class="tw-w-full tw-text-center tw-font-medium"
+                  @click="activeTab = 'templates'"
+                  :class="[
+                    'tw-flex tw-items-center tw-gap-1.5 tw-pb-3 tw-text-sm tw-font-medium tw-transition tw-border-b-2 -tw-mb-px',
+                    activeTab === 'templates'
+                      ? 'tw-border-blue-600 tw-text-blue-600'
+                      : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700',
+                  ]"
                 >
-                  {{ __("Flat/Percentage", "giantwp-discount-rules") }}
+                  <ReceiptPercentIcon class="tw-h-4 tw-w-4" />
+                  {{ __("Quick Start Templates", "giantwp-discount-rules") }}
                 </button>
-                <div
-                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
+
+                <button
+                  @click="activeTab = 'custom'"
+                  :class="[
+                    'tw-flex tw-items-center tw-gap-1.5 tw-pb-3 tw-text-sm tw-font-medium tw-transition tw-border-b-2 -tw-mb-px',
+                    activeTab === 'custom'
+                      ? 'tw-border-blue-600 tw-text-blue-600'
+                      : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700',
+                  ]"
                 >
-                  {{
-                    __(
-                      "Apply a fixed amount or percentage discount",
-                      "giantwp-discount-rules"
-                    )
-                  }}
-                </div>
+                  <Cog6ToothIcon class="tw-h-4 tw-w-4" />
+                  {{ __("Custom Rule", "giantwp-discount-rules") }}
+                </button>
               </div>
+            </div>
+
+            <!-- Tab: Quick Start Templates -->
+            <div v-if="activeTab === 'templates'" class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-4">
+              <button
+                v-for="tpl in quickTemplates"
+                :key="tpl.id"
+                @click="selectTemplate(tpl)"
+                :disabled="tpl.isPro && !isLicenseActive"
+                :class="[
+                  'tw-flex tw-flex-col tw-rounded-2xl tw-border tw-p-4 tw-text-left tw-transition tw-group',
+                  tpl.isPro && !isLicenseActive
+                    ? 'tw-border-gray-200 tw-bg-white tw-opacity-60 tw-cursor-not-allowed'
+                    : 'tw-border-gray-200 tw-bg-white tw-shadow-sm hover:tw-shadow-md hover:tw-border-gray-300 tw-cursor-pointer',
+                ]"
+              >
+                <!-- Top row: icon + badge -->
+                <div class="tw-flex tw-items-start tw-justify-between tw-mb-3">
+                  <div :class="['tw-flex tw-h-10 tw-w-10 tw-items-center tw-justify-center tw-rounded-xl', tpl.iconBg]">
+                    <component :is="tpl.icon" :class="['tw-h-5 tw-w-5', tpl.iconColor]" />
+                  </div>
+                  <span :class="['tw-rounded-full tw-px-2.5 tw-py-0.5 tw-text-[11px] tw-font-semibold', tpl.badgeBg, tpl.badgeText]">
+                    {{ tpl.badge }}
+                  </span>
+                </div>
+                <!-- Title -->
+                <p class="tw-text-sm tw-font-bold tw-text-gray-900 tw-mb-1">{{ tpl.name }}</p>
+                <!-- Description -->
+                <p class="tw-text-xs tw-text-gray-500 tw-leading-relaxed tw-mb-3 tw-line-clamp-2">{{ tpl.desc }}</p>
+                <!-- Tags + Arrow -->
+                <div class="tw-flex tw-items-end tw-justify-between tw-mt-auto">
+                  <div class="tw-flex tw-flex-wrap tw-gap-1">
+                    <span
+                      v-for="tag in tpl.tags"
+                      :key="tag"
+                      class="tw-rounded-full tw-bg-gray-100 tw-px-2 tw-py-0.5 tw-text-[11px] tw-text-gray-600"
+                    >{{ tag }}</span>
+                  </div>
+                  <span class="tw-text-gray-300 tw-text-base tw-ml-2 group-hover:tw-text-gray-500 tw-transition">→</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Tab: Custom Rule -->
+            <div v-if="activeTab === 'custom'" class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-4">
+
+              <!-- Flat / Percentage -->
+              <button
+                @click="() => selectDiscountType('Flat/Percentage')"
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition hover:tw-border-blue-400 hover:tw-shadow-md tw-cursor-pointer"
+              >
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-blue-50">
+                  <ReceiptPercentIcon class="tw-h-7 tw-w-7 tw-text-blue-500" />
+                </div>
+                <span class="tw-font-semibold tw-text-gray-800">{{ __("Flat / Percentage", "giantwp-discount-rules") }}</span>
+                <span class="tw-text-xs tw-text-gray-500">{{ __("Fixed amount or % off", "giantwp-discount-rules") }}</span>
+              </button>
 
               <!-- BOGO -->
-              <div
-                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
+              <button
+                @click="() => selectDiscountType('Bogo')"
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition hover:tw-border-orange-400 hover:tw-shadow-md tw-cursor-pointer"
               >
-                <button
-                  @click="() => selectDiscountType('Bogo')"
-                  class="tw-w-full tw-text-center tw-font-medium"
-                >
-                  {{ __("BOGO", "giantwp-discount-rules") }}
-                </button>
-                <div
-                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
-                >
-                  {{
-                    __("Buy One Get One free discount", "giantwp-discount-rules")
-                  }}
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-orange-50">
+                  <GiftIcon class="tw-h-7 tw-w-7 tw-text-orange-500" />
                 </div>
+                <span class="tw-font-semibold tw-text-gray-800">{{ __("BOGO", "giantwp-discount-rules") }}</span>
+                <span class="tw-text-xs tw-text-gray-500">{{ __("Buy one, get one free/discounted", "giantwp-discount-rules") }}</span>
+              </button>
+
+              <!-- Buy X Get Y -->
+              <div
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition"
+                :class="isLicenseActive ? 'hover:tw-border-pink-400 hover:tw-shadow-md tw-cursor-pointer' : 'tw-opacity-60 tw-cursor-not-allowed'"
+                @click="isLicenseActive ? selectDiscountType('Buy X Get Y') : null"
+              >
+                <span class="tw-absolute tw-top-2 tw-right-2 tw-rounded tw-bg-red-500 tw-px-2 tw-py-0.5 tw-text-[10px] tw-font-bold tw-text-white" v-if="!isLicenseActive">PRO</span>
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-pink-50">
+                  <CubeIcon class="tw-h-7 tw-w-7 tw-text-pink-500" />
+                </div>
+                <span class="tw-font-semibold tw-text-gray-800">{{ __("Buy X Get Y", "giantwp-discount-rules") }}</span>
+                <span class="tw-text-xs tw-text-gray-500">{{ __("Buy a set, get another free", "giantwp-discount-rules") }}</span>
               </div>
 
-              <!-- Pro Features -->
+              <!-- Shipping Discount -->
               <div
-                v-for="(proFeature, index) in proFeatures"
-                :key="index"
-                class="tw-relative tw-group tw-bg-gray-100 hover:tw-bg-blue-100 tw-rounded-md tw-p-6 tw-flex tw-flex-col tw-items-center"
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition"
+                :class="isLicenseActive ? 'hover:tw-border-purple-400 hover:tw-shadow-md tw-cursor-pointer' : 'tw-opacity-60 tw-cursor-not-allowed'"
+                @click="isLicenseActive ? selectDiscountType('Shipping Discount') : null"
               >
-                <button
-                  :disabled="!isLicenseActive"
-                  :class="
-                    !isLicenseActive
-                      ? 'tw-opacity-50 tw-cursor-not-allowed'
-                      : ''
-                  "
-                  @click="() => selectDiscountType(proFeature.value)"
-                  class="tw-w-full tw-text-center tw-font-medium"
-                >
-                  {{ __(proFeature.name, "giantwp-discount-rules") }}
-                </button>
-                <span
-                  v-if="!isLicenseActive"
-                  class="tw-absolute tw-top-1 tw-right-1 tw-bg-red-500 tw-text-white tw-text-xs tw-px-2 tw-py-1 tw-rounded"
-                  >Pro</span
-                >
-                <div
-                  class="tw-absolute tw-bottom-full tw-mb-2 tw-hidden tw-group-hover:tw-block tw-bg-gray-700 tw-text-white tw-text-xs tw-rounded tw-py-1 tw-px-2 tw-w-48 tw-text-center"
-                >
-                  {{ __(proFeature.description, "giantwp-discount-rules") }}
+                <span class="tw-absolute tw-top-2 tw-right-2 tw-rounded tw-bg-red-500 tw-px-2 tw-py-0.5 tw-text-[10px] tw-font-bold tw-text-white" v-if="!isLicenseActive">PRO</span>
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-purple-50">
+                  <TruckIcon class="tw-h-7 tw-w-7 tw-text-purple-500" />
                 </div>
+                <span class="tw-font-semibold tw-text-gray-800">{{ __("Shipping Discount", "giantwp-discount-rules") }}</span>
+                <span class="tw-text-xs tw-text-gray-500">{{ __("Free or reduced shipping rules", "giantwp-discount-rules") }}</span>
               </div>
+
+              <!-- Bulk Discount -->
+              <div
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition"
+                :class="isLicenseActive ? 'hover:tw-border-green-400 hover:tw-shadow-md tw-cursor-pointer' : 'tw-opacity-60 tw-cursor-not-allowed'"
+                @click="isLicenseActive ? selectDiscountType('Bulk Discount') : null"
+              >
+                <span class="tw-absolute tw-top-2 tw-right-2 tw-rounded tw-bg-red-500 tw-px-2 tw-py-0.5 tw-text-[10px] tw-font-bold tw-text-white" v-if="!isLicenseActive">PRO</span>
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-green-50">
+                  <RectangleStackIcon class="tw-h-7 tw-w-7 tw-text-green-500" />
+                </div>
+                <span class="tw-font-semibold tw-text-gray-800">{{ __("Bulk Discount", "giantwp-discount-rules") }}</span>
+                <span class="tw-text-xs tw-text-gray-500">{{ __("Tiered pricing by quantity", "giantwp-discount-rules") }}</span>
+              </div>
+
             </div>
           </template>
 
