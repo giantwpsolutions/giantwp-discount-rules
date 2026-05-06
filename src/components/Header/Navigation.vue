@@ -12,8 +12,21 @@ const route = useRoute();
   <div class="tw-ml-10 tw-flex tw-items-baseline tw-space-x-4">
     <template v-for="item in navigation" :key="item.name">
       <!-- Use router-link for internal links -->
+      <!-- Upcoming (non-clickable) -->
+      <span
+        v-if="item.isUpcoming"
+        class="tw-text-gray-400 tw-cursor-default tw-rounded-md tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-flex tw-items-center tw-select-none"
+        :title="__('Coming soon', 'giantwp-discount-rules')"
+      >
+        {{ item.name }}
+        <span class="tw-ml-2 tw-bg-blue-500 tw-text-white tw-text-xs tw-font-bold tw-px-2 tw-py-0.5 tw-rounded">
+          {{ __("Upcoming", "giantwp-discount-rules") }}
+        </span>
+      </span>
+
+      <!-- Internal link -->
       <router-link
-        v-if="!item.isExternal"
+        v-else-if="!item.isExternal"
         :to="item.href"
         :class="[
           route.path === item.href
@@ -29,6 +42,7 @@ const route = useRoute();
         </span>
       </router-link>
 
+      <!-- External link -->
       <a
         v-else
         :href="item.href"

@@ -241,6 +241,17 @@ const handleSaveSettings = async () => {
           </div>
         </div>
 
+        <!-- Margin Protection Guard (Upcoming) -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100 tw-opacity-60">
+          <div>
+            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Margin Protection Guard", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Prevent discounts from going below your minimum profit margin", "giantwp-discount-rules") }}</p>
+          </div>
+          <span class="tw-inline-block tw-rounded tw-bg-blue-500 tw-px-2.5 tw-py-1 tw-text-xs tw-font-bold tw-text-white tw-uppercase tw-tracking-wide">
+            {{ __("Upcoming", "giantwp-discount-rules") }}
+          </span>
+        </div>
+
         <!-- Save button -->
         <div class="tw-px-5 tw-py-4">
           <button
@@ -259,6 +270,7 @@ const handleSaveSettings = async () => {
     <div class="tw-w-64 tw-shrink-0">
       <Sidebar />
     </div>
-
   </div>
+
+
 </template>

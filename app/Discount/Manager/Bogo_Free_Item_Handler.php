@@ -135,6 +135,7 @@ class Bogo_Free_Item_Handler {
             if ( $original_price > $current_price ) {
                 $savings = $original_price - $current_price;
                 if ( $savings > 0 ) {
+                    /* translators: %s: formatted monetary savings amount (e.g. "$5.00"). */
                     return '<del>' . wc_price( $original_price ) . '</del> ' . wc_price( $current_price ) . ' <span class="gwpdr-save-badge">' . sprintf( esc_html__( 'Save %s', 'giantwp-discount-rules' ), wc_price( $savings ) ) . '</span>';
                 }
             }

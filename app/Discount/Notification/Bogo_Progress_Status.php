@@ -258,13 +258,13 @@ class Bogo_Progress_Status {
         }
 
         if ( $disc_type === 'percentage' ) {
-            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount percentage (e.g. "20%"). */
+            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
             $text = __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
             return sprintf( $text, $buy_count, $get_count, sprintf( '%s%%', $disc_value ) );
         }
 
         // fixed $ off
-        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (formatted price). */
+        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
         $text = __( '🎉 Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
         return sprintf( $text, $buy_count, $get_count, wc_price( $disc_value ) );
     }
@@ -304,7 +304,7 @@ class Bogo_Progress_Status {
 
         if ( $disc_type === 'percentage' ) {
 
-            /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount percentage (e.g. "20%"). */
+            /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
             $cart_text = __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' );
 
             $cart_msg = sprintf(
@@ -314,7 +314,7 @@ class Bogo_Progress_Status {
                 sprintf( '%s%%', $disc_value )
             );
 
-            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount percentage (e.g. "20%"). */
+            /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
             $single_text = __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
 
             $single_msg = sprintf(
@@ -329,7 +329,7 @@ class Bogo_Progress_Status {
 
         // fixed discount value
 
-        /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount amount (formatted price). */
+        /* translators: 1: remaining quantity needed, 2: linked product title HTML, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
         $cart_text = __( 'Add %1$d more %2$s to unlock %3$s off 💸', 'giantwp-discount-rules' );
 
         $cart_msg = sprintf(
@@ -339,7 +339,7 @@ class Bogo_Progress_Status {
             wc_price( $disc_value )
         );
 
-        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (formatted price). */
+        /* translators: 1: number of items to buy, 2: number of items customer gets, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
         $single_text = __( 'Buy %1$d and get %2$d with %3$s off ✨', 'giantwp-discount-rules' );
 
         $single_msg = sprintf(
@@ -385,7 +385,7 @@ class Bogo_Progress_Status {
 
         if ( $disc_type === 'percentage' ) {
 
-            /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount percentage (e.g. "20%"). */
+            /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
             $cart_text = __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' );
 
             $cart_msg = sprintf(
@@ -395,7 +395,7 @@ class Bogo_Progress_Status {
                 sprintf( '%s%%', $disc_value )
             );
 
-            /* translators: 1: number of discounted items, 2: discount percentage (e.g. "20%"). */
+            /* translators: 1: number of discounted items, 2: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
             $single_text = __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' );
 
             $single_msg = sprintf(
@@ -407,7 +407,7 @@ class Bogo_Progress_Status {
             return [ $cart_msg, $single_msg ];
         }
 
-        /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount amount (formatted price). */
+        /* translators: 1: number of discounted items, 2: linked product title HTML, 3: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
         $cart_text = __( 'Discount unlocked ✅ %1$d %2$s will get %3$s off!', 'giantwp-discount-rules' );
 
         $cart_msg = sprintf(
@@ -417,7 +417,7 @@ class Bogo_Progress_Status {
             wc_price( $disc_value )
         );
 
-        /* translators: 1: number of discounted items, 2: discount amount (formatted price). */
+        /* translators: 1: number of discounted items, 2: discount amount (percentage e.g. "20%" or price e.g. "$10.00"). */
         $single_text = __( 'Deal active: %1$d item(s) discounted by %2$s 💸', 'giantwp-discount-rules' );
 
         $single_msg = sprintf(

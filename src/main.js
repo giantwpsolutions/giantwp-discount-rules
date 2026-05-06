@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router/router';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import VueApexCharts from 'vue3-apexcharts';
 
 
 
@@ -25,5 +26,6 @@ app.config.globalProperties._nx = _nx;
 
 app.use(router);
 app.use(ElementPlus);
+app.use(VueApexCharts);
 app.mount('#giantwp-discount-rules-dashboard');
 

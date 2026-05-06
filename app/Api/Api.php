@@ -22,6 +22,7 @@ use GiantWP_Discount_Rules\Api\Controllers\Shared\Shipping_Zone_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Shared\Users_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\Analytics_Controller;
 
 
 /**
@@ -77,5 +78,8 @@ class Api {
 
         $all_discount = new All_Discount_Controller();
         $all_discount->register_routes();
+
+        $analytics = new Analytics_Controller();
+        $analytics->register_routes();
     }
 }

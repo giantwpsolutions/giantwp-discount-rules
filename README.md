@@ -4,6 +4,20 @@ Dynamic Pricing & BOGO Deals for WooCommerce — built with Vue 3 + Vite.
 
 ## Changelog
 
+### 1.2.14
+
+**Added**
+- Discount Analytics Dashboard — see which rules are driving revenue, how often they apply, and total discount given. All in one place, with a bar chart and per-rule breakdown table.
+- Product Badge now shows on single product pages too
+
+**Fixed**
+- Badges weren't showing for BOGO, Bulk, and Buy X Get Y — product condition data was being read incorrectly
+
+**Improved**
+- Settings page has a cleaner layout with upcoming features shown inline
+
+---
+
 ### 1.2.13 - 2026-04-26
 
 **Added**

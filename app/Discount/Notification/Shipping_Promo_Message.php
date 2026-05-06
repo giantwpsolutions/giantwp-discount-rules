@@ -186,7 +186,7 @@ class Shipping_Promo_Message {
                 }
 
                 // "<X>% off shipping"
-                /* translators: %s: discount percentage amount (e.g. "20%"). */
+                /* translators: %s: discount amount (percentage e.g. "20%" or monetary e.g. "$5.00"). */
                 $text = __( '%s off shipping', 'giantwp-discount-rules' );
 
                 return sprintf(
@@ -196,7 +196,7 @@ class Shipping_Promo_Message {
             }
 
             // fixed amount off shipping, e.g. "10.00৳ off shipping".
-            /* translators: %s: formatted monetary amount taken off shipping cost (e.g. "$5.00"). */
+            /* translators: %s: discount amount (percentage e.g. "20%" or monetary e.g. "$5.00"). */
             $text = __( '%s off shipping', 'giantwp-discount-rules' );
 
             return sprintf(

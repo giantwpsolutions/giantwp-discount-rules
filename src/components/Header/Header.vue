@@ -14,6 +14,11 @@ const navigation = [
     current: true,
   },
   {
+    name: __("Analytics", "giantwp-discount-rules"),
+    href: "/analytics",
+    current: false,
+  },
+  {
     name: __("Settings", "giantwp-discount-rules"),
     href: "/settings",
     current: false,

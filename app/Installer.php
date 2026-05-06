@@ -24,6 +24,7 @@ use GiantWP_Discount_Rules\Discount\Manager\FlatPercentage_Validator;
 use GiantWP_Discount_Rules\Discount\Manager\Product_Badge;
 use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 use GiantWP_Discount_Rules\Helper\PromoMessage;
+use GiantWP_Discount_Rules\Discount\Analytics\Analytics_Tracker;
 
 
 /**
@@ -56,6 +57,7 @@ class Installer
         FlatPercentageUsage::instance();
         Bogo_Discount::instance();
         PromoMessage::instance();
+        Analytics_Tracker::instance();
         gwpdr_appsero_init_tracker();
 
 

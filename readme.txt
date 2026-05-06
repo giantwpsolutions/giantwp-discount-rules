@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.13
+Stable tag: 1.2.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,12 +63,13 @@ This isn't just about offering discounts. It's about strategic pricing that incr
 * New vs. returning customers
 
 **Helpful Features That Actually Matter**
+* 🔥 **Discount Analytics** – See exactly which rules are driving revenue, how often they apply, and how much discount you're giving away. All in one dashboard, with a chart and per-rule breakdown.
 * **Upsell notifications** – Show "Buy 2 Get 10% Off" on product pages to encourage larger orders
 * **Auto-apply discounts** – No coupon codes needed. Customers see the savings automatically
 * **Schedule discounts** – Set start and end dates. Your Black Friday sale starts and stops itself
 * **Usage limits** – Cap how many times a discount can be used
-* **Discount tracking** – See which rules are working and which aren't
 * **Order labels** – Shows which discount was applied on order pages
+* **Product badges** – Show a discount badge on product images in your shop
 * **Works with sale prices** – Discount both regular and sale prices
 * **Simple on/off toggle** – Disable rules without deleting them
 * **HPOS compatible** – Works perfectly with WooCommerce's High-Performance Order Storage
@@ -283,6 +284,12 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 8. Buy X Get Y promotion showing discounted item in cart
 
 == Changelog ==
+
+= 1.2.14 =
+* 🔥 Added: Discount Analytics Dashboard — finally you can see which rules are actually making you money. Tracks revenue, discount given, and how many orders each rule touched. Resets whenever you want.
+* Added: Product Badge now works on single product pages too, not just the shop grid
+* Fixed: Badges weren't showing for BOGO, Bulk, and Buy X Get Y rules — the product data structure was being read incorrectly
+* Improved: Settings page has a cleaner layout
 
 = 1.2.13 - April 26, 2026 =
 * Added: Product Badge feature — show a discount badge on product images in the shop and on single product pages

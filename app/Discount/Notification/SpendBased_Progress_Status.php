@@ -160,7 +160,7 @@ class SpendBased_Progress_Status {
         // Flat currency discount.
         if ( function_exists( 'wc_price' ) ) {
 
-            /* translators: %s: formatted monetary discount amount (e.g. "$10.00"). */
+            /* translators: %s: discount amount (formatted price e.g. "$10.00" or plain number e.g. "10.00"). */
             $text = __( '%s off', 'giantwp-discount-rules' );
 
             return sprintf(
@@ -169,7 +169,7 @@ class SpendBased_Progress_Status {
             );
         }
 
-        /* translators: %s: formatted numeric discount amount (e.g. "10.00"). */
+        /* translators: %s: discount amount (formatted price e.g. "$10.00" or plain number e.g. "10.00"). */
         $text = __( '%s off', 'giantwp-discount-rules' );
 
         return sprintf(
