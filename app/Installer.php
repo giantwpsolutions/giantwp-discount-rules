@@ -25,6 +25,8 @@ use GiantWP_Discount_Rules\Discount\Manager\Product_Badge;
 use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 use GiantWP_Discount_Rules\Helper\PromoMessage;
 use GiantWP_Discount_Rules\Discount\Analytics\Analytics_Tracker;
+use GiantWP_Discount_Rules\Pro\MarginProtection\Margin_Guard;
+use GiantWP_Discount_Rules\Pro\MarginProtection\Product_Cost_Meta;
 
 
 /**
@@ -58,6 +60,13 @@ class Installer
         Bogo_Discount::instance();
         PromoMessage::instance();
         Analytics_Tracker::instance();
+
+        // Pro-only features
+        if ( defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE ) {
+            Margin_Guard::instance();
+            Product_Cost_Meta::instance();
+        }
+
         gwpdr_appsero_init_tracker();
 
 

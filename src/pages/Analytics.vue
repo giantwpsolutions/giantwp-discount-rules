@@ -174,7 +174,7 @@ const handleReset = async () => {
           </div>
 
           <!-- Table -->
-          <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+          <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-x-auto">
             <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
               <div>
                 <p class="tw-text-sm tw-font-bold tw-text-gray-800">{{ __("Rule Performance", "giantwp-discount-rules") }}</p>
@@ -239,7 +239,7 @@ const handleReset = async () => {
     </div>
 
     <!-- Sidebar -->
-    <div class="tw-w-64 tw-shrink-0">
+    <div class="tw-w-64 tw-shrink-0 tw-hidden lg:tw-block">
       <Sidebar />
     </div>
 

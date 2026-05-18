@@ -222,7 +222,7 @@ const closeModal = () => {
   </div>
 
   <!-- Sidebar -->
-  <div class="tw-w-64 tw-shrink-0">
+  <div class="tw-w-64 tw-shrink-0 tw-hidden lg:tw-block">
     <Sidebar />
   </div>
 

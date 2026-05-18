@@ -185,9 +185,8 @@ class Condition_Fields {
 
         // Ensure cart IDs are unique and condition value is array of integers
         $product_ids_in_cart = array_unique( array_map( 'intval', $product_ids_in_cart ) );
-        $condition_ids       = array_map( 'intval', $condition['value'] );
+        $condition_ids       = apply_filters( 'gwpdr_condition_product_ids', array_map( 'intval', $condition['value'] ) );
         $operator            = $condition['operator'];
-
 
         return gwpdr_compare_cart_items( $product_ids_in_cart, $operator, $condition_ids );
     }
@@ -224,7 +223,7 @@ class Condition_Fields {
         }
 
         $variation_ids_in_cart = array_unique( array_map( 'intval', $variation_ids_in_cart ) );
-        $condition_ids         = array_map( 'intval', $condition['value'] );
+        $condition_ids         = apply_filters( 'gwpdr_condition_product_ids', array_map( 'intval', $condition['value'] ) );
         $operator              = $condition['operator'];
 
         return gwpdr_compare_cart_items( $variation_ids_in_cart, $operator, $condition_ids );
@@ -262,9 +261,8 @@ class Condition_Fields {
         }
 
         $cart_category_ids = array_unique( array_map( 'intval', $cart_category_ids ) );
-        $condition_ids     = array_map( 'intval', $condition['value'] );
+        $condition_ids     = apply_filters( 'gwpdr_condition_category_ids', array_map( 'intval', $condition['value'] ) );
         $operator          = $condition['operator'];
-
 
         return gwpdr_compare_cart_items( $cart_category_ids, $operator, $condition_ids );
     }
@@ -301,7 +299,7 @@ class Condition_Fields {
         }
 
         $tag_ids_in_cart = array_unique( array_map( 'intval', $tag_ids_in_cart ) );
-        $condition_ids   = array_map( 'intval', $condition['value'] );
+        $condition_ids   = apply_filters( 'gwpdr_condition_tag_ids', array_map( 'intval', $condition['value'] ) );
         $operator        = $condition['operator'];
 
         return gwpdr_compare_cart_items( $tag_ids_in_cart, $operator, $condition_ids );
@@ -401,6 +399,7 @@ class Condition_Fields {
         }
 
         $purchased_product_ids = array_unique( $purchased_product_ids );
+        $condition_ids         = apply_filters( 'gwpdr_condition_product_ids', $condition_ids );
 
         return gwpdr_compare_cart_items( $purchased_product_ids, $operator, $condition_ids );
     }
@@ -452,6 +451,7 @@ class Condition_Fields {
         }
 
         $ordered_cat_ids = array_unique( $ordered_cat_ids );
+        $condition_ids   = apply_filters( 'gwpdr_condition_category_ids', $condition_ids );
 
         return gwpdr_compare_cart_items( $ordered_cat_ids, $operator, $condition_ids );
     }

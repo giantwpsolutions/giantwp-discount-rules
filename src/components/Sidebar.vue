@@ -30,11 +30,11 @@ const plugins = [
   },
   {
     logo:        baseUrl + "smartorderbump.svg",
-    name:        "Smart Order Bump",
-    desc:        __("Boost WooCommerce Revenue with Order Bumps", "giantwp-discount-rules"),
-    slug:        gwpdrPluginData.smartorderbump_slug,
-    status:      gwpdrPluginData.smartorderbump_status,
-    activateUrl: gwpdrPluginData.smartorderbump_activate_url,
+    name:        "Giant Checkout Offers",
+    desc:        __("Boost WooCommerce Sales with Smart Checkout Offers", "giantwp-discount-rules"),
+    slug:        gwpdrPluginData.giantcheckoutoffers_slug,
+    status:      gwpdrPluginData.giantcheckoutoffers_status,
+    activateUrl: gwpdrPluginData.giantcheckoutoffers_activate_url,
   },
 ];
 

@@ -23,6 +23,7 @@ use GiantWP_Discount_Rules\Api\Controllers\Shared\Users_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\FlatPercentage_Discount_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\Settings_Controller;
 use GiantWP_Discount_Rules\Api\Controllers\Discounts\Analytics_Controller;
+use GiantWP_Discount_Rules\Api\Controllers\Discounts\Margin_Settings_Controller;
 
 
 /**
@@ -81,5 +82,8 @@ class Api {
 
         $analytics = new Analytics_Controller();
         $analytics->register_routes();
+
+        $margin_settings = new Margin_Settings_Controller();
+        $margin_settings->register_routes();
     }
 }

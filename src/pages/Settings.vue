@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { QuestionMarkCircleIcon, Cog6ToothIcon, CheckIcon } from "@heroicons/vue/24/outline";
+import { QuestionMarkCircleIcon, Cog6ToothIcon, CheckIcon, ShieldCheckIcon } from "@heroicons/vue/24/outline";
 import { CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue';
 import Sidebar from "../components/Sidebar.vue";
 import {
@@ -19,6 +19,13 @@ import {
   isLoadingSettings,
 } from "@/data/save-data/saveSettingsData";
 
+import {
+  marginSettings,
+  isLoadingMargin,
+  loadMarginSettings,
+  saveMarginSettings,
+} from "@/data/marginData.js";
+
 import { settingsUpdate, errorMessage } from "@/data/message.js";
 
 const { __ } = wp.i18n;
@@ -28,6 +35,7 @@ const isProActive = ref(false);
 onMounted(() => {
   isProActive.value = !!gwpdrPluginData?.proActive;
   loadSettings();
+  loadMarginSettings();
   if (isProActive.value) {
     fetchLicenseStatus();
   }
@@ -44,6 +52,7 @@ const handleAction = async () => {
 const handleSaveSettings = async () => {
   try {
     await saveSettings();
+    if (isProActive.value) await saveMarginSettings();
     settingsUpdate();
   } catch (error) {
     errorMessage();
@@ -241,33 +250,87 @@ const handleSaveSettings = async () => {
           </div>
         </div>
 
-        <!-- Margin Protection Guard (Upcoming) -->
-        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100 tw-opacity-60">
-          <div>
-            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Margin Protection Guard", "giantwp-discount-rules") }}</p>
-            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Prevent discounts from going below your minimum profit margin", "giantwp-discount-rules") }}</p>
+        <!-- Margin Protection Guard sub-section header -->
+        <div
+          class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-3 tw-bg-gray-50 tw-border-t tw-border-gray-100"
+          :class="{ 'tw-opacity-60': !isProActive }"
+        >
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <ShieldCheckIcon class="tw-h-4 tw-w-4 tw-text-purple-500" />
+            <p class="tw-text-xs tw-font-bold tw-text-gray-700 tw-uppercase tw-tracking-wide">{{ __("Margin Protection Guard", "giantwp-discount-rules") }}</p>
+            <span
+              v-if="!isProActive"
+              class="tw-inline-block tw-rounded tw-bg-red-500 tw-text-white tw-text-[10px] tw-font-bold tw-px-1.5 tw-py-0.5"
+            >PRO</span>
           </div>
-          <span class="tw-inline-block tw-rounded tw-bg-blue-500 tw-px-2.5 tw-py-1 tw-text-xs tw-font-bold tw-text-white tw-uppercase tw-tracking-wide">
-            {{ __("Upcoming", "giantwp-discount-rules") }}
-          </span>
+          <p class="tw-text-xs tw-text-gray-400">{{ __("Prevent discounts from going below your profit floor", "giantwp-discount-rules") }}</p>
+        </div>
+
+        <!-- Enable Margin Protection -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100" :class="{ 'tw-opacity-60': !isProActive }">
+          <div>
+            <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Enable Margin Protection", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Automatically cap discounts before they hurt your margins", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-switch
+            v-model="marginSettings.enabled"
+            :disabled="!isProActive"
+            inline-prompt
+            :active-text="__('On', 'giantwp-discount-rules')"
+            :inactive-text="__('Off', 'giantwp-discount-rules')"
+          />
+        </div>
+
+        <!-- Global max discount cap -->
+        <div v-if="marginSettings.enabled" class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100" :class="{ 'tw-opacity-60': !isProActive }">
+          <div>
+            <div class="tw-flex tw-items-center tw-gap-1.5">
+              <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Global Max Discount", "giantwp-discount-rules") }}</p>
+              <el-tooltip effect="dark" :content="__('No rule can give more than this % off the cart subtotal. Set 0 to disable.', 'giantwp-discount-rules')" placement="top" popper-class="custom-tooltip">
+                <QuestionMarkCircleIcon class="tw-h-3.5 tw-w-3.5 tw-text-gray-400 tw-cursor-pointer" />
+              </el-tooltip>
+            </div>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Hard cap on any rule's discount as % of cart total. 0 = no cap.", "giantwp-discount-rules") }}</p>
+          </div>
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <el-input-number v-model="marginSettings.globalMaxDiscount" :min="0" :max="99" :step="1" :precision="1" :disabled="!isProActive" style="width: 130px" />
+            <span class="tw-text-sm tw-text-gray-500">%</span>
+          </div>
+        </div>
+
+        <!-- Global min margin -->
+        <div v-if="marginSettings.enabled" class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100" :class="{ 'tw-opacity-60': !isProActive }">
+          <div>
+            <div class="tw-flex tw-items-center tw-gap-1.5">
+              <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Global Min Margin", "giantwp-discount-rules") }}</p>
+              <el-tooltip effect="dark" :content="__('Minimum profit margin % to maintain per product. Used when a rule has no per-rule margin set.', 'giantwp-discount-rules')" placement="top" popper-class="custom-tooltip">
+                <QuestionMarkCircleIcon class="tw-h-3.5 tw-w-3.5 tw-text-gray-400 tw-cursor-pointer" />
+              </el-tooltip>
+            </div>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Requires Cost Price set on products. 0 = only protect from selling below cost.", "giantwp-discount-rules") }}</p>
+          </div>
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <el-input-number v-model="marginSettings.globalMinMargin" :min="0" :max="99" :step="1" :precision="1" :disabled="!isProActive" style="width: 130px" />
+            <span class="tw-text-sm tw-text-gray-500">%</span>
+          </div>
         </div>
 
         <!-- Save button -->
         <div class="tw-px-5 tw-py-4">
           <button
             @click="handleSaveSettings"
-            :disabled="isLoadingSettings"
+            :disabled="isLoadingSettings || isLoadingMargin"
             class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-transition hover:tw-bg-blue-700 disabled:tw-opacity-60 disabled:tw-cursor-wait"
           >
             <CheckIcon class="tw-h-4 tw-w-4" />
-            {{ isLoadingSettings ? __("Saving…", "giantwp-discount-rules") : __("Save Settings", "giantwp-discount-rules") }}
+            {{ (isLoadingSettings || isLoadingMargin) ? __("Saving…", "giantwp-discount-rules") : __("Save Settings", "giantwp-discount-rules") }}
           </button>
         </div>
       </div>
     </div>
 
     <!-- Sidebar -->
-    <div class="tw-w-64 tw-shrink-0">
+    <div class="tw-w-64 tw-shrink-0 tw-hidden lg:tw-block">
       <Sidebar />
     </div>
   </div>

@@ -108,7 +108,10 @@ class FlatPercentage_Discount {
             if ( $max_value > 0 ) {
                 $calculated_discounts = min( $calculated_discount, $max_value );
             }
-    
+
+            // Pro: Margin Protection Guard — may cap the discount further
+            $calculated_discounts = (float) apply_filters( 'gwpdr_fp_discount_amount', $calculated_discounts, $rule, $cart );
+
             if ( $calculated_discounts > 0 ) {
                 $this->create_or_update_coupon( $rule, $calculated_discounts );
                 $cart->apply_coupon( $rule['couponName'] );

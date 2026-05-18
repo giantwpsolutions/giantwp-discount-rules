@@ -9,6 +9,7 @@ use GiantWP_Discount_Rules\Traits\SingletonTrait;
 use GiantWP_Discount_Rules\Integration\Theme\DiviTheme;
 // Plugins
 use GiantWP_Discount_Rules\Integration\Plugin\LiteSpeedCache;
+use GiantWP_Discount_Rules\Integration\Plugin\WPML;
 
 class IntegrationInit {
     use SingletonTrait;
@@ -25,10 +26,12 @@ class IntegrationInit {
         }
 
         // ——— Plugins ———
-        // LiteSpeed Cache — you can either guard or always load (safe no-op)
         if ( defined('LSCWP_V') || class_exists('LiteSpeed_Cache') ) {
             LiteSpeedCache::instance();
         }
-        // Or, simply: LiteSpeedCache::instance(); // also fine (do_action is harmless)
+
+        if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+            WPML::instance();
+        }
     }
 }

@@ -81,7 +81,7 @@ const confirmDelete = (rule) => {
 <template>
   <div>
     <!-- Toolbar -->
-    <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-2 tw-mb-4">
       <button
         @click="onAdd"
         class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-blue-700"
@@ -102,7 +102,7 @@ const confirmDelete = (rule) => {
     </div>
 
     <!-- Table -->
-    <div class="tw-rounded-xl tw-border tw-border-gray-200">
+    <div class="tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-x-auto">
       <table class="tw-min-w-full tw-table-auto tw-border-collapse">
         <thead>
           <tr class="tw-border-b tw-border-gray-200 tw-bg-gray-50">

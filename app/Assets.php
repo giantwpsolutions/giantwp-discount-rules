@@ -69,9 +69,9 @@ class Assets {
         }
 
         $plugin_files = [
-            'primekit'       => 'primekit-addons/primekit-addons.php',
-            'quickcart'      => 'quick-cart-shopping/quick-cart-shopping.php',
-            'smartorderbump' => 'smart-order-bump/smart-order-bump.php',
+            'primekit'             => 'primekit-addons/primekit-addons.php',
+            'quickcart'            => 'quick-cart-shopping/quick-cart-shopping.php',
+            'giantcheckoutoffers'  => 'giant-checkout-offers-for-woocommerce/giant-checkout-offers-for-woocommerce.php',
         ];
 
         $plugin_status = [];
@@ -102,15 +102,15 @@ class Assets {
                 'communityUrl' => esc_url( 'https://www.facebook.com/groups/giantwpsolutions' ),
                 'docsUrl'      => esc_url( 'https://docs.giantwpsolutions.com/' ),
                 'proActive'    => defined( 'GIANTWP_DISCOUNT_RULES_PRO_ACTIVE' ) && GIANTWP_DISCOUNT_RULES_PRO_ACTIVE,
-                'primekit_slug'             => 'primekit-addons',
-                'quickcart_slug'            => 'quick-cart-shopping',
-                'smartorderbump_slug'       => 'smart-order-bump',
-                'primekit_status'           => $plugin_status['primekit'],
-                'quickcart_status'          => $plugin_status['quickcart'],
-                'smartorderbump_status'     => $plugin_status['smartorderbump'],
-                'primekit_activate_url'     => esc_url( $activate_urls['primekit'] ),
-                'quickcart_activate_url'    => esc_url( $activate_urls['quickcart'] ),
-                'smartorderbump_activate_url' => esc_url( $activate_urls['smartorderbump'] ),
+                'primekit_slug'                    => 'primekit-addons',
+                'quickcart_slug'                   => 'quick-cart-shopping',
+                'giantcheckoutoffers_slug'         => 'giant-checkout-offers-for-woocommerce',
+                'primekit_status'                  => $plugin_status['primekit'],
+                'quickcart_status'                 => $plugin_status['quickcart'],
+                'giantcheckoutoffers_status'       => $plugin_status['giantcheckoutoffers'],
+                'primekit_activate_url'            => esc_url( $activate_urls['primekit'] ),
+                'quickcart_activate_url'           => esc_url( $activate_urls['quickcart'] ),
+                'giantcheckoutoffers_activate_url' => esc_url( $activate_urls['giantcheckoutoffers'] ),
             ]
         );
 

@@ -415,7 +415,7 @@ const saveForm = async () => {
       class="tw-fixed lg:tw-ml-16 tw-top-0 tw-left-0 tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center tw-bg-gray-900 tw-bg-opacity-50 tw-z-50"
     >
       <div
-        class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-h-[75vh] tw-w-[80vw] tw-md:w-[75vw] tw-p-6 tw-grid tw-grid-rows-[auto,1fr,auto]"
+        class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-h-[85vh] md:tw-h-[75vh] tw-w-[95vw] md:tw-w-[80vw] tw-p-4 md:tw-p-6 tw-grid tw-grid-rows-[auto,1fr,auto]"
       >
         <!-- Modal Header -->
         <div class="tw-border-b tw-pb-4 tw-mb-4 tw-flex tw-items-center tw-space-x-4">

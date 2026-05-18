@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.14
+Stable tag: 1.2.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,12 @@ Set up unlimited pricing tiers based on quantity, total spend, weight, or any co
 * Percentage off shipping for VIP customers
 * Conditional shipping fees and discounts
 
+
+🔥 **Margin Protection Guard (New in 1.2.15)**
+Never sell below your cost again. Set a minimum profit margin per product and the plugin automatically caps any discount that would breach it. Three layers of protection:
+* Per-product cost price — enter your actual cost on the product page
+* Per-rule min margin % — override the global floor for a specific rule
+* Global max discount cap — hard limit on how much any rule can take off the cart total
 
 **Priority Support**
 * Get help from real humans who actually know the plugin
@@ -284,6 +290,12 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 8. Buy X Get Y promotion showing discounted item in cart
 
 == Changelog ==
+
+= 1.2.15 - May 19, 2026 =
+* 🔥 Added: **Margin Protection Guard** (Pro) — automatically caps discounts before they go below your profit floor. Supports per-product cost price, per-rule min margin %, and a global max discount cap. Set it up from Settings → Margin Protection Guard.
+* Added: WPML compatibility — product and category conditions now correctly match translated product IDs in multilingual stores
+* Improved: Admin pages are now fully responsive on smaller screens — sidebar hides below 1024 px, tables scroll horizontally
+
 
 = 1.2.14 =
 * 🔥 Added: Discount Analytics Dashboard — finally you can see which rules are actually making you money. Tracks revenue, discount given, and how many orders each rule touched. Resets whenever you want.
