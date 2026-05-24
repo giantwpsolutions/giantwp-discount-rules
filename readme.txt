@@ -3,7 +3,7 @@ Contributors: giantwpsolutions, developerhabib
 Donate link: https://giantwpsolutions.com/
 Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity discount
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.2.15
 License: GPLv2 or later
