@@ -1,6 +1,6 @@
 # GiantWP Discount Rules – Dynamic Pricing & BOGO Deals for WooCommerce
 
-**Version:** 1.2.15 | **Requires WP:** 5.8+ | **Requires PHP:** 7.4+ | **WC Tested:** 10.7
+**Version:** 1.2.17 | **Requires WP:** 5.8+ | **Requires PHP:** 7.4+ | **WC Tested:** 10.7
 
 Create powerful WooCommerce discounts in minutes. Bulk pricing, BOGO deals, customer-based discounts, and dynamic pricing that actually converts.
 
@@ -9,6 +9,15 @@ Create powerful WooCommerce discounts in minutes. Bulk pricing, BOGO deals, cust
 ---
 
 ## Changelog
+
+---
+
+### 1.2.16 – June 14, 2026
+
+- 🔥 **Added:** Smart Engine (Pro) — AI-powered Virtual Salesman. Connects to Anthropic Claude, OpenAI GPT-4o, or Google Gemini. Detects customer context in real time and delivers a personalised message on the cart page. Includes exit-intent detection, WC session caching, usage stats, and async AI message delivery (PHP renders a fallback instantly; JS upgrades it with the AI message without blocking page load).
+- **Added:** External Services disclosure in readme — documents all three AI providers, what data is sent, and legal links, as required by WordPress.org guidelines.
+
+---
 
 ### 1.2.15 – May 19, 2026
 - 🔥 **Added:** Margin Protection Guard (Pro) — automatically caps discounts before they go below your profit floor. Supports per-product cost price, per-rule min margin %, and a global max discount cap. Set it up from Settings → Margin Protection Guard.

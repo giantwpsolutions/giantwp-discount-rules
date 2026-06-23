@@ -19,6 +19,11 @@ const navigation = [
     current: false,
   },
   {
+    name: __("✨ Smart Engine", "giantwp-discount-rules"),
+    href: "/smart-engine",
+    current: false,
+  },
+  {
     name: __("Settings", "giantwp-discount-rules"),
     href: "/settings",
     current: false,
@@ -31,13 +36,7 @@ const navigation = [
     isExternal: true,
   },
 
-    {
-    name: __("Documentation", "giantwp-discount-rules"),
-    href: gwpdrPluginData.docsUrl,
-    current: false,
-    isExternal: true,
-  },
-];
+  ];
 
 // Dynamically set the path to the logo
 const logoUrl = `${gwpdrPluginData.pluginUrl}assets/images/giantwp_discount_rules.png`;

@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref, computed } from "vue";
 import { __ } from "@wordpress/i18n";
 import {
@@ -55,7 +55,7 @@ const formatUsage = (rule) => {
 };
 
 const typeConfig = {
-  "flat/percentage":  { label: "Flat / %",      icon: ReceiptPercentIcon, bg: "tw-bg-blue-50",   text: "tw-text-blue-600"   },
+  "flat/percentage":  { label: "Flat / %",      icon: ReceiptPercentIcon, bg: "tw-bg-brand-50",   text: "tw-text-brand-600"   },
   "bogo":             { label: "BOGO",           icon: GiftIcon,           bg: "tw-bg-orange-50", text: "tw-text-orange-600" },
   "buy x get y":      { label: "Buy X Get Y",   icon: CubeIcon,           bg: "tw-bg-pink-50",   text: "tw-text-pink-600"   },
   "shipping discount":{ label: "Shipping",       icon: TruckIcon,          bg: "tw-bg-purple-50", text: "tw-text-purple-600" },
@@ -84,7 +84,7 @@ const confirmDelete = (rule) => {
     <div class="tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-2 tw-mb-4">
       <button
         @click="onAdd"
-        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-blue-700"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-brand-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-brand-700"
       >
         <PlusIcon class="tw-h-4 tw-w-4" />
         {{ __("Add New Rule", "giantwp-discount-rules") }}
@@ -96,7 +96,7 @@ const confirmDelete = (rule) => {
           v-model="searchQuery"
           type="text"
           :placeholder="__('Search rules...', 'giantwp-discount-rules')"
-          class="tw-rounded-lg tw-border tw-border-gray-200 tw-bg-white tw-py-2 tw-pl-9 tw-pr-4 tw-text-sm tw-text-gray-700 tw-shadow-sm tw-outline-none focus:tw-border-blue-400 focus:tw-ring-1 focus:tw-ring-blue-400"
+          class="tw-rounded-lg tw-border tw-border-gray-200 tw-bg-white tw-py-2 tw-pl-9 tw-pr-4 tw-text-sm tw-text-gray-700 tw-shadow-sm tw-outline-none focus:tw-border-brand-400 focus:tw-ring-1 focus:tw-ring-brand-400"
         />
       </div>
     </div>
@@ -215,7 +215,7 @@ const confirmDelete = (rule) => {
                 <!-- Edit -->
                 <button
                   @click="onEdit(rule)"
-                  class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-gray-100 hover:tw-text-blue-600"
+                  class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-gray-100 hover:tw-text-brand-600"
                   :title="__('Edit', 'giantwp-discount-rules')"
                 >
                   <PencilSquareIcon class="tw-h-4 tw-w-4" />

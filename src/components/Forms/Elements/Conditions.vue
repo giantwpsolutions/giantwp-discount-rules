@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref, defineProps, defineEmits, onMounted, watch } from "vue";
 import { debounce } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
@@ -284,7 +284,7 @@ watch([localConditions, enableConditions, conditionsApplies], emitUpdates, {
               v-model="condition.value"
               type="number"
               placeholder="Enter a number"
-              class="tw-w-full tw-h-8 tw-border tw-rounded tw-p-2 tw-text-sm tw-text-gray-700 tw-bg-white tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
+              class="tw-w-full tw-h-8 tw-border tw-rounded tw-p-2 tw-text-sm tw-text-gray-700 tw-bg-white tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-brand-500 focus:tw-border-brand-500"
             />
           </div>
 
@@ -304,7 +304,7 @@ watch([localConditions, enableConditions, conditionsApplies], emitUpdates, {
       <!-- Add Button -->
       <button
         @click="addCondition"
-        class="tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 hover:tw-bg-blue-600"
+        class="tw-bg-brand-500 tw-text-white tw-rounded tw-px-4 tw-py-2 hover:tw-bg-brand-600"
       >
         {{ __("Add Condition", "giantwp-discount-rules") }}
       </button>

@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { onMounted, ref } from "vue";
 import { QuestionMarkCircleIcon, Cog6ToothIcon, CheckIcon, ShieldCheckIcon } from "@heroicons/vue/24/outline";
 import { CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue';
@@ -70,8 +70,8 @@ const handleSaveSettings = async () => {
       <div v-if="isProActive" class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-mb-4 tw-overflow-hidden">
         <!-- Section header -->
         <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
-          <div class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-lg tw-bg-blue-50">
-            <Cog6ToothIcon class="tw-h-5 tw-w-5 tw-text-blue-500" />
+          <div class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-lg tw-bg-brand-50">
+            <Cog6ToothIcon class="tw-h-5 tw-w-5 tw-text-brand-500" />
           </div>
           <div>
             <p class="tw-text-sm tw-font-bold tw-text-gray-800 tw-leading-tight">{{ __("License", "giantwp-discount-rules") }}</p>
@@ -320,7 +320,7 @@ const handleSaveSettings = async () => {
           <button
             @click="handleSaveSettings"
             :disabled="isLoadingSettings || isLoadingMargin"
-            class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-lg tw-bg-blue-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-transition hover:tw-bg-blue-700 disabled:tw-opacity-60 disabled:tw-cursor-wait"
+            class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-lg tw-bg-brand-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-transition hover:tw-bg-brand-700 disabled:tw-opacity-60 disabled:tw-cursor-wait"
           >
             <CheckIcon class="tw-h-4 tw-w-4" />
             {{ (isLoadingSettings || isLoadingMargin) ? __("Saving…", "giantwp-discount-rules") : __("Save Settings", "giantwp-discount-rules") }}

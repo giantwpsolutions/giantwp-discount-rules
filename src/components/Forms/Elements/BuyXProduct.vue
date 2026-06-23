@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { reactive, ref, onMounted, watch } from "vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
 import { Delete } from "@element-plus/icons-vue";
@@ -271,7 +271,7 @@ watch(
     <!-- Add Product Button -->
     <button
       @click="addProduct"
-      class="tw-mt-4 tw-bg-blue-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600">
+      class="tw-mt-4 tw-bg-brand-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600">
       {{ __("Assign Buy Product", "giantwp-discount-rules") }}
     </button>
   </div>

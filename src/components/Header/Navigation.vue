@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { useRoute } from "vue-router";
 
 // Props from parent component
@@ -19,7 +19,7 @@ const route = useRoute();
         :title="__('Coming soon', 'giantwp-discount-rules')"
       >
         {{ item.name }}
-        <span class="tw-ml-2 tw-bg-blue-500 tw-text-white tw-text-xs tw-font-bold tw-px-2 tw-py-0.5 tw-rounded">
+        <span class="tw-ml-2 tw-bg-brand-500 tw-text-white tw-text-xs tw-font-bold tw-px-2 tw-py-0.5 tw-rounded">
           {{ __("Upcoming", "giantwp-discount-rules") }}
         </span>
       </span>

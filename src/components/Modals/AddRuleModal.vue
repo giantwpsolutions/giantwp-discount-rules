@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref, defineEmits, watch, nextTick, computed, onMounted, toRaw } from "vue";
 import FlatPercentageForm from "../Forms/FlatPercentageForm.vue";
 import Bogo from "../Forms/Bogo.vue";
@@ -191,8 +191,8 @@ const quickTemplates = [
     desc: __("Buy any 2 products and get the 3rd one completely free.", "giantwp-discount-rules"),
     type: "Bogo",
     icon: GiftIcon,
-    iconBg: "tw-bg-blue-50",
-    iconColor: "tw-text-blue-500",
+    iconBg: "tw-bg-brand-50",
+    iconColor: "tw-text-brand-500",
     badge: __("Popular", "giantwp-discount-rules"),
     badgeBg: "tw-bg-orange-100",
     badgeText: "tw-text-orange-600",
@@ -422,7 +422,7 @@ const saveForm = async () => {
           <button
             v-if="showForm"
             @click="goBack"
-            class="tw-text-blue-600 hover:tw-text-blue-800"
+            class="tw-text-brand-600 hover:tw-text-brand-800"
             title="Back"
           >
             <svg
@@ -466,7 +466,7 @@ const saveForm = async () => {
                   :class="[
                     'tw-flex tw-items-center tw-gap-1.5 tw-pb-3 tw-text-sm tw-font-medium tw-transition tw-border-b-2 -tw-mb-px',
                     activeTab === 'templates'
-                      ? 'tw-border-blue-600 tw-text-blue-600'
+                      ? 'tw-border-brand-600 tw-text-brand-600'
                       : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700',
                   ]"
                 >
@@ -479,7 +479,7 @@ const saveForm = async () => {
                   :class="[
                     'tw-flex tw-items-center tw-gap-1.5 tw-pb-3 tw-text-sm tw-font-medium tw-transition tw-border-b-2 -tw-mb-px',
                     activeTab === 'custom'
-                      ? 'tw-border-blue-600 tw-text-blue-600'
+                      ? 'tw-border-brand-600 tw-text-brand-600'
                       : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700',
                   ]"
                 >
@@ -536,10 +536,10 @@ const saveForm = async () => {
               <!-- Flat / Percentage -->
               <button
                 @click="() => selectDiscountType('Flat/Percentage')"
-                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition hover:tw-border-blue-400 hover:tw-shadow-md tw-cursor-pointer"
+                class="tw-relative tw-flex tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-6 tw-text-center tw-shadow-sm tw-transition hover:tw-border-brand-400 hover:tw-shadow-md tw-cursor-pointer"
               >
-                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-blue-50">
-                  <ReceiptPercentIcon class="tw-h-7 tw-w-7 tw-text-blue-500" />
+                <div class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-xl tw-bg-brand-50">
+                  <ReceiptPercentIcon class="tw-h-7 tw-w-7 tw-text-brand-500" />
                 </div>
                 <span class="tw-font-semibold tw-text-gray-800">{{ __("Flat / Percentage", "giantwp-discount-rules") }}</span>
                 <span class="tw-text-xs tw-text-gray-500">{{ __("Fixed amount or % off", "giantwp-discount-rules") }}</span>
@@ -649,7 +649,7 @@ const saveForm = async () => {
             v-if="showForm"
             @click="saveForm"
             :disabled="isSaving"
-            class="tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-blue-700"
+            class="tw-bg-brand-600 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-brand-700"
           >
             {{
               isSaving

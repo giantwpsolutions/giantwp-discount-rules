@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref } from "vue";
 import {
   DocumentTextIcon,
@@ -132,7 +132,7 @@ const activatePlugin = (plugin) => {
           <button
             v-else-if="installStates[plugin.slug] === 'installed'"
             @click="activatePlugin(plugin)"
-            class="tw-block tw-w-full tw-rounded-lg tw-border tw-border-blue-300 tw-bg-blue-50 tw-py-1.5 tw-text-center tw-text-xs tw-font-medium tw-text-blue-600 tw-transition hover:tw-bg-blue-100 hover:tw-border-blue-400"
+            class="tw-block tw-w-full tw-rounded-lg tw-border tw-border-brand-300 tw-bg-brand-50 tw-py-1.5 tw-text-center tw-text-xs tw-font-medium tw-text-brand-600 tw-transition hover:tw-bg-brand-100 hover:tw-border-brand-400"
           >
             {{ __("Activate", "giantwp-discount-rules") }}
           </button>
@@ -145,7 +145,7 @@ const activatePlugin = (plugin) => {
             :class="[
               'tw-block tw-w-full tw-rounded-lg tw-border tw-py-1.5 tw-text-center tw-text-xs tw-font-medium tw-transition',
               installStates[plugin.slug] === 'installing'
-                ? 'tw-border-blue-200 tw-bg-blue-50 tw-text-blue-400 tw-cursor-wait'
+                ? 'tw-border-brand-200 tw-bg-brand-50 tw-text-brand-400 tw-cursor-wait'
                 : installStates[plugin.slug] === 'error'
                 ? 'tw-border-red-200 tw-bg-red-50 tw-text-red-500 hover:tw-bg-red-100'
                 : 'tw-border-gray-200 tw-text-gray-600 hover:tw-bg-gray-50 hover:tw-border-gray-300',

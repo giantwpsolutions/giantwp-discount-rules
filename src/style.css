@@ -111,13 +111,13 @@ html {
 
 /* Focus styles for the wrapper */
 .custom-select-v2 .el-select__wrapper:focus-within {
-  border-color: #3b82f6; /* Focus border color */
-  box-shadow: 0 0 0 2px #1c4a96; /* Custom focus ring */
+  border-color: #0876CF; /* Focus border color */
+  box-shadow: 0 0 0 2px #0663ad; /* Custom focus ring */
 }
 
 /* Hover styles for consistency */
 .custom-select-v2 .el-select__wrapper:hover {
-  border-color: #3b82f6; /* Hover border color */
+  border-color: #0876CF; /* Hover border color */
 }
 
 .el-select__tags-text {
@@ -163,7 +163,7 @@ html {
 
 .el-select-dropdown__item.is-selected {
   font-weight: 400 !important;
-  color: #1c4a96 !important;
+  color: #0663ad !important;
 }
 .el-input__inner {
   border: none !important;

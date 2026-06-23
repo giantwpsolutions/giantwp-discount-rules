@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref, computed, onMounted } from "vue";
 import { ArrowPathIcon, TrophyIcon, CurrencyDollarIcon, TagIcon, ChartBarIcon } from "@heroicons/vue/24/outline";
 import VueApexCharts from "vue3-apexcharts";
@@ -46,7 +46,7 @@ const typeLabel = (type) => {
 const typeColor = (type) => {
   const map = {
     "bogo":            "tw-bg-purple-100 tw-text-purple-700",
-    "flat/percentage": "tw-bg-blue-100 tw-text-blue-700",
+    "flat/percentage": "tw-bg-brand-100 tw-text-brand-700",
     "bulk discount":   "tw-bg-orange-100 tw-text-orange-700",
     "buy x get y":     "tw-bg-green-100 tw-text-green-700",
     "shipping":        "tw-bg-teal-100 tw-text-teal-700",
@@ -130,8 +130,8 @@ const handleReset = async () => {
             <!-- Total Applied -->
             <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-p-4">
               <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
-                <div class="tw-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-lg tw-bg-blue-50">
-                  <ChartBarIcon class="tw-h-4 tw-w-4 tw-text-blue-600" />
+                <div class="tw-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-lg tw-bg-brand-50">
+                  <ChartBarIcon class="tw-h-4 tw-w-4 tw-text-brand-600" />
                 </div>
                 <span class="tw-text-xs tw-text-gray-500 tw-font-medium">{{ __("Orders Impacted", "giantwp-discount-rules") }}</span>
               </div>

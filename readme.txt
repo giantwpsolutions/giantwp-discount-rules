@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.15
+Stable tag: 1.2.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -291,13 +291,17 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 == Changelog ==
 
+= 1.2.16 - June 23, 2026 =
+* 🔥 Added: **Smart Engine** (Pro) — AI-powered personalised discounts. Connects to Anthropic Claude, OpenAI GPT-4o, or Google Gemini to analyse each customer in real time and decide whether to offer a personalised discount on the cart page. Includes exit-intent detection, session caching, usage stats, and a collapsible Advanced Settings panel (intensity, protect margin, learning period).
+* Added: External Services disclosure in readme — documents all three AI providers, what data is sent, and legal links, as required by WordPress.org guidelines.
+
 = 1.2.15 - May 19, 2026 =
 * 🔥 Added: **Margin Protection Guard** (Pro) — automatically caps discounts before they go below your profit floor. Supports per-product cost price, per-rule min margin %, and a global max discount cap. Set it up from Settings → Margin Protection Guard.
 * Added: WPML compatibility — product and category conditions now correctly match translated product IDs in multilingual stores
 * Improved: Admin pages are now fully responsive on smaller screens — sidebar hides below 1024 px, tables scroll horizontally
 
 
-= 1.2.14 =
+= 1.2.14 - May 6, 2026 =
 * 🔥 Added: Discount Analytics Dashboard — finally you can see which rules are actually making you money. Tracks revenue, discount given, and how many orders each rule touched. Resets whenever you want.
 * Added: Product Badge now works on single product pages too, not just the shop grid
 * Fixed: Badges weren't showing for BOGO, Bulk, and Buy X Get Y rules — the product data structure was being read incorrectly
@@ -315,49 +319,49 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 * Improved: First Purchase Discount, Free Shipping, and Bulk Buy quick-start templates pre-fill correct field values
 * Improved: Conditions component fixed to prevent infinite re-render loop on prop sync
 
-= 1.2.12 =
+= 1.2.12 - Jan 21, 2026 =
 * Update plugin assets
 * minor frontend changes
 
-= 1.2.9 - December 27, 2024 =
+= 1.2.9 - December 27, 2025 =
 * Fixed: Minor bug fixes and stability improvements
 * Added: BOGO badge now displays in cart to highlight free/discounted items
 
-= 1.2.7 - November 8, 2024 =
+= 1.2.7 - November 8, 2025 =
 * Fixed: Minor bugs and compatibility issues
 * Added: Better integration with popular themes and plugins
 
-= 1.2.6 - October 28, 2024 =
+= 1.2.6 - October 28, 2025 =
 * Added: Complete translation support (.pot file) for PHP and Vue.js components
 * Fixed: Added translator comments to comply with WordPress standards
 * Improved: Overall translation readiness for multilingual stores
 
-= 1.2.3 - October 28, 2024 =
+= 1.2.3 - October 28, 2025 =
 * Updated: Plugin naming for better clarity
 
-= 1.2.0 - October 27, 2024 =
+= 1.2.0 - October 27, 2025 =
 * Added: Upsell notification feature for product pages
 * Updated: Complete UI refresh with improved user experience
 * Improved: WooCommerce compatibility and performance
 
-= 1.1.5 - October 17, 2024 =
+= 1.1.5 - October 17, 2025 =
 * Improved: Minor updates and data syncing enhancements
 
-= 1.1.4 - August 15, 2024 =
+= 1.1.4 - August 15, 2025 =
 * Fixed: Various bugs identified by users
 * Improved: Compatibility with latest WooCommerce version
 * Note: This is a verified stable working version
 
-= 1.1.3 - August 12, 2024 =
+= 1.1.3 - August 12, 2025 =
 * Improved: Code refinements and optimizations
 
-= 1.1.2 - May 28, 2024 =
+= 1.1.2 - May 28, 2025 =
 * Fixed: Bug fixes reported by community
 
-= 1.1.1 - May 22, 2024 =
+= 1.1.1 - May 22, 2025 =
 * Fixed: Minor bug fixes
 
-= 1.1.0 - April 11, 2024 =
+= 1.1.0 - April 11, 2025 =
 * Fixed: Various bugs and improvements
 * Improved: Overall plugin stability
 
@@ -373,6 +377,84 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 * Added: Modern Vue.js admin interface
 
 
+== External services ==
+
+The free version of this plugin does not connect to any external services.
+
+The Pro version uses external AI APIs for the Smart Engine feature, disclosed in full below.
+
+**Anthropic Claude API (Pro — Smart Engine only)**
+
+Service: Anthropic (anthropic.com)
+API endpoint used: https://api.anthropic.com/v1/messages
+
+What data is sent:
+
+* Customer type (new / returning / loyal — derived from order count)
+* Order count (total number of completed orders)
+* Lifetime value range (none / low / medium / high / vip — a bucketed range, not the exact figure)
+* Cart total (rounded to 2 decimal places)
+* Cart item count
+* Discount intensity setting chosen by the store owner (soft / balanced / bold)
+* Exit-intent signal (true or false — whether the customer moved the mouse toward closing the tab)
+
+What is NOT sent:
+
+* No customer names, email addresses, billing addresses, or phone numbers
+* No payment information of any kind
+* No IP addresses or device identifiers
+* No order history details or product information
+* No personally identifiable information of any kind
+
+Why it is sent:
+
+The data is used to decide in real time whether to offer the visiting customer a personalised discount, and at what percentage or fixed amount. The AI response is processed and stored entirely on your own server. Anthropic does not retain store data beyond the scope of processing the individual request.
+
+When the API is called:
+
+* When a customer loads the WooCommerce cart page and Smart Engine is enabled
+* Only once per unique customer context (results are cached for 1 hour to avoid repeated calls)
+* Not called at all if Smart Engine is disabled or no API key is saved
+
+Anthropic legal links:
+
+* Terms of Service: https://www.anthropic.com/legal/consumer-terms
+* Privacy Policy: https://www.anthropic.com/legal/privacy
+* Usage Policy: https://www.anthropic.com/legal/aup
+
+---
+
+**OpenAI API (Pro — Smart Engine only, optional)**
+
+Service: OpenAI (openai.com)
+API endpoints used: https://api.openai.com/v1/chat/completions | https://api.openai.com/v1/models
+
+The same data described above under Anthropic is sent to OpenAI when the store owner selects GPT-4o as their Smart Engine provider. The same "What is NOT sent" rules apply.
+
+OpenAI legal links:
+
+* Terms of Service: https://openai.com/policies/terms-of-use
+* Privacy Policy: https://openai.com/policies/privacy-policy
+* Usage Policy: https://openai.com/policies/usage-policies
+
+---
+
+**Google Gemini API (Pro — Smart Engine only, optional)**
+
+Service: Google (ai.google.dev)
+API endpoint used: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+
+The same data described above under Anthropic is sent to Google when the store owner selects Gemini as their Smart Engine provider. The same "What is NOT sent" rules apply.
+
+Google legal links:
+
+* Terms of Service: https://ai.google.dev/gemini-api/terms
+* Privacy Policy: https://policies.google.com/privacy
+* Usage Policy: https://policies.google.com/terms
+
+---
+
+The store owner's API key for the chosen provider is stored encrypted in the WordPress database (AES-256-CBC). It is never exposed in source code or transmitted anywhere other than to the chosen provider.
 
 == Development & Contributing ==
 

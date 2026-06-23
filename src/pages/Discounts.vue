@@ -1,4 +1,4 @@
-<!-- Discount.vue -->
+﻿<!-- Discount.vue -->
 <script setup>
 // All Imports
 import { ref, onMounted, toRaw, computed } from "vue";
@@ -162,8 +162,8 @@ const closeModal = () => {
     <div class="tw-grid tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 tw-mb-6">
       <!-- Total Rules -->
       <div class="tw-flex tw-items-center tw-gap-4 tw-rounded-xl tw-border tw-border-gray-200 tw-bg-white tw-p-4 tw-shadow-sm">
-        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-blue-50">
-          <TagIcon class="tw-h-6 tw-w-6 tw-text-blue-500" />
+        <div class="tw-flex tw-h-12 tw-w-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-bg-brand-50">
+          <TagIcon class="tw-h-6 tw-w-6 tw-text-brand-500" />
         </div>
         <div>
           <p class="tw-text-2xl tw-font-bold tw-leading-tight tw-text-gray-800">{{ totalRules }}</p>

@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref } from "vue";
 
 const selectedType = ref("");
@@ -21,7 +21,7 @@ const selectDiscountType = (type) => {
         :class="[
           'tw-p-4 tw-rounded-md tw-text-center tw-font-medium tw-w-full',
           selectedType === 'Flat/Percentage'
-            ? 'tw-bg-blue-200'
+            ? 'tw-bg-brand-200'
             : 'tw-bg-gray-100 tw-hover:bg-blue-100 tw-active:scale-95',
         ]">
         {{ __("Flat/Percentage", "giantwp-discount-rules") }}
@@ -44,7 +44,7 @@ const selectDiscountType = (type) => {
         :class="[
           'tw-p-4 tw-rounded-md tw-text-center tw-font-medium tw-w-full',
           selectedType === 'BOGO'
-            ? 'tw-bg-blue-200'
+            ? 'tw-bg-brand-200'
             : 'tw-bg-gray-100 tw-hover:bg-blue-100 tw-active:scale-95',
         ]">
         {{ __("BOGO", "giantwp-discount-rules") }}
