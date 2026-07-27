@@ -36,7 +36,7 @@ final class GiantWP_Discount_Rules
     /**
      * The plugin version
      */
-    const version = '1.2.16';
+    const version = '1.2.17';
 
     /**
      * Class Constructor
