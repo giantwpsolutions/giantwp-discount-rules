@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.16
+Stable tag: 1.2.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,14 @@ Set up unlimited pricing tiers based on quantity, total spend, weight, or any co
 * Percentage off shipping for VIP customers
 * Conditional shipping fees and discounts
 
+
+🤖 **AI Rule Builder (New in 1.2.17)**
+Describe your discount in plain English — AI builds the complete rule instantly. No forms, no settings to hunt through.
+* Natural language input: "Give 20% off to new customers who spend over $50"
+* Supports all five rule types: Flat/Percentage, BOGO, Bulk Discount, Buy X Get Y, Shipping Discount
+* Edit existing rules with AI: open any rule, describe what to change, AI updates it
+* Powered by your Smart Engine AI provider (Claude, GPT-4o, or Gemini)
+* Placeholder warning when AI generates condition IDs you need to fill in
 
 🔥 **Margin Protection Guard (New in 1.2.15)**
 Never sell below your cost again. Set a minimum profit margin per product and the plugin automatically caps any discount that would breach it. Three layers of protection:
@@ -291,6 +299,11 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 == Changelog ==
 
+= 1.2.17 - July 27, 2026 =
+* 🔥 Added: **AI Rule Builder** (Pro) — describe any discount in plain English and AI generates the complete rule instantly. Supports all five rule types: Flat/Percentage, BOGO, Bulk Discount, Buy X Get Y, and Shipping Discount. Rules are routed to the correct save service automatically.
+* Added: Placeholder warning banner when AI generates condition values that need real product/category IDs.
+* Improved: WooCommerce tested up to 10.9.4.
+
 = 1.2.16 - June 23, 2026 =
 * 🔥 Added: **Smart Engine** (Pro) — AI-powered personalised discounts. Connects to Anthropic Claude, OpenAI GPT-4o, or Google Gemini to analyse each customer in real time and decide whether to offer a personalised discount on the cart page. Includes exit-intent detection, session caching, usage stats, and a collapsible Advanced Settings panel (intensity, protect margin, learning period).
 * Added: External Services disclosure in readme — documents all three AI providers, what data is sent, and legal links, as required by WordPress.org guidelines.
@@ -381,9 +394,9 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 
 The free version of this plugin does not connect to any external services.
 
-The Pro version uses external AI APIs for the Smart Engine feature, disclosed in full below.
+The Pro version uses external AI APIs for the Smart Engine and AI Rule Builder features, disclosed in full below.
 
-**Anthropic Claude API (Pro — Smart Engine only)**
+**Anthropic Claude API (Pro — Smart Engine & AI Rule Builder)**
 
 Service: Anthropic (anthropic.com)
 API endpoint used: https://api.anthropic.com/v1/messages
@@ -424,7 +437,7 @@ Anthropic legal links:
 
 ---
 
-**OpenAI API (Pro — Smart Engine only, optional)**
+**OpenAI API (Pro — Smart Engine & AI Rule Builder, optional)**
 
 Service: OpenAI (openai.com)
 API endpoints used: https://api.openai.com/v1/chat/completions | https://api.openai.com/v1/models
@@ -439,7 +452,7 @@ OpenAI legal links:
 
 ---
 
-**Google Gemini API (Pro — Smart Engine only, optional)**
+**Google Gemini API (Pro — Smart Engine & AI Rule Builder, optional)**
 
 Service: Google (ai.google.dev)
 API endpoint used: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent

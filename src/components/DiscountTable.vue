@@ -1,6 +1,8 @@
 ﻿<script setup>
 import { ref, computed } from "vue";
 import { __ } from "@wordpress/i18n";
+
+const isProActive = !!gwpdrPluginData?.proActive;
 import {
   ReceiptPercentIcon,
   GiftIcon,
@@ -9,18 +11,21 @@ import {
   RectangleStackIcon,
   MagnifyingGlassIcon,
   PlusIcon,
+  SparklesIcon,
   PencilSquareIcon,
   DocumentDuplicateIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
-  discountRules: { type: Array, required: true },
-  onAdd:         { type: Function, required: true },
-  onEdit:        { type: Function, required: true },
-  onDelete:      { type: Function, required: true },
-  onToggleStatus:{ type: Function, required: true },
-  onDuplicate:   { type: Function, default: null },
+  discountRules:  { type: Array,    required: true },
+  onAdd:          { type: Function, required: true },
+  onEdit:         { type: Function, required: true },
+  onDelete:       { type: Function, required: true },
+  onToggleStatus: { type: Function, required: true },
+  onDuplicate:    { type: Function, default: null },
+  onAiBuilder:    { type: Function, default: null },
+  onAiEdit:       { type: Function, default: null },
 });
 
 const searchQuery    = ref("");
@@ -82,13 +87,27 @@ const confirmDelete = (rule) => {
   <div>
     <!-- Toolbar -->
     <div class="tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-2 tw-mb-4">
-      <button
-        @click="onAdd"
-        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-brand-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-brand-700"
-      >
-        <PlusIcon class="tw-h-4 tw-w-4" />
-        {{ __("Add New Rule", "giantwp-discount-rules") }}
-      </button>
+      <!-- Left: action buttons grouped -->
+      <div class="tw-flex tw-items-center tw-gap-2">
+        <button
+          @click="onAdd"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-bg-brand-600 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white tw-shadow-sm tw-transition hover:tw-bg-brand-700"
+        >
+          <PlusIcon class="tw-h-4 tw-w-4" />
+          {{ __("Add New Rule", "giantwp-discount-rules") }}
+        </button>
+
+        <!-- AI Rule Builder button (Pro) -->
+        <button
+          v-if="onAiBuilder"
+          @click="onAiBuilder"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-lg tw-border tw-border-violet-200 tw-bg-gradient-to-r tw-from-violet-50 tw-to-brand-50 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-violet-700 tw-shadow-sm tw-transition hover:tw-from-violet-100 hover:tw-to-brand-100 hover:tw-border-violet-300"
+        >
+          <SparklesIcon class="tw-h-4 tw-w-4 tw-text-violet-500" />
+          {{ __("AI Rule Builder", "giantwp-discount-rules") }}
+          <span v-if="!isProActive" class="tw-rounded-full tw-bg-gradient-to-r tw-from-violet-600 tw-to-brand-600 tw-px-1.5 tw-py-0.5 tw-text-[10px] tw-font-bold tw-text-white tw-leading-none tw-tracking-wide">PRO</span>
+        </button>
+      </div>
 
       <div class="tw-relative">
         <MagnifyingGlassIcon class="tw-absolute tw-left-3 tw-top-1/2 tw-h-4 tw-w-4 tw--translate-y-1/2 tw-text-gray-400" />
@@ -219,6 +238,16 @@ const confirmDelete = (rule) => {
                   :title="__('Edit', 'giantwp-discount-rules')"
                 >
                   <PencilSquareIcon class="tw-h-4 tw-w-4" />
+                </button>
+
+                <!-- AI Edit (Pro) -->
+                <button
+                  v-if="onAiEdit"
+                  @click="onAiEdit(rule)"
+                  class="tw-rounded tw-p-1 tw-text-gray-400 tw-transition hover:tw-bg-violet-50 hover:tw-text-violet-600"
+                  :title="__('AI Edit', 'giantwp-discount-rules')"
+                >
+                  <SparklesIcon class="tw-h-4 tw-w-4" />
                 </button>
 
                 <!-- Duplicate -->

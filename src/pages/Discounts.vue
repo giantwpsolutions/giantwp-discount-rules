@@ -6,6 +6,7 @@ import { TagIcon, BoltIcon, SignalIcon, StarIcon } from "@heroicons/vue/24/outli
 import Sidebar from "../components/Sidebar.vue";
 import DiscountTable from "../components/DiscountTable.vue";
 import AddRuleModal from "../components/Modals/AddRuleModal.vue";
+import AiRuleBuilder from "../components/AiRuleBuilder.vue";
 import {
   fetchAllDiscountRules,
   discountRules,
@@ -19,7 +20,9 @@ import { saveBulkDiscountData } from "@/data/save-data/saveBulkDiscountData.js";
 
 //Reactive state
 
-const showModal = ref(false);
+const showModal        = ref(false);
+const showAiBuilder    = ref(false);
+const aiEditingRule    = ref(null);
 const selectedDiscount = ref(null);
 
 const totalRules  = computed(() => discountRules.value.length);
@@ -141,11 +144,33 @@ const addNewRule = () => {
 
 // Close Modal
 const closeModal = () => {
-  // Reset everything to default state
   selectedDiscount.value = null;
-
-  // Close modal
   showModal.value = false;
+};
+
+// AI Rule Builder — create new rule
+const openAiBuilder = () => {
+  if (!gwpdrPluginData.proActive) {
+    window.open(gwpdrPluginData.proUrl, '_blank', 'noopener');
+    return;
+  }
+  aiEditingRule.value = null;
+  showAiBuilder.value = true;
+};
+
+// AI Rule Builder — edit existing rule (flat/percentage only)
+const openAiEdit = (rule) => {
+  if (!gwpdrPluginData.proActive) {
+    window.open(gwpdrPluginData.proUrl, '_blank', 'noopener');
+    return;
+  }
+  aiEditingRule.value = structuredClone(toRaw(rule));
+  showAiBuilder.value = true;
+};
+
+const closeAiBuilder = () => {
+  showAiBuilder.value = false;
+  aiEditingRule.value = null;
 };
 </script>
 
@@ -211,14 +236,24 @@ const closeModal = () => {
       :onAdd="addNewRule"
       :onEdit="handleEdit"
       :onDelete="deleteRule"
-      :onToggleStatus="toggleStatus" />
+      :onToggleStatus="toggleStatus"
+      :onAiBuilder="openAiBuilder"
+      :onAiEdit="openAiEdit" />
 
-    <!-- Modal Component -->
+    <!-- Add/Edit Rule Modal -->
     <AddRuleModal
       :visible="showModal"
       :editingRule="selectedDiscount"
       @close="closeModal"
       @discountUpdated="fetchDiscountRules" />
+
+    <!-- AI Rule Builder / Editor Modal (Pro) -->
+    <AiRuleBuilder
+      :visible="showAiBuilder"
+      :editingRule="aiEditingRule"
+      @close="closeAiBuilder"
+      @ruleAdded="fetchDiscountRules"
+      @ruleUpdated="fetchDiscountRules" />
   </div>
 
   <!-- Sidebar -->
