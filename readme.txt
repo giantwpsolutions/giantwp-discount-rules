@@ -5,7 +5,7 @@ Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity disco
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.17
+Stable tag: 1.2.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,10 +93,14 @@ Set up unlimited pricing tiers based on quantity, total spend, weight, or any co
 * Buy $100 worth of electronics, get a free accessory
 * Apply fixed or percentage discounts to the free/discounted items
 
+[youtube https://youtu.be/2y-GUljSvuM?si=gkSruvdcRSjoBqnQ]
+
 **Shipping Discounts**
 * Free shipping when cart total exceeds $X
 * Percentage off shipping for VIP customers
 * Conditional shipping fees and discounts
+
+[youtube https://youtu.be/zsOK4w65XtY?si=7xZWmZuammjQGmMe]
 
 
 🤖 **AI Rule Builder (New in 1.2.17)**
@@ -134,10 +138,14 @@ Let me show you how this works in practice:
 → Create a rule with purchase history condition
 → Applies automatically when they log in
 
+[youtube https://youtu.be/7Jplo2-46hA?si=4BnhyiBSOCKKncy1]
+
 **Example 3: Category Flash Sale**
 "All shoes 25% off this weekend only"
 → Set category discount with scheduled start/end dates
 → Automatically activates Friday at midnight, deactivates Sunday at 11:59 PM
+
+[youtube https://youtu.be/jO2BlVyK708?si=St1-Ppyu0xqHiXT-]
 
 **Example 4: Wholesale Pricing**
 "Wholesale customers get 30% off all orders over $200"
@@ -148,6 +156,8 @@ Let me show you how this works in practice:
 "Buy 2 pairs of jeans, get 1 free"
 → Set up BOGO rule for jeans category
 → Free item automatically added to cart
+
+[youtube https://youtu.be/CRdm8ar32X0?si=PnM8or5k5cAsQWce]
 
 == Available Conditions (Mix and Match) ==
 
@@ -298,6 +308,10 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 8. Buy X Get Y promotion showing discounted item in cart
 
 == Changelog ==
+
+= 1.2.18 - October 5, 2026 =
+* Improved: Bulk Discount form redesigned with a clean table layout — single header row, consistent grid columns, and uniform field heights
+* Improved: Select Product section in Bulk Discount now matches the same table-style layout for consistency
 
 = 1.2.17 - July 27, 2026 =
 * 🔥 Added: **AI Rule Builder** (Pro) — describe any discount in plain English and AI generates the complete rule instantly. Supports all five rule types: Flat/Percentage, BOGO, Bulk Discount, Buy X Get Y, and Shipping Discount. Rules are routed to the correct save service automatically.

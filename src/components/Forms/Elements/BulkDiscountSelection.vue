@@ -91,134 +91,117 @@ watch(
 </script>
 
 <template>
-  <div class="tw-space-y-4 tw-max-w-full tw-my-4 tw-border-t tw-border-b tw-py-4">
+  <div class="tw-my-4 tw-border-t tw-border-b tw-py-6">
     <!-- Get Item Selector -->
-    <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-6 tw-mb-1 tw-w-full sm:tw-w-[30%]">
-      <label
-        class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1 tw-w-full sm:tw-w-[25%]">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-mb-6 tw-w-full sm:tw-w-72">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-700 tw-whitespace-nowrap">
         {{ __("Get Item", "giantwp-discount-rules") }}
       </label>
-      <div class="tw-w-full tw-sm:w-[75%]">
-        <el-select
-          v-model="getItem"
-          @change="updateGetItem"
-          size="default"
-          popper-class="custom-dropdown"
-          class="tw-w-full">
-          <el-option
-            :value="'alltogether'"
-            :label="__('All together', 'giantwp-discount-rules')" />
-          <el-option
-            :value="'iq_each'"
-            :label="
-              __('Item quantity each cart line', 'giantwp-discount-rules')
-            " />
-        </el-select>
-      </div>
+      <el-select
+        v-model="getItem"
+        @change="updateGetItem"
+        size="default"
+        popper-class="custom-dropdown"
+        class="tw-flex-1">
+        <el-option
+          :value="'alltogether'"
+          :label="__('All together', 'giantwp-discount-rules')" />
+        <el-option
+          :value="'iq_each'"
+          :label="__('Item quantity each cart line', 'giantwp-discount-rules')" />
+      </el-select>
     </div>
 
-    <!-- Bulk Discounts -->
-    <div
-      v-for="(bulkDiscount, index) in bulkDiscounts"
-      :key="bulkDiscount.id"
-      class="tw-max-w-full tw-pt-4">
-      <div class="tw-flex tw-flex-wrap tw-gap-2">
-        <!-- From -->
-        <div class="tw-w-full sm:tw-w-[12%]">
-          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
+    <!-- Table -->
+    <div class="tw-w-full tw-overflow-x-auto">
+      <div class="tw-min-w-[600px]">
+        <!-- Header Row -->
+        <div class="tw-grid tw-gap-3 tw-mb-2 tw-px-1" style="grid-template-columns: 1fr 1fr 2fr 2fr 2fr 40px;">
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
             {{ __("From", "giantwp-discount-rules") }}
-          </label>
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("To", "giantwp-discount-rules") }}
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Discount Type", "giantwp-discount-rules") }}
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Discount Value", "giantwp-discount-rules") }}
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Maximum Value", "giantwp-discount-rules") }}
+          </span>
+          <span></span>
+        </div>
+
+        <!-- Data Rows -->
+        <div
+          v-for="(bulkDiscount, index) in bulkDiscounts"
+          :key="bulkDiscount.id"
+          class="bulk-row tw-grid tw-gap-3 tw-items-center tw-py-2 tw-px-1 tw-rounded-lg tw-mb-1"
+          :class="index % 2 === 0 ? 'tw-bg-gray-50' : 'tw-bg-white'"
+          style="grid-template-columns: 1fr 1fr 2fr 2fr 2fr 40px;">
+          <!-- From -->
           <el-input-number
             v-model="bulkDiscount.fromcount"
             @change="updateBulkDiscount"
             :min="1"
+            size="large"
             controls-position="right"
             class="tw-w-full" />
-        </div>
 
-        <!-- To -->
-        <div class="tw-w-full sm:tw-w-[12%]">
-          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
-            {{ __("To", "giantwp-discount-rules") }}
-          </label>
+          <!-- To -->
           <el-input-number
             v-model="bulkDiscount.toCount"
             @change="updateBulkDiscount"
             :min="1"
+            size="large"
             controls-position="right"
             class="tw-w-full" />
-        </div>
 
-        <!-- Discount Type -->
-        <div class="tw-w-full sm:tw-w-[22%]">
-          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
-            {{ __("Discount Type", "giantwp-discount-rules") }}
-          </label>
+          <!-- Discount Type -->
           <el-select
             v-model="bulkDiscount.discountTypeBulk"
             @change="updateBulkDiscount"
-            size="default"
+            size="large"
             class="tw-w-full"
             popper-class="custom-dropdown">
-            <el-option
-              :value="'fixed'"
-              :label="__('Fixed', 'giantwp-discount-rules')" />
-            <el-option
-              :value="'percentage'"
-              :label="__('Percentage', 'giantwp-discount-rules')" />
-            <el-option
-              :value="'flat_price'"
-              :label="__('Flat Price', 'giantwp-discount-rules')" />
+            <el-option :value="'fixed'" :label="__('Fixed', 'giantwp-discount-rules')" />
+            <el-option :value="'percentage'" :label="__('Percentage', 'giantwp-discount-rules')" />
+            <el-option :value="'flat_price'" :label="__('Flat Price', 'giantwp-discount-rules')" />
           </el-select>
-        </div>
 
-        <!-- Discount Value -->
-        <div class="tw-w-full sm:tw-w-[20%]">
-          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
-            {{ __("Discount Value", "giantwp-discount-rules") }}
-          </label>
+          <!-- Discount Value -->
           <el-input
             v-model.number="bulkDiscount.discountValue"
             @change="updateBulkDiscount"
-            placeholder="Enter value">
+            size="large"
+            :placeholder="__('Enter value', 'giantwp-discount-rules')">
             <template #append>
-              <span
-                v-html="
-                  bulkDiscount.discountTypeBulk === 'percentage'
-                    ? '%'
-                    : generalData.currency_symbol || '$'
-                "></span>
+              <span v-html="bulkDiscount.discountTypeBulk === 'percentage' ? '%' : generalData.currency_symbol || '$'"></span>
             </template>
           </el-input>
-        </div>
 
-        <!-- Max Value -->
-        <div class="tw-w-full sm:tw-w-[20%]">
-          <label class="tw-block tw-text-sm tw-font-medium tw-pb-2 tw-text-gray-900">
-            {{ __("Maximum Value", "giantwp-discount-rules") }}
-          </label>
+          <!-- Max Value -->
           <el-input
             v-model.number="bulkDiscount.maxValue"
             @change="updateBulkDiscount"
-            :disabled="
-              bulkDiscount.discountTypeBulk === 'fixed' ||
-              bulkDiscount.discountTypeBulk === 'flat_price'
-            "
-            placeholder="Enter value">
+            size="large"
+            :disabled="bulkDiscount.discountTypeBulk === 'fixed' || bulkDiscount.discountTypeBulk === 'flat_price'"
+            :placeholder="__('Enter value', 'giantwp-discount-rules')">
             <template #append>
               <span v-html="generalData.currency_symbol || '$'"></span>
             </template>
           </el-input>
-        </div>
 
-        <!-- Delete Icon -->
-        <div class="tw-w-full sm:tw-w-[10%] tw-flex tw-items-center tw-pt-6">
-          <el-icon
+          <!-- Delete -->
+          <button
+            type="button"
             @click="removeDiscount(bulkDiscount.id)"
-            size="20px"
-            class="tw-cursor-pointer tw-text-red-500">
-            <Delete />
-          </el-icon>
+            class="tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded tw-text-red-400 hover:tw-text-red-600 hover:tw-bg-red-50 tw-transition-colors">
+            <el-icon size="16"><Delete /></el-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -226,10 +209,16 @@ watch(
     <!-- Add Button -->
     <button
       @click="addBulkDiscount"
-      class="tw-bg-brand-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600 tw-mt-4">
+      class="tw-mt-4 tw-inline-flex tw-items-center tw-gap-2 tw-bg-brand-500 hover:tw-bg-brand-600 tw-text-white tw-text-sm tw-font-medium tw-rounded tw-px-4 tw-py-2 tw-transition-colors">
+      <el-icon size="14"><CirclePlus /></el-icon>
       {{ __("Assign Bulk Discount", "giantwp-discount-rules") }}
     </button>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* el-select size="large" doesn't consistently apply height to its wrapper; force it to match */
+:deep(.bulk-row .el-select__wrapper) {
+  height: 40px !important;
+}
+</style>

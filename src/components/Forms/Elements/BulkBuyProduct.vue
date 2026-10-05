@@ -129,138 +129,152 @@ watch(
 </script>
 
 <template>
-  <div class="tw-space-y-4 tw-max-w-full tw-mt-2 tw-mb-6 tw-border-b tw-py-6">
-    <h3 class="tw-text-base tw-text-gray-950">
-      <div class="tw-inline-flex tw-items-center tw-space-x-1">
-        <span>{{ __("Select Product", "giantwp-discount-rules") }}</span>
+  <div class="tw-mt-2 tw-mb-6 tw-border-b tw-py-6">
+    <!-- Header -->
+    <h3 class="tw-text-base tw-font-semibold tw-text-gray-900 tw-mb-4">
+      <span class="tw-inline-flex tw-items-center tw-gap-1">
+        {{ __("Select Product", "giantwp-discount-rules") }}
         <el-tooltip
-          class="box-item"
           effect="dark"
-          :content="
-            __(
-              'Which product will get the bulk rule?',
-              'giantwp-discount-rules'
-            )
-          "
+          :content="__('Which product will get the bulk rule?', 'giantwp-discount-rules')"
           placement="top"
           popper-class="custom-tooltip">
-          <QuestionMarkCircleIcon
-            class="tw-w-4 tw-h-4 tw-text-gray-500 tw-hover:text-gray-700 tw-cursor-pointer" />
+          <QuestionMarkCircleIcon class="tw-w-4 tw-h-4 tw-text-gray-400 tw-cursor-pointer" />
         </el-tooltip>
-      </div>
+      </span>
     </h3>
 
     <!-- Match Condition -->
-    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-mt-6 tw-mb-1">
-      <label class="tw-text-sm tw-font-medium tw-text-gray-900 tw-flex tw-items-center tw-gap-1">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-mb-6">
+      <label class="tw-text-sm tw-font-medium tw-text-gray-700">
         {{ __("Rules apply to products if matches", "giantwp-discount-rules") }}
       </label>
       <el-radio-group v-model="getApplies" @change="updateGetApplies">
-        <el-radio-button
-          :label="__('Any', 'giantwp-discount-rules')"
-          value="any" />
-        <el-radio-button
-          :label="__('All', 'giantwp-discount-rules')"
-          value="all" />
+        <el-radio-button :label="__('Any', 'giantwp-discount-rules')" value="any" />
+        <el-radio-button :label="__('All', 'giantwp-discount-rules')" value="all" />
       </el-radio-group>
     </div>
 
-    <!-- Product Conditions -->
-    <div
-      v-for="(buyProduct, index) in buyProducts"
-      :key="buyProduct.id"
-      class="tw-max-w-full">
-      <!-- Or/And Label -->
-      <div v-if="index > 0" class="mb-2">
-        <span class="tw-text-black tw-italic tw-text-sm">
-          {{
-            getApplies === "any"
-              ? __("Or", "giantwp-discount-rules")
-              : __("And", "giantwp-discount-rules")
-          }}
-        </span>
-      </div>
-
-      <div class="tw-flex tw-flex-wrap tw-gap-2">
-        <!-- Field 1: Field -->
-        <div class="tw-w-full sm:tw-w-[25%]">
-          <el-select
-            v-model="buyProduct.field"
-            clearable
-            @change="updateBuyProducts"
-            class="tw-w-full">
-            <el-option
-              v-for="item in productOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
+    <!-- Table -->
+    <div class="tw-w-full tw-overflow-x-auto">
+      <div class="tw-min-w-[500px]">
+        <!-- Header Row -->
+        <div class="tw-grid tw-gap-3 tw-mb-2 tw-px-1" style="grid-template-columns: 2fr 1.5fr 3fr 40px;">
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Type", "giantwp-discount-rules") }}
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Condition", "giantwp-discount-rules") }}
+          </span>
+          <span class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">
+            {{ __("Value", "giantwp-discount-rules") }}
+          </span>
+          <span></span>
         </div>
 
-        <!-- Field 2: Operator -->
-        <div class="tw-w-full sm:tw-w-[20%]">
-          <el-select
-            v-if="getProductOperator(buyProduct.field)?.length"
-            v-model="buyProduct.operator"
-            @change="updateBuyProducts"
-            class="tw-w-full">
-            <el-option
-              v-for="item in getProductOperator(buyProduct.field)"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
+        <!-- Data Rows -->
+        <template v-for="(buyProduct, index) in buyProducts" :key="buyProduct.id">
+          <!-- Or / And separator -->
+          <div v-if="index > 0" class="tw-flex tw-items-center tw-gap-2 tw-my-1 tw-px-1">
+            <span class="tw-text-xs tw-font-semibold tw-text-blue-500 tw-uppercase tw-bg-blue-50 tw-px-2 tw-py-0.5 tw-rounded">
+              {{ getApplies === "any" ? __("Or", "giantwp-discount-rules") : __("And", "giantwp-discount-rules") }}
+            </span>
+            <div class="tw-flex-1 tw-border-t tw-border-dashed tw-border-gray-200"></div>
+          </div>
 
-        <!-- Field 3: Value -->
-        <div class="tw-w-full sm:tw-w-[35%]">
-          <el-select-v2
-            v-if="ProductIsDropdown(buyProduct.field)"
-            v-model="buyProduct.value"
-            @change="updateBuyProducts"
-            :options="getProductDropdown(buyProduct.field)"
-            :placeholder="__('Select', 'giantwp-discount-rules')"
-            filterable
-            multiple
-            :loading="isLoadingProducts"
-            class="custom-select-v2 tw-w-full" />
+          <div
+            class="product-row tw-grid tw-gap-3 tw-items-center tw-py-2 tw-px-1 tw-rounded-lg"
+            :class="index % 2 === 0 ? 'tw-bg-gray-50' : 'tw-bg-white'"
+            style="grid-template-columns: 2fr 1.5fr 3fr 40px;">
+            <!-- Type -->
+            <el-select
+              v-model="buyProduct.field"
+              clearable
+              size="large"
+              @change="updateBuyProducts"
+              class="tw-w-full">
+              <el-option
+                v-for="item in productOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value" />
+            </el-select>
 
-          <el-input
-            v-else-if="productisPricingField(buyProduct.field)"
-            v-model="buyProduct.value"
-            @change="updateBuyProducts"
-            class="tw-w-full">
-            <template #append>
-              <span v-html="generalData.currency_symbol || '$'"></span>
-            </template>
-          </el-input>
+            <!-- Operator -->
+            <el-select
+              v-if="getProductOperator(buyProduct.field)?.length"
+              v-model="buyProduct.operator"
+              size="large"
+              @change="updateBuyProducts"
+              class="tw-w-full">
+              <el-option
+                v-for="item in getProductOperator(buyProduct.field)"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value" />
+            </el-select>
+            <div v-else></div>
 
-          <el-input-number
-            v-else-if="productisNumberField(buyProduct.field)"
-            v-model="buyProduct.value"
-            @change="updateBuyProducts"
-            class="tw-w-full"
-            controls-position="right" />
-        </div>
+            <!-- Value -->
+            <el-select-v2
+              v-if="ProductIsDropdown(buyProduct.field)"
+              v-model="buyProduct.value"
+              size="large"
+              @change="updateBuyProducts"
+              :options="getProductDropdown(buyProduct.field)"
+              :placeholder="__('Select', 'giantwp-discount-rules')"
+              filterable
+              multiple
+              :loading="isLoadingProducts"
+              class="custom-select-v2 tw-w-full" />
 
-        <!-- Field 4: Delete Icon -->
-        <div class="tw-w-full sm:tw-w-[10%] tw-flex tw-items-center tw-gap-4">
-          <el-icon
-            @click="removeProduct(buyProduct.id)"
-            size="20px"
-            color="red"
-            class="tw-cursor-pointer tw-text-red-500">
-            <Delete />
-          </el-icon>
-        </div>
+            <el-input
+              v-else-if="productisPricingField(buyProduct.field)"
+              v-model="buyProduct.value"
+              size="large"
+              @change="updateBuyProducts"
+              class="tw-w-full">
+              <template #append>
+                <span v-html="generalData.currency_symbol || '$'"></span>
+              </template>
+            </el-input>
+
+            <el-input-number
+              v-else-if="productisNumberField(buyProduct.field)"
+              v-model="buyProduct.value"
+              size="large"
+              @change="updateBuyProducts"
+              class="tw-w-full"
+              controls-position="right" />
+
+            <div v-else></div>
+
+            <!-- Delete -->
+            <button
+              type="button"
+              @click="removeProduct(buyProduct.id)"
+              class="tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded tw-text-red-400 hover:tw-text-red-600 hover:tw-bg-red-50 tw-transition-colors">
+              <el-icon size="16"><Delete /></el-icon>
+            </button>
+          </div>
+        </template>
       </div>
     </div>
 
-    <!-- Add Product -->
+    <!-- Add Button -->
     <button
       @click="addProduct"
-      class="tw-bg-brand-500 tw-text-white tw-rounded tw-px-4 tw-py-2 tw-hover:bg-blue-600">
+      class="tw-mt-4 tw-inline-flex tw-items-center tw-gap-2 tw-bg-brand-500 hover:tw-bg-brand-600 tw-text-white tw-text-sm tw-font-medium tw-rounded tw-px-4 tw-py-2 tw-transition-colors">
+      <el-icon size="14"><CirclePlus /></el-icon>
       {{ __("Assign Bulk Product", "giantwp-discount-rules") }}
     </button>
   </div>
 </template>
+
+<style scoped>
+:deep(.product-row .el-select__wrapper),
+:deep(.product-row .el-select-v2__wrapper) {
+  height: 40px !important;
+  overflow: hidden;
+}
+</style>
