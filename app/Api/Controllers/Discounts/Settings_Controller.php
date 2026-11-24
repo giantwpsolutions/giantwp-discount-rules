@@ -89,6 +89,11 @@ class Settings_Controller extends WP_REST_Controller {
             ? sanitize_hex_color( $data['badgeTextColor'] ) ?? '#ffffff'
             : '#ffffff';
 
+        $countdown_enabled = ! empty( $data['countdownTimerEnabled'] ) ? true : false;
+        $countdown_label   = isset( $data['countdownLabel'] )
+            ? sanitize_text_field( $data['countdownLabel'] )
+            : __( 'Sale ends in', 'giantwp-discount-rules' );
+
         $sanitized = [
             'discountBasedOn'          => $discount_based_on,
             'orderPageLabel'           => $order_page_label,
@@ -96,6 +101,8 @@ class Settings_Controller extends WP_REST_Controller {
             'showProductBadge'         => $show_badge,
             'badgeBgColor'             => $badge_bg,
             'badgeTextColor'           => $badge_text,
+            'countdownTimerEnabled'    => $countdown_enabled,
+            'countdownLabel'           => $countdown_label,
         ];
 
         update_option( 'giantwp_discountrules_settings', $sanitized );
@@ -117,9 +124,14 @@ class Settings_Controller extends WP_REST_Controller {
 
         // These should match the defaults you're expecting in Vue
         $defaults = [
-            'discountBasedOn'          => 'regular_price', // or 'sale_price' if that's your true default
+            'discountBasedOn'          => 'regular_price',
             'orderPageLabel'           => true,
             'upsellNotificationWidget' => false,
+            'showProductBadge'         => false,
+            'badgeBgColor'             => '#1c4a96',
+            'badgeTextColor'           => '#ffffff',
+            'countdownTimerEnabled'    => false,
+            'countdownLabel'           => __( 'Sale ends in', 'giantwp-discount-rules' ),
         ];
 
         $settings = get_option( 'giantwp_discountrules_settings', [] );

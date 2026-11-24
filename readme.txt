@@ -4,8 +4,8 @@ Donate link: https://giantwpsolutions.com/
 Tags: woocommerce discount, dynamic pricing, bogo, bulk discount, quantity discount
 Requires at least: 5.8
 Tested up to: 7.0
-Requires PHP: 7.4
-Stable tag: 1.2.18
+Requires PHP: 8.1
+Stable tag: 1.2.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,10 @@ Absolutely! The plugin is built with clean, extendable code. There are hooks and
 8. Buy X Get Y promotion showing discounted item in cart
 
 == Changelog ==
+
+= 1.2.19 - November 25, 2026 =
+* Added: Rule Duplicator — clone any existing discount rule with one click; opens pre-filled as a new rule ready to save
+* Added: Sale Countdown Timer — displays a live "Sale ends in" timer on product pages, shop pages, and cart/checkout for any active rule with a scheduled end date
 
 = 1.2.18 - October 5, 2026 =
 * Improved: Bulk Discount form redesigned with a clean table layout — single header row, consistent grid columns, and uniform field heights

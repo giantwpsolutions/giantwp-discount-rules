@@ -250,6 +250,44 @@ const handleSaveSettings = async () => {
           </div>
         </div>
 
+        <!-- Countdown Timer -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-gray-100"
+             :class="saveSettingsData.countdownTimerEnabled ? '' : 'tw-border-b'">
+          <div>
+            <div class="tw-flex tw-items-center tw-gap-1.5">
+              <p class="tw-text-sm tw-font-semibold tw-text-gray-800">{{ __("Countdown Timer", "giantwp-discount-rules") }}</p>
+              <el-tooltip
+                effect="dark"
+                :content="__('Show a live countdown on product, shop and cart pages for rules with a scheduled end date', 'giantwp-discount-rules')"
+                placement="top"
+                popper-class="custom-tooltip"
+              >
+                <QuestionMarkCircleIcon class="tw-h-3.5 tw-w-3.5 tw-text-gray-400 tw-cursor-pointer" />
+              </el-tooltip>
+            </div>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Display sale expiry countdown on product and cart pages", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-switch
+            v-model="saveSettingsData.countdownTimerEnabled"
+            inline-prompt
+            :active-text="__('On', 'giantwp-discount-rules')"
+            :inactive-text="__('Off', 'giantwp-discount-rules')"
+          />
+        </div>
+
+        <!-- Countdown Label (visible when timer is on) -->
+        <div v-if="saveSettingsData.countdownTimerEnabled" class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-bg-gray-50 tw-border-b tw-border-gray-100">
+          <div>
+            <p class="tw-text-xs tw-font-semibold tw-text-gray-700">{{ __("Timer Label", "giantwp-discount-rules") }}</p>
+            <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">{{ __("Text shown before the countdown (e.g. \"Sale ends in\")", "giantwp-discount-rules") }}</p>
+          </div>
+          <el-input
+            v-model="saveSettingsData.countdownLabel"
+            style="width: 220px"
+            :placeholder="__('Sale ends in', 'giantwp-discount-rules')"
+          />
+        </div>
+
         <!-- Margin Protection Guard sub-section header -->
         <div
           class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-3 tw-bg-gray-50 tw-border-t tw-border-gray-100"

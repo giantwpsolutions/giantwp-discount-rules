@@ -8,6 +8,8 @@ export const saveSettingsData = ref({
     showProductBadge: false,
     badgeBgColor: "#1c4a96",
     badgeTextColor: "#ffffff",
+    countdownTimerEnabled: false,
+    countdownLabel: "Sale ends in",
 });
 
 export const isLoadingSettings = ref(false);
@@ -32,6 +34,8 @@ export const loadSettings = async () => {
             showProductBadge: response.showProductBadge ?? false,
             badgeBgColor: response.badgeBgColor ?? "#1c4a96",
             badgeTextColor: response.badgeTextColor ?? "#ffffff",
+            countdownTimerEnabled: response.countdownTimerEnabled ?? false,
+            countdownLabel: response.countdownLabel ?? "Sale ends in",
         };
     } catch (err) {
         console.error("❌ Failed to load settings:", err);

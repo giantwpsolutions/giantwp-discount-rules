@@ -131,6 +131,33 @@ const handleEdit = async (rule) => {
   showModal.value = true;
 };
 
+// Handle Duplicate
+const handleDuplicate = (rule) => {
+  const clone = structuredClone(toRaw(rule));
+
+  // No id = AddRuleModal saves as new rule
+  delete clone.id;
+  delete clone.createdAt;
+
+  // Reset usage count
+  clone.usedCount = 0;
+
+  // Avoid WooCommerce coupon name collision
+  clone.couponName = clone.couponName ? `${clone.couponName}-copy` : '';
+
+  // Start inactive so user can review before activating
+  clone.status = 'off';
+
+  // Format discountType same way handleEdit does
+  clone.discountType = clone.discountType
+    .split(/([/ ])/)
+    .map((word) => word.trim() ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : word)
+    .join('');
+
+  selectedDiscount.value = clone;
+  showModal.value = true;
+};
+
 // Handle New Entry
 const addNewRule = () => {
   selectedDiscount.value = null;
@@ -237,6 +264,7 @@ const closeAiBuilder = () => {
       :onEdit="handleEdit"
       :onDelete="deleteRule"
       :onToggleStatus="toggleStatus"
+      :onDuplicate="handleDuplicate"
       :onAiBuilder="openAiBuilder"
       :onAiEdit="openAiEdit" />
 

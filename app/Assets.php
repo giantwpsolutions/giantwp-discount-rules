@@ -177,6 +177,25 @@ class Assets {
                 GWPDR_VERSION,
                 true
             );
+
+            // Countdown Timer (only when enabled in settings)
+            $settings = get_option( 'giantwp_discountrules_settings', [] );
+            if ( ! empty( $settings['countdownTimerEnabled'] ) ) {
+                wp_enqueue_style(
+                    'gwpdr_countdown_timer',
+                    plugin_dir_url(__DIR__) . 'assets/countdown-timer.css',
+                    [],
+                    GWPDR_VERSION
+                );
+
+                wp_enqueue_script(
+                    'gwpdr_countdown_timer',
+                    plugin_dir_url(__DIR__) . 'assets/js/countdown-timer.js',
+                    [],
+                    GWPDR_VERSION,
+                    true
+                );
+            }
         }
 
     }

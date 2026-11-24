@@ -25,6 +25,7 @@ use GiantWP_Discount_Rules\Discount\Manager\Product_Badge;
 use GiantWP_Discount_Rules\Discount\UsageTrack\FlatPercentageUsage;
 use GiantWP_Discount_Rules\Helper\PromoMessage;
 use GiantWP_Discount_Rules\Discount\Analytics\Analytics_Tracker;
+use GiantWP_Discount_Rules\Discount\Notification\Countdown_Timer;
 use GiantWP_Discount_Rules\Pro\MarginProtection\Margin_Guard;
 use GiantWP_Discount_Rules\Pro\MarginProtection\Product_Cost_Meta;
 
@@ -59,6 +60,7 @@ class Installer
         FlatPercentageUsage::instance();
         Bogo_Discount::instance();
         PromoMessage::instance();
+        Countdown_Timer::instance();
         Analytics_Tracker::instance();
 
         // Pro-only features
